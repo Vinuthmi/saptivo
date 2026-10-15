@@ -1,0 +1,153 @@
+
+/* ========================================
+   SAPTIVO — GLOBAL STYLES
+======================================== */
+
+/* 1. Global reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  color: #202124;
+  background-color: #ffffff;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 2. Shared design variables */
+:root {
+  --color-primary: #2563eb;
+  --color-primary-dark: #1d4ed8;
+  --color-text: #202124;
+  --color-muted: #6b7280;
+  --color-background: #ffffff;
+  --color-surface: #f8fafc;
+  --color-border: #e5e7eb;
+
+  --font-body: Arial, Helvetica, sans-serif;
+
+  --container-width: 1200px;
+  --page-padding: 24px;
+
+  --radius-small: 6px;
+  --radius-medium: 12px;
+  --radius-large: 20px;
+
+  --shadow-card: 0 4px 20px rgb(0 0 0 / 6%);
+}
+
+/* 3. Images and links */
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* 4. Shared container */
+.container {
+  width: min(
+    var(--container-width),
+    calc(100% - 2 * var(--page-padding))
+  );
+  margin-inline: auto;
+}
+
+/* 5. Shared section spacing */
+.section {
+  padding-block: 80px;
+}
+
+/* 6. Shared headings */
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+h1 {
+  font-size: clamp(2.25rem, 5vw, 4rem);
+}
+
+h2 {
+  font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+}
+
+p {
+  color: var(--color-muted);
+}
+
+/* 7. Responsive adjustments */
+@media (max-width: 768px) {
+  :root {
+    --page-padding: 18px;
+  }
+
+  .section {
+    padding-block: 52px;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --page-padding: 16px;
+  }
+
+  .section {
+    padding-block: 40px;
+  }
+}
+
+/* 8. Accessibility */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
