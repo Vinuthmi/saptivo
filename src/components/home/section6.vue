@@ -34,8 +34,6 @@
 
         </linearGradient>
 
-
-
         <filter
 
           v-for="(it, i) in items"
@@ -82,8 +80,6 @@
 
     </svg>
 
-
-
     <div class="s4-wrap">
 
       <!-- ============ left: heading ============ -->
@@ -108,8 +104,6 @@
 
         </p>
 
-
-
         <div class="s4-count" aria-hidden="true">
 
           <span class="s4-n"><b>{{ pad(active + 1) }}</b> / {{ pad(items.length) }}</span>
@@ -118,11 +112,7 @@
 
         </div>
 
-        
-
       </header>
-
-
 
       <!-- ============ right: expanding silk cards ============ -->
 
@@ -178,8 +168,6 @@
 
             <div class="s4-scrim" aria-hidden="true"></div>
 
-
-
             <!-- expanded content (fixed width so text never reflows while the card animates) -->
 
             <div class="s4-inner" role="region" :aria-label="it.name">
@@ -218,8 +206,6 @@
 
               </div>
 
-
-
               <div class="s4-widgets" aria-hidden="true">
 
                 <!-- white "product UI" widget -->
@@ -242,8 +228,6 @@
 
                   </template>
 
-
-
                   <template v-else-if="it.id === 'email'">
 
                     <div class="m-h">
@@ -265,8 +249,6 @@
                     <span class="m-pill o"><i></i>Expires in 10 min</span>
 
                   </template>
-
-
 
                   <template v-else-if="it.id === 'image'">
 
@@ -294,8 +276,6 @@
 
                   </template>
 
-
-
                   <template v-else-if="it.id === 'math'">
 
                     <p class="m-t b">Prove you're human</p>
@@ -318,8 +298,6 @@
 
                   </template>
 
-
-
                   <template v-else-if="it.id === 'rbac'">
 
                     <div v-for="r in roles" :key="r.n" class="m-role">
@@ -337,8 +315,6 @@
                     <span class="m-pill">Read · Edit · Delete · Export</span>
 
                   </template>
-
-
 
                   <template v-else-if="it.id === 'timeout'">
 
@@ -371,8 +347,6 @@
                     </div>
 
                   </template>
-
-
 
                   <template v-else>
 
@@ -408,8 +382,6 @@
 
                 </div>
 
-
-
                 <!-- glass metric widget -->
 
                 <div class="s4-w s4-w2">
@@ -438,13 +410,9 @@
 
             </div>
 
-
-
           </article>
 
         </div>
-
-
 
         <div class="s4-nav">
 
@@ -469,8 +437,6 @@
   </section>
 
 </template>
-
-
 
 <script setup>
 
@@ -498,8 +464,6 @@
 
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 
-
-
 const rootEl = ref(null)
 
 const scroller = ref(null)
@@ -510,11 +474,7 @@ const revealed = ref(false)
 
 const active = ref(0)
 
-
-
 const pad = (n) => String(n).padStart(2, '0')
-
-
 
 /* stroke icons — 24px grid */
 
@@ -535,8 +495,6 @@ const icons = {
   finger: '<path d="M12 3.5a7.5 7.5 0 0 0-7.5 7.5v2"/><path d="M12 7.5A3.5 3.5 0 0 0 8.5 11v3a7 7 0 0 1-1.8 4.7"/><path d="M12 11v3.5a10 10 0 0 1-2.2 6.2"/><path d="M15.5 20.5A12 12 0 0 0 17.5 14v-3a5.5 5.5 0 0 0-1-3.1"/><path d="M15 11v3a9 9 0 0 1-.9 4"/><path d="M19.5 12.5V11A7.5 7.5 0 0 0 17 5.4"/>',
 
 }
-
-
 
 /* ------------------------------------------------------------------ content
 
@@ -744,8 +702,6 @@ const items = [
 
 ]
 
-
-
 /* mock data */
 
 const tiles = ['c', 's', 'c', 't', 'c', 's', 't', 's', 'c']
@@ -766,8 +722,6 @@ const eqIdx = ref(0)
 
 const wrong = ref(false)
 
-
-
 /* ------------------------------------------------------------------ carousel */
 
 const canPrev = ref(false)
@@ -779,8 +733,6 @@ const dragging = ref(false)
 const mathOn = ref(false)
 
 let reduceMotion = false
-
-
 
 function stepSize() {
 
@@ -844,8 +796,6 @@ function onKey(e) {
 
 }
 
-
-
 /* mouse drag-to-scroll (touch / trackpad use native scrolling) */
 
 let drag = null
@@ -876,23 +826,17 @@ function onUp() {
 
 }
 
-
-
 /* ------------------------------------------------------------------ lifecycle */
 
 const timers = new Set()
 
 let ioReveal, ioCards, ro
 
-
-
 onMounted(() => {
 
   mounted.value = true
 
   reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-
-
 
   ioReveal = new IntersectionObserver(
 
@@ -913,8 +857,6 @@ onMounted(() => {
   )
 
   ioReveal.observe(rootEl.value)
-
-
 
   // a card is "on" (its widgets animate) while it is mostly inside the scroller
 
@@ -938,15 +880,11 @@ onMounted(() => {
 
   scroller.value.querySelectorAll('.s4-card').forEach((c) => ioCards.observe(c))
 
-
-
   ro = new ResizeObserver(update)
 
   ro.observe(scroller.value)
 
   update()
-
-
 
   if (!reduceMotion) {
 
@@ -995,8 +933,6 @@ onBeforeUnmount(() => {
 })
 
 </script>
-
-
 
 <style>
 
@@ -1079,8 +1015,6 @@ onBeforeUnmount(() => {
   align-items: start;
 
 }
-
-
 
 /* ============ heading (left) ============ */
 
@@ -1210,7 +1144,7 @@ onBeforeUnmount(() => {
 
 .s4-sub {
 
-  margin: 30px 0 0;
+  margin: 44px 0 0;
 
   font-size: 13px;
 
@@ -1316,8 +1250,6 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 /* ============ stage (right) — surface colour so the card notch blends in ============ */
 
 .s4-stage {
@@ -1366,8 +1298,6 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 /* ============ scrolling slides ============ */
 
 .s4-track {
@@ -1400,7 +1330,6 @@ onBeforeUnmount(() => {
 
 }
 
-
 .s4-track.dragging {
 
   scroll-snap-type: none;
@@ -1427,7 +1356,7 @@ onBeforeUnmount(() => {
 
   flex: 0 0 min(430px, 72vw);
 
-  height: 470px;
+  height: 520px;
 
   scroll-snap-align: start;
 
@@ -1468,8 +1397,6 @@ onBeforeUnmount(() => {
   transition-delay: calc(var(--i) * 0.07s + 0.15s);
 
 }
-
-
 
 /* background layers */
 
@@ -1617,8 +1544,6 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 /* ---------- top row: number + icon ---------- */
 
 .s4-top {
@@ -1689,8 +1614,6 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 /* ---------- expanded content ---------- */
 
 .s4-inner {
@@ -1750,8 +1673,6 @@ onBeforeUnmount(() => {
   transition-delay: 0.26s;
 
 }
-
-
 
 .s4-ct {
 
@@ -1830,8 +1751,6 @@ onBeforeUnmount(() => {
   stroke-linejoin: round;
 
 }
-
-
 
 /* widgets row */
 
@@ -2035,8 +1954,6 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 /* ---------- notched arrow button ---------- */
 
 .s4-notch {
@@ -2195,8 +2112,6 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 /* ---------- prev / next ---------- */
 
 .s4-nav {
@@ -2294,8 +2209,6 @@ onBeforeUnmount(() => {
   outline-offset: 3px;
 
 }
-
-
 
 /* ============ widget internals ============ */
 
@@ -2487,8 +2400,6 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 /* image captcha */
 
 .m-tiles {
@@ -2595,8 +2506,6 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 /* math captcha */
 
 .m-eq {
@@ -2695,8 +2604,6 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 /* roles */
 
 .m-role {
@@ -2760,8 +2667,6 @@ onBeforeUnmount(() => {
   box-shadow: 0 6px 10px -5px rgba(242, 84, 12, 0.7);
 
 }
-
-
 
 /* shared row layout (timer + fingerprint) */
 
@@ -2853,8 +2758,6 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 /* fingerprint */
 
 .m-fp {
@@ -2910,8 +2813,6 @@ onBeforeUnmount(() => {
   animation: none !important;
 
 }
-
-
 
 /* ============ keyframes ============ */
 
@@ -3033,8 +2934,6 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 /* ============ responsive ============ */
 
 @media (max-width: 1060px) {
@@ -3087,13 +2986,11 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 @media (max-width: 760px) {
 
   .s4-card {
 
-    height: 480px;
+    height: 500px;
 
   }
 
