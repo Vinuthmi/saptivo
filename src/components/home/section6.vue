@@ -1008,11 +1008,12 @@ onBeforeUnmount(() => {
 
   display: grid;
 
-  grid-template-columns: 250px minmax(0, 1fr);
+  grid-template-columns: minmax(270px, 300px) minmax(0, 1fr);
 
-  gap: clamp(30px, 4vw, 52px);
+  /* Keep a clear gutter between the intro column and the card carousel. */
+  gap: clamp(28px, 1.8vw, 28px);
 
-  align-items: start;
+  align-items: stretch;
 
 }
 
@@ -1023,6 +1024,17 @@ onBeforeUnmount(() => {
   position: sticky;
 
   top: 40px;
+
+  /* Heading stays at the top; description and slide counter sit near the bottom. */
+  display: flex;
+
+  flex-direction: column;
+
+  align-self: stretch;
+
+  min-height: 620px;
+
+  min-width: 0;
 
 }
 
@@ -1144,7 +1156,7 @@ onBeforeUnmount(() => {
 
 .s4-sub {
 
-  margin: 44px 0 0;
+  margin: auto 0 0;
 
   font-size: 13px;
 
@@ -2952,11 +2964,15 @@ onBeforeUnmount(() => {
 
     grid-template-columns: 1fr;
 
+    gap: 34px;
+
   }
 
   .s4-head {
 
     position: static;
+
+    min-height: 0;
 
   }
 
@@ -2964,7 +2980,7 @@ onBeforeUnmount(() => {
 
     max-width: 520px;
 
-    margin-top: 32px;
+    margin: 32px 0 0;
 
   }
 
