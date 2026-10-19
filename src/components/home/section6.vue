@@ -498,6 +498,8 @@
 
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 
+defineOptions({ name: 'SecuritySection' })
+
 
 
 const rootEl = ref(null)
@@ -815,14 +817,6 @@ function update() {
 function go(dir) {
 
   scroller.value?.scrollBy({ left: dir * stepSize(), behavior: reduceMotion ? 'auto' : 'smooth' })
-
-}
-
-function goTo(i) {
-
-  const n = ((i % items.length) + items.length) % items.length
-
-  scroller.value?.scrollTo({ left: n * stepSize(), behavior: reduceMotion ? 'auto' : 'smooth' })
 
 }
 
