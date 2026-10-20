@@ -104,14 +104,6 @@
 
         </p>
 
-        <div class="s4-count" aria-hidden="true">
-
-          <span class="s4-n"><b>{{ pad(active + 1) }}</b> / {{ pad(items.length) }}</span>
-
-          <span class="s4-bar"><i :style="{ width: ((active + 1) / items.length) * 100 + '%' }"></i></span>
-
-        </div>
-
       </header>
 
       <!-- ============ right: expanding silk cards ============ -->
@@ -434,11 +426,17 @@
 
     </div>
 
+    <NetworkSection />
+    <DataProtectionSection />
+
   </section>
 
 </template>
 
 <script setup>
+
+import NetworkSection from './section7.vue'
+import DataProtectionSection from './section8.vue'
 
 /**
 
@@ -473,8 +471,6 @@ const mounted = ref(false)
 const revealed = ref(false)
 
 const active = ref(0)
-
-const pad = (n) => String(n).padStart(2, '0')
 
 /* stroke icons — 24px grid */
 
@@ -1000,6 +996,65 @@ onBeforeUnmount(() => {
 
 }
 
+/* embedded Network & Infrastructure section: share this section's background and width */
+.s4 > .s5 {
+
+  max-width: 1240px;
+
+  margin: clamp(56px, 7vw, 96px) auto 0;
+
+  padding: 0;
+
+  background: none;
+
+  overflow: visible;
+
+}
+
+.s4 > .s5 .s5-panel {
+
+  max-width: none;
+
+  padding: 0;
+
+}
+
+.s4 > .s5 .s5-grid {
+
+  margin-inline: 0;
+
+  padding: 24px;
+
+}
+
+.s4 > .s6 {
+
+  max-width: 1240px;
+
+  margin: clamp(56px, 7vw, 96px) auto 0;
+
+  padding: 0;
+
+  background: none;
+
+  overflow: visible;
+
+}
+
+.s4 > .s6 .s6-panel {
+
+  max-width: none;
+
+  padding: 0;
+
+}
+
+.s4 > .s6 .s6-card {
+
+  margin-inline: 0;
+
+}
+
 .s4-wrap {
 
   max-width: 1240px;
@@ -1163,68 +1218,6 @@ onBeforeUnmount(() => {
   line-height: 1.8;
 
   color: var(--muted);
-
-}
-
-.s4-count {
-
-  margin-top: 30px;
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 14px;
-
-}
-
-.s4-n {
-
-  font-size: 12px;
-
-  color: var(--muted);
-
-  font-variant-numeric: tabular-nums;
-
-  white-space: nowrap;
-
-}
-
-.s4-n b {
-
-  font-size: 20px;
-
-  font-weight: 500;
-
-  color: var(--ink);
-
-}
-
-.s4-bar {
-
-  flex: 1;
-
-  height: 3px;
-
-  border-radius: 3px;
-
-  background: rgba(20, 21, 43, 0.1);
-
-  overflow: hidden;
-
-}
-
-.s4-bar i {
-
-  display: block;
-
-  height: 100%;
-
-  border-radius: 3px;
-
-  background: linear-gradient(90deg, var(--o1), var(--o2));
-
-  transition: width 0.5s var(--ease);
 
 }
 
@@ -2981,12 +2974,6 @@ onBeforeUnmount(() => {
     max-width: 520px;
 
     margin: 32px 0 0;
-
-  }
-
-  .s4-count {
-
-    max-width: 320px;
 
   }
 

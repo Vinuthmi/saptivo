@@ -7,6 +7,8 @@ import Section3 from '../components/home/section3.vue'
 import Section4 from '../components/home/section4.vue'
 import Section6 from '../components/home/section6.vue'
 
+
+
 const route = useRoute()
 const isSection2Preview = computed(() => route.query.preview === 'section2')
 const isSection6Preview = computed(() => route.query.preview === 'section6')
@@ -20,7 +22,9 @@ const isSection6Preview = computed(() => route.query.preview === 'section6')
       <Section2 :preview="isSection2Preview" />
       <Section3 />
       <Section4 />
+      
       <Section6 preview />
+      
     </template>
   </main>
 </template>
