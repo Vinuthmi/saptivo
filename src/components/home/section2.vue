@@ -28,7 +28,10 @@
     </svg>
 
     <header class="s2-head">
-      <span class="s2-eyebrow"><i></i>One platform · zero spreadsheets</span>
+      <span class="s2-eyebrow">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4l1.6 4.4L15 10l-4.4 1.6L9 16l-1.6-4.4L3 10l4.4-1.6zM17.5 12l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9zM17 3.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z" /></svg>
+        <span>One platform · zero spreadsheets</span>
+      </span>
       <h2 id="s2-title" class="s2-title">
         Replace your
         <b
@@ -1152,25 +1155,35 @@ onBeforeUnmount(() => {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 14px 6px 10px;
+  padding: 8px 15px 8px 11px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px solid var(--line);
-  backdrop-filter: blur(6px);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ink-2);
-  box-shadow: 0 6px 18px -10px rgba(20, 21, 43, 0.25);
+  border: 1.5px solid transparent;
+  background:
+    linear-gradient(#fff, #fff) padding-box,
+    linear-gradient(90deg, #ff9a3d, #e0407a) border-box;
+  font-size: 13.5px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: transform 0.4s var(--ease), box-shadow 0.4s;
 }
-.s2-eyebrow i {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--o1);
-  box-shadow: 0 0 0 0 rgba(255, 122, 26, 0.5);
-  animation: s2-ping 2s infinite;
+.s2-eyebrow span {
+  background: linear-gradient(90deg, #f2540c, #d6336c);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.s2-eyebrow svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: #f2540c;
+  stroke-width: 1.7;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.s2-eyebrow:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 24px -14px rgba(242, 84, 12, 0.6);
 }
 .s2-title {
   margin: 18px 0 0;
@@ -2456,14 +2469,6 @@ body.s2-lock {
 @keyframes s2-spin {
   to {
     transform: rotate(360deg);
-  }
-}
-@keyframes s2-ping {
-  70% {
-    box-shadow: 0 0 0 8px rgba(255, 122, 26, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(255, 122, 26, 0);
   }
 }
 @keyframes s2-ping-g {

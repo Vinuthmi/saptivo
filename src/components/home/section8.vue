@@ -41,7 +41,10 @@
       <!-- ============ heading row ============ -->
       <header class="s6-head">
         <div class="s6-hl">
-          <span class="s6-eyebrow"><i></i>03 · Data Protection &amp; Audit</span>
+          <span class="s6-eyebrow">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4l1.6 4.4L15 10l-4.4 1.6L9 16l-1.6-4.4L3 10l4.4-1.6zM17.5 12l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9zM17 3.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z" /></svg>
+            <span>03 · Data Protection &amp; Audit</span>
+          </span>
           <h2 id="s6-title" class="s6-title">
             Data Protection
             <span>
@@ -61,16 +64,16 @@
         </div>
       </header>
 
-      <div class="s6-card">
-        <div class="s6-row">
-          <article
+      <div class="s6-grid">
+        <!-- ============ left: visual stage ============ -->
+        <div class="s6-stage" @pointerenter="paused = true" @pointerleave="paused = false">
+          <div
             v-for="(it, i) in items"
-            :id="`s6-p-${it.id}`"
             :key="it.id"
-            class="s6-c s6-layer"
-            :class="{ on: revealed }"
+            class="s6-layer"
+            :class="{ on: active === i }"
             :style="{ '--i': i }"
-            :aria-label="it.name"
+            :aria-hidden="active === i ? undefined : 'true'"
           >
             <div class="s6-bg" :style="{ background: it.bg }" aria-hidden="true">
               <img v-if="it.img" class="s6-photo" :src="it.img" alt="" loading="lazy" draggable="false" />
@@ -81,49 +84,40 @@
             </div>
             <div class="s6-scrim" aria-hidden="true"></div>
 
-            <div class="s6-in2">
-              <div class="s6-top">
-                <span class="s6-tn" aria-hidden="true">{{ it.num }}</span>
-                <span class="g-k s6-mk">{{ it.metric[0] }} · {{ it.metric[2] }}</span>
-                <span class="s6-ti" aria-hidden="true"><svg viewBox="0 0 24 24" v-html="icons[it.icon]"></svg></span>
+            <div class="s6-top" aria-hidden="true">
+              <span class="s6-ti"><svg viewBox="0 0 24 24" v-html="icons[it.icon]"></svg></span>
+            </div>
+
+            <!-- glass metric widget -->
+            <div class="s6-w s6-w2" aria-hidden="true">
+              <div class="dg-top">
+                <span class="dg-ic"><svg viewBox="0 0 24 24" v-html="icons[it.icon]"></svg></span>
+                <span class="dg-k">{{ it.metric[2] }}</span>
               </div>
+              <div class="dg-big">{{ it.metric[0] }}</div>
+              <div class="dg-l">{{ it.metric[1] }}</div>
+              <div class="dg-tags">
+                <span v-for="t in it.tags" :key="t">{{ t }}</span>
+              </div>
+            </div>
 
-              <h3 class="s6-ct">{{ it.name }}</h3>
-              <p class="s6-cd">{{ it.desc }}</p>
-              <ul class="s6-pts">
-                <li v-for="p in it.points" :key="p">
-                  <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <circle cx="12" cy="12" r="9.5" />
-                    <path d="m8 12.5 2.8 2.8 5.2-5.6" />
-                  </svg>
-                  {{ p }}
-                </li>
-              </ul>
-
-              <!-- product window -->
-              <div class="s6-wrap" aria-hidden="true">
+            <!-- white "product UI" widget -->
+            <div class="s6-w s6-w1" aria-hidden="true">
               <!-- ===== rate limiting ===== -->
-              <div v-if="it.id === 'rate'" class="s6-win">
-                <div class="d-bar">
-                  <i></i><i></i><i></i>
-                  <span><svg viewBox="0 0 24 24" v-html="icons.rate"></svg>POST /api/auth/login</span>
-                  <em class="d-live"><b></b>Live</em>
+              <template v-if="it.id === 'rate'">
+                <div class="d-h">
+                  <svg viewBox="0 0 24 24" class="d-i" v-html="icons.rate"></svg>
+                  POST /api/auth/login
+                  <span class="d-live"><i></i>Live</span>
                 </div>
-                <div class="d-stats">
-                  <div v-for="s in rateStats" :key="s.l">
-                    <b>{{ s.v }}</b>
-                    <span>{{ s.l }}</span>
-                  </div>
+                <div class="d-pills">
+                  <span v-for="s in rateStats" :key="s.l" class="d-pill" :class="s.k"><i v-if="s.k"></i>{{ s.v }} {{ s.l }}</span>
                 </div>
                 <div class="d-chart">
                   <span class="d-thr"><em>limit · 60 / min</em></span>
                   <div class="d-bars">
                     <i v-for="(h, k) in bars" :key="k" :class="{ hot: h > 60 }" :style="{ '--h': h + '%', '--k': k }"></i>
                   </div>
-                </div>
-                <div class="d-lab">
-                  <svg viewBox="0 0 24 24" v-html="icons.lock"></svg>
-                  Exponential lockout
                 </div>
                 <div class="d-steps">
                   <span v-for="(s, k) in lockSteps" :key="s.a" :style="{ '--k': k }">
@@ -132,14 +126,14 @@
                   </span>
                 </div>
                 <div class="d-toast"><i></i>429 · Too Many Requests</div>
-              </div>
+              </template>
 
               <!-- ===== audit trail ===== -->
-              <div v-else-if="it.id === 'audit'" class="s6-win">
-                <div class="d-bar">
-                  <i></i><i></i><i></i>
-                  <span><svg viewBox="0 0 24 24" v-html="icons.audit"></svg>Audit trail</span>
-                  <em class="d-imm"><svg viewBox="0 0 24 24" v-html="icons.lock"></svg>Immutable</em>
+              <template v-else-if="it.id === 'audit'">
+                <div class="d-h">
+                  <svg viewBox="0 0 24 24" class="d-i" v-html="icons.audit"></svg>
+                  Audit trail
+                  <span class="d-imm"><svg viewBox="0 0 24 24" v-html="icons.lock"></svg>Immutable</span>
                 </div>
                 <div class="d-log">
                   <div v-for="(r, k) in auditRows" :key="k" class="d-ev" :style="{ '--k': k }">
@@ -148,30 +142,28 @@
                       <p>
                         <b>{{ r.n }}</b> {{ r.a }} <u>{{ r.t }}</u>
                       </p>
-                      <span v-if="r.f" class="d-diff"
-                        >{{ r.f }}: <s>{{ r.from }}</s> <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></svg> <strong>{{ r.to }}</strong></span
+                      <span class="d-diff"
+                        >{{ r.f }}: <s>{{ r.from }}</s>
+                        <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+                        <strong>{{ r.to }}</strong></span
                       >
-                      <span v-else class="d-diff mute">No field changes</span>
                     </div>
-                    <div class="d-evt">
-                      <code>{{ r.ip }}</code>
-                      <span>{{ r.time }}</span>
-                    </div>
+                    <span class="d-time">{{ r.time }}</span>
                   </div>
                 </div>
                 <div class="d-foot">
-                  <span><i></i>4 fields per event · user, action, IP, time</span>
+                  <span><i></i>user · action · IP · time</span>
                   <em class="d-export"><svg viewBox="0 0 24 24"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19.5h14" /></svg>Export</em>
                 </div>
                 <div class="d-toast"><i></i>audit-log.csv exported</div>
-              </div>
+              </template>
 
               <!-- ===== recycle bin ===== -->
-              <div v-else class="s6-win">
-                <div class="d-bar">
-                  <i></i><i></i><i></i>
-                  <span><svg viewBox="0 0 24 24" v-html="icons.bin"></svg>Recycle bin</span>
-                  <em class="d-imm"><svg viewBox="0 0 24 24" v-html="icons.restore"></svg>90-day buffer</em>
+              <template v-else>
+                <div class="d-h">
+                  <svg viewBox="0 0 24 24" class="d-i" v-html="icons.bin"></svg>
+                  Recycle bin
+                  <span class="d-imm"><svg viewBox="0 0 24 24" v-html="icons.restore"></svg>90-day buffer</span>
                 </div>
                 <div class="d-bin">
                   <div v-for="(r, k) in binRows" :key="k" class="d-item" :class="{ first: k === 0 }" :style="{ '--k': k }">
@@ -180,10 +172,7 @@
                       <p>
                         <b>{{ r.n }}</b>
                       </p>
-                      <span class="d-left"
-                        >Deleted {{ r.ago }} · {{ r.left }} d left
-                        <i><b :style="{ width: (r.left / 90) * 100 + '%' }"></b></i
-                      ></span>
+                      <span class="d-left">Deleted {{ r.ago }} · {{ r.left }} d left</span>
                     </div>
                     <span class="d-btnwrap">
                       <em class="d-btn"><svg viewBox="0 0 24 24" v-html="icons.restore"></svg>Restore</em>
@@ -195,11 +184,53 @@
                   <span><svg viewBox="0 0 24 24" v-html="icons.lock"></svg>Permanent delete · Admin only</span>
                 </div>
                 <div class="d-toast"><i></i>Restored with 12 linked records</div>
-              </div>
+              </template>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ right: list with progress ============ -->
+        <ul
+          ref="listEl"
+          class="s6-list"
+          role="group"
+          aria-label="Data protection and audit controls"
+          @pointerenter="paused = true"
+          @pointerleave="paused = false"
+          @focusin="paused = true"
+          @focusout="paused = false"
+          @keydown="onKey"
+        >
+          <li v-for="(it, i) in items" :key="it.id" class="s6-item" :class="{ on: active === i }" :style="{ '--i': i }">
+            <button
+              type="button"
+              class="s6-ib"
+              :aria-expanded="active === i"
+              :aria-controls="`s6-p-${it.id}`"
+              @click="select(i)"
+              @pointerenter="onEnter(i, $event)"
+              @pointerleave="onLeave"
+            >
+              <span class="s6-ico"><svg viewBox="0 0 24 24" v-html="icons[it.icon]"></svg></span>
+              <span class="s6-it">{{ it.name }}</span>
+            </button>
+            <p class="s6-id">{{ it.desc }}</p>
+            <div :id="`s6-p-${it.id}`" class="s6-more" role="region" :aria-label="it.name">
+              <div>
+                <ul class="s6-pts">
+                  <li v-for="p in it.points" :key="p">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <circle cx="12" cy="12" r="9.5" />
+                      <path d="m8 12.5 2.8 2.8 5.2-5.6" />
+                    </svg>
+                    {{ p }}
+                  </li>
+                </ul>
               </div>
             </div>
-          </article>
-        </div>
+            <span class="s6-line" aria-hidden="true"><i :style="{ width: active === i ? progress * 100 + '%' : '0%' }"></i></span>
+          </li>
+        </ul>
       </div>
     </div>
   </section>
@@ -209,18 +240,24 @@
 /**
  * SectionData.vue — "Data Protection & Audit" (part 03 of the security story, Vue 3, <script setup>)
  *
- * • Three silk cards side by side; each has its copy on top and a live product window underneath.
- * • Widgets animate once when the section scrolls into view; cards lift on hover.
+ * Same design as SectionNetwork (part 02):
+ * • Left: a silk-gradient stage whose floating product widgets cross-fade per protection.
+ * • Right: three protections with an orange progress line. The active one opens its 3 proof points.
+ * • Auto-plays every ~6.5s while in view (pauses on hover/focus). Click, hover (mouse) or ← → ↑ ↓ switch slides.
  * • Backgrounds are procedural "silk" (SVG lighting filters). For real photos set `img: '/path/photo.jpg'` on an item.
  *
  * No props. Browser APIs are only used in onMounted / handlers (SSR / Nuxt safe).
- * Everything is namespaced `.s6-` / `.d-` so it can sit on the same page as SectionAuth (`.s4-`) and SectionNetwork (`.s5-`).
+ * Everything is namespaced `.s6-` / `.d-` / `.dg-` so it can sit on the same page as SectionAuth (`.s4-`) and SectionNetwork (`.s5-`).
  */
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue'
 
 const rootEl = ref(null)
+const listEl = ref(null)
 const mounted = ref(false)
 const revealed = ref(false)
+const active = ref(0)
+const progress = ref(0)
+const paused = ref(false)
 
 /* stroke icons — 24px grid */
 const icons = {
@@ -235,14 +272,14 @@ const icons = {
 const items = [
   {
     id: 'rate',
-    num: '11',
     icon: 'rate',
     img: '',
     name: 'Rate Limiting',
     desc: 'Auto-blocks brute-force sign-in attempts.',
     bg: 'linear-gradient(135deg,#ffa05a 0%,#c4480e 50%,#4a1a06 100%)',
     silk: [0.004, 0.0112, 6, 245],
-    metric: ['Sliding window', 'Login and API endpoints', 'Throttle'],
+    metric: ['60 s', 'Sliding window on login and API endpoints', 'Throttle'],
+    tags: ['Lockout', '429 reply'],
     points: [
       'Sliding-window rate limiting on all login and API endpoints',
       'Exponential backoff lockouts upon repeated failed attempts',
@@ -251,14 +288,14 @@ const items = [
   },
   {
     id: 'audit',
-    num: '12',
     icon: 'audit',
     img: '',
     name: 'Audit Trail Logs',
     desc: 'Immutable log of who changed what.',
     bg: 'linear-gradient(135deg,#6aa3e6 0%,#245aa6 50%,#0a1f45 100%)',
     silk: [0.005, 0.009, 19, 215],
-    metric: ['Before / after', 'Tracked on leads and quotes', 'Field level'],
+    metric: ['4 fields', 'User, action, IP and timestamp on every event', 'Immutable'],
+    tags: ['Before / after', 'CSV export'],
     points: [
       'Records user ID, exact action, IP address, and timestamp',
       'Tracks full before/after field changes on leads and quotes',
@@ -267,14 +304,14 @@ const items = [
   },
   {
     id: 'bin',
-    num: '13',
     icon: 'bin',
     img: '',
     name: 'Soft Delete / Recycle Bin',
     desc: 'One-click restore with zero data loss.',
     bg: 'linear-gradient(135deg,#f6b65a 0%,#d9821c 50%,#7c3a08 100%)',
     silk: [0.0039, 0.0108, 27, 240],
-    metric: ['90 days', 'Recovery buffer', 'Zero data loss'],
+    metric: ['90 days', 'Recovery buffer for deleted records', 'Zero data loss'],
+    tags: ['1-click restore', ],
     points: [
       '90-day recovery buffer for accidentally deleted leads and records',
       'Restores complete relational data trees with one click',
@@ -285,9 +322,9 @@ const items = [
 
 /* mock data */
 const rateStats = [
-  { v: '1,284', l: 'requests / min' },
-  { v: '312', l: 'blocked' },
-  { v: '60 s', l: 'sliding window' },
+  { v: '1,284', l: 'req / min', k: '' },
+  { v: '312', l: 'blocked', k: 'r' },
+  { v: '60 s', l: 'window', k: '' },
 ]
 const bars = [22, 30, 26, 38, 34, 44, 40, 52, 48, 92, 100, 96, 70, 46, 36, 30, 26, 24]
 const lockSteps = [
@@ -296,10 +333,9 @@ const lockSteps = [
   { a: '8 fails', t: '1 hour' },
 ]
 const auditRows = [
-  { u: 'NP', c: '#f2540c', n: 'Nimal P.', a: 'edited', t: 'Quote #Q-2041', f: 'Discount', from: '5%', to: '10%', ip: '192.168.4.21', time: '10:42:08' },
-  { u: 'SK', c: '#245aa6', n: 'Sara K.', a: 'updated', t: 'Lead #L-318', f: 'Stage', from: 'New', to: 'Won', ip: '10.0.2.57', time: '10:39:51' },
-  { u: 'AD', c: '#2b8ca3', n: 'Admin', a: 'exported', t: 'Invoice list', f: '', from: '', to: '', ip: '172.16.0.4', time: '10:31:20' },
-  { u: 'RM', c: '#c26a16', n: 'Ravi M.', a: 'deleted', t: 'Lead #L-297', f: 'Status', from: 'Active', to: 'Deleted', ip: '192.168.4.33', time: '10:24:02' },
+  { u: 'NP', c: '#f2540c', n: 'Nimal P.', a: 'edited', t: 'Quote #Q-2041', f: 'Discount', from: '5%', to: '10%', time: '10:42' },
+  { u: 'SK', c: '#245aa6', n: 'Sara K.', a: 'updated', t: 'Lead #L-318', f: 'Stage', from: 'New', to: 'Won', time: '10:39' },
+  { u: 'RM', c: '#c26a16', n: 'Ravi M.', a: 'deleted', t: 'Lead #L-297', f: 'Status', from: 'Active', to: 'Deleted', time: '10:24' },
 ]
 const binRows = [
   { kind: 'Lead', n: 'Kasun Perera', ago: '3 d ago', left: 87 },
@@ -307,12 +343,47 @@ const binRows = [
   { kind: 'Client', n: 'Lanka Mart (Pvt) Ltd', ago: '41 d ago', left: 49 },
 ]
 
+/* ------------------------------------------------------------------ interaction */
+const AUTOPLAY_MS = 6500
+const TICK = 80
+let hoverTimer = 0
+let reduceMotion = false
+let inView = false
+
+function select(i) {
+  if (i === active.value) return
+  active.value = i
+  progress.value = 0
+}
+function next() {
+  select((active.value + 1) % items.length)
+}
+function onEnter(i, e) {
+  if (e.pointerType !== 'mouse' || i === active.value) return
+  clearTimeout(hoverTimer)
+  hoverTimer = setTimeout(() => select(i), 120)
+}
+function onLeave() {
+  clearTimeout(hoverTimer)
+}
+async function onKey(e) {
+  const dir = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? -1 : 0
+  if (!dir || !e.target.classList?.contains('s6-ib')) return
+  e.preventDefault()
+  const n = (active.value + dir + items.length) % items.length
+  select(n)
+  await nextTick()
+  listEl.value?.querySelectorAll('.s6-ib')[n]?.focus()
+}
+
 /* ------------------------------------------------------------------ lifecycle */
-let ioReveal
+const timers = new Set()
+let ioReveal, ioView
 
 onMounted(() => {
   mounted.value = true
-  // all three cards animate their widgets once the section scrolls into view
+  reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
   ioReveal = new IntersectionObserver(
     (es, o) => {
       if (es[0].isIntersecting) {
@@ -323,9 +394,32 @@ onMounted(() => {
     { threshold: 0.12 },
   )
   ioReveal.observe(rootEl.value)
+
+  ioView = new IntersectionObserver((es) => {
+    inView = es[0].isIntersecting
+  })
+  ioView.observe(rootEl.value)
+
+  if (reduceMotion) {
+    progress.value = 1
+  } else {
+    // auto-advance with a visible progress line under the active item
+    const ap = setInterval(() => {
+      if (paused.value || !inView || document.hidden) return
+      progress.value = Math.min(1, progress.value + TICK / AUTOPLAY_MS)
+      if (progress.value >= 1) next()
+    }, TICK)
+    timers.add(ap)
+  }
 })
 onBeforeUnmount(() => {
   ioReveal?.disconnect()
+  ioView?.disconnect()
+  clearTimeout(hoverTimer)
+  timers.forEach((t) => {
+    clearInterval(t)
+    clearTimeout(t)
+  })
 })
 </script>
 
@@ -391,23 +485,35 @@ onBeforeUnmount(() => {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 12px 6px 10px;
+  padding: 8px 15px 8px 11px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px solid var(--line);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--ink-2);
-  box-shadow: 0 6px 18px -10px rgba(20, 21, 43, 0.25);
+  border: 1.5px solid transparent;
+  background:
+    linear-gradient(#fff, #fff) padding-box,
+    linear-gradient(90deg, #ff9a3d, #e0407a) border-box;
+  font-size: 13.5px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: transform 0.4s var(--ease), box-shadow 0.4s;
 }
-.s6-eyebrow i {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--o1);
-  animation: s6-ping 2s infinite;
+.s6-eyebrow span {
+  background: linear-gradient(90deg, #f2540c, #d6336c);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.s6-eyebrow svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: #f2540c;
+  stroke-width: 1.7;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.s6-eyebrow:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 24px -14px rgba(242, 84, 12, 0.6);
 }
 .s6-title {
   margin: 22px 0 0;
@@ -451,31 +557,54 @@ onBeforeUnmount(() => {
   color: var(--muted);
 }
 
-/* ============ white card ============ */
-.s6-card {
+/* ============ grid ============ */
+.s6-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.04fr) minmax(0, 1fr);
+  gap: clamp(26px, 4vw, 56px);
+  align-items: start;
   margin-top: clamp(26px, 3.4vw, 40px);
   margin-inline: calc(-1 * clamp(22px, 3.6vw, 48px));
-  padding: clamp(14px, 2vw, 22px);
-  border-radius: 28px;
+  padding: 14px clamp(22px, 3.6vw, 48px) clamp(22px, 3.6vw, 48px);
+  border-radius: 24px;
   background: #fff;
   border: 1px solid var(--line);
   box-shadow:
     0 1px 0 #fff inset,
     0 40px 80px -50px rgba(20, 21, 43, 0.45);
 }
-.s6-js .s6-card {
+
+/* ============ stage (left) ============ */
+.s6-stage {
+  container-type: inline-size;
+  position: relative;
+  height: 470px;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: 28px;
+  background: #14152b;
+  color: #fff;
+}
+.s6-js .s6-stage {
   opacity: 0;
   transform: translateY(26px);
 }
-.s6-js.s6-in .s6-card {
+.s6-js.s6-in .s6-stage {
   opacity: 1;
   transform: none;
   transition:
     opacity 0.8s var(--ease) 0.15s,
     transform 0.9s var(--ease) 0.15s;
 }
-
-/* ============ body ============ */
+.s6-stage::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+  pointer-events: none;
+}
 .s6-layer {
   position: absolute;
   inset: 0;
@@ -498,6 +627,7 @@ onBeforeUnmount(() => {
   overflow: hidden;
 }
 .s6-silk {
+  /* fixed size + centred so the heavy filter is rasterised once */
   position: absolute;
   left: 50%;
   top: 0;
@@ -519,10 +649,10 @@ onBeforeUnmount(() => {
 }
 .s6-deco {
   position: absolute;
-  right: -34px;
-  top: 40px;
-  width: 270px;
-  height: 270px;
+  right: -30px;
+  bottom: -20px;
+  width: 300px;
+  height: 300px;
   fill: none;
   stroke: #fff;
   stroke-width: 0.5;
@@ -548,55 +678,14 @@ onBeforeUnmount(() => {
     linear-gradient(0deg, rgba(8, 10, 26, 0.32), rgba(8, 10, 26, 0) 50%);
 }
 
-/* copy content */
-.s6-in2 {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  padding: 24px 26px 22px;
-  display: flex;
-  flex-direction: column;
-}
-.s6-in2 > * {
-  opacity: 0;
-  transform: translateY(14px);
-  transition:
-    opacity 0.25s,
-    transform 0.25s;
-}
-.s6-layer.on .s6-in2 > * {
-  opacity: 1;
-  transform: none;
-  transition:
-    opacity 0.6s var(--ease),
-    transform 0.8s var(--ease);
-}
-.s6-layer.on .s6-in2 > :nth-child(2) {
-  transition-delay: 0.12s;
-}
-.s6-layer.on .s6-in2 > :nth-child(3) {
-  transition-delay: 0.18s;
-}
-.s6-layer.on .s6-in2 > :nth-child(4) {
-  transition-delay: 0.26s;
-}
-.s6-layer.on .s6-in2 > :nth-child(5) {
-  transition-delay: 0.38s;
-}
+/* top-left icon */
 .s6-top {
+  position: absolute;
+  left: 24px;
+  top: 22px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 18px;
-}
-.s6-tn {
-  font-size: 11px;
-  font-weight: 600;
-  padding: 3px 8px;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.9);
-  color: var(--ink);
-  font-variant-numeric: tabular-nums;
+  gap: 8px;
 }
 .s6-ti {
   width: 34px;
@@ -617,93 +706,113 @@ onBeforeUnmount(() => {
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-.s6-ct {
-  margin: 0;
-  font-size: clamp(24px, 2.4vw, 30px);
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  line-height: 1.15;
+
+/* widgets */
+.s6-w {
+  position: absolute;
+  opacity: 0;
+  transform: translateY(22px) scale(0.97);
+  transition:
+    opacity 0.3s,
+    transform 0.3s;
 }
-.s6-cd {
-  margin: 8px 0 0;
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.85);
+.s6-layer.on .s6-w {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.7s var(--ease),
+    transform 0.9s var(--ease);
 }
-.s6-pts {
-  margin: 18px 0 0;
-  padding: 0;
-  list-style: none;
-  display: grid;
+.s6-layer.on .s6-w1 {
+  transition-delay: 0.2s;
+}
+.s6-layer.on .s6-w2 {
+  transition-delay: 0.38s;
+}
+.s6-w1 {
+  left: 24px;
+  bottom: 24px;
+  width: min(340px, calc(100% - 48px));
+  padding: 15px 16px 14px;
+  border-radius: 22px;
+  background: #fff;
+  color: var(--ink);
+  box-shadow: 0 30px 50px -26px rgba(8, 10, 26, 0.75);
+  display: flex;
+  flex-direction: column;
   gap: 10px;
+  z-index: 3;
 }
-.s6-pts li {
-  display: flex;
-  gap: 9px;
-  align-items: flex-start;
-  font-size: 12.5px;
-  line-height: 1.5;
-  color: rgba(255, 255, 255, 0.93);
-}
-.s6-pts svg {
-  flex: none;
-  width: 16px;
-  height: 16px;
-  margin-top: 1px;
-  fill: rgba(255, 255, 255, 0.18);
-  stroke: #fff;
-  stroke-width: 1.7;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.s6-g {
-  margin-top: auto;
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  padding: 11px 14px;
-  border-radius: 18px;
+.s6-w2 {
+  right: 24px;
+  top: 24px;
+  width: 190px;
+  height: 152px;
+  padding: 14px 16px;
+  border-radius: 22px;
   background: rgba(255, 255, 255, 0.14);
   border: 1px solid rgba(255, 255, 255, 0.34);
   backdrop-filter: blur(14px) saturate(1.2);
   -webkit-backdrop-filter: blur(14px) saturate(1.2);
   box-shadow: 0 24px 40px -26px rgba(8, 10, 26, 0.6);
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
 }
-.g-ic {
-  flex: none;
-  width: 30px;
-  height: 30px;
+@container (max-width: 520px) {
+  .s6-w2 {
+    display: none;
+  }
+}
+.dg-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.dg-ic {
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.9);
 }
-.g-ic svg {
-  width: 15px;
-  height: 15px;
+.dg-ic svg {
+  width: 14px;
+  height: 14px;
   fill: none;
   stroke: var(--ink);
   stroke-width: 1.9;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-.g-main {
-  flex: 1;
-  min-width: 0;
-  display: grid;
-}
-.g-main b {
-  font-size: 19px;
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  line-height: 1.15;
-}
-.g-main em {
-  font-style: normal;
+.dg-k {
   font-size: 10.5px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+}
+.dg-big {
+  margin-top: auto;
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+}
+.dg-l {
+  margin-top: 5px;
+  font-size: 10.5px;
+  line-height: 1.35;
   color: rgba(255, 255, 255, 0.82);
 }
-.g-k {
-  padding: 3px 9px;
+.dg-tags {
+  margin-top: 9px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.dg-tags span {
+  padding: 2px 8px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.2);
   font-size: 9.5px;
@@ -711,61 +820,190 @@ onBeforeUnmount(() => {
   white-space: nowrap;
 }
 
-/* ============ product window ============ */
-.s6-win {
-  position: relative;
-  width: 100%;
-  padding: 0 0 26px;
-  border-radius: 20px;
-  background: #fff;
-  box-shadow:
-    0 0 0 1px rgba(20, 21, 43, 0.05),
-    0 40px 60px -34px rgba(20, 21, 43, 0.55);
+/* ============ list (right) ============ */
+.s6-list {
+  margin: 0;
+  padding: clamp(0px, 3vw, 34px) 0 0;
+  list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  opacity: 0;
-  transform: translateY(22px) scale(0.97);
-  transition:
-    opacity 0.3s,
-    transform 0.3s;
 }
-.s6-layer.on .s6-win {
+.s6-js .s6-item {
+  opacity: 0;
+  transform: translateY(22px);
+}
+.s6-js.s6-in .s6-item {
   opacity: 1;
   transform: none;
   transition:
-    opacity 0.7s var(--ease) 0.2s,
-    transform 0.9s var(--ease) 0.2s;
+    opacity 0.8s var(--ease),
+    transform 0.9s var(--ease);
+  transition-delay: calc(var(--i) * 0.09s + 0.25s);
 }
-.s6-win > :not(.d-bar):not(.d-toast) {
-  margin-inline: 16px;
+.s6-item {
+  position: relative;
+  padding: 22px 0 24px;
 }
-.d-bar {
+.s6-item:first-child {
+  padding-top: 0;
+}
+.s6-item:last-child {
+  padding-bottom: 0;
+}
+.s6-ib {
+  width: 100%;
   display: flex;
   align-items: center;
-  gap: 5px;
-  height: 42px;
-  padding: 0 14px;
-  border-bottom: 1px solid var(--line);
+  gap: 12px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 12px;
 }
-.d-bar > i {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #e6e3de;
+.s6-ib:focus-visible {
+  outline: 2px solid var(--o1);
+  outline-offset: 4px;
 }
-.d-bar > span {
-  margin-left: 8px;
+.s6-ico {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: var(--peach);
+  border: 1px solid var(--peach-2);
+  transition:
+    background 0.4s,
+    box-shadow 0.4s,
+    transform 0.5s var(--ease);
+}
+.s6-ico svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: var(--o2);
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke 0.4s;
+}
+.s6-item.on .s6-ico {
+  background: linear-gradient(145deg, var(--o1), var(--o2));
+  border-color: transparent;
+  box-shadow: 0 10px 18px -8px rgba(242, 84, 12, 0.7);
+  transform: scale(1.06);
+}
+.s6-item.on .s6-ico svg {
+  stroke: #fff;
+}
+.s6-it {
+  flex: 1;
+  min-width: 0;
+  font-size: clamp(17px, 1.7vw, 20px);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  color: var(--ink-2);
+  transition: color 0.4s;
+}
+.s6-item.on .s6-it,
+.s6-ib:hover .s6-it {
+  color: var(--ink);
+}
+.s6-id {
+  margin: 10px 0 0 46px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.s6-more {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.6s var(--ease);
+}
+.s6-more > div {
+  overflow: hidden;
+  min-height: 0;
+}
+.s6-item.on .s6-more {
+  grid-template-rows: 1fr;
+}
+.s6-pts {
+  margin: 14px 0 2px 46px;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 9px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 0.25s,
+    transform 0.25s;
+}
+.s6-item.on .s6-pts {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.6s var(--ease) 0.2s,
+    transform 0.7s var(--ease) 0.2s;
+}
+.s6-pts li {
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+.s6-pts svg {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  margin-top: 1px;
+  fill: var(--peach);
+  stroke: var(--o2);
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* divider + progress */
+.s6-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--line);
+  overflow: hidden;
+}
+.s6-item:last-child .s6-line {
+  display: none;
+}
+.s6-line i {
+  display: block;
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--o1), var(--o2));
+  transition: width 0.1s linear;
+}
+
+/* ============ widget internals ============ */
+.d-h {
   display: flex;
   align-items: center;
   gap: 7px;
-  min-width: 0;
   font-size: 11px;
   font-weight: 600;
   color: var(--ink-2);
   white-space: nowrap;
 }
-.d-bar > span svg {
+.d-i {
   flex: none;
   width: 15px;
   height: 15px;
@@ -775,16 +1013,13 @@ onBeforeUnmount(() => {
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-.d-bar > em {
-  margin-left: auto;
-  font-style: normal;
-}
 .d-live,
 .d-imm {
+  margin-left: auto;
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 3px 9px;
+  padding: 2px 8px;
   border-radius: 999px;
   font-size: 9.5px;
   font-weight: 700;
@@ -793,14 +1028,11 @@ onBeforeUnmount(() => {
   background: #ecfdf3;
   color: #15803d;
 }
-.d-live b {
+.d-live i {
   width: 5px;
   height: 5px;
   border-radius: 50%;
   background: currentColor;
-}
-.s6-layer.on .d-live b {
-  animation: s6-blink 1.6s ease-in-out infinite;
 }
 .d-imm {
   background: var(--peach);
@@ -815,16 +1047,50 @@ onBeforeUnmount(() => {
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+.s6-layer.on .d-live i,
+.s6-layer.on .d-pill i,
+.s6-layer.on .d-foot span i {
+  animation: s6-blink 1.6s ease-in-out infinite;
+}
 
-/* toast (floats over the window corner) */
+/* pills */
+.d-pills {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+.d-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: #f3f1ee;
+  color: var(--ink-2);
+  font-size: 9.5px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.d-pill i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.d-pill.r {
+  color: #c2262b;
+  background: #fff0f0;
+}
+
+/* toast (floats over the widget corner) */
 .d-toast {
   position: absolute;
-  right: -10px;
-  bottom: -14px;
+  right: -8px;
+  bottom: -12px;
   display: flex;
   align-items: center;
   gap: 7px;
-  padding: 7px 12px;
+  padding: 6px 12px;
   border-radius: 999px;
   background: var(--ink);
   color: #fff;
@@ -846,62 +1112,39 @@ onBeforeUnmount(() => {
 }
 
 /* rate limiting */
-.d-stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-}
-.d-stats div {
-  padding: 8px 10px;
-  border-radius: 12px;
-  background: #f7f6f4;
-}
-.d-stats b {
-  display: block;
-  font-size: 17px;
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  font-variant-numeric: tabular-nums;
-}
-.d-stats div:nth-child(2) b {
-  color: #c2262b;
-}
-.d-stats span {
-  font-size: 9.5px;
-  color: var(--muted);
-}
 .d-chart {
   position: relative;
-  height: 100px;
+  height: 80px;
+  padding: 8px 10px 0;
   border-radius: 12px;
   background: #f7f6f4;
-  padding: 8px 10px 0;
+  overflow: hidden;
 }
 .d-thr {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: calc(60% * 0.84 + 0px);
+  bottom: 43px; /* 60% of the 72px bar area */
   border-top: 1.5px dashed rgba(194, 38, 43, 0.55);
 }
 .d-thr em {
   position: absolute;
   right: 8px;
-  top: -16px;
+  top: -14px;
   font-style: normal;
   font-size: 8.5px;
   font-weight: 700;
   color: #c2262b;
 }
 .d-bars {
-  height: 100%;
+  height: 72px;
   display: flex;
   align-items: flex-end;
   gap: 4px;
 }
 .d-bars i {
   flex: 1;
-  height: calc(var(--h) * 0.84);
+  height: var(--h);
   border-radius: 4px 4px 0 0;
   background: linear-gradient(180deg, #ffb27c, #ff7a1a);
   transform-origin: bottom;
@@ -914,43 +1157,25 @@ onBeforeUnmount(() => {
   animation: s6-grow 0.7s var(--ease) both;
   animation-delay: calc(0.45s + var(--k) * 0.04s);
 }
-.d-lab {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 10.5px;
-  font-weight: 600;
-  color: var(--ink-2);
-}
-.d-lab svg {
-  width: 13px;
-  height: 13px;
-  fill: none;
-  stroke: var(--o2);
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
 .d-steps {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
+  gap: 6px;
 }
 .d-steps span {
-  position: relative;
   display: grid;
   gap: 1px;
-  padding: 8px 10px;
-  border-radius: 12px;
+  padding: 6px 9px;
+  border-radius: 11px;
   background: var(--peach);
   border: 1px solid var(--peach-2);
 }
 .d-steps small {
-  font-size: 9.5px;
+  font-size: 9px;
   color: #b84a0a;
 }
 .d-steps b {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--o2);
 }
@@ -960,16 +1185,18 @@ onBeforeUnmount(() => {
 }
 
 /* audit trail */
-.d-log {
+.d-log,
+.d-bin {
   display: grid;
-  gap: 6px;
+  gap: 5px;
 }
-.d-ev {
+.d-ev,
+.d-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 8px 10px;
-  border-radius: 12px;
+  gap: 9px;
+  padding: 7px 9px;
+  border-radius: 11px;
   background: #f7f6f4;
   min-width: 0;
 }
@@ -980,14 +1207,14 @@ onBeforeUnmount(() => {
 }
 .d-av {
   flex: none;
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   display: grid;
   place-items: center;
   background: var(--c);
   color: #fff;
-  font-size: 9.5px;
+  font-size: 9px;
   font-weight: 700;
 }
 .d-evm {
@@ -998,7 +1225,7 @@ onBeforeUnmount(() => {
 }
 .d-evm p {
   margin: 0;
-  font-size: 11px;
+  font-size: 10.5px;
   line-height: 1.3;
   color: var(--ink-2);
   white-space: nowrap;
@@ -1023,7 +1250,7 @@ onBeforeUnmount(() => {
   border-radius: 999px;
   background: #fff;
   border: 1px solid var(--line);
-  font-size: 9.5px;
+  font-size: 9px;
   color: var(--muted);
   white-space: nowrap;
 }
@@ -1043,23 +1270,8 @@ onBeforeUnmount(() => {
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-.d-diff.mute {
-  background: transparent;
-  border-color: transparent;
-  padding-left: 0;
-}
-.d-evt {
+.d-time {
   flex: none;
-  display: grid;
-  gap: 2px;
-  text-align: right;
-}
-.d-evt code {
-  font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
-  font-size: 9.5px;
-  color: var(--ink-2);
-}
-.d-evt span {
   font-size: 9.5px;
   color: var(--muted);
   font-variant-numeric: tabular-nums;
@@ -1069,7 +1281,7 @@ onBeforeUnmount(() => {
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  font-size: 10px;
+  font-size: 9.5px;
   color: var(--muted);
 }
 .d-foot span {
@@ -1096,7 +1308,7 @@ onBeforeUnmount(() => {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 4px 11px;
+  padding: 3px 10px;
   border-radius: 999px;
   background: var(--ink);
   color: #fff;
@@ -1115,22 +1327,9 @@ onBeforeUnmount(() => {
 }
 
 /* recycle bin */
-.d-bin {
-  display: grid;
-  gap: 6px;
-}
-.d-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 9px 10px;
-  border-radius: 12px;
-  background: #f7f6f4;
-  min-width: 0;
-}
 .d-kind {
   flex: none;
-  min-width: 46px;
+  min-width: 44px;
   padding: 4px 0;
   text-align: center;
   border-radius: 8px;
@@ -1141,29 +1340,11 @@ onBeforeUnmount(() => {
   color: var(--ink-2);
 }
 .d-left {
-  display: flex;
-  align-items: center;
-  gap: 8px;
   font-size: 9.5px;
   color: var(--muted);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-.d-left i {
-  flex: 1;
-  min-width: 24px;
-  max-width: 70px;
-  height: 3px;
-  border-radius: 3px;
-  background: rgba(20, 21, 43, 0.1);
-  overflow: hidden;
-}
-.d-left i b {
-  display: block;
-  height: 100%;
-  border-radius: 3px;
-  background: linear-gradient(90deg, var(--o1), var(--o2));
 }
 .d-btnwrap {
   position: relative;
@@ -1176,7 +1357,7 @@ onBeforeUnmount(() => {
   align-items: center;
   justify-content: center;
   gap: 5px;
-  padding: 5px 11px;
+  padding: 4px 10px;
   border-radius: 999px;
   background: #fff;
   border: 1px solid rgba(20, 21, 43, 0.14);
@@ -1213,14 +1394,6 @@ onBeforeUnmount(() => {
 }
 
 /* ============ keyframes ============ */
-@keyframes s6-ping {
-  70% {
-    box-shadow: 0 0 0 8px rgba(255, 122, 26, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(255, 122, 26, 0);
-  }
-}
 @keyframes s6-in {
   from {
     opacity: 0;
@@ -1280,142 +1453,46 @@ onBeforeUnmount(() => {
   }
 }
 
-/* ============ three-card row ============ */
-.s6-row {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(10px, 1.4vw, 16px);
-}
-.s6-c.s6-layer {
-  /* the shared layer rules are for stacked layers; here each layer is a normal grid cell */
-  position: relative;
-  inset: auto;
-  opacity: 1;
-  visibility: visible;
-  min-width: 0;
-  min-height: 640px;
-  overflow: hidden;
-  isolation: isolate;
-  border-radius: 24px;
-  background: #14152b;
-  color: #fff;
-  transition:
-    transform 0.6s var(--ease),
-    box-shadow 0.6s var(--ease);
-}
-.s6-c::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 6;
-  border-radius: inherit;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
-  pointer-events: none;
-}
-.s6-c.s6-layer:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 34px 50px -30px rgba(20, 21, 43, 0.6);
-}
-.s6-js .s6-c.s6-layer {
-  opacity: 0;
-  transform: translateY(26px);
-}
-.s6-js.s6-in .s6-c.s6-layer {
-  opacity: 1;
-  transform: none;
-  transition:
-    opacity 0.8s var(--ease) calc(var(--i) * 0.09s + 0.2s),
-    transform 0.9s var(--ease) calc(var(--i) * 0.09s + 0.2s),
-    box-shadow 0.6s var(--ease);
-}
-.s6-js.s6-in .s6-c.s6-layer:hover {
-  transform: translateY(-4px);
-  transition-delay: 0s;
-}
-.s6-c .s6-in2 {
-  position: relative;
-  inset: auto;
-  min-height: 640px;
-  padding: 22px 22px 24px;
-}
-.s6-c .s6-top {
-  gap: 8px;
-  margin-bottom: 16px;
-}
-.s6-mk {
-  margin-right: auto;
-  margin-left: 4px;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  border: 1px solid rgba(255, 255, 255, 0.28);
-}
-.s6-c .s6-ct {
-  font-size: clamp(22px, 2vw, 26px);
-}
-.s6-c .s6-cd {
-  font-size: 13.5px;
-}
-.s6-c .s6-pts {
-  margin-top: 14px;
-  gap: 9px;
-}
-.s6-c .s6-pts li {
-  font-size: 12px;
-}
-.s6-wrap {
-  margin-top: auto;
-  padding-top: 18px;
-  display: flex;
-  min-height: 252px;
-}
-.s6-wrap .s6-win {
-  margin: 0;
-  flex: 1;
-}
-/* compact windows */
-.s6-c .d-stats,
-.s6-c .d-lab,
-.s6-c .d-foot,
-.s6-c .d-ev:nth-child(n + 4),
-.s6-c .d-evt code,
-.s6-c .d-left i {
-  display: none;
-}
-.s6-c .d-chart {
-  height: 84px;
-}
-.s6-c .d-toast {
-  right: 10px;
-  bottom: -12px;
-}
-
 /* ============ responsive ============ */
-@media (max-width: 1060px) {
-  .s6-row {
-    grid-template-columns: 1fr;
-  }
-  .s6-c.s6-layer,
-  .s6-c .s6-in2 {
-    min-height: 0;
-  }
-  .s6-c .s6-in2 {
-    padding: 22px 22px 30px;
-  }
-  .s6-wrap {
-    max-width: 520px;
-  }
+@media (max-width: 960px) {
   .s6-head {
     grid-template-columns: minmax(0, 1fr) minmax(0, 300px);
     gap: 24px 28px;
+  }
+  .s6-grid {
+    grid-template-columns: 1fr;
+  }
+  .s6-list {
+    padding-top: 0;
+  }
+  .s6-stage {
+    height: 440px;
   }
 }
 @media (max-width: 760px) {
   .s6-head {
     grid-template-columns: 1fr;
   }
-  .s6-c .s6-in2 {
-    padding: 20px 18px 28px;
+  .s6-stage {
+    height: 420px;
+    border-radius: 24px;
+  }
+  .s6-w1 {
+    left: 16px;
+    bottom: 16px;
+    width: calc(100% - 32px);
+  }
+  .s6-top {
+    left: 16px;
+    top: 16px;
+  }
+  .s6-deco {
+    width: 200px;
+    height: 200px;
+  }
+  .s6-id,
+  .s6-pts {
+    margin-left: 0;
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -1427,7 +1504,8 @@ onBeforeUnmount(() => {
     transition-duration: 0.001s !important;
     transition-delay: 0s !important;
   }
-  .s6-js .s6-card,
+  .s6-js .s6-stage,
+  .s6-js .s6-item,
   .s6-js .s6-panel {
     opacity: 1;
     transform: none;

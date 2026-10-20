@@ -45,10 +45,15 @@
       <!-- ============ heading row ============ -->
       <header class="s5-head">
         <div class="s5-hl">
-          <span class="s5-eyebrow"><i></i>02 · Network &amp; Infrastructure</span>
+          <span class="s5-eyebrow">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4l1.6 4.4L15 10l-4.4 1.6L9 16l-1.6-4.4L3 10l4.4-1.6zM17.5 12l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9zM17 3.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z" /></svg>
+            <span>01 · Network &amp; Infrastructure</span>
+          </span>
           <h2 id="s5-title" class="s5-title">
-            Network &amp;
+            Network 
             <span>
+              &amp;
+            
               <b
                 >Infrastructure<svg viewBox="0 0 200 16" preserveAspectRatio="none" aria-hidden="true">
                   <path d="M2 11 C 30 3, 52 15, 84 8 S 146 3, 170 9 C 182 12, 192 8, 198 6" /></svg
@@ -85,7 +90,6 @@
             <div class="s5-scrim" aria-hidden="true"></div>
 
             <div class="s5-top" aria-hidden="true">
-              <span class="s5-tn">{{ it.num }}</span>
               <span class="s5-ti"><svg viewBox="0 0 24 24" v-html="icons[it.icon]"></svg></span>
             </div>
 
@@ -190,7 +194,6 @@
             >
               <span class="s5-ico"><svg viewBox="0 0 24 24" v-html="icons[it.icon]"></svg></span>
               <span class="s5-it">{{ it.name }}</span>
-              <span class="s5-num">{{ it.num }}</span>
             </button>
             <p class="s5-id">{{ it.desc }}</p>
             <div :id="`s5-p-${it.id}`" class="s5-more" role="region" :aria-label="it.name">
@@ -247,7 +250,6 @@ const icons = {
 const items = [
   {
     id: 'waf',
-    num: '08',
     icon: 'shield',
     img: '',
     name: 'Cloudflare WAF Protection',
@@ -264,7 +266,6 @@ const items = [
   },
   {
     id: 'ddos',
-    num: '09',
     icon: 'pulse',
     img: '',
     name: 'DDoS Mitigation',
@@ -281,7 +282,6 @@ const items = [
   },
   {
     id: 'tls',
-    num: '10',
     icon: 'lock',
     img: '',
     name: 'HTTPS / TLS 1.3',
@@ -449,23 +449,35 @@ onBeforeUnmount(() => {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 12px 6px 10px;
+  padding: 8px 15px 8px 11px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px solid var(--line);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--ink-2);
-  box-shadow: 0 6px 18px -10px rgba(20, 21, 43, 0.25);
+  border: 1.5px solid transparent;
+  background:
+    linear-gradient(#fff, #fff) padding-box,
+    linear-gradient(90deg, #ff9a3d, #e0407a) border-box;
+  font-size: 13.5px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: transform 0.4s var(--ease), box-shadow 0.4s;
 }
-.s5-eyebrow i {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--o1);
-  animation: s5-ping 2s infinite;
+.s5-eyebrow span {
+  background: linear-gradient(90deg, #f2540c, #d6336c);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.s5-eyebrow svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: #f2540c;
+  stroke-width: 1.7;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.s5-eyebrow:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 24px -14px rgba(242, 84, 12, 0.6);
 }
 .s5-title {
   margin: 22px 0 0;
@@ -629,7 +641,7 @@ onBeforeUnmount(() => {
     linear-gradient(0deg, rgba(8, 10, 26, 0.32), rgba(8, 10, 26, 0) 50%);
 }
 
-/* top-left badge row */
+/* top-left icon */
 .s5-top {
   position: absolute;
   left: 24px;
@@ -637,15 +649,6 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: center;
   gap: 8px;
-}
-.s5-tn {
-  font-size: 11px;
-  font-weight: 600;
-  padding: 3px 8px;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.9);
-  color: var(--ink);
-  font-variant-numeric: tabular-nums;
 }
 .s5-ti {
   width: 34px;
@@ -873,22 +876,6 @@ onBeforeUnmount(() => {
 .s5-item.on .s5-it,
 .s5-ib:hover .s5-it {
   color: var(--ink);
-}
-.s5-num {
-  font-size: 11px;
-  font-weight: 600;
-  padding: 3px 8px;
-  border-radius: 6px;
-  background: rgba(20, 21, 43, 0.06);
-  color: var(--muted);
-  font-variant-numeric: tabular-nums;
-  transition:
-    background 0.4s,
-    color 0.4s;
-}
-.s5-item.on .s5-num {
-  background: var(--ink);
-  color: #fff;
 }
 .s5-id {
   margin: 10px 0 0 46px;
@@ -1257,14 +1244,6 @@ onBeforeUnmount(() => {
 }
 
 /* ============ keyframes ============ */
-@keyframes s5-ping {
-  70% {
-    box-shadow: 0 0 0 8px rgba(255, 122, 26, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(255, 122, 26, 0);
-  }
-}
 @keyframes s5-in {
   from {
     opacity: 0;

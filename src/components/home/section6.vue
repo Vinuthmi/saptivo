@@ -80,13 +80,18 @@
 
     </svg>
 
+    <NetworkSection />
+
     <div class="s4-wrap">
 
       <!-- ============ left: heading ============ -->
 
       <header class="s4-head">
 
-        <span class="s4-eyebrow"><i></i>01 · Enterprise-grade security</span>
+        <span class="s4-eyebrow">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4l1.6 4.4L15 10l-4.4 1.6L9 16l-1.6-4.4L3 10l4.4-1.6zM17.5 12l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9zM17 3.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z" /></svg>
+          <span>02 · Enterprise-grade security</span>
+        </span>
 
         <h2 id="s4-title" class="s4-title">
 
@@ -165,8 +170,6 @@
             <div class="s4-inner" role="region" :aria-label="it.name">
 
               <div class="s4-top" aria-hidden="true">
-
-                <span class="s4-tn">{{ it.num }}</span>
 
                 <span class="s4-ti"><svg viewBox="0 0 24 24" v-html="icons[it.icon]"></svg></span>
 
@@ -426,7 +429,6 @@
 
     </div>
 
-    <NetworkSection />
     <DataProtectionSection />
 
   </section>
@@ -502,7 +504,7 @@ const items = [
 
   {
 
-    id: 'sms', num: '01', icon: 'sms', img: '',
+    id: 'sms', icon: 'sms', img: '',
 
     name: 'SMS OTP Login',
 
@@ -530,7 +532,7 @@ const items = [
 
   {
 
-    id: 'email', num: '02', icon: 'mail', img: '',
+    id: 'email', icon: 'mail', img: '',
 
     name: 'Email OTP Verification',
 
@@ -558,7 +560,7 @@ const items = [
 
   {
 
-    id: 'image', num: '03', icon: 'image', img: '',
+    id: 'image', icon: 'image', img: '',
 
     name: 'Image Captcha',
 
@@ -586,7 +588,7 @@ const items = [
 
   {
 
-    id: 'math', num: '04', icon: 'math', img: '',
+    id: 'math', icon: 'math', img: '',
 
     name: 'Text / Math Captcha',
 
@@ -614,7 +616,7 @@ const items = [
 
   {
 
-    id: 'rbac', num: '05', icon: 'roles', img: '',
+    id: 'rbac', icon: 'roles', img: '',
 
     name: 'Role-Based Access Control',
 
@@ -642,7 +644,7 @@ const items = [
 
   {
 
-    id: 'timeout', num: '06', icon: 'timer', img: '',
+    id: 'timeout', icon: 'timer', img: '',
 
     name: 'Session Timeout Lock',
 
@@ -670,7 +672,7 @@ const items = [
 
   {
 
-    id: 'device', num: '07', icon: 'finger', img: '',
+    id: 'device', icon: 'finger', img: '',
 
     name: 'Device Fingerprinting',
 
@@ -1001,7 +1003,7 @@ onBeforeUnmount(() => {
 
   max-width: 1240px;
 
-  margin: clamp(56px, 7vw, 96px) auto 0;
+  margin: clamp(56px, 7vw, 96px) auto;
 
   padding: 0;
 
@@ -1101,41 +1103,61 @@ onBeforeUnmount(() => {
 
   gap: 8px;
 
-  padding: 6px 12px 6px 10px;
+  padding: 8px 15px 8px 11px;
 
   border-radius: 999px;
 
-  background: rgba(255, 255, 255, 0.7);
+  border: 1.5px solid transparent;
 
-  border: 1px solid var(--line);
+  background:
+    linear-gradient(#fff, #fff) padding-box,
+    linear-gradient(90deg, #ff9a3d, #e0407a) border-box;
 
-  backdrop-filter: blur(6px);
+  font-size: 13.5px;
 
-  font-size: 10px;
+  font-weight: 500;
 
-  font-weight: 600;
+  text-decoration: none;
 
-  letter-spacing: 0.12em;
-
-  text-transform: uppercase;
-
-  color: var(--ink-2);
-
-  box-shadow: 0 6px 18px -10px rgba(20, 21, 43, 0.25);
+  transition: transform 0.4s var(--ease), box-shadow 0.4s;
 
 }
 
-.s4-eyebrow i {
+.s4-eyebrow span {
 
-  width: 7px;
+  background: linear-gradient(90deg, #f2540c, #d6336c);
 
-  height: 7px;
+  -webkit-background-clip: text;
 
-  border-radius: 50%;
+  background-clip: text;
 
-  background: var(--o1);
+  color: transparent;
 
-  animation: s4-ping 2s infinite;
+}
+
+.s4-eyebrow svg {
+
+  width: 18px;
+
+  height: 18px;
+
+  fill: none;
+
+  stroke: #f2540c;
+
+  stroke-width: 1.7;
+
+  stroke-linejoin: round;
+
+  stroke-linecap: round;
+
+}
+
+.s4-eyebrow:hover {
+
+  transform: translateY(-2px);
+
+  box-shadow: 0 14px 24px -14px rgba(242, 84, 12, 0.6);
 
 }
 
@@ -1549,7 +1571,7 @@ onBeforeUnmount(() => {
 
 }
 
-/* ---------- top row: number + icon ---------- */
+/* ---------- top row: icon ---------- */
 
 .s4-top {
 
@@ -1560,24 +1582,6 @@ onBeforeUnmount(() => {
   justify-content: space-between;
 
   margin-bottom: 16px;
-
-}
-
-.s4-tn {
-
-  font-size: 11px;
-
-  font-weight: 600;
-
-  padding: 3px 8px;
-
-  border-radius: 6px;
-
-  background: rgba(255, 255, 255, 0.9);
-
-  color: var(--ink);
-
-  font-variant-numeric: tabular-nums;
 
 }
 
@@ -2820,22 +2824,6 @@ onBeforeUnmount(() => {
 }
 
 /* ============ keyframes ============ */
-
-@keyframes s4-ping {
-
-  70% {
-
-    box-shadow: 0 0 0 8px rgba(255, 122, 26, 0);
-
-  }
-
-  100% {
-
-    box-shadow: 0 0 0 0 rgba(255, 122, 26, 0);
-
-  }
-
-}
 
 @keyframes s4-pop {
 
