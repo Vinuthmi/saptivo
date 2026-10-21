@@ -1,4 +1,5 @@
 <script setup>
+defineOptions({ name: 'HomeSection3' })
 import { ref } from 'vue'
 
 const active = ref(0)

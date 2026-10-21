@@ -426,8 +426,11 @@
 </template>
 
 <script setup>
+defineOptions({ name: 'HomeSection2' })
 /**
- * SectionTwo.vue — "Replace your Messy Excel Sheets" (Vue 3, <script setup>)
+ * SectionTwo.vue — "Replace your Messy Excel Sheets" (Vue 3, <script setup>
+defineOptions({ name: 'HomeSection2' })
+)
  *
  * Props:
  *   :submit-trial="async (payload) => { await api.post('/trial', payload) }"
@@ -440,7 +443,7 @@
  * SSR/Nuxt: all browser APIs live inside onMounted, so it is safe to render on the server
  * (wrap in <ClientOnly> if you prefer to skip the SSR markup of the animated parts).
  */
-import { ref, reactive, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
+import { ref, reactive, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
 
 const props = defineProps({
   /** async (payload) => void — call your API here. Throw to keep the form open. */
@@ -693,7 +696,8 @@ function renderGlobe(t) {
     for (let la = -80; la <= 80; la += 5) {
       const p = view(vec(la, lo))
       if (p.z > 0) {
-        pen ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)
+        if (pen) ctx.lineTo(p.x, p.y)
+        else ctx.moveTo(p.x, p.y)
         pen = true
       } else pen = false
     }
@@ -705,7 +709,8 @@ function renderGlobe(t) {
     for (let lo = -180; lo <= 180; lo += 5) {
       const p = view(vec(la, lo))
       if (p.z > 0) {
-        pen ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)
+        if (pen) ctx.lineTo(p.x, p.y)
+        else ctx.moveTo(p.x, p.y)
         pen = true
       } else pen = false
     }
@@ -767,7 +772,8 @@ function renderGlobe(t) {
       }
       const p = view(v)
       if (p.z > 0.02) {
-        pen ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)
+        if (pen) ctx.lineTo(p.x, p.y)
+        else ctx.moveTo(p.x, p.y)
         pen = true
       } else pen = false
     }
@@ -1077,7 +1083,8 @@ onMounted(() => {
   const gio = new IntersectionObserver(
     (es) => {
       globeVisible = es.some((e) => e.isIntersecting)
-      globeVisible ? startGlobe() : stopGlobe()
+      if (globeVisible) startGlobe()
+      else stopGlobe()
     },
     { threshold: 0.12 },
   )

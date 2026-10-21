@@ -106,6 +106,7 @@
 </template>
 
 <script setup>
+defineOptions({ name: 'HomeSection1' })
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 
 const ROTATION_INTERVAL_MS = 6000

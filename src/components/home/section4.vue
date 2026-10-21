@@ -278,6 +278,7 @@
 </template>
 
 <script setup>
+defineOptions({ name: 'HomeSection4' })
 import { ref, reactive, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
 
 defineProps({
@@ -568,7 +569,8 @@ function renderGlobe(t) {
     for (let la = -80; la <= 80; la += 5) {
       const p = view(vec(la, lo))
       if (p.z > 0) {
-        pen ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)
+        if (pen) ctx.lineTo(p.x, p.y)
+        else ctx.moveTo(p.x, p.y)
         pen = true
       } else pen = false
     }
@@ -580,7 +582,8 @@ function renderGlobe(t) {
     for (let lo = -180; lo <= 180; lo += 5) {
       const p = view(vec(la, lo))
       if (p.z > 0) {
-        pen ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)
+        if (pen) ctx.lineTo(p.x, p.y)
+        else ctx.moveTo(p.x, p.y)
         pen = true
       } else pen = false
     }
@@ -642,7 +645,8 @@ function renderGlobe(t) {
       }
       const p = view(v)
       if (p.z > 0.02) {
-        pen ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)
+        if (pen) ctx.lineTo(p.x, p.y)
+        else ctx.moveTo(p.x, p.y)
         pen = true
       } else pen = false
     }
@@ -840,7 +844,8 @@ onMounted(() => {
         runTypewriter()
       }
       globeVisible = visible
-      visible ? startGlobe() : stopGlobe()
+      if (visible) startGlobe()
+      else stopGlobe()
     },
     { threshold: 0.12 },
   )

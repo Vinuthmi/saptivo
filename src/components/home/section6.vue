@@ -439,10 +439,12 @@
 </template>
 
 <script setup>
-
+defineOptions({ name: 'HomeSection6' })
 /**
 
- * SectionAuth.vue — "Authentication & Access" (Vue 3, <script setup>)
+ * SectionAuth.vue — "Authentication & Access" (Vue 3, <script setup>
+defineOptions({ name: 'HomeSection6' })
+)
 
  *
 
@@ -767,14 +769,6 @@ function update() {
 function go(dir) {
 
   scroller.value?.scrollBy({ left: dir * stepSize(), behavior: reduceMotion ? 'auto' : 'smooth' })
-
-}
-
-function goTo(i) {
-
-  const n = ((i % items.length) + items.length) % items.length
-
-  scroller.value?.scrollTo({ left: n * stepSize(), behavior: reduceMotion ? 'auto' : 'smooth' })
 
 }
 
