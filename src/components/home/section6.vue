@@ -8,11 +8,11 @@
 
     :class="{ 's4-js': mounted, 's4-in': revealed }"
 
-    aria-labelledby="s4-title"
+    aria-labelledby="s4-security-title"
 
   >
 
-    <!-- shared SVG defs: underline gradient, timer ring gradient and one "silk" lighting filter per card -->
+    <!-- shared SVG defs: underline and timer ring gradients -->
 
     <svg width="0" height="0" style="position: absolute" aria-hidden="true" focusable="false">
 
@@ -34,51 +34,24 @@
 
         </linearGradient>
 
-        <filter
-
-          v-for="(it, i) in items"
-
-          :id="`s4-silk-${i}`"
-
-          :key="`f${i}`"
-
-          x="0"
-
-          y="0"
-
-          width="100%"
-
-          height="100%"
-
-          color-interpolation-filters="sRGB"
-
-        >
-
-          <feTurbulence type="fractalNoise" :baseFrequency="`${it.silk[0]} ${it.silk[1]}`" numOctaves="2" :seed="it.silk[2]" result="a" />
-
-          <feTurbulence type="fractalNoise" baseFrequency="0.009 0.014" numOctaves="2" :seed="it.silk[2] + 11" result="b" />
-
-          <feDisplacementMap in="a" in2="b" scale="190" xChannelSelector="R" yChannelSelector="G" result="w" />
-
-          <feDiffuseLighting in="w" surfaceScale="13" diffuseConstant="1.05" lighting-color="#ffffff" result="d">
-
-            <feDistantLight :azimuth="it.silk[3]" elevation="40" />
-
-          </feDiffuseLighting>
-
-          <feSpecularLighting in="w" surfaceScale="13" specularConstant="0.6" specularExponent="24" lighting-color="#ffffff" result="s">
-
-            <feDistantLight :azimuth="it.silk[3]" elevation="40" />
-
-          </feSpecularLighting>
-
-          <feComposite in="d" in2="s" operator="arithmetic" k1="0" k2="1" k3="0.75" k4="0" />
-
-        </filter>
-
       </defs>
 
     </svg>
+
+    <header class="s4-security-intro">
+      <span class="s4-eyebrow">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4l1.6 4.4L15 10l-4.4 1.6L9 16l-1.6-4.4L3 10l4.4-1.6zM17.5 12l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9zM17 3.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7z" /></svg>
+        <span>Enterprise-Grade Security</span>
+      </span>
+      <h2 id="s4-security-title" class="s4-security-title">
+        Your data is protected. <span>Period.</span>
+      </h2>
+      <p class="s4-security-sub">
+        Every layer of Saptivo is hardened with multi-factor authentication, real-time threat detection, and enterprise infrastructure security — so your business data never sleeps unguarded.
+      </p>
+    </header>
+
+    <NetworkSection />
 
     <div class="s4-wrap">
 
@@ -86,7 +59,9 @@
 
       <header class="s4-head">
 
-        <span class="s4-eyebrow"><i></i>01 · Enterprise-grade security</span>
+        <span class="s4-eyebrow">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4l1.6 4.4L15 10l-4.4 1.6L9 16l-1.6-4.4L3 10l4.4-1.6zM17.5 12l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9zM17 3.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z" /></svg>
+        </span>
 
         <h2 id="s4-title" class="s4-title">
 
@@ -104,17 +79,9 @@
 
         </p>
 
-        <div class="s4-count" aria-hidden="true">
-
-          <span class="s4-n"><b>{{ pad(active + 1) }}</b> / {{ pad(items.length) }}</span>
-
-          <span class="s4-bar"><i :style="{ width: ((active + 1) / items.length) * 100 + '%' }"></i></span>
-
-        </div>
-
       </header>
 
-      <!-- ============ right: expanding silk cards ============ -->
+      <!-- ============ right: expanding gradient cards ============ -->
 
       <div class="s4-stage">
 
@@ -150,17 +117,11 @@
 
           <article v-for="(it, i) in items" :key="it.id" class="s4-card" :data-id="it.id" :style="{ '--i': i }">
 
-            <!-- background: gradient + silk lighting (+ optional photo) -->
+            <!-- background: gradient (+ optional photo) -->
 
             <div class="s4-bg" :style="{ background: it.bg }" aria-hidden="true">
 
               <img v-if="it.img" class="s4-photo" :src="it.img" alt="" loading="lazy" draggable="false" />
-
-              <svg class="s4-silk" viewBox="0 0 720 560" preserveAspectRatio="none">
-
-                <rect width="720" height="560" fill="#000" :filter="`url(#s4-silk-${i})`" />
-
-              </svg>
 
               <svg class="s4-deco" viewBox="0 0 24 24" v-html="icons[it.icon]"></svg>
 
@@ -173,8 +134,6 @@
             <div class="s4-inner" role="region" :aria-label="it.name">
 
               <div class="s4-top" aria-hidden="true">
-
-                <span class="s4-tn">{{ it.num }}</span>
 
                 <span class="s4-ti"><svg viewBox="0 0 24 24" v-html="icons[it.icon]"></svg></span>
 
@@ -434,6 +393,8 @@
 
     </div>
 
+    <DataProtectionSection />
+
   </section>
 
 </template>
@@ -448,7 +409,7 @@ defineOptions({ name: 'HomeSection6' })
 
  *
 
- * Layout: sticky heading + counter on the left, scrolling silk cards (slides) on the right.
+ * Layout: sticky heading + counter on the left, scrolling gradient cards (slides) on the right.
 
  * • Scroll sideways with trackpad / touch swipe, mouse drag, the ‹ › buttons, ← → keys,
 
@@ -456,7 +417,7 @@ defineOptions({ name: 'HomeSection6' })
 
  * • Cards animate their widgets when they slide into view.
 
- * • Card backgrounds are procedural "silk" (SVG lighting filters). For real photos set `img` on an item.
+ * • Card backgrounds use layered gradients. For real photos set `img` on an item.
 
  *
 
@@ -475,8 +436,6 @@ const mounted = ref(false)
 const revealed = ref(false)
 
 const active = ref(0)
-
-const pad = (n) => String(n).padStart(2, '0')
 
 /* stroke icons — 24px grid */
 
@@ -500,23 +459,22 @@ const icons = {
 
 /* ------------------------------------------------------------------ content
 
-   silk: [baseFreqX, baseFreqY, seed, lightAzimuth]
-
    metric: [big value, label, small caption]                                              */
+
+const cardPalette = 'radial-gradient(82% 76% at 88% 4%,rgba(255,143,38,.98) 0%,rgba(239,91,21,.84) 42%,transparent 78%),radial-gradient(88% 78% at 2% 92%,#10385f 0%,#1b5275 42%,transparent 79%),radial-gradient(55% 42% at 54% 72%,rgba(220,226,228,.88) 0%,rgba(180,190,193,.46) 48%,transparent 78%),linear-gradient(135deg,#78311f 0%,#b95735 38%,#7a8b92 100%)'
 
 const items = [
 
   {
 
-    id: 'sms', num: '01', icon: 'sms', img: '',
+    id: 'sms', icon: 'sms', img: '',
 
     name: 'SMS OTP Login',
 
     desc: 'One-time SMS code on every login.',
 
-    bg: 'linear-gradient(135deg,#ffc79e 0%,#f58a4b 45%,#d9490a 100%)',
+    bg: cardPalette,
 
-    silk: [0.0042, 0.0105, 3, 235],
 
     metric: ['< 3s', 'Carrier-grade gateway delivery', 'SMS route'],
 
@@ -536,15 +494,14 @@ const items = [
 
   {
 
-    id: 'email', num: '02', icon: 'mail', img: '',
+    id: 'email', icon: 'mail', img: '',
 
     name: 'Email OTP Verification',
 
     desc: 'Email verification code for sensitive changes.',
 
-    bg: 'linear-gradient(135deg,#6aa3e6 0%,#245aa6 50%,#0a1f45 100%)',
+    bg: cardPalette,
 
-    silk: [0.005, 0.009, 8, 215],
 
     metric: ['6-digit', 'Cryptographically random code', 'Email OTP'],
 
@@ -564,15 +521,14 @@ const items = [
 
   {
 
-    id: 'image', num: '03', icon: 'image', img: '',
+    id: 'image', icon: 'image', img: '',
 
     name: 'Image Captcha',
 
     desc: 'Bot-proof image challenge at sign-in.',
 
-    bg: 'linear-gradient(135deg,#f6c3a8 0%,#d9806a 50%,#a24b3b 100%)',
+    bg: cardPalette,
 
-    silk: [0.0036, 0.0115, 14, 250],
 
     metric: ['0', 'Third-party ad trackers', 'Privacy-first'],
 
@@ -592,15 +548,14 @@ const items = [
 
   {
 
-    id: 'math', num: '04', icon: 'math', img: '',
+    id: 'math', icon: 'math', img: '',
 
     name: 'Text / Math Captcha',
 
     desc: 'Quick human-verification math challenge.',
 
-    bg: 'radial-gradient(60% 45% at 78% 12%, rgba(255,122,26,.45), transparent 62%), linear-gradient(135deg,#505377 0%,#25274a 55%,#0d0e22 100%)',
+    bg: cardPalette,
 
-    silk: [0.0048, 0.0095, 21, 225],
 
     metric: ['0 ms', 'External CDN latency', 'Self-hosted'],
 
@@ -620,15 +575,14 @@ const items = [
 
   {
 
-    id: 'rbac', num: '05', icon: 'roles', img: '',
+    id: 'rbac', icon: 'roles', img: '',
 
     name: 'Role-Based Access Control',
 
     desc: 'Granular role-based permissions for staff.',
 
-    bg: 'linear-gradient(135deg,#ffd886 0%,#f2a33a 50%,#c26a16 100%)',
+    bg: cardPalette,
 
-    silk: [0.0039, 0.0108, 30, 240],
 
     metric: ['3 roles', 'SuperAdmin · Manager · Staff', 'Permissions'],
 
@@ -648,15 +602,14 @@ const items = [
 
   {
 
-    id: 'timeout', num: '06', icon: 'timer', img: '',
+    id: 'timeout', icon: 'timer', img: '',
 
     name: 'Session Timeout Lock',
 
     desc: 'Auto-logout after periods of inactivity.',
 
-    bg: 'linear-gradient(135deg,#86d6dc 0%,#2b8ca3 50%,#0e475f 100%)',
+    bg: cardPalette,
 
-    silk: [0.0046, 0.0098, 37, 220],
 
     metric: ['15 min', 'Default inactivity timer', 'Configurable'],
 
@@ -676,15 +629,14 @@ const items = [
 
   {
 
-    id: 'device', num: '07', icon: 'finger', img: '',
+    id: 'device', icon: 'finger', img: '',
 
     name: 'Device Fingerprinting',
 
     desc: 'Flags logins from unknown devices.',
 
-    bg: 'linear-gradient(135deg,#ffa05a 0%,#c4480e 50%,#4a1a06 100%)',
+    bg: cardPalette,
 
-    silk: [0.004, 0.0112, 44, 245],
 
     metric: ['3 signals', 'Hardware · canvas · OS', 'Fingerprint'],
 
@@ -970,11 +922,7 @@ onBeforeUnmount(() => {
 
   color: var(--ink);
 
-  background:
-
-    radial-gradient(900px 420px at 0% 0%, rgba(255, 122, 26, 0.09), transparent 60%),
-
-    radial-gradient(800px 420px at 100% 100%, rgba(255, 122, 26, 0.08), transparent 60%), var(--page);
+  background: #fff;
 
 }
 
@@ -991,6 +939,125 @@ onBeforeUnmount(() => {
 .s4 svg {
 
   display: block;
+
+}
+
+/* embedded Network & Infrastructure section: share this section's background and width */
+.s4 > .s5 {
+
+  max-width: 1240px;
+
+  margin: clamp(30px, 4vw, 48px) auto clamp(56px, 7vw, 96px);
+
+  padding: 0;
+
+  background: none;
+
+  overflow: visible;
+
+}
+
+.s4-security-intro {
+
+  max-width: 1240px;
+
+  margin: 0 auto;
+
+  text-align: center;
+
+}
+
+.s4-security-title {
+
+  margin: 18px 0 0;
+
+  font-family: 'Inter Display', Inter, system-ui, sans-serif;
+
+  font-size: 3.5vw;
+
+  font-weight: 500;
+
+  line-height: 1.16;
+
+  letter-spacing: -0.05em;
+
+  color: #0f172a;
+
+}
+
+.s4-security-title span {
+
+  background: linear-gradient(100deg, #ff9a3d 0%, #ff6a1a 45%, #f2540c 100%);
+
+  background-clip: text;
+
+  -webkit-background-clip: text;
+
+  -webkit-text-fill-color: transparent;
+
+}
+
+.s4-security-sub {
+
+  max-width: 820px;
+
+  margin: 14px auto 0;
+
+  font-family: 'Inter Display', Inter, system-ui, sans-serif;
+
+  font-size: 24px;
+
+  font-weight: 600;
+
+  line-height: 34px;
+
+  letter-spacing: -0.72px;
+
+  color: #475569;
+
+}
+
+.s4 > .s5 .s5-panel {
+
+  max-width: none;
+
+  padding: 0;
+
+}
+
+.s4 > .s5 .s5-grid {
+
+  margin-inline: 0;
+
+  padding: 24px;
+
+}
+
+.s4 > .s6 {
+
+  max-width: 1240px;
+
+  margin: clamp(56px, 7vw, 96px) auto 0;
+
+  padding: 0;
+
+  background: none;
+
+  overflow: visible;
+
+}
+
+.s4 > .s6 .s6-panel {
+
+  max-width: none;
+
+  padding: 0;
+
+}
+
+.s4 > .s6 .s6-card {
+
+  margin-inline: 0;
 
 }
 
@@ -1040,41 +1107,67 @@ onBeforeUnmount(() => {
 
   gap: 8px;
 
-  padding: 6px 12px 6px 10px;
+  padding: 8px 15px 8px 11px;
 
   border-radius: 999px;
 
-  background: rgba(255, 255, 255, 0.7);
+  border: 1.5px solid transparent;
 
-  border: 1px solid var(--line);
+  background:
+    linear-gradient(#fff, #fff) padding-box,
+    linear-gradient(90deg, #ff9a3d, #e0407a) border-box;
 
-  backdrop-filter: blur(6px);
+  font-size: 13.5px;
 
-  font-size: 10px;
+  font-weight: 500;
 
-  font-weight: 600;
+  text-decoration: none;
 
-  letter-spacing: 0.12em;
-
-  text-transform: uppercase;
-
-  color: var(--ink-2);
-
-  box-shadow: 0 6px 18px -10px rgba(20, 21, 43, 0.25);
+  transition: transform 0.4s var(--ease), box-shadow 0.4s;
 
 }
 
-.s4-eyebrow i {
+.s4-head > .s4-eyebrow {
 
-  width: 7px;
+  display: none;
 
-  height: 7px;
+}
 
-  border-radius: 50%;
+.s4-eyebrow span {
 
-  background: var(--o1);
+  background: linear-gradient(90deg, #f2540c, #d6336c);
 
-  animation: s4-ping 2s infinite;
+  -webkit-background-clip: text;
+
+  background-clip: text;
+
+  color: transparent;
+
+}
+
+.s4-eyebrow svg {
+
+  width: 18px;
+
+  height: 18px;
+
+  fill: none;
+
+  stroke: #f2540c;
+
+  stroke-width: 1.7;
+
+  stroke-linejoin: round;
+
+  stroke-linecap: round;
+
+}
+
+.s4-eyebrow:hover {
+
+  transform: translateY(-2px);
+
+  box-shadow: 0 14px 24px -14px rgba(242, 84, 12, 0.6);
 
 }
 
@@ -1082,7 +1175,9 @@ onBeforeUnmount(() => {
 
   margin: 22px 0 0;
 
-  font-size: clamp(30px, 3.6vw, 42px);
+  font-family: 'Inter Display', Inter, system-ui, sans-serif;
+
+  font-size: 2vw;
 
   font-weight: 500;
 
@@ -1096,7 +1191,7 @@ onBeforeUnmount(() => {
 
   display: block;
 
-  font-weight: 300;
+  font-weight: 500;
 
 }
 
@@ -1157,68 +1252,6 @@ onBeforeUnmount(() => {
   line-height: 1.8;
 
   color: var(--muted);
-
-}
-
-.s4-count {
-
-  margin-top: 30px;
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 14px;
-
-}
-
-.s4-n {
-
-  font-size: 12px;
-
-  color: var(--muted);
-
-  font-variant-numeric: tabular-nums;
-
-  white-space: nowrap;
-
-}
-
-.s4-n b {
-
-  font-size: 20px;
-
-  font-weight: 500;
-
-  color: var(--ink);
-
-}
-
-.s4-bar {
-
-  flex: 1;
-
-  height: 3px;
-
-  border-radius: 3px;
-
-  background: rgba(20, 21, 43, 0.1);
-
-  overflow: hidden;
-
-}
-
-.s4-bar i {
-
-  display: block;
-
-  height: 100%;
-
-  border-radius: 3px;
-
-  background: linear-gradient(90deg, var(--o1), var(--o2));
-
-  transition: width 0.5s var(--ease);
 
 }
 
@@ -1370,11 +1403,11 @@ onBeforeUnmount(() => {
 
   isolation: isolate;
 
-  border-radius: 26px;
-
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  border-radius: 30px;
   background: #14152b;
-
   color: #fff;
+  box-shadow: 0 28px 54px -34px rgba(16, 42, 64, 0.62), 0 1px 0 rgba(255, 255, 255, 0.4) inset;
 
   -webkit-tap-highlight-color: transparent;
 
@@ -1423,32 +1456,6 @@ onBeforeUnmount(() => {
 .s4-card:not(.on):hover .s4-bg {
 
   filter: brightness(1.1) saturate(1.1);
-
-}
-
-.s4-silk {
-
-  /* fixed size + centred, so the heavy filter is rasterised once and never re-computed
-
-     while the card width animates */
-
-  position: absolute;
-
-  left: 50%;
-
-  top: 0;
-
-  width: 720px;
-
-  height: 560px;
-
-  transform: translateX(-50%);
-
-  mix-blend-mode: soft-light;
-
-  opacity: 0.95;
-
-  pointer-events: none;
 
 }
 
@@ -1525,10 +1532,8 @@ onBeforeUnmount(() => {
   pointer-events: none;
 
   background:
-
-    linear-gradient(135deg, rgba(8, 10, 26, 0.5) 0%, rgba(8, 10, 26, 0) 55%),
-
-    linear-gradient(0deg, rgba(8, 10, 26, 0.28), rgba(8, 10, 26, 0) 45%);
+    radial-gradient(ellipse at 4% 96%, rgba(8, 28, 50, 0.36), transparent 62%),
+    linear-gradient(180deg, rgba(28, 27, 35, 0.08), transparent 48%, rgba(8, 20, 34, 0.16));
 
 }
 
@@ -1550,7 +1555,7 @@ onBeforeUnmount(() => {
 
 }
 
-/* ---------- top row: number + icon ---------- */
+/* ---------- top row: icon ---------- */
 
 .s4-top {
 
@@ -1561,24 +1566,6 @@ onBeforeUnmount(() => {
   justify-content: space-between;
 
   margin-bottom: 16px;
-
-}
-
-.s4-tn {
-
-  font-size: 11px;
-
-  font-weight: 600;
-
-  padding: 3px 8px;
-
-  border-radius: 6px;
-
-  background: rgba(255, 255, 255, 0.9);
-
-  color: var(--ink);
-
-  font-variant-numeric: tabular-nums;
 
 }
 
@@ -1788,11 +1775,12 @@ onBeforeUnmount(() => {
 
   padding: 13px 14px;
 
-  background: #fff;
-
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.9);
   color: var(--ink);
-
-  box-shadow: 0 24px 40px -22px rgba(8, 10, 26, 0.7);
+  backdrop-filter: blur(16px) saturate(1.08);
+  -webkit-backdrop-filter: blur(16px) saturate(1.08);
+  box-shadow: 0 24px 44px -22px rgba(8, 27, 48, 0.52);
 
   display: flex;
 
@@ -2822,22 +2810,6 @@ onBeforeUnmount(() => {
 
 /* ============ keyframes ============ */
 
-@keyframes s4-ping {
-
-  70% {
-
-    box-shadow: 0 0 0 8px rgba(255, 122, 26, 0);
-
-  }
-
-  100% {
-
-    box-shadow: 0 0 0 0 rgba(255, 122, 26, 0);
-
-  }
-
-}
-
 @keyframes s4-pop {
 
   from {
@@ -2975,12 +2947,6 @@ onBeforeUnmount(() => {
     max-width: 520px;
 
     margin: 32px 0 0;
-
-  }
-
-  .s4-count {
-
-    max-width: 320px;
 
   }
 
