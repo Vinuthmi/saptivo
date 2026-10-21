@@ -269,6 +269,8 @@ const icons = {
 }
 
 /* silk: [baseFreqX, baseFreqY, seed, lightAzimuth]   metric: [big value, label, small caption] */
+const cardPalette = 'radial-gradient(75% 80% at 78% 18%,rgba(255,143,38,.92) 0%,rgba(235,93,22,.72) 45%,transparent 76%),radial-gradient(80% 70% at 12% 84%,#174a70 0%,#243d59 48%,transparent 78%),linear-gradient(135deg,#a7a2a0 0%,#c58b6d 45%,#e85b17 100%)'
+
 const items = [
   {
     id: 'rate',
@@ -276,7 +278,7 @@ const items = [
     img: '',
     name: 'Rate Limiting',
     desc: 'Auto-blocks brute-force sign-in attempts.',
-    bg: 'linear-gradient(135deg,#ffa05a 0%,#c4480e 50%,#4a1a06 100%)',
+    bg: cardPalette,
     silk: [0.004, 0.0112, 6, 245],
     metric: ['60 s', 'Sliding window on login and API endpoints', 'Throttle'],
     tags: ['Lockout', '429 reply'],
@@ -292,7 +294,7 @@ const items = [
     img: '',
     name: 'Audit Trail Logs',
     desc: 'Immutable log of who changed what.',
-    bg: 'linear-gradient(135deg,#6aa3e6 0%,#245aa6 50%,#0a1f45 100%)',
+    bg: cardPalette,
     silk: [0.005, 0.009, 19, 215],
     metric: ['4 fields', 'User, action, IP and timestamp on every event', 'Immutable'],
     tags: ['Before / after', 'CSV export'],
@@ -308,7 +310,7 @@ const items = [
     img: '',
     name: 'Soft Delete / Recycle Bin',
     desc: 'One-click restore with zero data loss.',
-    bg: 'linear-gradient(135deg,#f6b65a 0%,#d9821c 50%,#7c3a08 100%)',
+    bg: cardPalette,
     silk: [0.0039, 0.0108, 27, 240],
     metric: ['90 days', 'Recovery buffer for deleted records', 'Zero data loss'],
     tags: ['1-click restore', ],
@@ -443,9 +445,7 @@ onBeforeUnmount(() => {
   padding: clamp(36px, 6vw, 84px) clamp(12px, 4vw, 40px);
   font-family: 'Poppins', system-ui, sans-serif;
   color: var(--ink);
-  background:
-    radial-gradient(900px 420px at 0% 0%, rgba(255, 122, 26, 0.1), transparent 60%),
-    radial-gradient(800px 420px at 100% 100%, rgba(255, 122, 26, 0.09), transparent 60%), var(--page);
+  background: #fff;
 }
 .s6 *,
 .s6 *::before,
@@ -517,14 +517,15 @@ onBeforeUnmount(() => {
 }
 .s6-title {
   margin: 22px 0 0;
-  font-size: clamp(30px, 3.6vw, 42px);
+  font-family: 'Inter Display', Inter, system-ui, sans-serif;
+  font-size: 2vw;
   font-weight: 500;
   line-height: 1.12;
   letter-spacing: -0.025em;
 }
 .s6-title span {
   display: block;
-  font-weight: 300;
+  font-weight: 500;
 }
 .s6-title b {
   position: relative;

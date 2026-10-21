@@ -247,6 +247,8 @@ const icons = {
 }
 
 /* silk: [baseFreqX, baseFreqY, seed, lightAzimuth]   metric: [big value, label, small caption] */
+const cardPalette = 'radial-gradient(75% 80% at 78% 18%,rgba(255,143,38,.92) 0%,rgba(235,93,22,.72) 45%,transparent 76%),radial-gradient(80% 70% at 12% 84%,#174a70 0%,#243d59 48%,transparent 78%),linear-gradient(135deg,#a7a2a0 0%,#c58b6d 45%,#e85b17 100%)'
+
 const items = [
   {
     id: 'waf',
@@ -254,7 +256,7 @@ const items = [
     img: '',
     name: 'Cloudflare WAF Protection',
     desc: 'Blocks SQLi, XSS, and web exploits.',
-    bg: 'linear-gradient(135deg,#ffb27c 0%,#f2540c 50%,#7a2204 100%)',
+    bg: cardPalette,
     silk: [0.0042, 0.0105, 5, 235],
     metric: ['OWASP', 'Top 10 inspected on every request', 'Web firewall'],
     tags: ['SQLi', 'XSS'],
@@ -270,7 +272,7 @@ const items = [
     img: '',
     name: 'DDoS Mitigation',
     desc: 'Cloudflare absorbs volumetric flood attacks.',
-    bg: 'radial-gradient(60% 45% at 78% 12%, rgba(255,122,26,.45), transparent 62%), linear-gradient(135deg,#505377 0%,#25274a 55%,#0d0e22 100%)',
+    bg: cardPalette,
     silk: [0.0048, 0.0095, 17, 225],
     metric: ['320+ Tbps', 'Global Anycast edge capacity', 'Cloudflare'],
     tags: ['99.99% uptime', 'L3 · L4 · L7'],
@@ -286,7 +288,7 @@ const items = [
     img: '',
     name: 'HTTPS / TLS 1.3',
     desc: 'End-to-end encryption on all data.',
-    bg: 'linear-gradient(135deg,#86d6dc 0%,#2b8ca3 50%,#0e475f 100%)',
+    bg: cardPalette,
     silk: [0.0046, 0.0098, 33, 220],
     metric: ['TLS 1.3', 'Modern cryptographic standard in transit', 'Encryption'],
     tags: ['Forward secrecy', 'HSTS'],
@@ -407,9 +409,7 @@ onBeforeUnmount(() => {
   padding: clamp(36px, 6vw, 84px) clamp(12px, 4vw, 40px);
   font-family: 'Poppins', system-ui, sans-serif;
   color: var(--ink);
-  background:
-    radial-gradient(900px 420px at 0% 0%, rgba(255, 122, 26, 0.1), transparent 60%),
-    radial-gradient(800px 420px at 100% 100%, rgba(255, 122, 26, 0.09), transparent 60%), var(--page);
+  background: #fff;
 }
 .s5 *,
 .s5 *::before,
@@ -481,14 +481,15 @@ onBeforeUnmount(() => {
 }
 .s5-title {
   margin: 22px 0 0;
-  font-size: clamp(30px, 3.6vw, 42px);
+  font-family: 'Inter Display', Inter, system-ui, sans-serif;
+  font-size: 2vw;
   font-weight: 500;
   line-height: 1.12;
   letter-spacing: -0.025em;
 }
 .s5-title span {
   display: block;
-  font-weight: 300;
+  font-weight: 500;
 }
 .s5-title b {
   position: relative;

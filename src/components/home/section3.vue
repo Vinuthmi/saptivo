@@ -367,19 +367,24 @@ onBeforeUnmount(() => {
 }
 .hiw-title {
   margin: 8px 0 16px;
-  font-size: clamp(32px, 4.4vw, 46px);
+  font-family: 'Inter Display', Inter, system-ui, sans-serif;
+  font-size: 3.5vw;
   line-height: 1.15;
   font-weight: 500;
   letter-spacing: -0.025em;
 }
 .hiw-title b {
   font-weight: 500;
+
   color: var(--o);
 }
 .hiw-head p {
   margin: 0;
-  font-size: 14.5px;
-  line-height: 1.75;
+  font-family: 'Inter Display', Inter, system-ui, sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 34px;
+  letter-spacing: -0.72px;
   color: var(--mut);
 }
 .hiw-js .hiw-head,
@@ -436,7 +441,8 @@ onBeforeUnmount(() => {
   border-radius: 6px;
 }
 .hiw-rt {
-  font-size: clamp(18px, 1.8vw, 22px);
+  font-family: Inter, system-ui, sans-serif;
+  font-size: clamp(1vw, 1.8vw, 22px);
   font-weight: 500;
   letter-spacing: -0.015em;
   color: #3b3d52;

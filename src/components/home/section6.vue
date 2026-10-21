@@ -500,6 +500,8 @@ const icons = {
 
    metric: [big value, label, small caption]                                              */
 
+const cardPalette = 'radial-gradient(75% 80% at 78% 18%,rgba(255,143,38,.92) 0%,rgba(235,93,22,.72) 45%,transparent 76%),radial-gradient(80% 70% at 12% 84%,#174a70 0%,#243d59 48%,transparent 78%),linear-gradient(135deg,#a7a2a0 0%,#c58b6d 45%,#e85b17 100%)'
+
 const items = [
 
   {
@@ -510,7 +512,7 @@ const items = [
 
     desc: 'One-time SMS code on every login.',
 
-    bg: 'linear-gradient(135deg,#ffc79e 0%,#f58a4b 45%,#d9490a 100%)',
+    bg: cardPalette,
 
     silk: [0.0042, 0.0105, 3, 235],
 
@@ -538,7 +540,7 @@ const items = [
 
     desc: 'Email verification code for sensitive changes.',
 
-    bg: 'linear-gradient(135deg,#6aa3e6 0%,#245aa6 50%,#0a1f45 100%)',
+    bg: cardPalette,
 
     silk: [0.005, 0.009, 8, 215],
 
@@ -566,7 +568,7 @@ const items = [
 
     desc: 'Bot-proof image challenge at sign-in.',
 
-    bg: 'linear-gradient(135deg,#f6c3a8 0%,#d9806a 50%,#a24b3b 100%)',
+    bg: cardPalette,
 
     silk: [0.0036, 0.0115, 14, 250],
 
@@ -594,7 +596,7 @@ const items = [
 
     desc: 'Quick human-verification math challenge.',
 
-    bg: 'radial-gradient(60% 45% at 78% 12%, rgba(255,122,26,.45), transparent 62%), linear-gradient(135deg,#505377 0%,#25274a 55%,#0d0e22 100%)',
+    bg: cardPalette,
 
     silk: [0.0048, 0.0095, 21, 225],
 
@@ -622,7 +624,7 @@ const items = [
 
     desc: 'Granular role-based permissions for staff.',
 
-    bg: 'linear-gradient(135deg,#ffd886 0%,#f2a33a 50%,#c26a16 100%)',
+    bg: cardPalette,
 
     silk: [0.0039, 0.0108, 30, 240],
 
@@ -650,7 +652,7 @@ const items = [
 
     desc: 'Auto-logout after periods of inactivity.',
 
-    bg: 'linear-gradient(135deg,#86d6dc 0%,#2b8ca3 50%,#0e475f 100%)',
+    bg: cardPalette,
 
     silk: [0.0046, 0.0098, 37, 220],
 
@@ -678,7 +680,7 @@ const items = [
 
     desc: 'Flags logins from unknown devices.',
 
-    bg: 'linear-gradient(135deg,#ffa05a 0%,#c4480e 50%,#4a1a06 100%)',
+    bg: cardPalette,
 
     silk: [0.004, 0.0112, 44, 245],
 
@@ -974,11 +976,7 @@ onBeforeUnmount(() => {
 
   color: var(--ink);
 
-  background:
-
-    radial-gradient(900px 420px at 0% 0%, rgba(255, 122, 26, 0.09), transparent 60%),
-
-    radial-gradient(800px 420px at 100% 100%, rgba(255, 122, 26, 0.08), transparent 60%), var(--page);
+  background: #fff;
 
 }
 
@@ -1165,7 +1163,9 @@ onBeforeUnmount(() => {
 
   margin: 22px 0 0;
 
-  font-size: clamp(30px, 3.6vw, 42px);
+  font-family: 'Inter Display', Inter, system-ui, sans-serif;
+
+  font-size: 2vw;
 
   font-weight: 500;
 
@@ -1179,7 +1179,7 @@ onBeforeUnmount(() => {
 
   display: block;
 
-  font-weight: 300;
+  font-weight: 500;
 
 }
 

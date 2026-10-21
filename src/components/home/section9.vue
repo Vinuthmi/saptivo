@@ -460,7 +460,8 @@ onMounted(() => {
 }
 .hx-title {
   margin: 26px 0 0;
-  font-size: clamp(42px, 6vw, 78px);
+  font-family: 'Inter Display', Inter, system-ui, sans-serif;
+  font-size: 3.5vw;
   font-weight: 500;
   line-height: 1.04;
   letter-spacing: -0.045em;
@@ -478,8 +479,11 @@ onMounted(() => {
 .hx-sub {
   max-width: 520px;
   margin: 22px 0 0;
-  font-size: clamp(15px, 1.4vw, 18px);
-  line-height: 1.65;
+  font-family: 'Inter Display', Inter, system-ui, sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 34px;
+  letter-spacing: -0.72px;
   color: var(--muted);
 }
 .hx-cta {

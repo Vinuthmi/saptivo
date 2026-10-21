@@ -43,10 +43,7 @@
             <path d="M2 8 C 60 2, 110 12, 160 6 S 260 2, 298 7" /></svg
         ></b>
       </h2>
-      <p class="s2-sub">
-        POS, CRM, inventory and every branch in one live workspace — built for fast-moving retail
-        teams.
-      </p>
+      
     </header>
 
     <div class="s2-grid" @pointermove="spotlight">
@@ -1132,9 +1129,7 @@ onBeforeUnmount(() => {
   padding: clamp(48px, 7vw, 96px) clamp(16px, 4vw, 40px) clamp(56px, 8vw, 110px);
   font-family: 'Poppins', system-ui, sans-serif;
   color: var(--ink);
-  background:
-    radial-gradient(900px 420px at 12% -8%, rgba(255, 122, 26, 0.1), transparent 60%),
-    radial-gradient(800px 420px at 92% 108%, rgba(255, 122, 26, 0.09), transparent 60%), var(--page);
+  background: #fff;
 }
 .s2 *,
 .s2-modal,
@@ -1187,8 +1182,9 @@ onBeforeUnmount(() => {
 }
 .s2-title {
   margin: 18px 0 0;
-  font-weight: 300;
-  font-size: clamp(28px, 4.4vw, 46px);
+  font-family: 'Inter Display', Inter, system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 3.5vw;
   line-height: 1.15;
   letter-spacing: -0.02em;
   color: var(--ink);
@@ -1222,8 +1218,11 @@ onBeforeUnmount(() => {
 .s2-sub {
   margin: 20px auto 0;
   max-width: 520px;
-  font-size: 14px;
-  line-height: 1.7;
+  font-family: 'Inter Display', Inter, system-ui, sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 34px;
+  letter-spacing: -0.72px;
   color: var(--muted);
 }
 
