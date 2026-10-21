@@ -187,7 +187,7 @@
 
 <script setup>
 defineOptions({ name: 'HomeSection3' })
-import { ref } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 
 const rootEl = ref(null)
 const mounted = ref(false)

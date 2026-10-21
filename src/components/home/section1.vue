@@ -188,7 +188,7 @@
 
 <script setup>
 defineOptions({ name: 'HomeSection1' })
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 
 const ROTATION_INTERVAL_MS = 6000
 
@@ -291,6 +291,9 @@ const calls = [
   ['NF', 'Nimali Fernando', '771 880 214', 'Answered', '1008', '2:31', '2026-10-20 15:02'],
   ['UC', 'Unknown customer', '112 457 803', 'Missed', '8001', '0:18', '2026-10-20 11:27'],
 ]
+
+const SW = 960
+const SH = 660
 
 const rootEl = ref(null)
 const stageEl = ref(null)

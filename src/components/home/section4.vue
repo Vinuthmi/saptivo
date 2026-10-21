@@ -349,56 +349,32 @@
 </template>
 
 <script setup>
-defineOptions({ name: 'HomeSection4' })
-import { ref, reactive, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
+/**
+ * IntegrationsShowcase.vue — "Built-in integrations that work for you 24/7" (Vue 3, <script setup>)
+ *
+ * Each slide pairs an integration + a live-stats card (left) with the Saptivo CRM screen it feeds (right),
+ * drawn from the real product UI: Inquiries, Lead pipeline, 3CX call journal and the Tasks calendar.
+ * • Tabs, arrows, ← → keys, swipe and autoplay (7s; pauses on hover/focus/off-screen).
+ * • Pure HTML/CSS/SVG — no image files. Scene is authored at 1160×490 and scaled to fit.
+ * • prefers-reduced-motion: no autoplay, no looping animation.
+ *
+ * Prop: hubUrl — link for the "Explore Integrations Hub" button.
+ * Browser APIs are only used in onMounted / handlers (SSR / Nuxt safe).
+ */
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 
-defineProps({
-  /** Where the arrow button on the partner card should link to. */
-  partnerHubUrl: { type: String, default: '#' },
-})
-const emit = defineEmits(['launch'])
+defineProps({ hubUrl: { type: String, default: '#integrations' } })
 
-/* ──────────────────────────── static content ──────────────────────────── */
+const SCENE_W = 1160
+const SCENE_H = 490
+const COMPACT_W = 700
+const AUTOPLAY_MS = 7000
 
-const brandSvg = {
-  facebook:
-    '<circle cx="12" cy="12" r="11" fill="currentColor"/><path fill="var(--cut)" d="M13.200 19v-6.200h2.100l.4-2.500h-2.500V8.700c0-.7.3-1.200 1.300-1.200h1.300V5.300c-.2 0-1-.1-1.900-.1-1.900 0-3.200 1.200-3.200 3.300v1.800H8.600v2.500h2.100V19z"/>',
-  whatsapp:
-    '<path fill="currentColor" d="M12 2.200a9.800 9.800 0 0 0-8.400 14.800L2.200 21.800l5-1.300A9.800 9.800 0 1 0 12 2.200z"/><path fill="var(--cut)" d="M8.700 7.200c.3-.5.600-.5.900-.5h.5l.9 2c.1.300 0 .5-.2.700l-.6.700c.8 1.500 1.900 2.500 3.500 3.200l.8-.9c.2-.2.4-.3.7-.2l2 .9c.3.1.4.3.3.6-.2 1-1.100 1.700-2.200 1.600-3.100-.4-5.900-3-6.300-6.100-.1-.6 0-1.400.5-2.400z"/>',
-  messenger:
-    '<path fill="currentColor" d="M12 2C6.500 2 2 6.200 2 11.400c0 2.900 1.400 5.500 3.600 7.200V22l3.300-1.800c1 .3 2 .4 3.100.4 5.500 0 10-4.200 10-9.400S17.500 2 12 2z"/><path fill="var(--cut)" d="M5.800 14.200l4.300-4.600 2.600 2.300 4.300-2.300-4.300 4.700-2.600-2.400z"/>',
-  calendar:
-    '<path fill="currentColor" d="M5 3h11l4 4v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><text x="12" y="17" text-anchor="middle" font-size="9.500" font-weight="700" font-family="Poppins,sans-serif" fill="var(--cut)">31</text>',
-  wordpress:
-    '<circle cx="12" cy="12" r="10.400" fill="none" stroke="currentColor" stroke-width="1.700"/><path d="M5.800 8.400l3.100 8.800 2.100-5.600 2.200 5.600 3.200-8.800" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
-}
-
-const brandRows = [
-  [
-    { id: 'facebook', color: '#1877f2' },
-    { id: 'whatsapp', color: '#25d366' },
-    { id: 'messenger', color: '#a259ff' },
-    { id: 'calendar', color: '#4285f4' },
-    { id: 'wordpress', color: '#21759b' },
-    { id: '3cx', color: '#0b8ed8' },
-  ],
-  [
-    { id: '3cx', color: '#0b8ed8' },
-    { id: 'calendar', color: '#4285f4' },
-    { id: 'wordpress', color: '#21759b' },
-    { id: 'facebook', color: '#1877f2' },
-    { id: 'messenger', color: '#a259ff' },
-    { id: 'whatsapp', color: '#25d366' },
-  ],
-]
-
-/* Notifications mirror real CRM events (inquiries, 3CX calls, tasks, receipts). */
-const notifications = [
-  'WhatsApp Digital Receipt Dispatched',
-  'New inquiry from John Smith · Inquiry #28',
-  'Missed call logged · 3CX · 755322689',
-  '3 team tasks are overdue',
-  'Quotation approved · Invoice created',
+const slides = [
+  { id: 'web', tab: 'Website leads', icon: 'globe' },
+  { id: 'fb', tab: 'Social lead ads', icon: 'bolt' },
+  { id: 'calls', tab: 'Calls & WhatsApp', icon: 'phone' },
+  { id: 'cal', tab: 'Google Calendar', icon: 'calendar' },
 ]
 
 /* demo data (mirrors the CRM screens) */
@@ -432,397 +408,40 @@ const calls = [
   { i: 'N', n: 'Nadeesha', p: '94771234567', t: 'Answered', x: '1001', d: '3:12', at: '2026-09-15 02:11' },
   { i: 'KP', n: 'Kasun Perera', p: '94712345098', t: 'Answered', x: '1032', d: '2:05', at: '2026-09-12 11:42' },
 ]
-const perks = ['Instant 14-Day Cloud Sandbox', 'Dedicated Setup Specialist']
+const monthDays = Array.from({ length: 31 }, (_, i) => i + 1)
+const hours = ['9 AM', '10 AM', '11 AM', '12 PM', '1 PM', '2 PM', '3 PM', '4 PM']
 
-/* ──────────────────────────── shared state ──────────────────────────── */
-
-const rootEl = ref(null)
-const ready = ref(false)
-const reducedMotion = ref(false)
-let io
-
-/** Spotlight: expose the pointer position to the hovered card via CSS variables. */
-function trackPointer(e) {
-  const card = e.target.closest?.('.card')
-  if (!card) return
-  const r = card.getBoundingClientRect()
-  card.style.setProperty('--mx', `${e.clientX - r.left}px`)
-  card.style.setProperty('--my', `${e.clientY - r.top}px`)
+/* left-hand stats card: sparkline + 3 numbers per slide */
+function spark(vals) {
+  const W = 260
+  const H = 56
+  const max = Math.max(...vals)
+  const pts = vals.map((v, i) => [+((i * W) / (vals.length - 1)).toFixed(1), +(H - 6 - (v / max) * (H - 16)).toFixed(1)])
+  const line = pts.map((p, i) => `${i ? 'L' : 'M'}${p[0]} ${p[1]}`).join(' ')
+  return { line, area: `${line} L${W} ${H} L0 ${H}Z` }
 }
+const sides = [
+  { title: 'Website → CRM', tag: 'Last 7 days', v: [4, 6, 5, 9, 7, 12, 15], stats: [{ v: '38', l: 'Inquiries' }, { v: '4 min', l: 'First reply' }, { v: '27%', l: 'Became leads' }] },
+  { title: 'Lead ads performance', tag: 'This week', v: [2, 3, 6, 5, 9, 8, 14], stats: [{ v: '64', l: 'Leads captured' }, { v: '0.6 s', l: 'Sync time' }, { v: '92%', l: 'Contacted' }] },
+  { title: 'Call & chat activity', tag: 'Today', v: [3, 7, 5, 11, 8, 6, 10], stats: [{ v: '126', l: 'Calls logged' }, { v: '18', l: 'WhatsApp chats' }, { v: '96%', l: 'Auto-matched' }] },
+  { title: 'Calendar sync', tag: 'Live', v: [5, 5, 8, 6, 9, 7, 8], stats: [{ v: '42', l: 'Events mirrored' }, { v: '2-way', l: 'Direction' }, { v: '< 5 s', l: 'Latency' }] },
+].map((s) => ({ ...s, ...spark(s.v) }))
 
-/* ──────────────────────────── alerts card ──────────────────────────── */
-
-const alertCount = ref(0)
-const toastIndex = ref(0)
-let toastTimer
-let countRaf
-
-function countUp(to = 1284, ms = 1400) {
-  const start = performance.now()
-  const tick = (now) => {
-    const t = Math.min(1, (now - start) / ms)
-    alertCount.value = Math.round(to * (1 - Math.pow(1 - t, 3)))
-    if (t < 1) countRaf = requestAnimationFrame(tick)
-  }
-  countRaf = requestAnimationFrame(tick)
+const icon = {
+  globe: '<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.6 2.4 2.6 14.6 0 17M12 3.5c-2.6 2.4-2.6 14.6 0 17"/>',
+  bolt: '<path d="M13 3 5 13.5h6L10 21l8-10.5h-6z"/>',
+  phone: '<path d="M7 4.5h3l1.4 4-2 1.4a10 10 0 0 0 4.7 4.7l1.4-2 4 1.4v3a2 2 0 0 1-2.2 2A14.500 14.500 0 0 1 5 6.7 2 2 0 0 1 7 4.5z"/>',
+  calendar: '<rect x="4" y="5.5" width="16" height="14.5" rx="3"/><path d="M4 10h16M8.5 4v3M15.5 4v3"/>',
+  chat: '<path d="M4 5h16v11H9.5L5 20v-4H4z"/><path d="M8.5 10.5h7"/>',
+  pin: '<path d="m14.5 4.5 5 5-3 .8-3.2 3.2.2 3.5-1.3 1.3-3.5-3.5L5 19l-.7-.7 4.2-5.200-3.5-3.5L6.300 8.3l3.5.2L13 5.3z"/>',
+  refresh: '<path d="M19 11a7 7 0 0 0-12.500-3.800L5 9"/><path d="M5 4.5V9h4.5"/><path d="M5 13a7 7 0 0 0 12.500 3.800L19 15"/><path d="M19 19.500V15h-4.500"/>',
+  wa: '<path d="M12 3.8a8.200 8.200 0 0 0-7 12.400L3.800 20.200l4.100-1.100A8.200 8.200 0 1 0 12 3.800z"/><path d="M9 8.600c.3 2.600 2.300 5.100 5.700 6.200l1.400-1.500-2-1.200-1 .8c-.8-.3-1.700-1.200-2.100-2.100l.8-.9-1-2.200z"/>',
 }
-
-/* ──────────────────────────── inquiry card (typewriter) ──────────────────────────── */
-
-const FULL_QUERY = 'Incoming Inquiry • WordPress Webhook Sync'
-const typed = ref(FULL_QUERY)
-const synced = ref(true)
-let typeTimer
-let typingStopped = false
-
-function runTypewriter() {
-  if (reducedMotion.value) return
-  let i = 0
-  typed.value = ''
-  synced.value = false
-  const step = () => {
-    if (typingStopped) return
-    if (i < FULL_QUERY.length) {
-      typed.value = FULL_QUERY.slice(0, ++i)
-      typeTimer = setTimeout(step, 42 + Math.random() * 50)
-    } else {
-      typeTimer = setTimeout(() => {
-        synced.value = true
-        typeTimer = setTimeout(runTypewriter, 4200)
-      }, 450)
-    }
-  }
-  typeTimer = setTimeout(step, 600)
-}
-
-/* ──────────────────────────── globe card ──────────────────────────── */
-
-const globeEl = ref(null)
-
-/* Dotted land mask: [latitude, cells per ring, [start, length, …]] */
-const LAND = [[-30,164,[49,10,90,6,134,18]],[-28.1,167,[51,10,91,8,136,19]],[-26.2,170,[52,10,92,9,139,18]],[-24.3,173,[53,11,93,10,108,1,141,18]],[-22.4,175,[53,14,94,11,109,2,143,18]],[-20.5,177,[54,15,95,11,110,2,146,16,169,1]],[-18.6,180,[55,15,96,12,112,3,151,12]],[-16.7,181,[54,17,96,14,113,3,153,7,161,3,180,1]],[-14.8,183,[53,19,98,14,116,1,155,5,163,2]],[-12.9,185,[53,20,99,14,159,4,165,1]],[-11,186,[53,21,100,14,166,1]],[-9.1,187,[53,22,100,14,158,1,167,1,170,1]],[-7.2,188,[52,24,101,14,150,3,166,5]],[-5.3,189,[52,24,101,14,149,1,157,1,167,4]],[-3.4,189,[52,22,100,16,148,2,154,2,157,2,164,6,174,1]],[-1.5,189,[52,19,99,17,147,2,152,4,157,2,163,2]],[0.4,189,[52,16,99,18,147,2,152,4,157,1,159,1,161,1]],[2.3,189,[53,15,100,19,146,1,148,1,153,3]],[4.2,189,[54,13,99,21,145,1,147,2,154,2]],[6.1,188,[54,10,88,7,96,24,146,1,159,1]],[8,188,[51,1,53,10,87,33,134,1,136,1,158,2]],[9.9,187,[49,1,54,2,57,4,86,34,133,2,148,1,157,1]],[11.8,185,[48,1,55,2,84,31,118,1,131,3,143,1,145,4]],[13.7,184,[46,3,83,30,114,2,130,3,142,6,154,1]],[15.6,182,[44,5,83,28,113,4,128,4,140,6]],[17.5,181,[40,6,82,28,112,6,127,5,138,6,151,1]],[19.4,179,[37,5,44,2,53,2,81,27,110,8,126,6,136,6,144,1]],[21.3,177,[37,4,45,1,50,1,80,27,108,10,123,8,134,7,142,1]],[23.2,174,[36,4,79,25,106,10,120,23,145,1]],[25.1,172,[32,1,34,5,79,24,104,7,112,1,118,25]],[27,169,[31,1,33,6,46,1,78,22,101,7,109,32]],[28.9,166,[30,9,45,1,78,27,106,33]],[30.8,163,[29,16,77,60]],[32.7,159,[28,16,75,11,95,38,137,1]],[34.6,156,[26,19,75,8,94,36,135,2]],[36.5,152,[25,19,73,1,76,5,85,1,88,39,129,2,134,1]],[38.4,148,[23,20,70,4,80,1,83,1,85,9,96,26,125,2,131,1]],[40.3,145,[22,21,69,4,80,2,83,10,94,27,122,2,129,1]],[42.2,140,[22,20,66,5,73,3,77,4,86,3,90,31,124,1]],[44.1,136,[21,21,43,1,67,4,72,1,74,5,83,3,87,32,121,1]],[46,132,[21,23,66,11,78,1,80,4,85,32]],[47.9,127,[20,21,43,2,62,51]],[49.8,122,[18,20,39,1,41,1,61,49]],[51.7,117,[17,15,33,7,57,2,60,44,109,1]],[53.6,112,[16,14,31,8,53,1,55,1,58,42,104,2]],[55.5,107,[5,1,14,14,30,6,52,1,57,1,60,34,100,2]],[57.4,102,[6,2,13,12,29,4,49,1,54,2,58,33,95,2]],[59.3,97,[5,2,11,12,27,3,50,3,55,35]],[61.2,91,[4,18,26,1,33,2,47,3,51,34,87,2]],[63.1,86,[2,1,4,17,26,2,31,2,45,2,48,38]],[65,80,[1,1,3,18,23,2,28,3,35,2,42,3,46,2,49,31]],[66.9,74,[0,2,3,17,22,2,26,4,40,5,47,27]],[68.8,69,[3,9,13,1,16,3,20,1,25,4,38,4,46,1,49,20]],[70.7,63,[4,1,11,2,16,3,22,6,36,1,41,1,43,1,45,14]],[72.6,57,[9,7,20,5,39,1,41,8]],[74.5,51,[9,1,13,1,17,6,33,1,38,3]],[76.4,45,[7,1,12,1,14,6,30,1,35,2]],[78.3,38,[9,8,20,1]],[80.2,32,[7,7,24,1]]]
-
-const RAD = Math.PI / 180
-const landDots = []
-for (const [lat, n, runs] of LAND) {
-  for (let k = 0; k < runs.length; k += 2) {
-    for (let i = runs[k]; i < runs[k] + runs[k + 1]; i++) {
-      const lon = -180 + ((i + 0.5) * 360) / n
-      const a = Math.abs(lat)
-      landDots.push({
-        x: Math.cos(lat * RAD) * Math.sin(lon * RAD),
-        y: Math.sin(lat * RAD),
-        z: Math.cos(lat * RAD) * Math.cos(lon * RAD),
-        rgb: a < 24 ? [226, 184, 112] : a < 52 ? [112, 178, 108] : [226, 238, 246],
-      })
-    }
-  }
-}
-
-const vec = (lat, lon) => ({
-  x: Math.cos(lat * RAD) * Math.sin(lon * RAD),
-  y: Math.sin(lat * RAD),
-  z: Math.cos(lat * RAD) * Math.cos(lon * RAD),
-})
-
-const cities = [
-  { lat: 6.93, lon: 79.85, hq: true, p: 0 }, // Colombo — HQ
-  { lat: 51.5, lon: -0.12, p: 1 },
-  { lat: 40.7, lon: -74, p: 2 },
-  { lat: 25.2, lon: 55.3, p: 3 },
-  { lat: 28.6, lon: 77.2, p: 4 },
-  { lat: 39.9, lon: 116.4, p: 5 },
-  { lat: 35.7, lon: 139.7, p: 6 },
-  { lat: 41, lon: 28.9, p: 7 },
-  { lat: 55.7, lon: 37.6, p: 1 },
-  { lat: 43.7, lon: -79.4, p: 3 },
-  { lat: 52.5, lon: 13.4, p: 2 },
-  { lat: 1.35, lon: 103.8, p: 4 },
-].map((c) => ({ ...c, v: vec(c.lat, c.lon) }))
-
-let globeRaf = 0
-let globeVisible = false
-let lon0 = 20
-let dragging = false
-let dragX = 0
-let lastT = 0
-
-function drawFace(ctx, x, y, r, p) {
-  ctx.save()
-  ctx.beginPath()
-  ctx.arc(x, y, r, 0, Math.PI * 2)
-  ctx.clip()
-  ctx.fillStyle = p.bg
-  ctx.fillRect(x - r, y - r, r * 2, r * 2)
-  ctx.fillStyle = p.shirt
-  ctx.beginPath()
-  ctx.ellipse(x, y + r * 0.95, r * 0.95, r * 0.62, 0, 0, Math.PI * 2)
-  ctx.fill()
-  ctx.fillStyle = p.skin
-  ctx.beginPath()
-  ctx.arc(x, y - r * 0.12, r * 0.4, 0, Math.PI * 2)
-  ctx.fill()
-  ctx.fillStyle = p.hair
-  ctx.beginPath()
-  ctx.arc(x, y - r * 0.18, r * 0.42, Math.PI * 1.02, Math.PI * 1.98)
-  ctx.fill()
-  ctx.restore()
-}
-
-function renderGlobe(t) {
-  const canvas = globeEl.value
-  if (!canvas) return
-  const ctx = canvas.getContext('2d')
-  const dpr = canvas.width / canvas.clientWidth
-  const w = canvas.clientWidth
-  const h = canvas.clientHeight
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
-  ctx.clearRect(0, 0, w, h)
-
-  const R = Math.min(w * 0.32, 190)
-  const cx = w / 2
-  const cy = h - 160 + R // only the top ~160px of the globe peeks into the card
-  const tilt = 12 * RAD
-  const cl = Math.cos(lon0 * RAD)
-  const sl = Math.sin(lon0 * RAD)
-  const ct = Math.cos(tilt)
-  const st = Math.sin(tilt)
-
-  // world vector → view space (rotate about Y by lon0, then tilt about X)
-  const view = (v, s = 1) => {
-    const x1 = v.x * cl - v.z * sl
-    const z1 = v.z * cl + v.x * sl
-    return { x: cx + x1 * R * s, y: cy - (v.y * ct - z1 * st) * R * s, z: v.y * st + z1 * ct }
-  }
-
-  // atmosphere
-  let g = ctx.createRadialGradient(cx, cy, R * 0.96, cx, cy, R * 1.22)
-  g.addColorStop(0, 'rgba(70,160,255,.45)')
-  g.addColorStop(1, 'rgba(70,160,255,0)')
-  ctx.fillStyle = g
-  ctx.beginPath()
-  ctx.arc(cx, cy, R * 1.22, 0, Math.PI * 2)
-  ctx.fill()
-
-  // ocean
-  g = ctx.createRadialGradient(cx - R * 0.35, cy - R * 0.45, R * 0.1, cx, cy, R)
-  g.addColorStop(0, '#2a67b0')
-  g.addColorStop(0.55, '#0e2d5c')
-  g.addColorStop(1, '#050f24')
-  ctx.fillStyle = g
-  ctx.beginPath()
-  ctx.arc(cx, cy, R, 0, Math.PI * 2)
-  ctx.fill()
-
-  ctx.save()
-  ctx.beginPath()
-  ctx.arc(cx, cy, R, 0, Math.PI * 2)
-  ctx.clip()
-
-  // graticule
-  ctx.strokeStyle = 'rgba(140,200,255,.12)'
-  ctx.lineWidth = 0.7
-  for (let lo = -180; lo < 180; lo += 30) {
-    ctx.beginPath()
-    let pen = false
-    for (let la = -80; la <= 80; la += 5) {
-      const p = view(vec(la, lo))
-      if (p.z > 0) {
-        if (pen) ctx.lineTo(p.x, p.y)
-        else ctx.moveTo(p.x, p.y)
-        pen = true
-      } else pen = false
-    }
-    ctx.stroke()
-  }
-  for (let la = -60; la <= 60; la += 30) {
-    ctx.beginPath()
-    let pen = false
-    for (let lo = -180; lo <= 180; lo += 5) {
-      const p = view(vec(la, lo))
-      if (p.z > 0) {
-        if (pen) ctx.lineTo(p.x, p.y)
-        else ctx.moveTo(p.x, p.y)
-        pen = true
-      } else pen = false
-    }
-    ctx.stroke()
-  }
-
-  // land
-  for (const d of landDots) {
-    const p = view(d)
-    if (p.z <= 0.02) continue
-    const k = Math.pow(p.z, 0.55)
-    ctx.fillStyle = `rgba(${d.rgb[0]},${d.rgb[1]},${d.rgb[2]},${0.3 + 0.7 * k})`
-    ctx.beginPath()
-    ctx.arc(p.x, p.y, 0.8 + 1.35 * k, 0, Math.PI * 2)
-    ctx.fill()
-  }
-
-  // limb darkening
-  g = ctx.createRadialGradient(cx - R * 0.25, cy - R * 0.3, R * 0.5, cx, cy, R * 1.02)
-  g.addColorStop(0, 'rgba(0,0,0,0)')
-  g.addColorStop(1, 'rgba(2,8,22,.55)')
-  ctx.fillStyle = g
-  ctx.fillRect(cx - R, cy - R, R * 2, R * 2)
-  ctx.restore()
-
-  // rim
-  ctx.save()
-  ctx.lineWidth = 4
-  ctx.strokeStyle = '#3d9bff'
-  ctx.shadowColor = 'rgba(70,160,255,.9)'
-  ctx.shadowBlur = 16
-  ctx.beginPath()
-  ctx.arc(cx, cy, R, 0, Math.PI * 2)
-  ctx.stroke()
-  ctx.restore()
-
-  // sync arcs HQ → branches
-  const hq = cities[0]
-  ctx.save()
-  ctx.lineCap = 'round'
-  ctx.lineWidth = 1.6
-  ctx.setLineDash([3, 7])
-  ctx.lineDashOffset = -(t / 1000) * 26
-  for (let i = 1; i < cities.length; i++) {
-    const c = cities[i]
-    const dot = Math.max(-1, Math.min(1, hq.v.x * c.v.x + hq.v.y * c.v.y + hq.v.z * c.v.z))
-    const om = Math.acos(dot)
-    if (om < 0.01) continue
-    ctx.beginPath()
-    let pen = false
-    for (let s = 0; s <= 1.0001; s += 0.04) {
-      const a = Math.sin((1 - s) * om) / Math.sin(om)
-      const b = Math.sin(s * om) / Math.sin(om)
-      const lift = 1 + 0.2 * Math.sin(Math.PI * s)
-      const v = {
-        x: (hq.v.x * a + c.v.x * b) * lift,
-        y: (hq.v.y * a + c.v.y * b) * lift,
-        z: (hq.v.z * a + c.v.z * b) * lift,
-      }
-      const p = view(v)
-      if (p.z > 0.02) {
-        if (pen) ctx.lineTo(p.x, p.y)
-        else ctx.moveTo(p.x, p.y)
-        pen = true
-      } else pen = false
-    }
-    ctx.strokeStyle = 'rgba(255,140,70,.8)'
-    ctx.shadowColor = 'rgba(255,120,50,.9)'
-    ctx.shadowBlur = 6
-    ctx.stroke()
-  }
-  ctx.restore()
-
-  // pins
-  const pins = cities.map((c) => ({ c, s: view(c.v), top: view(c.v, 1.16) })).sort((a, b) => a.s.z - b.s.z)
-  for (const { c, s, top } of pins) {
-    if (s.z <= 0.05) continue
-    const al = Math.min(1, (s.z - 0.05) / 0.25)
-    ctx.save()
-    ctx.globalAlpha = al
-    ctx.strokeStyle = 'rgba(255,255,255,.65)'
-    ctx.lineWidth = 1
-    ctx.beginPath()
-    ctx.moveTo(s.x, s.y)
-    ctx.lineTo(top.x, top.y)
-    ctx.stroke()
-    ctx.fillStyle = '#ff7a30'
-    ctx.beginPath()
-    ctx.arc(s.x, s.y, 2.6, 0, Math.PI * 2)
-    ctx.fill()
-    if (c.hq) {
-      const ph = ((t / 1400) % 1)
-      ctx.strokeStyle = `rgba(255,122,48,${0.7 * (1 - ph)})`
-      ctx.lineWidth = 2
-      ctx.beginPath()
-      ctx.arc(s.x, s.y, 4 + ph * 22, 0, Math.PI * 2)
-      ctx.stroke()
-    }
-    const r = c.hq ? 15 : 12
-    ctx.shadowColor = 'rgba(15,23,42,.45)'
-    ctx.shadowBlur = 8
-    ctx.shadowOffsetY = 3
-    ctx.fillStyle = '#fff'
-    ctx.beginPath()
-    ctx.arc(top.x, top.y, r + 2.5, 0, Math.PI * 2)
-    ctx.fill()
-    ctx.shadowColor = 'transparent'
-    drawFace(ctx, top.x, top.y, r, people[c.p])
-    if (c.hq) {
-      ctx.strokeStyle = '#ff6a1a'
-      ctx.lineWidth = 2
-      ctx.beginPath()
-      ctx.arc(top.x, top.y, r + 2.5, 0, Math.PI * 2)
-      ctx.stroke()
-    }
-    ctx.restore()
-  }
-}
-
-function sizeGlobe() {
-  const canvas = globeEl.value
-  if (!canvas) return
-  const dpr = Math.min(window.devicePixelRatio || 1, 2)
-  const r = canvas.getBoundingClientRect()
-  canvas.width = Math.round(r.width * dpr)
-  canvas.height = Math.round(r.height * dpr)
-  renderGlobe(performance.now())
-}
-
-function globeLoop(t) {
-  if (!globeVisible) return
-  const dt = lastT ? Math.min(64, t - lastT) : 16
-  lastT = t
-  if (!dragging) lon0 += dt * 0.006
-  renderGlobe(t)
-  globeRaf = requestAnimationFrame(globeLoop)
-}
-
-function startGlobe() {
-  if (reducedMotion.value || globeRaf) return
-  lastT = 0
-  globeRaf = requestAnimationFrame(globeLoop)
-}
-function stopGlobe() {
-  cancelAnimationFrame(globeRaf)
-  globeRaf = 0
-}
-
-function onGlobeDown(e) {
-  dragging = true
-  dragX = e.clientX
-  globeEl.value?.setPointerCapture?.(e.pointerId)
-}
-function onGlobeMove(e) {
-  if (!dragging) return
-  lon0 -= (e.clientX - dragX) * 0.4
-  dragX = e.clientX
-  if (reducedMotion.value) renderGlobe(performance.now())
-}
-function onGlobeUp() {
-  dragging = false
-}
-
-/* ──────────────────────────── modal ──────────────────────────── */
-
-const modalOpen = ref(false)
-const submitted = ref(false)
-const triggerEl = ref(null)
-const dialogEl = ref(null)
-const firstInput = ref(null)
-const form = reactive({ name: '', business: '', phone: '', industry: industries[0] })
-const errors = reactive({ name: '', business: '', phone: '' })
-const firstName = computed(() => form.name.split(' ')[0] || 'there')
-
-function openModal() {
-  submitted.value = false
-  modalOpen.value = true
-}
-function closeModal() {
-  modalOpen.value = false
+const art = {
+  wp: '<circle cx="24" cy="24" r="21" fill="#21759b"/><circle cx="24" cy="24" r="17.8" fill="none" stroke="#fff" stroke-width="1.8"/><path d="M13.5 17h4.4l3.700 11.600L24 21.200l-1.300-4.200h4.500l3.600 11.600 2.300-7.600c.3-1.100-.3-2-1.500-2h-1.400v-1.400h6.200v1.400h-1c-1.100 0-1.900.7-2.300 1.800l-3.600 11.600h-1.600L25.600 21l-3.300 9.400h-1.700z" fill="#fff" transform="translate(-2.4 2) scale(1.06)"/>',
+  fb: '<circle cx="24" cy="24" r="21" fill="#1877f2"/><path d="M26.200 41V27.600h4.100l.7-4.800h-4.800v-3c0-1.400.6-2.500 2.500-2.500H31V13c-.5-.1-2-.2-3.700-.2-3.700 0-6.100 2.200-6.100 6.200v3.800H17v4.800h4.200V41z" fill="#fff"/>',
+  g: '<path d="M43.600 20.500H42V20H24v8h11.300A12 12 0 1 1 24 12c3 0 5.800 1.100 7.900 3l5.700-5.700A20 20 0 1 0 44 24c0-1.200-.1-2.400-.4-3.500z" fill="#4285f4"/>',
+  gcal: '<rect x="3" y="3" width="18" height="18" rx="3.500" fill="#fff" stroke="#4285f4" stroke-width="1.6"/><path d="M3 8.500h18" stroke="#4285f4" stroke-width="3.4"/><text x="12" y="18.200" text-anchor="middle" font-size="8" font-weight="700" fill="#4285f4" font-family="Poppins,sans-serif">31</text>',
 }
 
 const rootEl = ref(null)
@@ -876,42 +495,14 @@ function fit() {
 }
 
 onMounted(() => {
-  reducedMotion.value = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  document.addEventListener('keydown', onKey)
-  window.addEventListener('resize', sizeGlobe)
-
-  const canvas = globeEl.value
-  canvas.addEventListener('pointerdown', onGlobeDown)
-  canvas.addEventListener('pointermove', onGlobeMove)
-  canvas.addEventListener('pointerup', onGlobeUp)
-  canvas.addEventListener('pointercancel', onGlobeUp)
-  sizeGlobe()
-
-  if (reducedMotion.value) {
-    alertCount.value = 1284
-    ready.value = true
-    return
-  }
-
-  toastTimer = setInterval(() => {
-    toastIndex.value = (toastIndex.value + 1) % notifications.length
-  }, 3400)
-
-  io = new IntersectionObserver(
-    (entries) => {
-      const visible = entries.some((e) => e.isIntersecting)
-      if (visible && !ready.value) {
-        ready.value = true
-        countUp()
-        typingStopped = false
-        runTypewriter()
-      }
-      globeVisible = visible
-      if (visible) startGlobe()
-      else stopGlobe()
-    },
-    { threshold: 0.12 },
-  )
+  motion.value = !(typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches)
+  fit()
+  ro = new ResizeObserver(fit)
+  ro.observe(stageEl.value)
+  io = new IntersectionObserver(([en]) => {
+    inView.value = en.isIntersecting
+    if (en.isIntersecting) revealed.value = true
+  }, { threshold: 0.25 })
   io.observe(rootEl.value)
   startTimer()
 })

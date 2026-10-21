@@ -400,12 +400,13 @@
 </template>
 
 <script setup>
-defineOptions({ name: 'HomeSection6' })
+
+import NetworkSection from './section7.vue'
+import DataProtectionSection from './section8.vue'
+
 /**
 
- * SectionAuth.vue — "Authentication & Access" (Vue 3, <script setup>
-defineOptions({ name: 'HomeSection6' })
-)
+ * SectionAuth.vue — "Authentication & Access" (Vue 3, <script setup>)
 
  *
 
@@ -721,6 +722,14 @@ function update() {
 function go(dir) {
 
   scroller.value?.scrollBy({ left: dir * stepSize(), behavior: reduceMotion ? 'auto' : 'smooth' })
+
+}
+
+function goTo(i) {
+
+  const n = ((i % items.length) + items.length) % items.length
+
+  scroller.value?.scrollTo({ left: n * stepSize(), behavior: reduceMotion ? 'auto' : 'smooth' })
 
 }
 
