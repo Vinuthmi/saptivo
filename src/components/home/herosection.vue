@@ -1,835 +1,491 @@
 <template>
-  <section
-    ref="rootEl"
-    class="hx"
-    :class="{ 'hx-js': mounted, 'hx-in': revealed }"
-    aria-labelledby="hx-title"
-  >
-    <div class="hx-frame" aria-hidden="true"></div>
+  <section id="top" ref="hero" class="hero" aria-labelledby="hero-title">
+    <div class="top">
+      <div class="bg" aria-hidden="true"></div>
 
-    <div class="hx-wrap">
-      <!-- ============ copy ============ -->
-      <div class="hx-copy">
-        <a class="hx-badge" :href="badgeHref">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4l1.6 4.4L15 10l-4.4 1.6L9 16l-1.6-4.4L3 10l4.4-1.6zM17.500 12l.9 2.600 2.600.9-2.600.9-.9 2.600-.9-2.600-2.600-.9 2.600-.9zM17 3.500l.7 1.800 1.800.7-1.800.7-.7 1.800-.7-1.800-1.800-.7 1.800-.7z" /></svg>
-          <span>Saptivo CRM · Google Calendar sync is live</span>
+    <div class="content">
+      <h1 id="hero-title">
+        Manage and automate
+        <span class="accent">CRM, your way.</span>
+      </h1>
+
+      <p class="lead">
+        Bring customers, conversations and your entire team into one
+        connected workspace. Work smarter, move faster and make every
+        opportunity count.
+      </p>
+
+      <div class="actions">
+        <a href="#contact" class="btn btn-primary">
+          Build your advantage <span class="arrow" aria-hidden="true">↗</span>
         </a>
+        <a href="#features" class="btn btn-outline">See how it works</a>
+      </div>
+    </div>
+    </div>
 
-        <h1 id="hx-title" class="hx-title">
-          <span class="l1">Turn every inquiry</span>
-          <span class="l2">into a closed deal.</span>
-        </h1>
-
-        <p class="hx-sub">
-          When leads, calls and quotes live in five different tools, deals slip away. Saptivo puts them in one pipeline.
-        </p>
-
-        <div class="hx-cta">
-          <a class="hx-btn pri" :href="ctaHref">
-            <span>Try Free for 14 Days</span>
-            <i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></svg></i>
-          </a>
-          <a class="hx-btn sec" :href="demoHref">Book a Demo</a>
+    <div ref="stage" class="stage">
+      <!-- orbit lives BELOW the text, behind the video card -->
+      <div class="orbit" aria-hidden="true">
+        <div class="ring ring-c" :style="{ '--rot': rotC + 'deg' }">
+          <i v-for="(d, i) in dotsC" :key="'c' + i" class="dot" :style="{ '--a': d.a + 'deg', '--s': d.s + 'px' }"></i>
         </div>
 
-        <ul class="hx-list">
-          <li v-for="t in points" :key="t">
-            <i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m6.500 12.500 3.500 3.500 7.500-8" /></svg></i>
-            {{ t }}
-          </li>
-        </ul>
+        <div class="ring ring-b" :style="{ '--rot': rotB + 'deg' }">
+          <i v-for="(d, i) in dotsB" :key="'b' + i" class="dot" :style="{ '--a': d.a + 'deg', '--s': d.s + 'px' }"></i>
+        </div>
+
+        <div class="ring ring-a" :style="{ '--rot': rot + 'deg' }">
+          <span
+            v-for="(s, i) in ringIcons"
+            :key="s.name + i"
+            class="node"
+            :style="{ '--a': i * (360 / ringIcons.length) + 'deg' }"
+          >
+            <img :src="s.img" alt="" width="32" height="32" draggable="false" />
+          </span>
+        </div>
       </div>
 
-      <!-- ============ isometric scene ============ -->
-      <div class="hx-art" aria-hidden="true">
-        <svg class="hx-svg" viewBox="0 0 780 600" focusable="false">
-          <defs>
-            <linearGradient id="hx-or" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stop-color="#ff9a4c" />
-              <stop offset="1" stop-color="#f2540c" />
-            </linearGradient>
-            <linearGradient id="hx-cr" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="#f2540c" />
-              <stop offset="1" stop-color="#d9490a" />
-            </linearGradient>
-            <radialGradient id="hx-fade" cx="0.5" cy="0.5" r="0.55">
-              <stop offset="0" stop-color="#fff" />
-              <stop offset="1" stop-color="#000" />
-            </radialGradient>
-            <radialGradient id="hx-glow" cx="0.5" cy="0.5" r="0.5">
-              <stop offset="0" stop-color="#ff8a3a" stop-opacity="0.45" />
-              <stop offset="1" stop-color="#ff8a3a" stop-opacity="0" />
-            </radialGradient>
-            <mask id="hx-m" maskUnits="userSpaceOnUse" x="0" y="0" width="780" height="600">
-              <rect width="780" height="600" fill="url(#hx-fade)" />
-            </mask>
-            <filter id="hx-sh" x="-30%" y="-30%" width="160%" height="180%">
-              <feDropShadow dx="0" dy="14" stdDeviation="12" flood-color="#14152b" flood-opacity="0.13" />
-            </filter>
-            <filter id="hx-sh2" x="-30%" y="-30%" width="160%" height="180%">
-              <feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="#14152b" flood-opacity="0.12" />
-            </filter>
-            <filter id="hx-gl" x="-80%" y="-80%" width="260%" height="260%">
-              <feGaussianBlur stdDeviation="3" result="b" />
-              <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
-            </filter>
-          </defs>
+      <div class="sticky">
+        <div class="video-card" :style="{ '--p': progress }">
+          <video
+            ref="heroVideo"
+            class="video"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="metadata"
+            @play="isPlaying = true"
+            @pause="isPlaying = false"
+          >
+            <source src="/video/crm-hero.mp4" type="video/mp4" />
+          </video>
+          <div class="video-shade" aria-hidden="true"></div>
 
-          <!-- floor grid, faded at the edges -->
-          <g mask="url(#hx-m)" class="grid">
-            <polyline v-for="(g, i) in grid" :key="i" :points="g" />
-          </g>
-          <polygon :points="plate" class="plate" />
+          <h3
+            class="video-copy"
+            :style="{ opacity: copyOpacity, transform: 'translateY(' + copyShift + 'px)' }"
+            aria-hidden="true"
+          >
+            One view.
+            <span>Infinite momentum.</span>
+          </h3>
 
-          <!-- circuit routes -->
-          <g class="routes">
-            <g v-for="n in nodes" :key="n.id" fill="none" stroke-linecap="round" stroke-linejoin="round">
-              <path :d="n.d" class="r-out" />
-              <path :d="n.d" class="r-in" />
-              <path :d="n.d" class="r-fl" />
-            </g>
-          </g>
+          <button class="play" type="button" @click="togglePlay"
+            :aria-label="isPlaying ? 'Pause video' : 'Play video'">
+            <svg v-if="isPlaying" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14" /></svg>
+            <svg v-else viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z" /></svg>
+          </button>
 
-          <!-- data packets flowing into Saptivo -->
-          <g v-if="!reduce">
-            <g v-for="(n, i) in nodes" :key="`p${n.id}`">
-              <circle r="9" class="pk-h">
-                <animateMotion :path="n.rev" dur="4s" :begin="`${i}s`" repeatCount="indefinite" />
-              </circle>
-              <circle r="4.500" class="pk">
-                <animateMotion :path="n.rev" dur="4s" :begin="`${i}s`" repeatCount="indefinite" />
-              </circle>
-            </g>
-          </g>
+          <button class="sound" type="button" @click="toggleMute"
+            :aria-label="isMuted ? 'Unmute video' : 'Mute video'">
+            <svg v-if="isMuted" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Z" /><path d="m17 9 4 6m0-6-4 6" /></svg>
+            <svg v-else viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Z" /><path d="M17 9a5 5 0 0 1 0 6" /><path d="M19 6a9 9 0 0 1 0 12" /></svg>
+          </button>
+        </div>
+      </div>
+    </div>
 
-          <!-- integration pucks -->
-          <g v-for="(n, i) in nodes" :key="`n${n.id}`" class="pop" :style="{ '--d': 0.5 + i * 0.12 + 's' }">
-            <g class="float" :style="{ '--f': i * 0.7 + 's' }">
-              <ellipse :cx="n.end[0]" :cy="n.end[1] + 12" rx="50" ry="29" class="puck-sh" />
-              <ellipse :cx="n.end[0]" :cy="n.end[1] + 8" rx="44" ry="26" class="puck-side" />
-              <ellipse :cx="n.end[0]" :cy="n.end[1]" rx="44" ry="26" class="puck-top" />
-              <ellipse :cx="n.end[0]" :cy="n.end[1]" rx="44" ry="26" class="puck-ring" :style="{ '--f': i * 0.5 + 's' }" />
-              <g :transform="`translate(${n.end[0]} ${n.end[1] - 1}) scale(1 .66)`">
-                <template v-if="n.id === 'fb'">
-                  <circle r="22" fill="#1877f2" />
-                  <text y="10" text-anchor="middle" class="bi fb">f</text>
-                </template>
-                <template v-else-if="n.id === 'cal'">
-                  <rect x="-21" y="-21" width="42" height="42" rx="11" fill="#fff" stroke="#dfe3ee" stroke-width="1.500" />
-                  <path d="M-21 -9h42v-1a10 10 0 0 0-10-10h-22a10 10 0 0 0-10 10z" fill="#4285f4" />
-                  <text y="14" text-anchor="middle" class="bi gc">31</text>
-                </template>
-                <template v-else-if="n.id === 'wp'">
-                  <circle r="22" fill="#21759b" />
-                  <circle r="17" fill="none" stroke="#fff" stroke-width="2" />
-                  <text y="9" text-anchor="middle" class="bi wp">W</text>
-                </template>
-                <template v-else>
-                  <circle r="22" fill="#25d366" />
-                  <g transform="translate(-13 -13) scale(1.08)"><path :d="icons.phone" class="ph" /></g>
-                </template>
-              </g>
-            </g>
-          </g>
-
-          <!-- Saptivo pedestal -->
-          <g class="pop" style="--d: 0.25s">
-            <ellipse :cx="cube[0]" :cy="cube[1] + 6" rx="150" ry="84" fill="url(#hx-glow)" />
-            <g filter="url(#hx-sh)">
-              <polygon :points="base.left" fill="#f3ece8" />
-              <polygon :points="base.right" fill="#ebe3df" />
-              <polygon :points="base.top" fill="#fbf8f6" stroke="#f0e9e5" stroke-width="1.500" />
-            </g>
-            <polygon :points="tile.left" fill="#f6f1ee" />
-            <polygon :points="tile.right" fill="#efe8e4" />
-            <polygon :points="tile.top" fill="#fff" stroke="#f3ece8" stroke-width="1.200" />
-            <ellipse :cx="cube[0]" :cy="cube[1] + 12" rx="104" ry="60" class="pulse" />
-          </g>
-
-          <!-- floating Saptivo cube -->
-          <g class="pop" style="--d: 0.45s">
-            <g class="float big">
-              <ellipse :cx="ring[0]" :cy="ring[1]" rx="64" ry="36" class="orbit" />
-              <polygon :points="cb.left" fill="#ff8a3a" opacity="0.96" />
-              <polygon :points="cb.right" fill="url(#hx-cr)" opacity="0.96" />
-              <polygon :points="cb.top" fill="#ffd2b0" />
-              <polyline :points="cb.edge" fill="none" stroke="#fff" stroke-width="1.500" stroke-opacity="0.8" stroke-linejoin="round" />
-              <g :transform="mtx(-24, -24, 114)">
-                <g transform="translate(5 5) scale(1.6)">
-                  <path d="M12 3l9 5-9 5-9-5zM3 13l9 5 9-5M3 17.500l9 5 9-5" class="logo" />
-                </g>
-              </g>
-            </g>
-          </g>
-
-          <!-- CRM card (isometric plane) -->
-          <g class="pop" style="--d: 0.7s">
-            <g filter="url(#hx-sh)">
-              <polygon :points="card.left" fill="#f3ece8" />
-              <polygon :points="card.right" fill="#ebe3df" />
-              <polygon :points="card.top" fill="#fff" />
-            </g>
-            <g :transform="mtx(80, -60, 8)">
-              <!-- prompt box -->
-              <rect x="14" y="14" width="262" height="64" rx="12" fill="#fff" stroke="#efe8e4" />
-              <rect x="22" y="22" width="150" height="20" rx="10" fill="#f6f2ef" />
-              <circle cx="34" cy="32" r="6" fill="#14152b" />
-              <text x="46" y="35.500" class="t s">Inquiry_#28.pdf</text>
-              <text x="158" y="35.500" class="t s">×</text>
-              <text x="22" y="64" class="t m">Follow up with John Smith</text>
-              <rect x="192" y="53" width="1.600" height="14" fill="#f2540c" class="caret" />
-              <!-- chips -->
-              <g transform="translate(14 88)">
-                <rect width="66" height="20" rx="10" fill="#fff" stroke="#efe8e4" />
-                <circle cx="13" cy="10" r="4" fill="#25d366" />
-                <text x="22" y="13.500" class="t s">WhatsApp</text>
-              </g>
-              <g transform="translate(88 88)">
-                <rect width="56" height="20" rx="10" fill="#fff" stroke="#efe8e4" />
-                <circle cx="13" cy="10" r="4" fill="#f2540c" />
-                <text x="22" y="13.500" class="t s">Quote</text>
-              </g>
-              <!-- suggestions -->
-              <g v-for="(r, k) in rows" :key="r.t" :opacity="1 - k * 0.27">
-                <rect x="10" :y="r.y - 12" width="232" height="18" rx="9" class="hl" :style="{ '--k': k }" />
-                <g :transform="`translate(20 ${r.y - 9}) scale(.55)`"><path :d="r.i" class="ri" /></g>
-                <text x="40" :y="r.y + 1.500" class="t r">{{ r.t }}</text>
-              </g>
-              <!-- send -->
-              <circle cx="260" cy="162" r="12" fill="url(#hx-or)" />
-              <path d="M255 162h10M261 157l5 5-5 5" class="arrow" />
-            </g>
-          </g>
-
-          <!-- "Capturing lead…" label -->
-          <g class="pop" style="--d: 0.9s">
-            <g class="float" style="--f: 1.2s">
-              <g filter="url(#hx-sh2)">
-                <polygon :points="lab.left" fill="#f3ece8" />
-                <polygon :points="lab.right" fill="#ebe3df" />
-                <polygon :points="lab.top" fill="#fff" />
-              </g>
-              <g :transform="mtx(110, 150, 6)">
-                <g transform="translate(26 22)">
-                  <g v-if="!reduce">
-                    <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="2.400s" repeatCount="indefinite" />
-                    <line v-for="k in 8" :key="k" x1="0" y1="-10" x2="0" y2="-5" stroke="#f2540c" stroke-width="2.200" stroke-linecap="round" :opacity="0.15 + k * 0.1" :transform="`rotate(${k * 45})`" />
-                  </g>
-                  <g v-else>
-                    <line v-for="k in 8" :key="k" x1="0" y1="-10" x2="0" y2="-5" stroke="#f2540c" stroke-width="2.200" stroke-linecap="round" :opacity="0.15 + k * 0.1" :transform="`rotate(${k * 45})`" />
-                  </g>
-                </g>
-                <text x="46" y="27" class="t m">Capturing lead…</text>
-              </g>
-            </g>
-          </g>
-
-          <!-- floating toasts -->
-          <g v-for="(t, i) in toasts" :key="t.t" class="pop" :style="{ '--d': 1.1 + i * 0.15 + 's' }">
-            <g class="float" :style="{ '--f': i * 0.9 + 's' }">
-              <g :transform="`translate(${t.x} ${t.y})`" filter="url(#hx-sh2)">
-                <rect :width="t.w" height="30" rx="15" fill="#fff" stroke="#f0e9e5" />
-                <circle cx="16" cy="15" r="5" :fill="t.c" />
-                <text x="28" y="19" class="t toast">{{ t.t }}</text>
-              </g>
-            </g>
-          </g>
-        </svg>
+    <div id="features" class="brands">
+      <p class="brands-title">All your work. Working as one.</p>
+      <div class="marquee">
+        <div class="track">
+          <span v-for="(f, i) in loop" :key="f + i" class="chip">{{ f }}</span>
+        </div>
       </div>
     </div>
   </section>
 </template>
 
 <script setup>
-/**
- * SectionHero.vue — Saptivo hero with an isometric "integrations → one pipeline" scene (Vue 3, <script setup>)
- *
- * Left: badge, gradient headline, copy, CTAs and a checklist.
- * Right: an SVG isometric scene — WordPress, Facebook, Google Calendar and Phone/WhatsApp feed glowing
- * circuit routes into the Saptivo cube, next to a CRM card showing a follow-up being prepared.
- * Everything is drawn from the small `P()` iso projection below, so positions are easy to tweak.
- *
- * Props: ctaHref, demoHref, badgeHref. Browser APIs are only used in onMounted (SSR / Nuxt safe).
- * Respects prefers-reduced-motion (the scene is drawn static, no travelling packets or spinner).
- */
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+defineOptions({ name: "HeroSection" });
 
-defineProps({
-  ctaHref: { type: String, default: '#signup' },
-  demoHref: { type: String, default: '#demo' },
-  badgeHref: { type: String, default: '#integrations' },
-})
+const hero = ref(null);
+const stage = ref(null);
+const heroVideo = ref(null);
+const isMuted = ref(true);
+const isPlaying = ref(true);
+const rot = ref(0);
+const progress = ref(0);
 
-const rootEl = ref(null)
-const mounted = ref(false)
-const revealed = ref(false)
-const reduce = ref(false)
+const rotB = computed(() => -rot.value * 0.7);
+const rotC = computed(() => rot.value * 0.45);
 
-const points = [
-  'Capture leads from web, social and calls',
-  'Quote, invoice and follow up in one place',
-  'Manage your whole team easily',
-]
+// Real brand logos (simple-icons paths + brand colours) rendered as <img>.
+// To use your own files instead, set `img: "/images/social/instagram.png"`.
+const brands = [
+  {
+    "name": "Instagram",
+    "hex": "E4405F",
+    "path": "M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"
+  },
+  {
+    "name": "YouTube",
+    "hex": "FF0000",
+    "path": "M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"
+  },
+  {
+    "name": "Facebook",
+    "hex": "0866FF",
+    "path": "M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"
+  },
+  {
+    "name": "TikTok",
+    "hex": "000000",
+    "path": "M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"
+  },
+  {
+    "name": "LinkedIn",
+    "hex": "0A66C2",
+    "path": "M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
+  },
+  {
+    "name": "X",
+    "hex": "000000",
+    "path": "M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"
+  },
+  {
+    "name": "WhatsApp",
+    "hex": "25D366",
+    "path": "M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"
+  },
+  {
+    "name": "Telegram",
+    "hex": "26A5E4",
+    "path": "M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"
+  },
+  {
+    "name": "Pinterest",
+    "hex": "BD081C",
+    "path": "M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.39 18.592.026 11.985.026L12.017 0z"
+  },
+  {
+    "name": "Reddit",
+    "hex": "FF4500",
+    "path": "M12 0C5.373 0 0 5.373 0 12c0 3.314 1.343 6.314 3.515 8.485l-2.286 2.286C.775 23.225 1.097 24 1.738 24H12c6.627 0 12-5.373 12-12S18.627 0 12 0Zm4.388 3.199c1.104 0 1.999.895 1.999 1.999 0 1.105-.895 2-1.999 2-.946 0-1.739-.657-1.947-1.539v.002c-1.147.162-2.032 1.15-2.032 2.341v.007c1.776.067 3.4.567 4.686 1.363.473-.363 1.064-.58 1.707-.58 1.547 0 2.802 1.254 2.802 2.802 0 1.117-.655 2.081-1.601 2.531-.088 3.256-3.637 5.876-7.997 5.876-4.361 0-7.905-2.617-7.998-5.87-.954-.447-1.614-1.415-1.614-2.538 0-1.548 1.255-2.802 2.803-2.802.645 0 1.239.218 1.712.585 1.275-.79 2.881-1.291 4.64-1.365v-.01c0-1.663 1.263-3.034 2.88-3.207.188-.911.993-1.595 1.959-1.595Zm-8.085 8.376c-.784 0-1.459.78-1.506 1.797-.047 1.016.64 1.429 1.426 1.429.786 0 1.371-.369 1.418-1.385.047-1.017-.553-1.841-1.338-1.841Zm7.406 0c-.786 0-1.385.824-1.338 1.841.047 1.017.634 1.385 1.418 1.385.785 0 1.473-.413 1.426-1.429-.046-1.017-.721-1.797-1.506-1.797Zm-3.703 4.013c-.974 0-1.907.048-2.77.135-.147.015-.241.168-.183.305.483 1.154 1.622 1.964 2.953 1.964 1.33 0 2.47-.81 2.953-1.964.057-.137-.037-.29-.184-.305-.863-.087-1.795-.135-2.769-.135Z"
+  },
+  {
+    "name": "Discord",
+    "hex": "5865F2",
+    "path": "M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"
+  }
+];
 
-/* ------------------------------------------------------------------ isometric projection
-   world x → down-right, world y → down-left, z → up.  World (0,0,0) sits at screen (OX, OY). */
-const S = 0.866
-const H = 0.5
-const OX = 360
-const OY = 272
-const P = (x, y, z = 0) => [OX + S * (x - y), OY + H * (x + y) - z]
-const f = (n) => +n.toFixed(1)
-const pts = (arr) => arr.map(([x, y, z = 0]) => P(x, y, z).map(f).join(',')).join(' ')
-const mtx = (x, y, z = 0) => {
-  const [tx, ty] = P(x, y, z)
-  return `matrix(${S} ${H} ${-S} ${H} ${f(tx)} ${f(ty)})`
-}
-function box(x, y, w, d, h, z0 = 0) {
-  const z1 = z0 + h
-  return {
-    top: pts([[x, y, z1], [x + w, y, z1], [x + w, y + d, z1], [x, y + d, z1]]),
-    right: pts([[x + w, y, z0], [x + w, y + d, z0], [x + w, y + d, z1], [x + w, y, z1]]),
-    left: pts([[x, y + d, z0], [x + w, y + d, z0], [x + w, y + d, z1], [x, y + d, z1]]),
-    edge: pts([[x, y + d, z1], [x + w, y + d, z1], [x + w, y, z1], [x + w, y + d, z1], [x + w, y + d, z0]]),
+const toImg = (b) =>
+  "data:image/svg+xml;utf8," +
+  encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#${b.hex}" d="${b.path}"/></svg>`
+  );
+
+const social = brands.map((b) => ({ name: b.name, img: toImg(b) }));
+const ringIcons = [...social, ...social];
+
+// hollow circles riding the inner rings (a = angle, s = size in px)
+const dotsB = [
+  { a: 18, s: 14 }, { a: 88, s: 28 }, { a: 158, s: 12 },
+  { a: 228, s: 22 }, { a: 300, s: 16 },
+];
+const dotsC = [
+  { a: 52, s: 20 }, { a: 140, s: 10 }, { a: 214, s: 30 }, { a: 322, s: 14 },
+];
+
+const features = [
+  "Omnichannel CRM",
+  "Multi-Store Sync",
+  "Smart Quotes",
+  "Sales Analytics",
+  "3CX Call Journal",
+];
+const loop = computed(() => [...features, ...features, ...features, ...features]);
+const copyOpacity = computed(() => Math.min(Math.max((progress.value - 0.35) / 0.4, 0), 1));
+const copyShift = computed(() => (1 - copyOpacity.value) * 36);
+
+async function togglePlay() {
+  const v = heroVideo.value;
+  if (!v) return;
+  if (v.paused) {
+    try { await v.play(); } catch { /* blocked */ }
+  } else {
+    v.pause();
   }
 }
-/* path with softly rounded corners (in screen space) */
-function rounded(world, r = 18) {
-  const s = world.map(([x, y]) => P(x, y))
-  let d = `M${f(s[0][0])},${f(s[0][1])}`
-  for (let i = 1; i < s.length - 1; i++) {
-    const [px, py] = s[i - 1]
-    const [cx, cy] = s[i]
-    const [nx, ny] = s[i + 1]
-    const l1 = Math.hypot(cx - px, cy - py)
-    const l2 = Math.hypot(nx - cx, ny - cy)
-    const rr = Math.min(r, l1 / 2, l2 / 2)
-    const ax = cx + ((px - cx) / l1) * rr
-    const ay = cy + ((py - cy) / l1) * rr
-    const bx = cx + ((nx - cx) / l2) * rr
-    const by = cy + ((ny - cy) / l2) * rr
-    d += ` L${f(ax)},${f(ay)} Q${f(cx)},${f(cy)} ${f(bx)},${f(by)}`
+function toggleMute() {
+  const v = heroVideo.value;
+  if (!v) return;
+  v.muted = !v.muted;
+  isMuted.value = v.muted;
+}
+
+let ticking = false;
+let raf = null;
+function update() {
+  rot.value = window.scrollY * 0.12;
+  const el = stage.value;
+  if (el) {
+    const total = el.offsetHeight - window.innerHeight;
+    const p = total > 0 ? -el.getBoundingClientRect().top / total : 0;
+    progress.value = Math.min(Math.max(p, 0), 1);
   }
-  const e = s[s.length - 1]
-  return d + ` L${f(e[0])},${f(e[1])}`
+  ticking = false;
+}
+function onScroll() {
+  if (ticking) return;
+  ticking = true;
+  raf = requestAnimationFrame(update);
 }
 
-/* ------------------------------------------------------------------ scene data */
-const icons = {
-  phone: 'M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z',
-  doc: 'M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8zM14 3v5h5M9 13h6M9 17h4',
-  cal: 'M6 5h12a2.500 2.500 0 0 1 2.500 2.500v11A2.500 2.500 0 0 1 18 21H6a2.500 2.500 0 0 1-2.500-2.500v-11A2.500 2.500 0 0 1 6 5zM3.500 10h17M8 3v4M16 3v4',
-}
-
-const routeDefs = [
-  { id: 'fb', pts: [[-30, -40], [-30, -150], [-100, -150], [-100, -290]] },
-  { id: 'cal', pts: [[40, -20], [260, -20], [260, -150]] },
-  { id: 'wp', pts: [[-20, 40], [-20, 270], [90, 270]] },
-  { id: 'ph', pts: [[-40, -20], [-200, -20], [-200, 90]] },
-]
-const nodes = routeDefs.map((r) => ({
-  id: r.id,
-  d: rounded(r.pts),
-  rev: rounded([...r.pts].reverse()),
-  end: P(...r.pts[r.pts.length - 1]).map(f),
-}))
-
-const grid = []
-for (let t = -320; t <= 320; t += 64) {
-  grid.push(pts([[-320, t], [320, t]]))
-  grid.push(pts([[t, -320], [t, 320]]))
-}
-const plate = pts([[-150, -150], [150, -150], [150, 150], [-150, 150]])
-const base = box(-65, -65, 130, 130, 34, 0)
-const tile = box(-54, -54, 108, 108, 10, 34)
-const cb = box(-24, -24, 48, 48, 48, 66)
-const card = box(80, -60, 290, 190, 8, 0)
-const lab = box(110, 150, 200, 44, 6, 0)
-const cube = P(0, 0, 0).map(f)
-const ring = P(0, 0, 56).map(f)
-
-const rows = [
-  { t: 'Send quotation', y: 128, i: icons.doc },
-  { t: 'Call back customer', y: 148, i: icons.phone },
-  { t: 'Book appointment', y: 168, i: icons.cal },
-]
-const toasts = [
-  { x: 548, y: 118, w: 112, t: '+1 new lead', c: '#1fa971' },
-  { x: 24, y: 268, w: 148, t: 'Call logged · 1:40', c: '#25d366' },
-  { x: 636, y: 262, w: 118, t: 'Event synced', c: '#4285f4' },
-  { x: 34, y: 492, w: 140, t: 'Form submitted', c: '#f2540c' },
-]
-
-/* ------------------------------------------------------------------ lifecycle */
 onMounted(() => {
-  mounted.value = true
-  reduce.value = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  requestAnimationFrame(() => (revealed.value = true))
-})
+  const v = heroVideo.value;
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduce) {
+    v?.pause();
+    return;
+  }
+  v?.play().catch(() => { isPlaying.value = false; });
+  update();
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll, { passive: true });
+});
+onBeforeUnmount(() => {
+  window.removeEventListener("scroll", onScroll);
+  window.removeEventListener("resize", onScroll);
+  if (raf !== null) cancelAnimationFrame(raf);
+  heroVideo.value?.pause();
+});
 </script>
 
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+<style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
-/* ============ tokens ============ */
-.hx {
-  --ink: #14152b;
-  --ink-2: #2b2d45;
-  --muted: #6c7084;
-  --line: rgba(20, 21, 43, 0.08);
-  --o1: #ff8a3a;
-  --o2: #f2540c;
-  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+.hero {
+  --orange: #ff6338;
+  --orange-deep: #f04b23;
+  --ink: #17191d;
+  --paper: #f7f7f4;
+  --muted: #5d6068;
+  --title: clamp(46px, 3.5vw, 104px); /* headline + video text share this size */
+
+  --ring: min(1560px, 175vw);   /* outer orbit diameter */
+  --step: 95px;                 /* gap between concentric rings */
+  --crest: 54px;                /* where the outer ring peaks inside the orbit strip */
+  --top0: clamp(150px, 17vw, 220px); /* video card top offset (orbit strip height) */
+  --w0: min(1180px, calc(100vw - 40px));
+  --ratio: 0.53;
+  --h0: min(calc(var(--w0) * var(--ratio)), calc(100svh - var(--top0) - 32px));
+
   position: relative;
   isolation: isolate;
-  overflow: hidden;
-  font-family: 'Poppins', system-ui, sans-serif;
+  overflow: clip; /* "hidden" would break the sticky video */
+  padding-bottom: 56px;
+  text-align: center;
   color: var(--ink);
+  background: var(--paper);
+  font-family: "Inter", system-ui, sans-serif;
+}
+.hero *, .hero *::before, .hero *::after { box-sizing: border-box; }
+.hero a:focus-visible, .hero button:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; }
+
+/* ---------- fluted-glass orange background ---------- */
+.top { position: relative; }
+.bg {
+  position: absolute; z-index: -1; left: 0; right: 0; top: 0;
+  bottom: calc((var(--top0) + var(--h0)) * -0.72);
+  overflow: hidden; pointer-events: none;
   background:
-    radial-gradient(760px 520px at 88% 72%, rgba(255, 138, 58, 0.1), transparent 62%),
-    radial-gradient(600px 420px at 0% 0%, rgba(255, 138, 58, 0.06), transparent 60%), #fff;
+    radial-gradient(ellipse 52% 60% at 50% 0%, #fff 0 50%, rgba(255, 255, 255, 0) 100%),
+    radial-gradient(ellipse 100% 42% at 50% 86%, rgba(255, 92, 36, 0.92), rgba(255, 92, 36, 0) 76%),
+    radial-gradient(ellipse 46% 100% at 0% 58%, #ff5a1f 0%, rgba(255, 106, 43, 0.82) 34%, rgba(255, 106, 43, 0) 78%),
+    radial-gradient(ellipse 46% 100% at 100% 58%, #ff5a1f 0%, rgba(255, 106, 43, 0.82) 34%, rgba(255, 106, 43, 0) 78%),
+    #fff;
+  -webkit-mask-image: linear-gradient(180deg, #000 70%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 70%, transparent 100%);
 }
-.hx *,
-.hx *::before,
-.hx *::after {
-  box-sizing: border-box;
+.bg::after {
+  content: ""; position: absolute; inset: 0;
+  background: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.3) 0, rgba(255, 255, 255, 0) 60px);
+  -webkit-backdrop-filter: blur(9px); backdrop-filter: blur(9px);
 }
-.hx svg {
+
+/* ---------- content ---------- */
+.content {
+  display: flex; flex-direction: column; align-items: center;
+  width: min(1040px, calc(100% - 40px)); margin: 0 auto;
+  padding: 112px 0 28px;
+}
+h1 {
+  margin: 0; font-weight: 500; line-height: 0.98; letter-spacing: -0.06em; color: #0b0c0e;
+  font-size: var(--title);
+  animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.accent,
+.video-copy span {
   display: block;
-}
-.hx-frame {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  max-width: 1376px;
-  margin: 0 auto;
-  border-inline: 1px solid var(--line);
-  pointer-events: none;
-}
-.hx-wrap {
-  position: relative;
-  max-width: 1280px;
-  min-height: 740px;
-  margin: 0 auto;
-  padding: clamp(28px, 3.6vw, 48px) clamp(20px, 3.6vw, 40px) clamp(36px, 5vw, 80px);
-}
-
-/* ============ copy ============ */
-.hx-copy {
-  position: relative;
-  z-index: 2;
-  max-width: 720px;
-}
-.hx-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 15px 8px 11px;
-  border-radius: 999px;
-  border: 1.5px solid transparent;
-  background:
-    linear-gradient(#fff, #fff) padding-box,
-    linear-gradient(90deg, #ff9a3d, #e0407a) border-box;
-  font-size: 13.5px;
-  font-weight: 500;
-  text-decoration: none;
-  transition: transform 0.4s var(--ease), box-shadow 0.4s;
-}
-.hx-badge span {
-  background: linear-gradient(90deg, #f2540c, #d6336c);
-  -webkit-background-clip: text;
+  width: fit-content; /* gradient spans the text itself */
+  margin: 0 auto -0.14em;
+  padding-bottom: 0.14em; /* keeps the "g" descender inside the clipped background */
+  background: linear-gradient(100deg, #ff9a3d 0%, #ff6a1a 45%, #f2540c 100%);
   background-clip: text;
-  color: transparent;
-}
-.hx-badge svg {
-  width: 18px;
-  height: 18px;
-  fill: none;
-  stroke: #f2540c;
-  stroke-width: 1.7;
-  stroke-linejoin: round;
-  stroke-linecap: round;
-}
-.hx-badge:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 14px 24px -14px rgba(242, 84, 12, 0.6);
-}
-.hx-badge:focus-visible {
-  outline: 2px solid var(--o2);
-  outline-offset: 4px;
-}
-.hx-title {
-  margin: 26px 0 0;
-  font-size: clamp(42px, 6vw, 78px);
-  font-weight: 500;
-  line-height: 1.04;
-  letter-spacing: -0.045em;
-}
-.hx-title span {
-  display: block;
-}
-.hx-title .l2 {
-  background: linear-gradient(90deg, #ff9a3d 0%, #f2540c 52%, #d6336c 100%);
   -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  padding-bottom: 0.08em;
+  -webkit-text-fill-color: transparent;
 }
-.hx-sub {
-  max-width: 520px;
-  margin: 22px 0 0;
-  font-size: clamp(15px, 1.4vw, 18px);
-  line-height: 1.65;
-  color: var(--muted);
+.lead {
+  max-width: 560px; margin: 28px 0 0;
+  font-size: 17px; line-height: 1.75; color: #4a4d55;
+  animation: rise 0.9s 0.1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
-.hx-cta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-  margin-top: 32px;
+.actions {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 36px;
+  animation: rise 0.9s 0.2s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
-.hx-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 18px;
-  height: 52px;
-  padding: 0 22px;
-  border-radius: 14px;
-  font-size: 15.5px;
-  font-weight: 500;
-  text-decoration: none;
-  transition: transform 0.4s var(--ease), box-shadow 0.4s, background 0.3s;
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 12px;
+  min-height: 54px; padding: 0 24px; border-radius: 12px;
+  text-decoration: none; font-size: 15px; font-weight: 600;
+  transition: transform 0.2s, background 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
-.hx-btn:hover {
-  transform: translateY(-2px);
-}
-.hx-btn:focus-visible {
-  outline: 2px solid var(--o2);
-  outline-offset: 4px;
-}
-.hx-btn.pri {
-  padding: 0 7px 0 22px;
-  color: #fff;
-  background: linear-gradient(180deg, #ff8f4a, #f2540c);
-  box-shadow: 0 18px 30px -16px rgba(242, 84, 12, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.35);
-}
-.hx-btn.pri i {
-  width: 38px;
-  height: 38px;
-  border-radius: 10px;
-  display: grid;
-  place-items: center;
-  background: rgba(255, 255, 255, 0.22);
-  transition: transform 0.4s var(--ease), background 0.3s;
-}
-.hx-btn.pri:hover i {
-  transform: translateX(3px);
-  background: rgba(255, 255, 255, 0.32);
-}
-.hx-btn.pri svg {
-  width: 18px;
-  height: 18px;
-  fill: none;
-  stroke: #fff;
-  stroke-width: 2.2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.hx-btn.sec {
-  color: var(--ink);
-  background: #fff;
-  border: 1px solid rgba(20, 21, 43, 0.14);
-}
-.hx-btn.sec:hover {
-  border-color: var(--o2);
-  box-shadow: 0 14px 24px -16px rgba(242, 84, 12, 0.6);
-}
-.hx-list {
-  margin: 34px 0 0;
-  padding: 0;
-  list-style: none;
-  display: grid;
-  gap: 14px;
-}
-.hx-list li {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 15.5px;
-  font-weight: 500;
-  color: var(--ink-2);
-}
-.hx-list i {
-  flex: none;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: #fff1e8;
-  border: 1px solid #ffe0cc;
-}
-.hx-list svg {
-  width: 13px;
-  height: 13px;
-  fill: none;
-  stroke: var(--o2);
-  stroke-width: 2.6;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
+.btn-primary { color: #fff; background: linear-gradient(180deg, #ff7a45, #f2531f); box-shadow: inset 0 0 0 1px rgba(255,255,255,.35), 0 10px 24px rgba(240,75,35,.3); }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: inset 0 0 0 1px rgba(255,255,255,.4), 0 16px 32px rgba(240,75,35,.4); }
+.arrow { display: inline-block; transition: transform 0.25s; }
+.btn-primary:hover .arrow { transform: rotate(45deg); }
+.btn-outline { color: #fff; background: #0b0c0e; box-shadow: inset 0 0 0 1px rgba(255,255,255,.14), 0 10px 24px rgba(0,0,0,.18); }
+.btn-outline:hover { transform: translateY(-2px); box-shadow: inset 0 0 0 1px rgba(255,255,255,.28), 0 16px 32px rgba(0,0,0,.28); }
 
-/* ============ art ============ */
-.hx-art {
-  position: absolute;
-  right: -2%;
-  bottom: -2%;
-  z-index: 1;
-  width: min(800px, 64vw);
-  pointer-events: none;
-}
-.hx-svg {
-  width: 100%;
-  height: auto;
-  overflow: visible;
-}
-.hx-svg text {
-  font-family: 'Poppins', system-ui, sans-serif;
-}
-.grid polyline {
-  fill: none;
-  stroke: #14152b;
-  stroke-opacity: 0.07;
-  stroke-width: 1;
-}
-.plate {
-  fill: #fcfaf9;
-  stroke: #f1eae6;
-  stroke-width: 2;
-  stroke-linejoin: round;
-}
-.r-out {
-  stroke: #efe8e4;
-  stroke-width: 17;
-}
-.r-in {
-  stroke: #fff;
-  stroke-width: 12;
-}
-.r-fl {
-  stroke: #ffb48a;
-  stroke-width: 2.4;
-  stroke-dasharray: 3 10;
-  animation: hx-dash 1.2s linear infinite;
-}
-.pk-h {
-  fill: #ff8a3a;
-  opacity: 0.3;
-}
-.pk {
-  fill: #f2540c;
-  stroke: #fff;
-  stroke-width: 1.5;
-  filter: url(#hx-gl);
-}
+/* ---------- stage ---------- */
+.stage { position: relative; height: 250svh; }
 
-/* pucks */
-.puck-sh {
-  fill: #14152b;
-  opacity: 0.08;
-  filter: blur(5px);
-}
-.puck-side {
-  fill: #ebe3df;
-}
-.puck-top {
-  fill: #fff;
-  stroke: #f1eae6;
-  stroke-width: 1.5;
-}
-.puck-ring {
-  fill: none;
-  stroke: #ff9a4c;
-  stroke-width: 1.5;
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: hx-ring 3.6s ease-out infinite;
-  animation-delay: var(--f, 0s);
-}
-.bi {
-  font-weight: 700;
-}
-.bi.fb {
-  font-size: 32px;
-  fill: #fff;
-}
-.bi.gc {
-  font-size: 19px;
-  fill: #1a73e8;
-}
-.bi.wp {
-  font-family: Georgia, serif;
-  font-size: 26px;
-  fill: #fff;
-}
-.ph {
-  fill: none;
-  stroke: #fff;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-/* pedestal + cube */
-.pulse {
-  fill: none;
-  stroke: #ff8a3a;
-  stroke-width: 2;
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: hx-pulse 2s ease-out infinite;
-}
+/* ---------- orbit (below the text, behind the card) ---------- */
 .orbit {
-  fill: none;
-  stroke: #f2540c;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-dasharray: 5 12;
-  animation: hx-dash 1.6s linear infinite;
+  position: absolute; z-index: 0; top: 0; left: 0; right: 0; height: 700px;
+  overflow: hidden; pointer-events: none;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 55%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 55%, transparent 100%);
 }
-.logo {
-  fill: none;
-  stroke: #fff;
-  stroke-width: 1.7;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+.ring {
+  position: absolute; left: 50%;
+  width: var(--d); height: var(--d); top: var(--top); margin-left: calc(var(--d) / -2);
+  border-radius: 50%; border: 1px solid rgba(23, 25, 29, 0.2);
+  transform: rotate(var(--rot, 0deg)); will-change: transform;
+}
+.ring-a { --d: var(--ring); --top: var(--crest); }
+.ring-b { --d: calc(var(--ring) - var(--step) * 2); --top: calc(var(--crest) + var(--step)); border: 1px dashed rgba(23, 25, 29, 0.3); }
+.ring-c { --d: calc(var(--ring) - var(--step) * 4); --top: calc(var(--crest) + var(--step) * 2); border-color: rgba(23, 25, 29, 0.12); }
+
+.node {
+  position: absolute; top: 50%; left: 50%;
+  display: grid; place-items: center; width: 66px; height: 66px;
+  background: #fff; border-radius: 20px;
+  box-shadow: 0 10px 28px rgba(23, 25, 29, 0.09), 0 1px 3px rgba(23, 25, 29, 0.06);
+  transform:
+    translate(-50%, -50%) rotate(var(--a))
+    translateY(calc(var(--d) / -2))
+    rotate(calc(var(--a) * -1 - var(--rot, 0deg)));
+}
+.node img { display: block; width: 32px; height: 32px; user-select: none; }
+
+.dot {
+  position: absolute; top: 50%; left: 50%; display: block;
+  width: var(--s); height: var(--s);
+  background: #fff; border: 2px solid var(--orange); border-radius: 50%;
+  transform: translate(-50%, -50%) rotate(var(--a)) translateY(calc(var(--d) / -2));
+}
+.ring-c .dot { border-color: rgba(23, 25, 29, 0.55); border-width: 1.5px; }
+
+/* ---------- scroll-driven video ---------- */
+.sticky {
+  position: sticky; top: 0; z-index: 1;
+  display: grid; grid-template-rows: 100svh; justify-items: center; align-items: start;
+  width: 100%; height: 100svh;
+}
+.video-card {
+  --p: 0;
+  position: relative; isolation: isolate; overflow: hidden; background: var(--ink);
+  margin-top: calc(var(--top0) * (1 - var(--p)));
+  width: calc(var(--w0) + (100% - var(--w0)) * var(--p));
+  height: calc(var(--h0) + (100% - var(--h0)) * var(--p));
+  border: calc(6px * (1 - var(--p))) solid #fff;
+  border-radius: calc(28px * (1 - var(--p)));
+  box-shadow: 0 calc(40px * (1 - var(--p))) calc(90px * (1 - var(--p))) rgba(23, 25, 29, 0.22);
+  will-change: width, height;
+}
+.video { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
+.video-shade {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,0.8) 100%);
+}
+.video-copy {
+  position: absolute; z-index: 2; margin: 0; left: 0; right: 0; bottom: clamp(40px, 10vh, 110px);
+  padding: 0 24px; text-align: center; color: #fff; pointer-events: none;
+  font-weight: 500; line-height: 0.98; letter-spacing: -0.06em; font-size: var(--title);
+  will-change: transform, opacity;
 }
 
-/* card contents */
-.t {
-  fill: var(--ink-2);
+.play, .sound {
+  position: absolute; z-index: 4; display: grid; place-items: center;
+  color: var(--ink); background: #fff; border: 0; cursor: pointer;
+  transition: opacity 0.25s, transform 0.25s, background 0.2s, color 0.2s;
 }
-.t.s {
-  font-size: 9.5px;
-  font-weight: 500;
-}
-.t.m {
-  font-size: 13px;
-  font-weight: 500;
-}
-.t.r {
-  font-size: 11.5px;
-  font-weight: 500;
-  fill: #6c7084;
-}
-.t.toast {
-  font-size: 11.5px;
-  font-weight: 500;
-  fill: var(--ink);
-}
-.ri {
-  fill: none;
-  stroke: #9a9db0;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.arrow {
-  fill: none;
-  stroke: #fff;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.hl {
-  fill: #ff8a3a;
-  opacity: 0;
-  animation: hx-hl 6s ease-in-out infinite;
-  animation-delay: calc(var(--k) * 2s);
-}
-.caret {
-  animation: hx-caret 1s steps(1) infinite;
-}
+.play { top: 50%; left: 50%; width: 72px; height: 72px; border-radius: 20px; opacity: 0; transform: translate(-50%, -50%); }
+.video-card:hover .play, .play:focus-visible { opacity: 1; }
+.play:hover { color: #fff; background: var(--orange); transform: translate(-50%, -50%) scale(1.06); }
+.sound { right: 22px; bottom: 22px; width: 48px; height: 48px; border-radius: 14px; }
+.sound:hover { color: #fff; background: var(--orange); }
+.play svg, .sound svg { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.play svg { width: 26px; height: 26px; }
+.sound svg { width: 21px; height: 21px; }
+.play svg path[d^="M8 5l"] { fill: currentColor; }
 
-/* motion helpers */
-.float {
-  animation: hx-bob 5s ease-in-out infinite;
-  animation-delay: var(--f, 0s);
+/* ---------- marquee ---------- */
+.brands { position: relative; margin-top: 64px; }
+.brands-title { margin: 0 0 22px; font-size: 14px; font-weight: 500; color: var(--muted); }
+.marquee {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
 }
-.float.big {
-  animation-duration: 6s;
+.track { display: flex; width: max-content; animation: slide 36s linear infinite; }
+.marquee:hover .track { animation-play-state: paused; }
+.chip {
+  display: inline-flex; align-items: center; gap: 16px; padding: 0 34px;
+  font-size: 22px; font-weight: 600; letter-spacing: -0.02em; color: #34363d; white-space: nowrap;
 }
-.hx-js .pop {
-  opacity: 0;
-  transform-box: fill-box;
-  transform-origin: 50% 70%;
-  transform: translateY(26px) scale(0.94);
-}
-.hx-js.hx-in .pop {
-  opacity: 1;
-  transform: none;
-  transition: opacity 0.9s var(--ease) var(--d, 0s), transform 1.1s var(--ease) var(--d, 0s);
-}
+.chip::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--orange); }
 
-/* copy entrance */
-.hx-js .hx-badge,
-.hx-js .hx-title,
-.hx-js .hx-sub,
-.hx-js .hx-cta,
-.hx-js .hx-list {
-  opacity: 0;
-  transform: translateY(22px);
-}
-.hx-js.hx-in .hx-badge,
-.hx-js.hx-in .hx-title,
-.hx-js.hx-in .hx-sub,
-.hx-js.hx-in .hx-cta,
-.hx-js.hx-in .hx-list {
-  opacity: 1;
-  transform: none;
-  transition: opacity 0.8s var(--ease), transform 0.9s var(--ease);
-}
-.hx-js.hx-in .hx-title { transition-delay: 0.08s; }
-.hx-js.hx-in .hx-sub { transition-delay: 0.16s; }
-.hx-js.hx-in .hx-cta { transition-delay: 0.24s; }
-.hx-js.hx-in .hx-list { transition-delay: 0.32s; }
+@keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+@keyframes slide { to { transform: translateX(-50%); } }
 
-/* ============ keyframes ============ */
-@keyframes hx-dash { to { stroke-dashoffset: -26; } }
-@keyframes hx-bob { 50% { transform: translateY(-7px); } }
-@keyframes hx-ring { 0% { opacity: 0.8; transform: scale(1); } 70%, 100% { opacity: 0; transform: scale(1.5); } }
-@keyframes hx-pulse { 0% { opacity: 0.7; transform: scale(0.75); } 100% { opacity: 0; transform: scale(1.3); } }
-@keyframes hx-hl { 0%, 100% { opacity: 0; } 8%, 26% { opacity: 0.14; } 34% { opacity: 0; } }
-@keyframes hx-caret { 50% { opacity: 0; } }
-
-/* ============ responsive ============ */
-@media (max-width: 1100px) {
-  .hx-art { width: min(720px, 62vw); right: -4%; }
-}
+/* ---------- responsive ---------- */
 @media (max-width: 900px) {
-  .hx-wrap { min-height: 0; padding-bottom: 20px; }
-  .hx-art {
-    position: relative;
-    right: auto;
-    bottom: auto;
-    width: min(680px, 100%);
-    margin: 18px auto 0;
-  }
+  .content { padding-top: 96px; }
 }
-@media (max-width: 480px) {
-  .hx-btn { width: 100%; justify-content: space-between; }
-  .hx-btn.sec { justify-content: center; }
+@media (max-width: 760px) {
+  .hero { --ring: min(1100px, 230vw); --step: 58px; --crest: 44px; --top0: 150px; --w0: calc(100vw - 24px); --ratio: 0.85; --title: clamp(38px, 10.5vw, 64px); padding-bottom: 40px; }
+  .content { width: calc(100% - 32px); padding: 76px 0 24px; }
+  .lead { font-size: 15px; margin-top: 22px; }
+  .actions { width: 100%; gap: 10px; margin-top: 28px; }
+  .btn { min-height: 50px; padding: 0 20px; font-size: 14px; }
+  .node { width: 52px; height: 52px; border-radius: 16px; }
+  .node img { width: 26px; height: 26px; }
+  .stage { height: 220svh; }
+  .bg::after { background: repeating-linear-gradient(90deg, rgba(255,255,255,.3) 0, rgba(255,255,255,0) 38px); }
+  .video-copy { bottom: 84px; padding: 0 16px; }
+  .play { opacity: 1; width: 58px; height: 58px; border-radius: 17px; }
+  .sound { right: 14px; bottom: 14px; width: 42px; height: 42px; border-radius: 12px; }
+  .brands { margin-top: 44px; }
+  .chip { padding: 0 22px; gap: 12px; font-size: 17px; }
+}
+@media (max-width: 380px) {
+  .actions { flex-direction: column; align-items: stretch; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .hx *, .hx *::before, .hx *::after {
-    animation-duration: 0.001s !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001s !important;
-    transition-delay: 0s !important;
-  }
-  .hx-js .pop, .hx-js .hx-badge, .hx-js .hx-title, .hx-js .hx-sub, .hx-js .hx-cta, .hx-js .hx-list {
-    opacity: 1;
-    transform: none;
-  }
+  h1, .lead, .actions { animation: none; }
+  .track { animation: none; }
+  .stage { height: auto; padding-top: var(--top0); }
+  .orbit { height: calc(var(--top0) + 160px); }
+  .sticky { position: relative; height: auto; display: block; }
+  .video-card { margin: 0 auto; width: var(--w0); height: auto; aspect-ratio: 16 / 9; border: 3px solid #fff; border-radius: 20px; }
+  .play { opacity: 1; }
 }
 </style>

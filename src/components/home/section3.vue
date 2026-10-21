@@ -186,16 +186,8 @@
 </template>
 
 <script setup>
-/**
- * HowItWorks.vue — "How it works · Integrates easily" (Vue 3, <script setup>)
- *
- * • Left: minimal accordion — the active row opens its description and shows an arrow + a thin progress line.
- * • Right: gradient stage with a dotted backdrop; each tab shows a small product mock (top pill → card → bottom pill).
- * • Switch by hover (mouse), click/tap, Tab or ↑ ↓. Auto-plays every ~6s while in view, pausing on hover/focus.
- * • Respects prefers-reduced-motion. Pure HTML/CSS/SVG, no image files, no props.
- * Everything is namespaced `.hiw-` so it can live next to the other sections.
- */
-import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue'
+defineOptions({ name: 'HomeSection3' })
+import { ref } from 'vue'
 
 const rootEl = ref(null)
 const mounted = ref(false)

@@ -400,13 +400,12 @@
 </template>
 
 <script setup>
-
-import NetworkSection from './section7.vue'
-import DataProtectionSection from './section8.vue'
-
+defineOptions({ name: 'HomeSection6' })
 /**
 
- * SectionAuth.vue — "Authentication & Access" (Vue 3, <script setup>)
+ * SectionAuth.vue — "Authentication & Access" (Vue 3, <script setup>
+defineOptions({ name: 'HomeSection6' })
+)
 
  *
 
@@ -428,13 +427,6 @@ import DataProtectionSection from './section8.vue'
 
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 
-<<<<<<< HEAD
-defineOptions({ name: 'SecuritySection' })
-
-
-
-=======
->>>>>>> main
 const rootEl = ref(null)
 
 const scroller = ref(null)

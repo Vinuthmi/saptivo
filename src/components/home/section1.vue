@@ -187,18 +187,10 @@
 </template>
 
 <script setup>
-/**
- * FeaturesStack.vue — "Everything you need to grow & scale." (Vue 3, <script setup>)
- * Layout follows the reference video: wrapped pill tabs with peach icon tiles, a product window
- * inside stacked frames that fades out at the bottom, cross-fade + blur between features.
- * The artwork is HTML/CSS (no images). Autoplay 6 s (progress line under the active pill; pauses on
- * hover/focus/off-screen). ← → keys on the tabs. prefers-reduced-motion: no autoplay / looping motion.
- * SSR/Nuxt safe: browser APIs only in onMounted.
- */
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+defineOptions({ name: 'HomeSection1' })
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 
-const SW = 960 // authored scene width
-const SH = 560 // visible scene height
+const ROTATION_INTERVAL_MS = 6000
 
 const features = [
   {
