@@ -5,7 +5,7 @@
     :class="{ 's6-js': mounted, 's6-in': revealed }"
     aria-labelledby="s6-title"
   >
-    <!-- shared SVG defs: underline gradient + one "silk" lighting filter per slide (same recipe as the other security sections) -->
+    <!-- shared SVG defs: underline gradient -->
     <svg width="0" height="0" style="position: absolute" aria-hidden="true" focusable="false">
       <defs>
         <linearGradient id="s6-ul" x1="0" x2="1">
@@ -13,27 +13,6 @@
           <stop offset="1" stop-color="#f2540c" />
         </linearGradient>
 
-        <filter
-          v-for="(it, i) in items"
-          :id="`s6-silk-${i}`"
-          :key="`f${i}`"
-          x="0"
-          y="0"
-          width="100%"
-          height="100%"
-          color-interpolation-filters="sRGB"
-        >
-          <feTurbulence type="fractalNoise" :baseFrequency="`${it.silk[0]} ${it.silk[1]}`" numOctaves="2" :seed="it.silk[2]" result="a" />
-          <feTurbulence type="fractalNoise" baseFrequency="0.009 0.014" numOctaves="2" :seed="it.silk[2] + 11" result="b" />
-          <feDisplacementMap in="a" in2="b" scale="190" xChannelSelector="R" yChannelSelector="G" result="w" />
-          <feDiffuseLighting in="w" surfaceScale="13" diffuseConstant="1.05" lighting-color="#ffffff" result="d">
-            <feDistantLight :azimuth="it.silk[3]" elevation="40" />
-          </feDiffuseLighting>
-          <feSpecularLighting in="w" surfaceScale="13" specularConstant="0.6" specularExponent="24" lighting-color="#ffffff" result="s">
-            <feDistantLight :azimuth="it.silk[3]" elevation="40" />
-          </feSpecularLighting>
-          <feComposite in="d" in2="s" operator="arithmetic" k1="0" k2="1" k3="0.75" k4="0" />
-        </filter>
       </defs>
     </svg>
 
@@ -43,7 +22,6 @@
         <div class="s6-hl">
           <span class="s6-eyebrow">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4l1.6 4.4L15 10l-4.4 1.6L9 16l-1.6-4.4L3 10l4.4-1.6zM17.5 12l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9zM17 3.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z" /></svg>
-            <span>03 · Data Protection &amp; Audit</span>
           </span>
           <h2 id="s6-title" class="s6-title">
             Data Protection
@@ -77,9 +55,6 @@
           >
             <div class="s6-bg" :style="{ background: it.bg }" aria-hidden="true">
               <img v-if="it.img" class="s6-photo" :src="it.img" alt="" loading="lazy" draggable="false" />
-              <svg class="s6-silk" viewBox="0 0 720 560" preserveAspectRatio="none">
-                <rect width="720" height="560" fill="#000" :filter="`url(#s6-silk-${i})`" />
-              </svg>
               <svg class="s6-deco" viewBox="0 0 24 24" v-html="icons[it.icon]"></svg>
             </div>
             <div class="s6-scrim" aria-hidden="true"></div>
@@ -241,10 +216,10 @@
  * SectionData.vue — "Data Protection & Audit" (part 03 of the security story, Vue 3, <script setup>)
  *
  * Same design as SectionNetwork (part 02):
- * • Left: a silk-gradient stage whose floating product widgets cross-fade per protection.
+ * • Left: a gradient stage whose floating product widgets cross-fade per protection.
  * • Right: three protections with an orange progress line. The active one opens its 3 proof points.
  * • Auto-plays every ~6.5s while in view (pauses on hover/focus). Click, hover (mouse) or ← → ↑ ↓ switch slides.
- * • Backgrounds are procedural "silk" (SVG lighting filters). For real photos set `img: '/path/photo.jpg'` on an item.
+ * • Backgrounds use layered gradients. For real photos set `img: '/path/photo.jpg'` on an item.
  *
  * No props. Browser APIs are only used in onMounted / handlers (SSR / Nuxt safe).
  * Everything is namespaced `.s6-` / `.d-` / `.dg-` so it can sit on the same page as SectionAuth (`.s4-`) and SectionNetwork (`.s5-`).
@@ -268,8 +243,8 @@ const icons = {
   lock: '<rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/>',
 }
 
-/* silk: [baseFreqX, baseFreqY, seed, lightAzimuth]   metric: [big value, label, small caption] */
-const cardPalette = 'radial-gradient(75% 80% at 78% 18%,rgba(255,143,38,.92) 0%,rgba(235,93,22,.72) 45%,transparent 76%),radial-gradient(80% 70% at 12% 84%,#174a70 0%,#243d59 48%,transparent 78%),linear-gradient(135deg,#a7a2a0 0%,#c58b6d 45%,#e85b17 100%)'
+/* metric: [big value, label, small caption] */
+const cardPalette = 'radial-gradient(82% 76% at 88% 4%,rgba(255,143,38,.98) 0%,rgba(239,91,21,.84) 42%,transparent 78%),radial-gradient(88% 78% at 2% 92%,#10385f 0%,#1b5275 42%,transparent 79%),radial-gradient(55% 42% at 54% 72%,rgba(220,226,228,.88) 0%,rgba(180,190,193,.46) 48%,transparent 78%),linear-gradient(135deg,#78311f 0%,#b95735 38%,#7a8b92 100%)'
 
 const items = [
   {
@@ -279,7 +254,6 @@ const items = [
     name: 'Rate Limiting',
     desc: 'Auto-blocks brute-force sign-in attempts.',
     bg: cardPalette,
-    silk: [0.004, 0.0112, 6, 245],
     metric: ['60 s', 'Sliding window on login and API endpoints', 'Throttle'],
     tags: ['Lockout', '429 reply'],
     points: [
@@ -295,7 +269,6 @@ const items = [
     name: 'Audit Trail Logs',
     desc: 'Immutable log of who changed what.',
     bg: cardPalette,
-    silk: [0.005, 0.009, 19, 215],
     metric: ['4 fields', 'User, action, IP and timestamp on every event', 'Immutable'],
     tags: ['Before / after', 'CSV export'],
     points: [
@@ -311,7 +284,6 @@ const items = [
     name: 'Soft Delete / Recycle Bin',
     desc: 'One-click restore with zero data loss.',
     bg: cardPalette,
-    silk: [0.0039, 0.0108, 27, 240],
     metric: ['90 days', 'Recovery buffer for deleted records', 'Zero data loss'],
     tags: ['1-click restore', ],
     points: [
@@ -495,6 +467,7 @@ onBeforeUnmount(() => {
   font-weight: 500;
   text-decoration: none;
   transition: transform 0.4s var(--ease), box-shadow 0.4s;
+  display: none;
 }
 .s6-eyebrow span {
   background: linear-gradient(90deg, #f2540c, #d6336c);
@@ -582,9 +555,11 @@ onBeforeUnmount(() => {
   height: 470px;
   overflow: hidden;
   isolation: isolate;
-  border-radius: 28px;
-  background: #14152b;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 30px;
+  background: #f4f6f7;
   color: #fff;
+  box-shadow: 0 30px 64px -38px rgba(16, 42, 64, 0.55), 0 1px 0 #fff inset;
 }
 .s6-js .s6-stage {
   opacity: 0;
@@ -627,18 +602,6 @@ onBeforeUnmount(() => {
   inset: 0;
   overflow: hidden;
 }
-.s6-silk {
-  /* fixed size + centred so the heavy filter is rasterised once */
-  position: absolute;
-  left: 50%;
-  top: 0;
-  width: 720px;
-  height: 560px;
-  transform: translateX(-50%);
-  mix-blend-mode: soft-light;
-  opacity: 0.95;
-  pointer-events: none;
-}
 .s6-photo {
   position: absolute;
   inset: 0;
@@ -675,8 +638,8 @@ onBeforeUnmount(() => {
   inset: 0;
   pointer-events: none;
   background:
-    linear-gradient(135deg, rgba(8, 10, 26, 0.5) 0%, rgba(8, 10, 26, 0) 55%),
-    linear-gradient(0deg, rgba(8, 10, 26, 0.32), rgba(8, 10, 26, 0) 50%);
+    radial-gradient(ellipse at 4% 96%, rgba(8, 28, 50, 0.36), transparent 62%),
+    linear-gradient(180deg, rgba(28, 27, 35, 0.08), transparent 48%, rgba(8, 20, 34, 0.16));
 }
 
 /* top-left icon */
@@ -736,9 +699,12 @@ onBeforeUnmount(() => {
   width: min(340px, calc(100% - 48px));
   padding: 15px 16px 14px;
   border-radius: 22px;
-  background: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.96);
   color: var(--ink);
-  box-shadow: 0 30px 50px -26px rgba(8, 10, 26, 0.75);
+  backdrop-filter: blur(16px) saturate(1.08);
+  -webkit-backdrop-filter: blur(16px) saturate(1.08);
+  box-shadow: 0 30px 50px -26px rgba(8, 27, 48, 0.56);
   display: flex;
   flex-direction: column;
   gap: 10px;

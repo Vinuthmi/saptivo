@@ -8,11 +8,11 @@
 
     :class="{ 's4-js': mounted, 's4-in': revealed }"
 
-    aria-labelledby="s4-title"
+    aria-labelledby="s4-security-title"
 
   >
 
-    <!-- shared SVG defs: underline gradient, timer ring gradient and one "silk" lighting filter per card -->
+    <!-- shared SVG defs: underline and timer ring gradients -->
 
     <svg width="0" height="0" style="position: absolute" aria-hidden="true" focusable="false">
 
@@ -34,51 +34,22 @@
 
         </linearGradient>
 
-        <filter
-
-          v-for="(it, i) in items"
-
-          :id="`s4-silk-${i}`"
-
-          :key="`f${i}`"
-
-          x="0"
-
-          y="0"
-
-          width="100%"
-
-          height="100%"
-
-          color-interpolation-filters="sRGB"
-
-        >
-
-          <feTurbulence type="fractalNoise" :baseFrequency="`${it.silk[0]} ${it.silk[1]}`" numOctaves="2" :seed="it.silk[2]" result="a" />
-
-          <feTurbulence type="fractalNoise" baseFrequency="0.009 0.014" numOctaves="2" :seed="it.silk[2] + 11" result="b" />
-
-          <feDisplacementMap in="a" in2="b" scale="190" xChannelSelector="R" yChannelSelector="G" result="w" />
-
-          <feDiffuseLighting in="w" surfaceScale="13" diffuseConstant="1.05" lighting-color="#ffffff" result="d">
-
-            <feDistantLight :azimuth="it.silk[3]" elevation="40" />
-
-          </feDiffuseLighting>
-
-          <feSpecularLighting in="w" surfaceScale="13" specularConstant="0.6" specularExponent="24" lighting-color="#ffffff" result="s">
-
-            <feDistantLight :azimuth="it.silk[3]" elevation="40" />
-
-          </feSpecularLighting>
-
-          <feComposite in="d" in2="s" operator="arithmetic" k1="0" k2="1" k3="0.75" k4="0" />
-
-        </filter>
-
       </defs>
 
     </svg>
+
+    <header class="s4-security-intro">
+      <span class="s4-eyebrow">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4l1.6 4.4L15 10l-4.4 1.6L9 16l-1.6-4.4L3 10l4.4-1.6zM17.5 12l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9zM17 3.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7z" /></svg>
+        <span>Enterprise-Grade Security</span>
+      </span>
+      <h2 id="s4-security-title" class="s4-security-title">
+        Your data is protected. <span>Period.</span>
+      </h2>
+      <p class="s4-security-sub">
+        Every layer of Saptivo is hardened with multi-factor authentication, real-time threat detection, and enterprise infrastructure security — so your business data never sleeps unguarded.
+      </p>
+    </header>
 
     <NetworkSection />
 
@@ -90,7 +61,6 @@
 
         <span class="s4-eyebrow">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4l1.6 4.4L15 10l-4.4 1.6L9 16l-1.6-4.4L3 10l4.4-1.6zM17.5 12l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9zM17 3.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z" /></svg>
-          <span>02 · Enterprise-grade security</span>
         </span>
 
         <h2 id="s4-title" class="s4-title">
@@ -111,7 +81,7 @@
 
       </header>
 
-      <!-- ============ right: expanding silk cards ============ -->
+      <!-- ============ right: expanding gradient cards ============ -->
 
       <div class="s4-stage">
 
@@ -147,17 +117,11 @@
 
           <article v-for="(it, i) in items" :key="it.id" class="s4-card" :data-id="it.id" :style="{ '--i': i }">
 
-            <!-- background: gradient + silk lighting (+ optional photo) -->
+            <!-- background: gradient (+ optional photo) -->
 
             <div class="s4-bg" :style="{ background: it.bg }" aria-hidden="true">
 
               <img v-if="it.img" class="s4-photo" :src="it.img" alt="" loading="lazy" draggable="false" />
-
-              <svg class="s4-silk" viewBox="0 0 720 560" preserveAspectRatio="none">
-
-                <rect width="720" height="560" fill="#000" :filter="`url(#s4-silk-${i})`" />
-
-              </svg>
 
               <svg class="s4-deco" viewBox="0 0 24 24" v-html="icons[it.icon]"></svg>
 
@@ -446,7 +410,7 @@ import DataProtectionSection from './section8.vue'
 
  *
 
- * Layout: sticky heading + counter on the left, scrolling silk cards (slides) on the right.
+ * Layout: sticky heading + counter on the left, scrolling gradient cards (slides) on the right.
 
  * • Scroll sideways with trackpad / touch swipe, mouse drag, the ‹ › buttons, ← → keys,
 
@@ -454,7 +418,7 @@ import DataProtectionSection from './section8.vue'
 
  * • Cards animate their widgets when they slide into view.
 
- * • Card backgrounds are procedural "silk" (SVG lighting filters). For real photos set `img` on an item.
+ * • Card backgrounds use layered gradients. For real photos set `img` on an item.
 
  *
 
@@ -496,11 +460,9 @@ const icons = {
 
 /* ------------------------------------------------------------------ content
 
-   silk: [baseFreqX, baseFreqY, seed, lightAzimuth]
-
    metric: [big value, label, small caption]                                              */
 
-const cardPalette = 'radial-gradient(75% 80% at 78% 18%,rgba(255,143,38,.92) 0%,rgba(235,93,22,.72) 45%,transparent 76%),radial-gradient(80% 70% at 12% 84%,#174a70 0%,#243d59 48%,transparent 78%),linear-gradient(135deg,#a7a2a0 0%,#c58b6d 45%,#e85b17 100%)'
+const cardPalette = 'radial-gradient(82% 76% at 88% 4%,rgba(255,143,38,.98) 0%,rgba(239,91,21,.84) 42%,transparent 78%),radial-gradient(88% 78% at 2% 92%,#10385f 0%,#1b5275 42%,transparent 79%),radial-gradient(55% 42% at 54% 72%,rgba(220,226,228,.88) 0%,rgba(180,190,193,.46) 48%,transparent 78%),linear-gradient(135deg,#78311f 0%,#b95735 38%,#7a8b92 100%)'
 
 const items = [
 
@@ -514,7 +476,6 @@ const items = [
 
     bg: cardPalette,
 
-    silk: [0.0042, 0.0105, 3, 235],
 
     metric: ['< 3s', 'Carrier-grade gateway delivery', 'SMS route'],
 
@@ -542,7 +503,6 @@ const items = [
 
     bg: cardPalette,
 
-    silk: [0.005, 0.009, 8, 215],
 
     metric: ['6-digit', 'Cryptographically random code', 'Email OTP'],
 
@@ -570,7 +530,6 @@ const items = [
 
     bg: cardPalette,
 
-    silk: [0.0036, 0.0115, 14, 250],
 
     metric: ['0', 'Third-party ad trackers', 'Privacy-first'],
 
@@ -598,7 +557,6 @@ const items = [
 
     bg: cardPalette,
 
-    silk: [0.0048, 0.0095, 21, 225],
 
     metric: ['0 ms', 'External CDN latency', 'Self-hosted'],
 
@@ -626,7 +584,6 @@ const items = [
 
     bg: cardPalette,
 
-    silk: [0.0039, 0.0108, 30, 240],
 
     metric: ['3 roles', 'SuperAdmin · Manager · Staff', 'Permissions'],
 
@@ -654,7 +611,6 @@ const items = [
 
     bg: cardPalette,
 
-    silk: [0.0046, 0.0098, 37, 220],
 
     metric: ['15 min', 'Default inactivity timer', 'Configurable'],
 
@@ -682,7 +638,6 @@ const items = [
 
     bg: cardPalette,
 
-    silk: [0.004, 0.0112, 44, 245],
 
     metric: ['3 signals', 'Hardware · canvas · OS', 'Fingerprint'],
 
@@ -1001,13 +956,73 @@ onBeforeUnmount(() => {
 
   max-width: 1240px;
 
-  margin: clamp(56px, 7vw, 96px) auto;
+  margin: clamp(30px, 4vw, 48px) auto clamp(56px, 7vw, 96px);
 
   padding: 0;
 
   background: none;
 
   overflow: visible;
+
+}
+
+.s4-security-intro {
+
+  max-width: 1240px;
+
+  margin: 0 auto;
+
+  text-align: center;
+
+}
+
+.s4-security-title {
+
+  margin: 18px 0 0;
+
+  font-family: 'Inter Display', Inter, system-ui, sans-serif;
+
+  font-size: 3.5vw;
+
+  font-weight: 500;
+
+  line-height: 1.16;
+
+  letter-spacing: -0.05em;
+
+  color: #0f172a;
+
+}
+
+.s4-security-title span {
+
+  background: linear-gradient(100deg, #ff9a3d 0%, #ff6a1a 45%, #f2540c 100%);
+
+  background-clip: text;
+
+  -webkit-background-clip: text;
+
+  -webkit-text-fill-color: transparent;
+
+}
+
+.s4-security-sub {
+
+  max-width: 820px;
+
+  margin: 14px auto 0;
+
+  font-family: 'Inter Display', Inter, system-ui, sans-serif;
+
+  font-size: 24px;
+
+  font-weight: 600;
+
+  line-height: 34px;
+
+  letter-spacing: -0.72px;
+
+  color: #475569;
 
 }
 
@@ -1118,6 +1133,12 @@ onBeforeUnmount(() => {
   text-decoration: none;
 
   transition: transform 0.4s var(--ease), box-shadow 0.4s;
+
+}
+
+.s4-head > .s4-eyebrow {
+
+  display: none;
 
 }
 
@@ -1391,11 +1412,11 @@ onBeforeUnmount(() => {
 
   isolation: isolate;
 
-  border-radius: 26px;
-
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  border-radius: 30px;
   background: #14152b;
-
   color: #fff;
+  box-shadow: 0 28px 54px -34px rgba(16, 42, 64, 0.62), 0 1px 0 rgba(255, 255, 255, 0.4) inset;
 
   -webkit-tap-highlight-color: transparent;
 
@@ -1444,32 +1465,6 @@ onBeforeUnmount(() => {
 .s4-card:not(.on):hover .s4-bg {
 
   filter: brightness(1.1) saturate(1.1);
-
-}
-
-.s4-silk {
-
-  /* fixed size + centred, so the heavy filter is rasterised once and never re-computed
-
-     while the card width animates */
-
-  position: absolute;
-
-  left: 50%;
-
-  top: 0;
-
-  width: 720px;
-
-  height: 560px;
-
-  transform: translateX(-50%);
-
-  mix-blend-mode: soft-light;
-
-  opacity: 0.95;
-
-  pointer-events: none;
 
 }
 
@@ -1546,10 +1541,8 @@ onBeforeUnmount(() => {
   pointer-events: none;
 
   background:
-
-    linear-gradient(135deg, rgba(8, 10, 26, 0.5) 0%, rgba(8, 10, 26, 0) 55%),
-
-    linear-gradient(0deg, rgba(8, 10, 26, 0.28), rgba(8, 10, 26, 0) 45%);
+    radial-gradient(ellipse at 4% 96%, rgba(8, 28, 50, 0.36), transparent 62%),
+    linear-gradient(180deg, rgba(28, 27, 35, 0.08), transparent 48%, rgba(8, 20, 34, 0.16));
 
 }
 
@@ -1791,11 +1784,12 @@ onBeforeUnmount(() => {
 
   padding: 13px 14px;
 
-  background: #fff;
-
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.9);
   color: var(--ink);
-
-  box-shadow: 0 24px 40px -22px rgba(8, 10, 26, 0.7);
+  backdrop-filter: blur(16px) saturate(1.08);
+  -webkit-backdrop-filter: blur(16px) saturate(1.08);
+  box-shadow: 0 24px 44px -22px rgba(8, 27, 48, 0.52);
 
   display: flex;
 

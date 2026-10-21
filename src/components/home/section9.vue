@@ -463,17 +463,19 @@ onMounted(() => {
   font-family: 'Inter Display', Inter, system-ui, sans-serif;
   font-size: 3.5vw;
   font-weight: 500;
-  line-height: 1.04;
+  line-height: 1.16;
   letter-spacing: -0.045em;
 }
 .hx-title span {
   display: block;
 }
 .hx-title .l2 {
-  background: linear-gradient(90deg, #ff9a3d 0%, #f2540c 52%, #d6336c 100%);
+  background: linear-gradient(100deg, #ff9a3d 0%, #ff6a1a 45%, #f2540c 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  -webkit-text-fill-color: transparent;
+  opacity: 1;
   padding-bottom: 0.08em;
 }
 .hx-sub {

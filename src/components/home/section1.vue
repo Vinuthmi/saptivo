@@ -43,13 +43,12 @@
       >
         <!-- stacked frames + window -->
         <div ref="stageEl" class="fs-stage" aria-hidden="true">
-          <div class="fs-fit" :style="{ height: SH * scale + 'px' }">
+          <div class="fs-fit" :style="{ height: (SH + 84) * scale + 'px' }">
             <div class="fs-scene" :style="{ transform: `translateX(-50%) scale(${scale})` }">
-              <span class="lay l4"></span><span class="lay l3"></span><span class="lay l2"></span><span class="lay l1"></span>
-
-              <div class="frame">
+              <div class="fs-stack">
                 <!-- ================= 1 · CRM ================= -->
-                <div class="sc" :class="{ on: active === 0 }">
+                <div class="fs-card" :class="{ front: active === 0, out: prev === 0 && active !== 0 }" :style="{ '--d': depth(0) }">
+                  <div class="sc" :class="{ on: active === 0 }">
                   <div class="bar"><b>Customers</b><span class="srch">⌕ Search customers…</span><span class="flt">Filter</span><span class="avs"><i>KP</i><i>NF</i><i>RS</i></span></div>
                   <div class="body crm">
                     <div class="list">
@@ -77,9 +76,11 @@
                     </div>
                   </div>
                 </div>
+                </div>
 
                 <!-- ================= 2 · Stores ================= -->
-                <div class="sc" :class="{ on: active === 1 }">
+                <div class="fs-card" :class="{ front: active === 1, out: prev === 1 && active !== 1 }" :style="{ '--d': depth(1) }">
+                  <div class="sc" :class="{ on: active === 1 }">
                   <div class="bar"><b>HQ Dashboard</b><span class="srch">⌕ Search branches…</span><span class="flt">Today</span><span class="avs"><i>HQ</i></span></div>
                   <div class="body">
                     <div class="tiles">
@@ -96,9 +97,11 @@
                     </div>
                   </div>
                 </div>
+                </div>
 
                 <!-- ================= 3 · Quotes ================= -->
-                <div class="sc" :class="{ on: active === 2 }">
+                <div class="fs-card" :class="{ front: active === 2, out: prev === 2 && active !== 2 }" :style="{ '--d': depth(2) }">
+                  <div class="sc" :class="{ on: active === 2 }">
                   <div class="bar"><b>New quotation</b><span class="srch">⌕ QT-2048</span><span class="flt">Preview PDF</span><span class="avs"><i>AS</i></span></div>
                   <div class="body qt">
                     <div class="steps">
@@ -114,9 +117,11 @@
                     </div>
                   </div>
                 </div>
+                </div>
 
                 <!-- ================= 4 · Analytics ================= -->
-                <div class="sc" :class="{ on: active === 3 }">
+                <div class="fs-card" :class="{ front: active === 3, out: prev === 3 && active !== 3 }" :style="{ '--d': depth(3) }">
+                  <div class="sc" :class="{ on: active === 3 }">
                   <div class="bar"><b>Sales pipeline</b><span class="srch">⌕ Search deals…</span><span class="flt">Filter</span><span class="rev">$128,400 <em>▲ 38.4%</em></span></div>
                   <div class="body">
                     <div class="kan">
@@ -130,9 +135,11 @@
                     </div>
                   </div>
                 </div>
+                </div>
 
                 <!-- ================= 5 · Calls ================= -->
-                <div class="sc" :class="{ on: active === 4 }">
+                <div class="fs-card" :class="{ front: active === 4, out: prev === 4 && active !== 4 }" :style="{ '--d': depth(4) }">
+                  <div class="sc" :class="{ on: active === 4 }">
                   <div class="bar"><b>Call journal</b><span class="srch">⌕ Search calls…</span><span class="flt">Today</span><span class="avs"><i>1001</i></span></div>
                   <div class="body">
                     <div class="pills"><i class="on">All</i><i>Missed</i><i>Answered</i><i>Outbound</i></div>
@@ -150,6 +157,7 @@
                       <div class="hist"><span>Last quote <b>QT-2031</b></span><span>Open tasks <b>2</b></span></div>
                     </div>
                   </div>
+                </div>
                 </div>
               </div>
             </div>
@@ -248,7 +256,7 @@ const features = [
 /* demo data for the artwork */
 const customers = [
   ['KP', 'Kasun Perera', 'Colombo · $4,820', 'Gold', '#0f172a'],
-  ['NF', 'Nimali Fernando', 'Kandy · $3,140', 'Silver', '#ff5722'],
+  ['NF', 'Nimali Fernando', 'Kandy · $3,140', 'Silver', '#f2540c'],
   ['RS', 'Ravindu Silva', 'Galle · $2,960', 'Silver', '#6366f1'],
   ['IJ', 'Ishara Jayasuriya', 'Colombo · $1,720', 'Bronze', '#0ea5a4'],
   ['DW', 'Dilan Wickrama', 'Jaffna · $980', 'Bronze', '#e11d74'],
@@ -281,7 +289,7 @@ const lines = [
 const kanban = [
   { t: 'Leads', n: 24, c: '#94a3b8', cards: [['Lanka Traders', 'Inquiry via website', '$6,400', 'Medium'], ['Blue Wave Hotel', 'Facebook lead ad', '$12,900', 'High'], ['Ceylon Auto', 'WhatsApp inquiry', '$3,200', 'Low']] },
   { t: 'Quoted', n: 18, c: '#f59e0b', cards: [['Metro Pharmacy', 'QT-2051 · viewed', '$8,750', 'High'], ['Green Leaf Café', 'QT-2049 · sent', '$2,980', 'Low'], ['Pearl Retail', 'QT-2047 · viewed', '$5,300', 'Medium']] },
-  { t: 'Approved', n: 11, c: '#ff5722', cards: [['Apex Motors', 'QT-2048 · approved', '$7,420', 'High'], ['Sunrise Mart', 'QT-2044 · approved', '$4,100', 'Medium'], ['Silver Coast', 'QT-2042 · approved', '$6,050', 'Low']] },
+  { t: 'Approved', n: 11, c: '#f2540c', cards: [['Apex Motors', 'QT-2048 · approved', '$7,420', 'High'], ['Sunrise Mart', 'QT-2044 · approved', '$4,100', 'Medium'], ['Silver Coast', 'QT-2042 · approved', '$6,050', 'Low']] },
   { t: 'Paid', n: 9, c: '#10b981', cards: [['Island Books', 'INV-3380 · paid', '$3,640', 'Low'], ['Coral Dental', 'INV-3377 · paid', '$9,210', 'High'], ['Zen Studio', 'INV-3370 · paid', '$2,480', 'Low']] },
 ]
 const calls = [
@@ -295,6 +303,8 @@ const calls = [
 const rootEl = ref(null)
 const stageEl = ref(null)
 const active = ref(0)
+const prev = ref(-1)
+const order = ref([0, 1, 2, 3, 4]) // front → back
 const paused = ref(false)
 const revealed = ref(false)
 const scale = ref(1)
@@ -304,8 +314,14 @@ const cur = computed(() => features[active.value])
 let ro, io
 
 function goTo(i) {
-  active.value = (i + features.length) % features.length
+  const n = (i + features.length) % features.length
+  if (n === active.value) return
+  prev.value = active.value
+  active.value = n
+  // the chosen screen moves to the front, everything else keeps its relative order behind it
+  order.value = [n, ...order.value.filter((x) => x !== n)]
 }
+const depth = (i) => order.value.indexOf(i)
 const step = (d) => goTo(active.value + d)
 function fit() {
   if (!stageEl.value) return
@@ -336,7 +352,8 @@ onBeforeUnmount(() => {
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap');
 
 .fs {
-  --o: #ff5722;
+  --o: #f2540c;
+  --og: linear-gradient(145deg, #ff7a1a, #f2540c);
   --o-soft: #fff1e8;
   --navy: #0f172a;
   --ink: #475569;
@@ -467,7 +484,7 @@ onBeforeUnmount(() => {
 .fs-tab.on {
   background: #ffe7da;
   border-color: #ffd0b6;
-  box-shadow: 0 10px 20px -12px rgba(255, 87, 34, 0.55);
+  box-shadow: 0 10px 20px -12px rgba(242, 84, 12, 0.55);
 }
 .fs-tab.on .ti {
   background: #fff;
@@ -478,7 +495,7 @@ onBeforeUnmount(() => {
   bottom: 0;
   height: 2.5px;
   width: 100%;
-  background: var(--o);
+  background: var(--og);
   transform-origin: left;
   animation: fs-fill 6s linear forwards;
 }
@@ -509,68 +526,70 @@ onBeforeUnmount(() => {
   left: 50%;
   top: 0;
   width: 1016px; /* 960 + frame */
-  height: 660px;
+  max-width: none;
+  flex: none;
+  height: 744px;
   transform-origin: 50% 0;
-  padding-top: 52px;
 }
-/* stacked frames behind */
-.lay {
+.fs .fs-stack {
   position: absolute;
-  top: 0;
-  border-radius: 30px 30px 0 0;
-  background: linear-gradient(180deg, #fcebdd, var(--frame));
-  border: 1px solid rgba(255, 255, 255, 0.7);
+  inset: 0;
+  width: auto;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  display: block;
 }
-.l1 { top: 38px; left: 22px; right: 22px; height: 120px; opacity: 0.95; }
-.l2 { top: 26px; left: 44px; right: 44px; height: 120px; opacity: 0.7; }
-.l3 { top: 14px; left: 66px; right: 66px; height: 120px; opacity: 0.45; }
-.l4 { top: 2px; left: 88px; right: 88px; height: 120px; opacity: 0.25; }
-.frame {
-  position: relative;
+/* every screen is its own beige frame + white window; --d is its place in the stack (0 = front) */
+.fs .fs-card {
+  --d: 0;
+  position: absolute;
+  width: auto;
+  max-width: none;
+  min-width: 0;
+  margin: 0;
+  display: block;
+  top: 136px;
+  left: 0;
+  right: 0;
   height: 620px;
   padding: 18px 18px 0;
   border-radius: 30px 30px 0 0;
   background: linear-gradient(180deg, #fde8da, var(--frame));
+  border-top: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 -10px 24px -16px rgba(150, 70, 30, 0.35);
+  z-index: calc(10 - var(--d));
+  transform-origin: 50% 0;
+  transform: translateY(calc(var(--d) * -34px)) scale(calc(1 - var(--d) * 0.032));
+  transition: transform 0.95s cubic-bezier(0.16, 0.84, 0.3, 1), filter 0.7s ease;
+  filter: saturate(calc(1 - var(--d) * 0.12));
+}
+.fs .fs-card.front {
   box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.8) inset, 0 40px 60px -30px rgba(150, 70, 30, 0.35);
 }
-.frame::after {
-  content: '';
-  position: absolute;
-  inset: 18px 18px 0;
-  border-radius: 14px 14px 0 0;
-  box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.04);
-  pointer-events: none;
+/* the window that just left the front dips a little before it slides back */
+.fs .fs-card.out {
+  transition-duration: 0.8s, 0.7s;
 }
-.fs-fade {
-  position: absolute;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  height: 30%;
-  background: linear-gradient(180deg, rgba(253, 247, 243, 0) 0%, rgba(253, 247, 243, 0.55) 45%, var(--bg) 100%);
-  pointer-events: none;
-}
-
-/* scenes: the leaving screen recedes into the stack, the next one comes forward from it */
 .sc {
   position: absolute;
   inset: 18px 18px 0;
   border-radius: 14px 14px 0 0;
   background: #fff;
   overflow: hidden;
-  opacity: 0;
-  visibility: hidden;
-  filter: blur(7px);
-  transform: translateY(-16px) scale(0.93);
-  transform-origin: 50% 0;
-  transition: opacity 0.42s ease, filter 0.5s ease, transform 0.55s cubic-bezier(0.5, 0, 0.75, 0.4), visibility 0s linear 0.55s;
+  /* behind the front: only a faded header strip shows */
+  opacity: calc(0.62 - var(--d) * 0.12);
+  filter: blur(1.6px);
+  transition: opacity 0.7s ease, filter 0.8s ease;
 }
-.sc.on {
+.fs .fs-card.front .sc {
   opacity: 1;
-  visibility: visible;
   filter: none;
-  transform: none;
-  transition: opacity 0.5s ease 0.18s, filter 0.6s ease 0.18s, transform 0.75s var(--ease) 0.18s, visibility 0s;
+  transition: opacity 0.7s ease 0.15s, filter 0.85s ease 0.1s;
+}
+.fs .fs-card.out .sc {
+  filter: blur(6px);
+  transition: opacity 0.5s ease, filter 0.5s ease;
 }
 .sc small {
   font-size: 11px;
@@ -629,7 +648,7 @@ onBeforeUnmount(() => {
   font: 600 9px/1 'Poppins', sans-serif;
   font-style: normal;
 }
-.avs i:nth-child(2) { background: var(--o); }
+.avs i:nth-child(2) { background: var(--og); }
 .avs i:nth-child(3) { background: #6366f1; }
 .rev {
   font-size: 15px;
@@ -655,7 +674,7 @@ onBeforeUnmount(() => {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: var(--o);
+  background: var(--og);
   color: #fff;
   font: 600 11.5px/1 'Poppins', sans-serif;
   font-style: normal;
@@ -778,7 +797,7 @@ onBeforeUnmount(() => {
   width: 0;
   height: 100%;
   border-radius: 9px;
-  background: linear-gradient(90deg, #ffa468, #ff5722);
+  background: linear-gradient(90deg, #ff9a3d, #f2540c);
 }
 .sc.on .pb i {
   width: var(--w);
@@ -810,7 +829,7 @@ onBeforeUnmount(() => {
   position: absolute;
   inset: 9px;
   border-radius: 50%;
-  background: var(--o);
+  background: var(--og);
 }
 .ev > i.wa { background: #e6f9ee; }
 .ev > i.wa::after { background: #16a34a; }
@@ -891,7 +910,7 @@ onBeforeUnmount(() => {
   display: block;
   height: 100%;
   border-radius: 6px;
-  background: linear-gradient(90deg, #ffa468, #ff5722);
+  background: linear-gradient(90deg, #ff9a3d, #f2540c);
 }
 .chips {
   display: flex;
@@ -1036,7 +1055,7 @@ onBeforeUnmount(() => {
   font-weight: 500;
 }
 .btn.o {
-  background: var(--o);
+  background: var(--og);
 }
 .sc.on .btn.o {
   animation: fs-ring 2.6s ease-out 1.6s infinite;
@@ -1059,7 +1078,7 @@ onBeforeUnmount(() => {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: var(--o);
+  background: var(--og);
   color: #fff;
   font-size: 10px;
   font-style: normal;
@@ -1296,7 +1315,7 @@ onBeforeUnmount(() => {
   height: 18px;
   margin-top: 1px;
   border-radius: 50%;
-  background: var(--o);
+  background: var(--og);
 }
 .cp2 svg {
   width: 13px;
@@ -1341,8 +1360,8 @@ onBeforeUnmount(() => {
   to { transform: scaleX(1); }
 }
 @keyframes fs-ring {
-  0% { box-shadow: 0 0 0 0 rgba(255, 87, 34, 0.45); }
-  70%, 100% { box-shadow: 0 0 0 10px rgba(255, 87, 34, 0); }
+  0% { box-shadow: 0 0 0 0 rgba(242, 84, 12, 0.45); }
+  70%, 100% { box-shadow: 0 0 0 10px rgba(242, 84, 12, 0); }
 }
 @keyframes fs-bob {
   50% { translate: 0 -6px; }
