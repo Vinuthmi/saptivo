@@ -428,6 +428,13 @@ import DataProtectionSection from './section8.vue'
 
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 
+<<<<<<< HEAD
+defineOptions({ name: 'SecuritySection' })
+
+
+
+=======
+>>>>>>> main
 const rootEl = ref(null)
 
 const scroller = ref(null)
@@ -722,14 +729,6 @@ function update() {
 function go(dir) {
 
   scroller.value?.scrollBy({ left: dir * stepSize(), behavior: reduceMotion ? 'auto' : 'smooth' })
-
-}
-
-function goTo(i) {
-
-  const n = ((i % items.length) + items.length) % items.length
-
-  scroller.value?.scrollTo({ left: n * stepSize(), behavior: reduceMotion ? 'auto' : 'smooth' })
 
 }
 
