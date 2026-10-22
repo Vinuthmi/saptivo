@@ -1,17 +1,4 @@
-<script setup>
-import { RouterView } from 'vue-router'
-import SiteHeader from './components/home/siteHeader.vue'
-import SiteFooter from './components/home/siteFooter.vue'
-</script>
-
 <template>
-<<<<<<< HEAD
-  <SiteHeader />
-  <RouterView />
-  <SiteFooter />
-</template>
-
-=======
   <main>
     <SiteHeader />
     <HeroSection />
@@ -43,7 +30,7 @@ import SiteHeader from "./components/home/siteHeader.vue";
 import SiteFooter from "./components/home/siteFooter.vue";
 import Section11 from "./components/home/section11.vue";
 </script>
->>>>>>> origin/main
+
 <style>
 * {
   box-sizing: border-box;
