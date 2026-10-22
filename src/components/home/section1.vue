@@ -190,8 +190,6 @@
 defineOptions({ name: 'HomeSection1' })
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 
-const ROTATION_INTERVAL_MS = 6000
-
 const features = [
   {
     id: 'crm',

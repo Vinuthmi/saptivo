@@ -349,6 +349,7 @@
 </template>
 
 <script setup>
+defineOptions({ name: 'HomeIntegrationsSection' })
 /**
  * IntegrationsShowcase.vue — "Built-in integrations that work for you 24/7" (Vue 3, <script setup>)
  *
@@ -508,8 +509,8 @@ onMounted(() => {
 })
 onBeforeUnmount(() => {
   stopTimer()
-  ro && ro.disconnect()
-  io && io.disconnect()
+  ro?.disconnect()
+  io?.disconnect()
 })
 </script>
 

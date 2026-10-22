@@ -241,6 +241,7 @@
 </template>
 
 <script setup>
+defineOptions({ name: 'HomeHeroSection' })
 /**
  * SectionHero.vue — Saptivo hero with an isometric "integrations → one pipeline" scene (Vue 3, <script setup>)
  *
