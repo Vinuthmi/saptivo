@@ -23,6 +23,7 @@ import SiteFooter from './components/home/siteFooter.vue'
     <Section10 />
     <Section6 />
     <Section9 />
+    <Section11 />
 
     <SiteFooter />
   </main>
@@ -40,6 +41,7 @@ import Section9 from "./components/home/section9.vue";
 import Section10 from "./components/home/section10.vue";
 import SiteHeader from "./components/home/siteHeader.vue";
 import SiteFooter from "./components/home/siteFooter.vue";
+import Section11 from "./components/home/section11.vue";
 </script>
 >>>>>>> origin/main
 <style>
