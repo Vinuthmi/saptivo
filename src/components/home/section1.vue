@@ -291,7 +291,7 @@ const calls = [
 ]
 
 const SW = 960
-const SH = 660
+const SH = 700
 
 const rootEl = ref(null)
 const stageEl = ref(null)
@@ -838,25 +838,36 @@ onBeforeUnmount(() => {
   grid-template-columns: repeat(4, 1fr);
   gap: 12px;
 }
-.tile {
+.tiles .tile {
   display: grid;
+  place-items: stretch;
   gap: 3px;
-  padding: 14px 16px;
+  height: auto;
+  padding: 12px 14px;
   border: 1px solid var(--line);
   border-radius: 14px;
   background: #fff;
 }
-.tile b {
-  font-size: 24px;
+.tiles .tile b {
+  font-size: 22px;
   font-weight: 500;
   line-height: 1.15;
 }
-.tile em {
+.tiles .tile em {
+  position: static;
+  width: auto;
+  height: auto;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  transform: none;
+  animation: none;
+  display: block;
   font-style: normal;
   font-size: 11.5px;
   color: var(--mute);
 }
-.tile em.up {
+.tiles .tile em.up {
   color: #15803d;
 }
 .tbl {
@@ -948,30 +959,30 @@ onBeforeUnmount(() => {
   display: grid;
   gap: 1px;
   margin-top: 6px;
-  padding: 12px 14px;
+  padding: 10px 12px;
   border: 1px solid #ffe0cf;
   border-radius: 12px;
   background: #fff7f2;
-  font-size: 12px;
+  font-size: 10.5px;
   color: var(--ink);
 }
-.bill small {
-  font-size: 9.5px;
+.qt .bill small {
+  font-size: 8.5px;
   font-weight: 600;
   letter-spacing: 0.08em;
   color: var(--o);
 }
-.bill b {
-  font-size: 13.5px;
+.qt .bill b {
+  font-size: 12px;
   font-weight: 500;
   color: var(--navy);
 }
-.stp b {
+.qt .stp b {
   display: block;
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 500;
 }
-.stp.cur b {
+.qt .stp.cur b {
   color: var(--o);
 }
 .stp.done b::after {
@@ -979,7 +990,7 @@ onBeforeUnmount(() => {
   color: #15803d;
 }
 .doc {
-  padding: 18px;
+  padding: 16px;
   border: 1px solid var(--line);
   border-radius: 16px;
   background: #fff;
@@ -991,15 +1002,15 @@ onBeforeUnmount(() => {
   justify-content: space-between;
   margin-bottom: 8px;
 }
-.dh .nm b {
-  font-size: 16px;
+.qt .dh .nm b {
+  font-size: 14px;
 }
 .stt {
-  padding: 4px 11px;
+  padding: 3px 10px;
   border-radius: 999px;
   background: #e8f8ee;
   color: #15803d;
-  font-size: 10.5px;
+  font-size: 9.5px;
   font-weight: 700;
   letter-spacing: 0.05em;
 }
@@ -1008,14 +1019,15 @@ onBeforeUnmount(() => {
   grid-template-columns: 1fr auto 70px;
   gap: 12px;
   margin-top: 8px;
-  padding: 11px 12px;
+  padding: 9px 12px;
   border-radius: 10px;
   background: #faf7f4;
-  font-size: 13px;
+  font-size: 11.5px;
   color: var(--ink);
 }
-.ln b {
+.qt .ln b {
   text-align: right;
+  font-size: 12px;
   color: var(--navy);
   font-weight: 600;
 }
@@ -1023,12 +1035,12 @@ onBeforeUnmount(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 14px 4px 12px;
-  font-size: 13px;
+  margin: 12px 4px 10px;
+  font-size: 12px;
   color: var(--ink);
 }
-.tot b {
-  font-size: 24px;
+.qt .tot b {
+  font-size: 20px;
   font-weight: 600;
   color: var(--navy);
 }
@@ -1039,12 +1051,12 @@ onBeforeUnmount(() => {
 .btn {
   display: inline-flex;
   align-items: center;
-  height: 38px;
-  padding: 0 18px;
+  height: 34px;
+  padding: 0 16px;
   border-radius: 10px;
   background: var(--navy);
   color: #fff;
-  font-size: 13px;
+  font-size: 11.5px;
   font-weight: 500;
 }
 .btn.o {
@@ -1062,14 +1074,14 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: center;
   gap: 7px;
-  font-size: 12.5px;
+  font-size: 11px;
   font-weight: 500;
 }
 .flow i {
   display: grid;
   place-items: center;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   background: var(--og);
   color: #fff;
