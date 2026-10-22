@@ -193,6 +193,7 @@
 </template>
 
 <script setup>
+defineOptions({ name: 'HomeNetworkSection' })
 /**
  * SectionNetwork.vue — "Network & Infrastructure" (part 02 of the security story, Vue 3, <script setup>)
  *

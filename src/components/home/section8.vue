@@ -212,6 +212,7 @@
 </template>
 
 <script setup>
+defineOptions({ name: 'HomeDataProtectionSection' })
 /**
  * SectionData.vue — "Data Protection & Audit" (part 03 of the security story, Vue 3, <script setup>)
  *

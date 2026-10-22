@@ -3,18 +3,42 @@ defineOptions({ name: 'SiteFooter' })
 const year = new Date().getFullYear()
 const logoSrc = `${import.meta.env.BASE_URL}saptivo-logo.png`
 
-// Brand icons that orbit around the circle (inline SVGs, no external assets)
+// Brand logos orbiting the circle: image files in /public/orbit (SVG = always sharp, PNG 512px as backup)
+const orbitBase = `${import.meta.env.BASE_URL}orbit/`
 const orbitIcons = [
-  { name: 'Instagram', svg: '<path fill="#E1306C" d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.4 5.6 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.6 18.4 4 16.4 4zm9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/>' },
-  { name: 'YouTube', svg: '<path fill="#FF0000" d="M10 15l5.19-3L10 9m11.56-1.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/>' },
-  { name: 'Facebook', svg: '<circle cx="12" cy="12" r="10" fill="#1877F2"/><path fill="#fff" d="M13.5 21v-7h2.4l.4-3h-2.8V9.3c0-.8.3-1.3 1.4-1.3h1.5V5.3c-.3 0-1.2-.1-2.2-.1-2.2 0-3.7 1.3-3.7 3.8V11H8v3h2.5v7z"/>' },
-  { name: 'Discord', svg: '<path fill="#5865F2" d="M19 5.5A16 16 0 0 0 15 4.3l-.5 1a14 14 0 0 0-5 0l-.5-1A16 16 0 0 0 5 5.5C2.5 9.2 1.8 12.8 2.1 16.4A16 16 0 0 0 7 19l1-1.6a10 10 0 0 1-1.6-.8l.4-.3a11.500 11.500 0 0 0 10.400 0l.4.3a10 10 0 0 1-1.600.8L17 19a16 16 0 0 0 4.900-2.600c.4-4.200-.7-7.800-2.900-10.900zM9 14.200c-1 0-1.800-.9-1.800-2s.8-2 1.800-2 1.800.9 1.800 2-.8 2-1.800 2zm6 0c-1 0-1.800-.9-1.800-2s.8-2 1.800-2 1.800.9 1.800 2-.8 2-1.800 2z"/>' },
-  { name: 'WordPress', svg: '<circle cx="12" cy="12" r="10.5" fill="#21759b"/><path fill="#fff" d="m4.7 8.1 3.4 9.3 2.1-5.6-1.3-3.7H7.5v-1h5v1h-1.2l3.1 8.5 2.8-7.6c.1-.3.2-.6.2-.9 0-.8-.5-1.2-1.1-1.2v-1h3.6v1c-.8.1-1.3.8-1.7 1.8l-3.7 10.1c-.5.2-1 .3-1.5.4l-2.4-6.6-2.4 6.6c-.5-.1-1-.3-1.5-.5L2.7 8.1z"/>' },
-  { name: '3CX', viewBox: '0 0 72 32', svg: '<text x="36" y="24" text-anchor="middle" font-family="Arial,sans-serif" font-size="25" font-weight="700" letter-spacing="-1.5" fill="#0b8ed8">3CX</text>' },
-  { name: 'Google Calendar', svg: '<rect x="3" y="4" width="18" height="17" rx="3" fill="#4285f4"/><path d="M6 4h4v4H6z" fill="#ea4335"/><path d="M10 4h4v4h-4z" fill="#fbbc04"/><path d="M14 4h4v4h-4z" fill="#34a853"/><path d="M6 8h12v10H6z" fill="#fff"/><path d="M6 8h12v2H6z" fill="#4285f4"/><text x="12" y="16" text-anchor="middle" font-family="Arial,sans-serif" font-size="7" font-weight="700" fill="#4285f4">31</text>' },
+  { name: 'Instagram', src: `${orbitBase}instagram.svg`, size: 40 },
+  { name: 'YouTube', src: `${orbitBase}youtube.svg`, size: 42 },
+  { name: 'Facebook', src: `${orbitBase}facebook.svg`, size: 40 },
+  { name: 'Discord', src: `${orbitBase}discord.svg`, size: 42 },
+  { name: 'WordPress', src: `${orbitBase}wordpress.svg`, size: 40 },
+  { name: '3CX', src: `${orbitBase}3cx.svg`, size: 56 },
+  { name: 'Google Calendar', src: `${orbitBase}google-calendar.svg`, size: 38 },
 ]
 
-// Links taken from the site menu
+// Trust bar (from the design reference)
+const trust = [
+  {
+    title: '99.99% Uptime SLA',
+    sub: 'Enterprise cloud reliability',
+    svg: '<path d="M12 3 4.5 6v5.5c0 4.6 3.1 8.4 7.5 9.5 4.4-1.1 7.5-4.9 7.5-9.5V6z"/><path d="m8.8 12 2.4 2.4 4.2-4.6"/>',
+  },
+  {
+    title: 'Bank-Grade Security',
+    sub: '256-bit encryption & RBAC',
+    svg: '<rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/>',
+  },
+  {
+    title: 'Live Multi-Store Sync',
+    sub: 'Sub-60s ledger updates',
+    svg: '<path d="M20 11a8 8 0 0 0-14-4.5L4 9"/><path d="M4 4v5h5"/><path d="M4 13a8 8 0 0 0 14 4.5L20 15"/><path d="M20 20v-5h-5"/>',
+  },
+  {
+    title: 'Dedicated Support',
+    sub: '24/7 technical onboarding',
+    svg: '<path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3.5" y="14" width="4" height="6" rx="2"/><rect x="16.5" y="14" width="4" height="6" rx="2"/><path d="M20 19.5c0 1.4-1.6 2-4 2h-2"/>',
+  },
+]
+
 const menuLinks = [
   { label: 'Features', href: '#features' },
   { label: 'Industries', href: '#industries' },
@@ -29,7 +53,7 @@ const partnerLinks = [
 
 <template>
   <footer id="contact" class="site-footer">
-    <!-- CTA + rotating orbit -->
+    <!-- CTA + rotating orbit (light) -->
     <section class="cta">
       <h2 class="cta-title">
         Ready to run
@@ -43,11 +67,10 @@ const partnerLinks = [
         <a class="btn btn-primary" href="mailto:hello@saptivo.com">
           Talk to our team <span aria-hidden="true">↗</span>
         </a>
-        <a class="btn btn-dark" href="#workflow">See how it works</a>
+        <a class="btn btn-light" href="#workflow">See how it works</a>
       </div>
 
       <div class="orbit-wrap" aria-hidden="true">
-        <!-- outer ring with brand icons -->
         <div class="orbit">
           <div
             v-for="(icon, i) in orbitIcons"
@@ -56,21 +79,49 @@ const partnerLinks = [
             :style="{ '--a': `${(360 / orbitIcons.length) * i}deg` }"
           >
             <span class="orbit-badge">
-              <svg :viewBox="icon.viewBox || '0 0 24 24'" width="30" height="30" v-html="icon.svg"></svg>
+              <img
+                :src="icon.src"
+                :alt="icon.name"
+                :style="{ width: icon.size + 'px', height: icon.size + 'px' }"
+                draggable="false"
+              />
             </span>
           </div>
         </div>
-        <!-- inner dashed ring with a travelling dot -->
         <div class="orbit-inner"><i class="orbit-dot"></i></div>
       </div>
     </section>
 
-    <!-- White footer card -->
+    <!-- Dark footer card -->
     <div class="footer-card">
+      <!-- Trust bar -->
+      <ul class="trust">
+        <li v-for="t in trust" :key="t.title" class="trust-item">
+          <span class="trust-icon">
+            <svg
+              viewBox="0 0 24 24"
+              width="26"
+              height="26"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              v-html="t.svg"
+            ></svg>
+          </span>
+          <span class="trust-text">
+            <b>{{ t.title }}</b>
+            <small>{{ t.sub }}</small>
+          </span>
+        </li>
+      </ul>
+
       <div class="footer-main">
         <div class="footer-brand-block">
           <a class="footer-brand" href="#top" aria-label="Saptivo home"><img :src="logoSrc" alt="Saptivo" /></a>
           <p>One connected workspace for customers, sales, and every store you run.</p>
+          <span class="status"><i></i> All systems operational</span>
         </div>
         <nav class="footer-links" aria-label="Product">
           <b>Product</b>
@@ -94,28 +145,27 @@ const partnerLinks = [
   </footer>
 </template>
 
-<!-- Inter (same family as the hero). Remove if already loaded globally. -->
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 </style>
 
 <style scoped>
 .site-footer {
-  --radius: 340px; /* outer orbit radius */
+  --radius: 340px;
   position: relative;
   padding: 0 clamp(16px, 6vw, 88px) 40px;
-  background: #17191d;
-  color: #fff;
-  font-family: 'Poppins', Arial, sans-serif;
+  background: #f2f1ee;
+  color: #17191d;
+  font-family: 'Inter', 'Poppins', Arial, sans-serif;
   overflow: hidden;
 }
-.site-footer::before { /* soft orange glow like the hero */
+.site-footer::before {
   content: '';
   position: absolute;
   top: -120px; left: 50%;
   width: 900px; height: 500px;
   transform: translateX(-50%);
-  background: radial-gradient(closest-side, rgba(240, 100, 43, 0.22), transparent);
+  background: radial-gradient(closest-side, rgba(240, 100, 43, 0.18), transparent);
   pointer-events: none;
 }
 
@@ -129,8 +179,9 @@ const partnerLinks = [
 }
 .cta-title {
   margin: 0;
+  color: #17191d;
   font-size: clamp(34px, 3.5vw, 62px);
-  font-weight: 500;
+  font-weight: 600;
   line-height: 1.1;
   letter-spacing: -0.035em;
 }
@@ -145,7 +196,7 @@ const partnerLinks = [
 .cta-sub {
   max-width: 560px;
   margin: 22px auto 32px;
-  color: #b4b5ba;
+  color: #6b6c72;
   font-size: 15px;
   line-height: 1.9;
 }
@@ -163,15 +214,16 @@ const partnerLinks = [
   box-shadow: 0 8px 22px rgba(240, 100, 43, 0.4);
 }
 .btn-primary:hover { filter: brightness(1.06); }
-.btn-dark {
-  color: #fff; background: #000;
-  border: 1px solid rgba(255, 255, 255, 0.16);
+.btn-light {
+  color: #17191d; background: #fff;
+  border: 1px solid rgba(23, 25, 29, 0.14);
+  box-shadow: 0 4px 14px rgba(23, 25, 29, 0.06);
 }
 
 /* ---------- Rotating orbit ---------- */
 .orbit-wrap {
   position: relative;
-  height: 300px;           /* only the top arc of the circles is visible */
+  height: 300px;
   margin-top: 46px;
   overflow: hidden;
 }
@@ -186,26 +238,27 @@ const partnerLinks = [
   width: calc(var(--radius) * 2);
   height: calc(var(--radius) * 2);
   margin-left: calc(var(--radius) * -1);
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(23, 25, 29, 0.14);
   animation: spin 60s linear infinite;
 }
 .orbit-item {
   position: absolute;
   top: 50%; left: 50%;
-  width: 70px; height: 70px;
-  margin: -35px 0 0 -35px;
+  width: 76px; height: 76px;
+  margin: -38px 0 0 -38px;
   transform: rotate(var(--a)) translateY(calc(var(--radius) * -1));
 }
 .orbit-badge {
   display: grid; place-items: center;
   width: 100%; height: 100%;
-  border-radius: 18px;
+  border-radius: 20px;
   background: #fff;
-  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.4);
-  transform: rotate(calc(var(--a) * -1));          /* keep icons upright */
+  border: 1px solid rgba(23, 25, 29, 0.08);
+  box-shadow: 0 12px 28px rgba(23, 25, 29, 0.14), 0 2px 6px rgba(23, 25, 29, 0.06);
+  transform: rotate(calc(var(--a) * -1));
   animation: upright 60s linear infinite;
 }
-.orbit-badge svg { display: block; }
+.orbit-badge img { display: block; object-fit: contain; user-select: none; }
 
 .orbit-inner {
   --r2: calc(var(--radius) - 95px);
@@ -213,7 +266,7 @@ const partnerLinks = [
   width: calc(var(--r2) * 2);
   height: calc(var(--r2) * 2);
   margin-left: calc(var(--r2) * -1);
-  border: 1px dashed rgba(255, 255, 255, 0.22);
+  border: 1px dashed rgba(23, 25, 29, 0.24);
   animation: spin-rev 90s linear infinite;
 }
 .orbit-dot {
@@ -221,59 +274,129 @@ const partnerLinks = [
   top: -7px; left: 50%;
   width: 14px; height: 14px; margin-left: -7px;
   border-radius: 50%;
-  background: #17191d;
+  background: #fff;
   border: 2px solid #f0642b;
-  box-shadow: 0 0 12px rgba(240, 100, 43, 0.8);
+  box-shadow: 0 0 12px rgba(240, 100, 43, 0.7);
 }
 
 @keyframes spin { to { transform: rotate(360deg); } }
 @keyframes spin-rev { to { transform: rotate(-360deg); } }
 @keyframes upright { to { transform: rotate(calc(var(--a) * -1 - 360deg)); } }
 
-/* ---------- White footer card ---------- */
+/* ---------- Dark footer card ---------- */
 .footer-card {
   position: relative;
   z-index: 2;
   max-width: 1300px;
   margin: -70px auto 0;
-  padding: 56px clamp(20px, 4vw, 56px) 22px;
+  padding: 44px clamp(20px, 4vw, 56px) 22px;
   border-radius: 24px;
-  background: #fff;
-  color: #17191d;
+  background: #17191d;
+  color: #fff;
+  overflow: hidden;
+  box-shadow: 0 30px 60px rgba(23, 25, 29, 0.25);
 }
+.footer-card::before { /* orange glow in the corner */
+  content: '';
+  position: absolute;
+  top: -160px; right: -120px;
+  width: 460px; height: 360px;
+  background: radial-gradient(closest-side, rgba(240, 100, 43, 0.25), transparent);
+  pointer-events: none;
+}
+.footer-card::after { /* top accent line */
+  content: '';
+  position: absolute;
+  top: 0; left: 8%; right: 8%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #f0642b, transparent);
+}
+
+/* trust bar */
+.trust {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin: 0 0 40px;
+  padding: 0 0 36px;
+  list-style: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.trust-item { display: flex; align-items: center; gap: 14px; }
+.trust-icon {
+  flex: none;
+  display: grid; place-items: center;
+  width: 52px; height: 52px;
+  border-radius: 15px;
+  color: #ff6a2c;
+  background: rgba(240, 100, 43, 0.12);
+  border: 1px solid rgba(240, 100, 43, 0.3);
+  transition: transform 0.25s, background 0.25s, color 0.25s;
+}
+.trust-item:hover .trust-icon { transform: translateY(-3px); background: #f0642b; color: #fff; }
+.trust-text { display: flex; flex-direction: column; gap: 3px; }
+.trust-text b { color: #fff; font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+.trust-text small { color: #9a9ba3; font-size: 13px; line-height: 1.4; }
+
 .footer-main {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(220px, 1.2fr) minmax(120px, 0.45fr) minmax(120px, 0.45fr) minmax(200px, 0.6fr);
   gap: 40px;
   padding-bottom: 44px;
 }
 .footer-brand { display: inline-flex; align-items: center; }
-.footer-brand img { display: block; width: 160px; max-width: 100%; height: auto; }
-.footer-brand-block p { max-width: 310px; margin: 15px 0 0; color: #6b6c72; font-size: 12px; line-height: 1.8; }
+.footer-brand img {
+  display: block; width: 160px; max-width: 100%; height: auto;
+  filter: brightness(0) invert(1); /* logo turns white on the dark card */
+}
+.footer-brand-block p { max-width: 310px; margin: 15px 0 18px; color: #9a9ba3; font-size: 13px; line-height: 1.8; }
+.status {
+  display: inline-flex; align-items: center; gap: 9px;
+  padding: 7px 14px; border-radius: 99px;
+  color: #c9cad0; font-size: 12px; font-weight: 500;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.status i {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #2ecc71;
+  box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.6);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  70% { box-shadow: 0 0 0 8px rgba(46, 204, 113, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0); }
+}
+
 .footer-links, .footer-contact { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
-.footer-links b, .footer-contact > b { margin-bottom: 4px; color: #17191d; font-size: 14px; font-weight: 600; }
-.footer-links a, .footer-bottom a { color: #55565c; font-size: 13px; text-decoration: none; transition: color 0.2s; }
-.footer-links a:hover, .footer-bottom a:hover { color: #f0642b; }
+.footer-links b, .footer-contact > b { margin-bottom: 4px; color: #fff; font-size: 14px; font-weight: 600; }
+.footer-links a, .footer-bottom a { color: #a4a5ac; font-size: 13px; text-decoration: none; transition: color 0.2s, transform 0.2s; }
+.footer-links a:hover, .footer-bottom a:hover { color: #ff7a3a; }
+.footer-links a:hover { transform: translateX(3px); }
 .footer-cta {
   display: inline-flex; align-items: center; gap: 24px;
-  padding: 12px 18px; border: 1px solid #dcdce0; border-radius: 99px;
-  color: #17191d; font-size: 12px; font-weight: 500; text-decoration: none;
+  padding: 12px 18px; border: 1px solid rgba(255, 255, 255, 0.22); border-radius: 99px;
+  color: #fff; font-size: 12px; font-weight: 500; text-decoration: none;
   transition: all 0.2s;
 }
-.footer-cta span { color: #f0642b; font-size: 15px; }
+.footer-cta span { color: #ff7a3a; font-size: 15px; }
 .footer-cta:hover { border-color: #f0642b; background: #f0642b; color: #fff; }
 .footer-cta:hover span { color: #fff; }
 .footer-bottom {
+  position: relative;
   display: flex; justify-content: space-between; gap: 15px;
-  padding-top: 19px; border-top: 1px solid #e8e8ec;
-  color: #7a7b82; font-size: 11px;
+  padding-top: 19px; border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: #7f8088; font-size: 12px;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .orbit, .orbit-inner, .orbit-badge { animation: none; }
+  .orbit, .orbit-inner, .orbit-badge, .status i { animation: none; }
 }
 
 @media (max-width: 900px) {
+  .trust { grid-template-columns: 1fr 1fr; }
   .footer-main { grid-template-columns: 1fr 1fr 1fr; }
   .footer-brand-block, .footer-contact { grid-column: 1 / -1; }
 }
@@ -281,11 +404,12 @@ const partnerLinks = [
   .site-footer { --radius: 200px; padding: 0 16px 24px; }
   .cta { padding-top: 60px; }
   .orbit-wrap { height: 230px; }
-  .orbit-item { width: 52px; height: 52px; margin: -26px 0 0 -26px; }
-  .orbit-badge { border-radius: 14px; }
-  .orbit-badge svg { width: 24px; height: 24px; }
-  .footer-card { margin-top: -50px; padding: 36px 20px 18px; }
+  .orbit-item { width: 56px; height: 56px; margin: -28px 0 0 -28px; }
+  .orbit-badge { border-radius: 15px; }
+  .orbit-badge img { transform: scale(0.7); }
+  .footer-card { margin-top: -50px; padding: 32px 20px 18px; }
+  .trust { grid-template-columns: 1fr; gap: 18px; padding-bottom: 28px; }
   .footer-main { grid-template-columns: 1fr 1fr; gap: 30px 20px; padding-bottom: 32px; }
-  .footer-bottom { font-size: 10px; }
+  .footer-bottom { font-size: 11px; }
 }
 </style>

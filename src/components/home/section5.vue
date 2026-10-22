@@ -316,7 +316,8 @@ onBeforeUnmount(() => { clearInterval(tick); chatTimers.forEach(clearTimeout); c
 </style>
 
 <style scoped>
-.eng { --a: #f0642b; --ink: #17191d; --txt: #17191d; --mut: #6b6f78; --line: #e4e0d9; --fw: 500; position: relative; overflow: hidden; padding: clamp(64px, 9vw, 120px) clamp(16px, 5vw, 72px); color: var(--txt); background: #faf8f5; font-family: Inter, "Segoe UI", system-ui, sans-serif; }
+/* CHANGED: --ink is now a softer charcoal (was #17191d) */
+.eng { --a: #f0642b; --ink: #2b2f38; --txt: #17191d; --mut: #6b6f78; --line: #e4e0d9; --fw: 500; position: relative; overflow: hidden; padding: clamp(64px, 9vw, 120px) clamp(16px, 5vw, 72px); color: var(--txt); background: #faf8f5; font-family: Inter, "Segoe UI", system-ui, sans-serif; }
 .eng *, .eng *::before, .eng *::after { box-sizing: border-box; }
 .eng button { font: inherit; color: inherit; cursor: pointer; }
 .eng button:focus-visible, .eng input:focus-visible { outline: 2px solid var(--a); outline-offset: 3px; }
@@ -350,23 +351,25 @@ onBeforeUnmount(() => { clearInterval(tick); chatTimers.forEach(clearTimeout); c
 .play { margin-top: 18px; padding: 0; border: 0; background: none; color: var(--mut); font: 500 13px Poppins, sans-serif; text-align: left; text-decoration: underline; text-underline-offset: 4px; }
 .play:hover { color: var(--a); }
 
-/* Stage: dark copy panel + solid brand-colour view */
+/* Stage: soft charcoal copy panel + soft peach view */
 .stage { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); min-height: 620px; overflow: hidden; border-radius: 28px; color: #fff; background: var(--ink); box-shadow: 0 30px 70px #17191d26; }
 .stage-copy { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding: clamp(26px, 3.2vw, 52px); }
 .stage-no { display: flex; align-items: center; margin: 0 0 30px; color: #8b8f98; font: 500 13px Poppins, sans-serif; letter-spacing: .08em; }
 .stage-no b { margin-right: 6px; color: var(--a); font-weight: 600; }
-.stage-no em { margin-left: 14px; padding: 4px 11px; border: 1px solid #3a3d44; border-radius: 99px; color: #c9ccd2; font-size: 11px; font-style: normal; letter-spacing: .08em; text-transform: uppercase; }
+.stage-no em { margin-left: 14px; padding: 4px 11px; border: 1px solid #4a4e57; border-radius: 99px; color: #c9ccd2; font-size: 11px; font-style: normal; letter-spacing: .08em; text-transform: uppercase; }
 .stage-copy h3 { margin: 0 0 18px; font-family: Poppins, sans-serif; font-size: max(22px, 2.5vw); font-weight: var(--fw); line-height: 1.18; letter-spacing: -.025em; }
-.stage-text { max-width: 380px; margin: 0; color: #aeb2ba; font-size: 15px; line-height: 1.75; }
+.stage-text { max-width: 380px; margin: 0; color: #b6bac2; font-size: 15px; line-height: 1.75; }
 .stage-hint { display: flex; align-items: center; gap: 10px; margin: 30px 0 0; color: #fff; font: 500 13px Poppins, sans-serif; }
 .stage-hint span { width: 8px; height: 8px; background: var(--a); }
-.next { margin-top: 26px; padding: 0 0 5px; border: 0; border-bottom: 1px solid #4a4d55; background: none; color: #fff; font: 500 13px Poppins, sans-serif; text-align: left; transition: color .2s, border-color .2s; }
+.next { margin-top: 26px; padding: 0 0 5px; border: 0; border-bottom: 1px solid #5a5e67; background: none; color: #fff; font: 500 13px Poppins, sans-serif; text-align: left; transition: color .2s, border-color .2s; }
 .next:hover { color: var(--a); border-color: var(--a); }
 
-.stage-view { display: grid; place-items: center; padding: clamp(22px, 3.2vw, 52px); background-color: var(--a); background-image: radial-gradient(rgba(255, 255, 255, .3) 1.2px, transparent 1.6px); background-size: 22px 22px; }
+/* CHANGED: orange panel is now a soft peach (22% orange + white) */
+.stage-view { display: grid; place-items: center; padding: clamp(22px, 3.2vw, 52px); background-color: color-mix(in srgb, var(--a) 22%, #fff); background-image: radial-gradient(color-mix(in srgb, var(--a) 35%, transparent) 1.2px, transparent 1.6px); background-size: 22px 22px; }
 
 /* App window */
-.win { width: 100%; max-width: 520px; min-width: 0; overflow: hidden; border-radius: 14px; color: #1c2638; background: #f7f8fb; box-shadow: 9px 9px 0 var(--ink); }
+/* CHANGED: softer shadow instead of the hard black one */
+.win { width: 100%; max-width: 520px; min-width: 0; overflow: hidden; border-radius: 14px; color: #1c2638; background: #f7f8fb; box-shadow: 9px 9px 0 color-mix(in srgb, var(--a) 45%, #fff); }
 .win-bar { display: flex; align-items: center; gap: 6px; padding: 12px 14px; border-bottom: 1px solid #e4e8f0; background: #fff; }
 .win-bar i { width: 10px; height: 10px; border-radius: 50%; background: #d8dde8; }
 .win-bar span { margin-left: 10px; color: #6b778c; font-size: 12px; font-weight: 600; }
@@ -490,7 +493,7 @@ onBeforeUnmount(() => { clearInterval(tick); chatTimers.forEach(clearTimeout); c
 @media (max-width: 480px) {
   .win-body { padding: 14px; }
   .facts { grid-template-columns: 1fr; }
-  .win { box-shadow: 6px 6px 0 var(--ink); }
+  .win { box-shadow: 6px 6px 0 color-mix(in srgb, var(--a) 45%, #fff); }
 }
 @media (prefers-reduced-motion: reduce) {
   .eng *, .eng *::before, .eng *::after { animation: none !important; transition: none !important; }

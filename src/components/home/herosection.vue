@@ -296,9 +296,9 @@ onBeforeUnmount(() => {
   overflow: hidden; pointer-events: none;
   background:
     radial-gradient(ellipse 52% 60% at 50% 0%, #fff 0 50%, rgba(255, 255, 255, 0) 100%),
-    radial-gradient(ellipse 100% 42% at 50% 86%, rgba(255, 92, 36, 0.92), rgba(255, 92, 36, 0) 76%),
-    radial-gradient(ellipse 46% 100% at 0% 58%, #ff5a1f 0%, rgba(255, 106, 43, 0.82) 34%, rgba(255, 106, 43, 0) 78%),
-    radial-gradient(ellipse 46% 100% at 100% 58%, #ff5a1f 0%, rgba(255, 106, 43, 0.82) 34%, rgba(255, 106, 43, 0) 78%),
+    radial-gradient(ellipse 100% 42% at 50% 86%, #f3c3b3eb, rgba(255, 92, 36, 0) 76%),
+    radial-gradient(ellipse 46% 100% at 0% 58%, #f3c3b3eb 0%, rgba(250, 173, 140, 0.82) 34%, rgba(255, 106, 43, 0) 78%),
+    radial-gradient(ellipse 46% 100% at 100% 58%, #f3c3b3eb 0%, rgba(250, 173, 140, 0.82) 34%, rgba(255, 106, 43, 0) 78%),
     #fff;
   -webkit-mask-image: linear-gradient(180deg, #000 70%, transparent 100%);
   mask-image: linear-gradient(180deg, #000 70%, transparent 100%);
