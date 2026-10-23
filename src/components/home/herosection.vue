@@ -1,6 +1,8 @@
 <template>
   <section id="top" ref="hero" class="hero" aria-labelledby="hero-title">
     <div class="top">
+      <div class="bg" aria-hidden="true"></div>
+
     <div class="content">
       <h1 id="hero-title">
         Manage and automate
@@ -262,7 +264,7 @@ onBeforeUnmount(() => {
   --orange: #ff6338;
   --orange-deep: #f04b23;
   --ink: #17191d;
-  --paper: #fff;
+  --paper: #f7f7f4;
   --muted: #5d6068;
   --title: clamp(46px, 3.5vw, 104px); /* headline + video text share this size */
 
@@ -286,7 +288,26 @@ onBeforeUnmount(() => {
 .hero *, .hero *::before, .hero *::after { box-sizing: border-box; }
 .hero a:focus-visible, .hero button:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; }
 
+/* ---------- fluted-glass orange background ---------- */
 .top { position: relative; }
+.bg {
+  position: absolute; z-index: -1; left: 0; right: 0; top: 0;
+  bottom: calc((var(--top0) + var(--h0)) * -0.72);
+  overflow: hidden; pointer-events: none;
+  background:
+    radial-gradient(ellipse 52% 60% at 50% 0%, #fff 0 50%, rgba(255, 255, 255, 0) 100%),
+    radial-gradient(ellipse 100% 42% at 50% 86%, #f3c3b3eb, rgba(255, 92, 36, 0) 76%),
+    radial-gradient(ellipse 46% 100% at 0% 58%, #f3c3b3eb 0%, rgba(250, 173, 140, 0.82) 34%, rgba(255, 106, 43, 0) 78%),
+    radial-gradient(ellipse 46% 100% at 100% 58%, #f3c3b3eb 0%, rgba(250, 173, 140, 0.82) 34%, rgba(255, 106, 43, 0) 78%),
+    #fff;
+  -webkit-mask-image: linear-gradient(180deg, #000 70%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 70%, transparent 100%);
+}
+.bg::after {
+  content: ""; position: absolute; inset: 0;
+  background: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.3) 0, rgba(255, 255, 255, 0) 60px);
+  -webkit-backdrop-filter: blur(9px); backdrop-filter: blur(9px);
+}
 
 /* ---------- content ---------- */
 .content {
@@ -448,6 +469,7 @@ h1 {
   .node { width: 52px; height: 52px; border-radius: 16px; }
   .node img { width: 26px; height: 26px; }
   .stage { height: 220svh; }
+  .bg::after { background: repeating-linear-gradient(90deg, rgba(255,255,255,.3) 0, rgba(255,255,255,0) 38px); }
   .video-copy { bottom: 84px; padding: 0 16px; }
   .play { opacity: 1; width: 58px; height: 58px; border-radius: 17px; }
   .sound { right: 14px; bottom: 14px; width: 42px; height: 42px; border-radius: 12px; }
