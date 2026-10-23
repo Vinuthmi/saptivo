@@ -42,8 +42,8 @@
         @focusout="paused = false"
       >
         <!-- stacked frames + window -->
-        <div ref="stageEl" class="fs-stage" aria-hidden="true">
-          <div class="fs-fit" :style="{ height: (SH + 84) * scale + 'px' }">
+        <div ref="stageEl" class="fs-stage" :class="{ crop: cropped }" aria-hidden="true">
+          <div ref="fitEl" class="fs-fit" :style="fitH ? { height: fitH + 'px' } : undefined">
             <div class="fs-scene" :style="{ transform: `translateX(-50%) scale(${scale})` }">
               <div class="fs-stack">
                 <!-- ================= 1 · CRM ================= -->
@@ -290,21 +290,29 @@ const calls = [
   ['UC', 'Unknown customer', '112 457 803', 'Missed', '8001', '0:18', '2026-10-20 11:27'],
 ]
 
-const SW = 960
-const SH = 700
+/* Preview geometry. The scene is authored at SW × SH (the 4 strips of the cards behind + one 620px window)
+   and scaled uniformly, so proportions never change. */
+const SW = 960 + 56 // window + beige frame
+const STACK = 112 // 4 strips × 28px of the cards behind the front one
+const SH = STACK + 620
+const MIN_K = 0.85 // never scale below this: keeps the dashboard text readable
+const WIDE = 900 // below this width the page is allowed to scroll naturally
 
 const rootEl = ref(null)
 const stageEl = ref(null)
+const fitEl = ref(null)
 const active = ref(0)
 const prev = ref(-1)
 const order = ref([0, 1, 2, 3, 4]) // front → back
 const paused = ref(false)
 const revealed = ref(false)
 const scale = ref(1)
+const fitH = ref(0) // visible height of the preview in px (0 until measured)
+const cropped = ref(false) // true when the bottom of the windows is faded out to save height
 const motion = ref(true)
 const cur = computed(() => features[active.value])
 
-let ro, io
+let ro, io, raf
 
 function goTo(i) {
   const n = (i + features.length) % features.length
@@ -316,16 +324,41 @@ function goTo(i) {
 }
 const depth = (i) => order.value.indexOf(i)
 const step = (d) => goTo(active.value + d)
+/* Scale by width first, then (on wide screens) by the height that is really left in the viewport once the
+   heading, tabs and caption have taken their share. If even MIN_K does not fit, the preview is cropped at the
+   bottom and faded out instead of being shrunk further. */
 function fit() {
-  if (!stageEl.value) return
-  scale.value = Math.min(1.08, +(stageEl.value.clientWidth / (SW + 56)).toFixed(3)) || 1
+  const stage = stageEl.value
+  const root = rootEl.value
+  const box = fitEl.value
+  if (!stage || !root || !box) return
+  const ws = Math.min(1.08, stage.clientWidth / SW) || 1
+  let k = ws
+  let h = SH * ws
+  if (window.innerWidth >= WIDE) {
+    const vh = window.visualViewport?.height || window.innerHeight // equivalent of 100dvh
+    const cs = getComputedStyle(root)
+    const chrome = root.offsetHeight - box.offsetHeight + (parseFloat(cs.marginTop) || 0) + (parseFloat(cs.marginBottom) || 0)
+    const avail = Math.max(180, vh - chrome)
+    k = Math.min(ws, Math.max(MIN_K, avail / SH))
+    h = Math.min(SH * k, avail)
+  }
+  scale.value = +k.toFixed(3)
+  fitH.value = Math.round(h)
+  cropped.value = h < SH * k - 1
+}
+function queueFit() {
+  cancelAnimationFrame(raf)
+  raf = requestAnimationFrame(fit)
 }
 
 onMounted(() => {
   motion.value = !(typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches)
   fit()
-  ro = new ResizeObserver(fit)
-  ro.observe(stageEl.value)
+  ro = new ResizeObserver(queueFit) // width changes and caption height changes (each tab has different copy)
+  ro.observe(rootEl.value)
+  window.addEventListener('resize', queueFit) // viewport height changes do not resize the section itself
+  window.visualViewport?.addEventListener('resize', queueFit)
   io = new IntersectionObserver(
     ([en]) => {
       if (en.isIntersecting) revealed.value = true
@@ -336,6 +369,9 @@ onMounted(() => {
   io.observe(rootEl.value)
 })
 onBeforeUnmount(() => {
+  cancelAnimationFrame(raf)
+  window.removeEventListener('resize', queueFit)
+  window.visualViewport?.removeEventListener('resize', queueFit)
   ro?.disconnect()
   io?.disconnect()
 })
@@ -356,10 +392,10 @@ onBeforeUnmount(() => {
   --bg: #fff;
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
   position: relative;
-  width: calc(100% - 2 * clamp(12px, 3vw, 40px));
+  width: calc(100% - 2 * clamp(8px, 1.6vw, 24px));
   max-width: 1680px;
-  margin: clamp(16px, 3vw, 40px) auto;
-  padding: clamp(40px, 6vw, 84px) clamp(14px, 4vw, 64px) clamp(28px, 4vw, 52px);
+  margin: clamp(8px, 1.6vh, 20px) auto;
+  padding: clamp(18px, 3.4vh, 40px) clamp(14px, 4vw, 64px) clamp(14px, 2.6vh, 28px);
   overflow: hidden;
   isolation: isolate;
   border: 1px solid rgba(15, 23, 42, 0.06);
@@ -402,9 +438,9 @@ onBeforeUnmount(() => {
   margin: 0 auto;
   color: #0f172a;
   font-family: 'Inter Display', Inter, system-ui, sans-serif;
-  font-size: 3.5vw;
+  font-size: clamp(28px, min(3.4vw, 5.2vh), 48px);
   font-weight: 500;
-  line-height: 1.16;
+  line-height: 1.12;
   letter-spacing: -0.05em;
 }
 .fs-title span {
@@ -418,13 +454,13 @@ onBeforeUnmount(() => {
   -webkit-text-fill-color: transparent;
 }
 .fs-head p {
-  margin: 14px auto 0;
-  max-width: 520px;
+  margin: clamp(6px, 1.2vh, 12px) auto 0;
+  max-width: 600px;
   font-family: 'Inter Display', Inter, system-ui, sans-serif;
-  font-size: 24px;
-  font-weight: 600;
-  line-height: 34px;
-  letter-spacing: -0.72px;
+  font-size: clamp(15px, 1.25vw, 18px);
+  font-weight: 500;
+  line-height: 1.45;
+  letter-spacing: -0.02em;
   color: var(--ink);
 }
 
@@ -433,21 +469,21 @@ onBeforeUnmount(() => {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 10px;
-  max-width: 820px;
-  margin: 30px auto 0;
+  gap: 8px;
+  margin: clamp(12px, 2.2vh, 20px) auto 0;
 }
 .fs-tab {
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 5px 16px 5px 5px;
+  gap: 8px;
+  padding: 4px 13px 4px 4px;
   border: 1px solid #f0e3d8;
-  border-radius: 11px;
+  border-radius: 10px;
   background: rgba(255, 255, 255, 0.85);
   color: #1f2937;
-  font: 700 16px/1.2 'Poppins', system-ui, sans-serif;
+  font: 600 13.5px/1.2 'Poppins', system-ui, sans-serif;
+  white-space: nowrap;
   cursor: pointer;
   overflow: hidden;
   transition: background 0.3s, border-color 0.3s, box-shadow 0.3s, transform 0.3s;
@@ -455,15 +491,15 @@ onBeforeUnmount(() => {
 .fs-tab .ti {
   display: grid;
   place-items: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
   background: #fde6d8;
   transition: background 0.3s;
 }
 .fs-tab .ti svg {
-  width: 18px;
-  height: 18px;
+  width: 15px;
+  height: 15px;
   fill: none;
   stroke: var(--o);
   stroke-width: 1.9;
@@ -502,17 +538,34 @@ onBeforeUnmount(() => {
 
 /* ================= stage ================= */
 .fs-show {
-  margin-top: 34px;
+  margin-top: clamp(14px, 2.4vh, 22px);
 }
 .fs-stage {
   position: relative;
   max-width: 1040px;
   margin: 0 auto;
   overflow: hidden;
+  isolation: isolate;
 }
 .fs-fit {
   position: relative;
   overflow: hidden;
+  height: 660px; /* only until the script has measured; fit() then sets the exact height */
+}
+/* when the preview is cropped to fit the viewport, the windows fade out instead of ending abruptly */
+.fs-fade {
+  display: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 28%;
+  z-index: 30;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 60%, #fff 100%);
+}
+.fs-stage.crop .fs-fade {
+  display: block;
 }
 .fs-scene {
   position: absolute;
@@ -521,7 +574,7 @@ onBeforeUnmount(() => {
   width: 1016px; /* 960 + frame */
   max-width: none;
   flex: none;
-  height: 744px;
+  height: 732px; /* = STACK + window, see the script */
   transform-origin: 50% 0;
 }
 .fs .fs-stack {
@@ -542,7 +595,7 @@ onBeforeUnmount(() => {
   min-width: 0;
   margin: 0;
   display: block;
-  top: 136px;
+  top: 112px;
   left: 0;
   right: 0;
   height: 620px;
@@ -553,7 +606,7 @@ onBeforeUnmount(() => {
   box-shadow: 0 -10px 24px -16px rgba(150, 70, 30, 0.35);
   z-index: calc(10 - var(--d));
   transform-origin: 50% 0;
-  transform: translateY(calc(var(--d) * -34px)) scale(calc(1 - var(--d) * 0.032));
+  transform: translateY(calc(var(--d) * -28px)) scale(calc(1 - var(--d) * 0.03));
   transition: transform 0.95s cubic-bezier(0.16, 0.84, 0.3, 1), filter 0.7s ease;
   filter: saturate(calc(1 - var(--d) * 0.12));
 }
@@ -1257,49 +1310,49 @@ onBeforeUnmount(() => {
   position: relative;
   z-index: 2;
   display: grid;
-  grid-template-columns: 1.15fr 1fr;
-  grid-template-areas: 'a b' 'c c';
-  gap: 22px clamp(20px, 4vw, 56px);
+  grid-template-columns: 1.1fr 1fr;
+  grid-template-areas: 'a b' 'a c';
+  gap: clamp(8px, 1.6vh, 16px) clamp(20px, 4vw, 48px);
   max-width: 1040px;
-  margin: -18px auto 0;
+  margin: 6px auto 0;
   padding: 0 clamp(4px, 2vw, 24px);
   animation: fs-in 0.6s var(--ease) both;
 }
 .cp1 { grid-area: a; }
-.cp2 { grid-area: b; align-self: center; }
-.cp3 { grid-area: c; }
+.cp2 { grid-area: b; align-self: end; }
+.cp3 { grid-area: c; align-self: start; }
 .lbl {
   display: inline-block;
-  padding: 6px 13px;
+  padding: 4px 11px;
   border: 1px solid #ffe0cf;
   border-radius: 999px;
   background: var(--o-soft);
   color: #c2410c;
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 500;
 }
 .cp1 h3 {
-  margin: 14px 0 0;
-  max-width: 520px;
+  margin: 8px 0 0;
+  max-width: 560px;
   font-family: 'Inter Display', Inter, system-ui, sans-serif;
-  font-size: clamp(22px, 2.6vw, 30px);
+  font-size: clamp(18px, min(1.9vw, 3.2vh), 26px);
   font-weight: 600;
   line-height: 1.25;
   letter-spacing: -0.05em;
 }
 .cp1 p {
-  margin: 10px 0 0;
-  max-width: 520px;
+  margin: 6px 0 0;
+  max-width: 580px;
   font-family: 'Inter Display', Inter, system-ui, sans-serif;
-  font-size: 24px;
-  font-weight: 600;
-  line-height: 34px;
-  letter-spacing: -0.72px;
+  font-size: clamp(13px, 1.1vw, 15px);
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
   color: var(--ink);
 }
 .cp2 {
   display: grid;
-  gap: 10px;
+  gap: 7px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -1308,23 +1361,23 @@ onBeforeUnmount(() => {
   display: flex;
   gap: 10px;
   align-items: flex-start;
-  font-size: 13.5px;
-  line-height: 1.5;
+  font-size: 12.5px;
+  line-height: 1.45;
   color: #334155;
 }
 .cp2 i {
   display: grid;
   place-items: center;
   flex: none;
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   margin-top: 1px;
   border-radius: 50%;
   background: var(--og);
 }
 .cp2 svg {
-  width: 13px;
-  height: 13px;
+  width: 12px;
+  height: 12px;
   fill: none;
   stroke: #fff;
   stroke-width: 2;
@@ -1334,24 +1387,24 @@ onBeforeUnmount(() => {
 .cp3 {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
+  gap: 10px;
 }
 .cp3 div {
-  padding: 14px 16px;
+  padding: 7px 12px;
   border: 1px solid #f3e6dc;
-  border-radius: 16px;
+  border-radius: 14px;
   background: rgba(255, 255, 255, 0.8);
 }
 .cp3 strong {
   display: block;
   color: var(--o);
-  font-size: 22px;
+  font-size: clamp(15px, 1.3vw, 18px);
   font-weight: 500;
-  line-height: 1.3;
+  line-height: 1.25;
   overflow-wrap: anywhere;
 }
 .cp3 span {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--ink);
 }
 
@@ -1392,18 +1445,11 @@ onBeforeUnmount(() => {
   .fs-cap {
     grid-template-columns: minmax(0, 1fr);
     grid-template-areas: 'a' 'b' 'c';
-    margin-top: -10px;
   }
-  .fs-tabs {
-    gap: 8px;
-  }
+  .cp2 { align-self: start; }
   .fs-tab {
-    font-size: 13px;
-    padding-right: 12px;
-  }
-  .fs-tab .ti {
-    width: 30px;
-    height: 30px;
+    font-size: 12.5px;
+    padding-right: 11px;
   }
 }
 @media (max-width: 520px) {
@@ -1418,4 +1464,4 @@ onBeforeUnmount(() => {
   .fs *::before,
   .fs *::after { transition-duration: 0.01s !important; transition-delay: 0s !important; }
 }
-</style>
+</style>git add .
