@@ -9,22 +9,17 @@
     <div class="ig-wrap">
       <!-- ============ header ============ -->
       <header class="ig-head">
-        <div class="ig-hl">
-          <span class="ig-logo" aria-hidden="true">
-            <svg width="21" height="21" viewBox="0 0 24 24"><path d="m12 3 9 4.6-9 4.6-9-4.6z" /><path d="m3 12 9 4.6 9-4.6" /><path d="m3 16.4 9 4.6 9-4.6" /></svg>
-          </span>
-          <h2 id="ig-title" class="ig-title">
-            Built-in integrations that work for you <em>24/7.</em>
-          </h2>
-        </div>
-        <div class="ig-hr">
-          <a class="ig-btn" :href="hubUrl">Explore Integrations Hub</a>
-          <p class="ig-sub">
-            Saptivo connects your entire operational stack seamlessly. Auto-log phone calls, sync
-            WhatsApp chats, ingest social leads instantly, and mirror tasks to Google Calendar in
-            real time.
-          </p>
-        </div>
+        <span class="ig-logo" aria-hidden="true">
+          <svg width="21" height="21" viewBox="0 0 24 24"><path d="m12 3 9 4.6-9 4.6-9-4.6z" /><path d="m3 12 9 4.6 9-4.6" /><path d="m3 16.4 9 4.6 9-4.6" /></svg>
+        </span>
+        <h2 id="ig-title" class="ig-title">
+          Built-in integrations that work for you <em>24/7.</em>
+        </h2>
+        <p class="ig-sub">
+          Saptivo connects your entire operational stack seamlessly. Auto-log phone calls, sync
+          WhatsApp chats, ingest social leads instantly, and mirror tasks to Google Calendar in
+          real time.
+        </p>
       </header>
 
       <!-- ============ tabs ============ -->
@@ -84,7 +79,7 @@
                 <div class="src card" style="--d: 0">
                   <div class="src-top">
                     <span class="brand"><svg width="34" height="34" viewBox="0 0 48 48" v-html="art.wp"></svg></span>
-                    <span class="st ok"><i></i>CONNECTED</span>
+                    <span class="st ig-ok"><i></i>CONNECTED</span>
                   </div>
                   <b class="src-n">WordPress Website</b>
                   <span class="src-s">septivo.com</span>
@@ -124,7 +119,7 @@
                 </div>
                 <div class="thead web"><span>CUSTOMER</span><span>CONTACT</span><span>SOURCE</span><span>STATUS</span><span class="rc">RECEIVED</span></div>
                 <div v-for="(r, k) in inquiries" :key="r.n" class="trow web" :class="{ fresh: k === 0 }" :style="{ '--k': k }">
-                  <span class="who"><i class="av">{{ r.i }}</i><span><b>{{ r.n }}</b><small>{{ r.no }}</small></span></span>
+                  <span class="ig-who"><i class="av">{{ r.i }}</i><span><b>{{ r.n }}</b><small>{{ r.no }}</small></span></span>
                   <span class="ct">{{ r.e }}</span>
                   <span class="chip"><svg width="18" height="18" viewBox="0 0 24 24" v-html="icon.globe"></svg>Website integration</span>
                   <span class="pend" :class="r.cls">{{ r.s }}</span>
@@ -191,7 +186,7 @@
                 </div>
                 <div class="thead two"><span>CUSTOMER</span><span>SOURCE</span><span>LEAD STAGE</span><span class="rc">RECEIVED</span></div>
                 <div v-for="(l, k) in leads" :key="l.n" class="trow two" :class="{ fresh: k === 0 }" :style="{ '--k': k }">
-                  <span class="who"><i class="av">{{ l.i }}</i><span><b>{{ l.n }}</b><small>{{ l.camp }}</small></span></span>
+                  <span class="ig-who"><i class="av">{{ l.i }}</i><span><b>{{ l.n }}</b><small>{{ l.camp }}</small></span></span>
                   <span class="chip fb"><svg width="12" height="12" viewBox="0 0 48 48" v-html="art.fb"></svg>Facebook Lead Ads</span>
                   <span class="pend" :class="l.cls">{{ l.s }}</span>
                   <span class="ct rc">{{ l.t }}</span>
@@ -218,7 +213,7 @@
                 <div class="src card" style="--d: 0">
                   <div class="src-top">
                     <span class="brand ph"><svg width="30" height="30" viewBox="0 0 24 24" v-html="icon.phone"></svg></span>
-                    <span class="st ok"><i></i>ENABLED</span>
+                    <span class="st ig-ok"><i></i>ENABLED</span>
                   </div>
                   <b class="src-n">3CX Telephony Mapping</b>
                   <span class="src-s">Incoming calls open the vendor panel</span>
@@ -252,16 +247,16 @@
                   <div><small>PBX CALL JOURNAL</small><h3>Calls</h3></div>
                   <span class="ready"><svg width="18" height="18" viewBox="0 0 24 24" v-html="icon.phone"></svg><span><b>Call Back Ready</b><small>extension 1001 can place callbacks</small></span></span>
                 </div>
-                <div class="pills"><span class="on">All</span><span>Missed</span><span>Answered</span><span>Outbound</span></div>
-                <div class="thead calls"><span>CUSTOMER</span><span>CALL TYPE</span><span>EXT</span><span>DURATION</span><span>DATE / TIME</span></div>
-                <div v-for="(c, k) in calls" :key="c.p" class="trow calls" :class="{ fresh: k === 0 }" :style="{ '--k': k }">
-                  <span class="who"><i class="av dk">{{ c.i }}</i><span><b>{{ c.n }}</b><small>{{ c.p }}</small></span></span>
-                  <span class="cp" :class="c.t">{{ c.t }}</span>
+                <div class="ig-pills"><span class="on">All <em>126</em></span><span>Missed <em>9</em></span><span>Answered <em>98</em></span><span>Outbound <em>19</em></span></div>
+                <div class="thead ig-calls"><span>CUSTOMER</span><span>CALL TYPE</span><span>EXT</span><span>DURATION</span><span>DATE / TIME</span></div>
+                <div v-for="(c, k) in calls" :key="c.p" class="trow ig-calls" :class="{ fresh: k === 0 }" :style="{ '--k': k }">
+                  <span class="ig-who"><i class="av dk">{{ c.i }}</i><span><b>{{ c.n }}<i v-if="c.wa" class="wa-b" title="WhatsApp chat linked"><svg viewBox="0 0 24 24" aria-hidden="true" v-html="icon.wa"></svg></i></b><small>{{ c.p }}</small></span></span>
+                  <span class="ig-cp" :class="c.t">{{ c.t }}</span>
                   <span class="ct">{{ c.x }}</span>
                   <span class="ct">{{ c.d }}</span>
                   <span class="ct">{{ c.at }}</span>
                 </div>
-                <p class="foot">Showing 1–5 of 126 calls · auto-matched to customers</p>
+                <p class="foot">Showing 1–4 of 126 calls · auto-matched to customers</p>
               </div>
 
               <div class="toast t3" style="--d: 3">
@@ -283,13 +278,13 @@
                 <div class="src card" style="--d: 0">
                   <div class="src-top">
                     <span class="brand"><svg width="34" height="34" viewBox="0 0 24 24" v-html="art.gcal"></svg></span>
-                    <span class="st ok"><i></i>2-WAY SYNC</span>
+                    <span class="st ig-ok"><i></i>2-WAY SYNC</span>
                   </div>
                   <b class="src-n">Google Calendar</b>
                   <span class="src-s">designer@saptivo.com</span>
                   <div class="mini-cal">
                     <span v-for="(d, i) in 'SMTWTFS'.split('')" :key="'h' + i" class="dw">{{ d }}</span>
-                    <span v-for="n in monthDays" :key="n" :class="{ today: n === 16, ev: n === 9 || n === 22 }">{{ n }}</span>
+                    <span v-for="n in monthDays" :key="n" :class="{ today: n === 16, 'ig-ev': n === 9 || n === 22 }">{{ n }}</span>
                   </div>
                 </div>
                 <div class="side card" style="--d: 1">
@@ -315,20 +310,20 @@
                   <span class="dbox"><small>OCT</small><b>16</b></span>
                   <span class="cal-t"><b>October 2026</b><small>Friday</small></span>
                   <span class="cal-act">
-                    <i class="btn">Today</i>
-                    <i class="btn g"><svg width="12" height="12" viewBox="0 0 48 48" v-html="art.g"></svg>Sync Google</i>
-                    <i class="btn o">+ Add event</i>
+                    <i class="ig-btn">Today</i>
+                    <i class="ig-btn g"><svg width="12" height="12" viewBox="0 0 48 48" v-html="art.g"></svg>Sync Google</i>
+                    <i class="ig-btn o">+ Add event</i>
                   </span>
                 </div>
                 <div class="day">
                   <div v-for="h in hours" :key="h" class="hr"><small>{{ h }}</small></div>
                   <span class="now"><i></i></span>
-                  <div class="evt e4"><b>Quote follow-up · Lead #L-318</b><small>9:30 AM · Task</small></div>
-                  <div class="evt e2"><b>Call customer</b><small>11:00 AM · Task</small></div>
-                  <div class="evt e5"><b>Sales stand-up</b><small>12:30 PM · Synced to Google</small></div>
-                  <div class="evt e1"><b>Client vehicle handover</b><small>2:30 PM · Synced to Google</small></div>
-                  <div class="evt e3"><b>Prepare documents</b><small>4:00 PM · Task</small></div>
-                  <div class="evt e6"><b>Supplier call</b><small>3:00 PM · Synced to Google</small></div>
+                  <div class="evt e4"><b>Quote follow-up · Lead #L-318</b><small>9:30 – 10:15 AM · CRM task → Google</small></div>
+                  <div class="evt e2"><b>Call customer</b><small>11:00 – 11:45 AM · CRM task → Google</small></div>
+                  <div class="evt e5"><b>Sales stand-up</b><small>12:30 – 1:15 PM · From Google</small></div>
+                  <div class="evt e1"><b>Client vehicle handover</b><small>2:30 – 3:45 PM · From Google</small></div>
+                  <div class="evt e3"><b>Prepare documents</b><small>4:00 – 4:30 PM · CRM task → Google</small></div>
+                  <div class="evt e6"><b>Supplier call</b><small>3:00 – 3:30 PM · From Google</small></div>
                 </div>
               </div>
 
@@ -340,8 +335,17 @@
           </div>
         </div>
 
-        <div class="ig-dots" aria-hidden="true">
-          <span v-for="(s, i) in slides" :key="s.id" class="ig-dot" :class="{ on: active === i }"></span>
+        <div class="ig-dots" role="group" aria-label="Choose integration">
+          <button
+            v-for="(s, i) in slides"
+            :key="s.id"
+            type="button"
+            class="ig-dot"
+            :class="{ on: active === i }"
+            :aria-label="`Show ${s.tab}`"
+            :aria-current="active === i ? 'true' : undefined"
+            @click="goTo(i)"
+          ></button>
         </div>
       </div>
     </div>
@@ -359,12 +363,9 @@ defineOptions({ name: 'HomeIntegrationsSection' })
  * • Pure HTML/CSS/SVG — no image files. Scene is authored at 1160×490 and scaled to fit.
  * • prefers-reduced-motion: no autoplay, no looping animation.
  *
- * Prop: hubUrl — link for the "Explore Integrations Hub" button.
  * Browser APIs are only used in onMounted / handlers (SSR / Nuxt safe).
  */
 import { ref, onMounted, onBeforeUnmount } from 'vue'
-
-defineProps({ hubUrl: { type: String, default: '#integrations' } })
 
 const SCENE_W = 1160
 const SCENE_H = 490
@@ -403,11 +404,10 @@ const leads = [
   { i: 'TW', n: 'Tharushi Wickrama', camp: 'Q3 SUV Promotion', s: 'NEW LEAD', cls: 'lead', t: '2 h ago' },
 ]
 const calls = [
-  { i: 'UC', n: 'Unknown customer', p: '755322689', t: 'Missed', x: '8001', d: '0:56', at: '2026-10-07 06:49' },
-  { i: 'UC', n: 'Unknown customer', p: '770629341', t: 'Answered', x: '1032', d: '1:40', at: '2026-09-30 10:29' },
-  { i: 'Y', n: 'Yasasi', p: '94703970813', t: 'Outbound', x: '1001', d: '—', at: '2026-09-17 04:39' },
-  { i: 'N', n: 'Nadeesha', p: '94771234567', t: 'Answered', x: '1001', d: '3:12', at: '2026-09-15 02:11' },
-  { i: 'KP', n: 'Kasun Perera', p: '94712345098', t: 'Answered', x: '1032', d: '2:05', at: '2026-09-12 11:42' },
+  { i: 'DP', n: 'Daniel Perera', p: '755 322 689', t: 'Missed', x: '8001', d: '0:56', at: '2026-10-16 08:49', wa: true },
+  { i: 'KP', n: 'Kasun Perera', p: '+94 71 234 5098', t: 'Answered', x: '1032', d: '2:05', at: '2026-10-16 08:12', wa: true },
+  { i: 'YA', n: 'Yasasi Alwis', p: '+94 70 397 0813', t: 'Outbound', x: '1001', d: '4:05', at: '2026-10-15 16:39', wa: false },
+  { i: 'NF', n: 'Nadeesha Fernando', p: '+94 77 123 4567', t: 'Answered', x: '1001', d: '3:12', at: '2026-10-15 15:02', wa: true },
 ]
 const monthDays = Array.from({ length: 31 }, (_, i) => i + 1)
 const hours = ['9 AM', '10 AM', '11 AM', '12 PM', '1 PM', '2 PM', '3 PM', '4 PM']
@@ -564,9 +564,9 @@ onBeforeUnmount(() => {
 /* ============ header ============ */
 .ig-head {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 32px;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 .ig-logo {
   display: grid;
@@ -580,8 +580,9 @@ onBeforeUnmount(() => {
 }
 .ig-logo svg { width: 21px; height: 21px; fill: none; stroke: var(--o); stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
 .ig-title {
-  margin: 0;
-  max-width: 560px;
+  margin: 0 auto;
+  max-width: 760px;
+  text-wrap: balance;
   font-family: 'Inter Display', Inter, system-ui, sans-serif;
   font-size: 3.5vw;
   line-height: 1.15;
@@ -589,24 +590,8 @@ onBeforeUnmount(() => {
   letter-spacing: -0.02em;
 }
 .ig-title em { font-style: normal; color: var(--o); white-space: nowrap; }
-.ig-hr { display: flex; flex-direction: column; align-items: flex-end; gap: 20px; padding-top: 26px; }
-.ig-btn {
-  display: inline-flex;
-  align-items: center;
-  height: 42px;
-  padding: 0 22px;
-  border: 1.5px solid var(--navy);
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.25);
-  color: var(--navy);
-  font-size: 14px;
-  font-weight: 500;
-  text-decoration: none;
-  transition: background 0.25s, color 0.25s, transform 0.25s, box-shadow 0.25s;
-}
-.ig-btn:hover { background: var(--navy); color: #fff; transform: translateY(-1px); box-shadow: 0 8px 20px rgba(15, 23, 42, 0.18); }
-.ig-btn:focus-visible, .ig-nav:focus-visible, .ig-tab:focus-visible { outline: 2px solid var(--o); outline-offset: 3px; }
-.ig-sub { margin: 0; max-width: 480px; text-align: right; font-family: 'Inter Display', Inter, system-ui, sans-serif; font-size: clamp(15px, 1vw, 18px); font-weight: 500; line-height: 1.45; letter-spacing: -0.02em; color: #475569; }
+.ig-nav:focus-visible, .ig-tab:focus-visible { outline: 2px solid var(--o); outline-offset: 3px; }
+.ig-sub { margin: 16px auto 0; max-width: 640px; text-align: center; font-family: 'Inter Display', Inter, system-ui, sans-serif; font-size: clamp(15px, 1vw, 18px); font-weight: 500; line-height: 1.45; letter-spacing: -0.02em; color: #475569; }
 
 /* ============ tabs ============ */
 .ig-tabs {
@@ -712,7 +697,7 @@ onBeforeUnmount(() => {
 .brand.ph svg { fill: none; stroke: var(--o); stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
 .st { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 999px; font-size: 10px; font-weight: 600; letter-spacing: 0.04em; }
 .st i { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
-.st.ok { background: #e8f8ee; color: #15803d; }
+.st.ig-ok { background: #e8f8ee; color: #15803d; }
 .st.live { background: #e8f1ff; color: #1d4ed8; }
 .src-n { font-size: 17px; font-weight: 600; line-height: 1.25; }
 .src-s { font-size: 12.5px; color: var(--ink); line-height: 1.45; }
@@ -838,9 +823,9 @@ onBeforeUnmount(() => {
 .trow.fresh { border-color: #ffd2b8; background: linear-gradient(90deg, #fff8f3, #fff); box-shadow: 0 8px 16px -10px rgba(255, 87, 34, 0.5); }
 .sl.on .trow.fresh { animation: ig-fresh 3.2s ease-in-out 1.4s infinite; }
 @keyframes ig-fresh { 0%, 100% { box-shadow: 0 8px 16px -10px rgba(255, 87, 34, 0.5); } 50% { box-shadow: 0 0 0 3px rgba(255, 87, 34, 0.14), 0 10px 18px -10px rgba(255, 87, 34, 0.6); } }
-.who { display: flex; align-items: center; gap: 9px; min-width: 0; }
-.who b { display: block; font-size: 12.5px; font-weight: 600; line-height: 1.2; white-space: nowrap; }
-.who small { display: block; font-size: 10px; color: var(--mute); white-space: nowrap; }
+.ig-who { display: flex; align-items: center; gap: 9px; min-width: 0; }
+.ig-who b { display: block; font-size: 12.5px; font-weight: 600; line-height: 1.2; white-space: nowrap; }
+.ig-who small { display: block; font-size: 10px; color: var(--mute); white-space: nowrap; }
 .av { display: grid; place-items: center; flex: none; width: 30px; height: 30px; border-radius: 9px; background: var(--o); color: #fff; font: 600 10.5px/1 'Poppins', sans-serif; font-style: normal; }
 .av.dk { border-radius: 50%; background: var(--navy); box-shadow: 0 0 0 2px #fff, 0 0 0 3.5px var(--o); }
 .ct { font-size: 11px; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -869,15 +854,18 @@ onBeforeUnmount(() => {
 .thead.two, .trow.two { grid-template-columns: 1.3fr 1.2fr 0.8fr 0.6fr; }
 
 /* calls */
-.pills { display: flex; gap: 6px; margin: 12px 2px 0; }
-.pills span { padding: 5px 12px; border: 1px solid #e2e8f0; border-radius: 8px; background: #fff; font-size: 10.5px; font-weight: 500; color: var(--ink); }
-.pills .on { background: var(--navy); border-color: var(--navy); color: #fff; }
-.thead.calls, .trow.calls { grid-template-columns: 1.55fr 0.8fr 0.5fr 0.6fr 1.05fr; column-gap: 8px; }
-.trow.calls { padding: 8px 10px; margin-top: 5px; }
-.cp { width: fit-content; padding: 3px 9px; border-radius: 6px; font-size: 9.5px; font-weight: 600; }
-.cp.Missed { background: #fee4e2; color: #b42318; }
-.cp.Answered { background: #e8f8ee; color: #15803d; }
-.cp.Outbound { background: #e3edff; color: #1d4ed8; }
+.ig-pills { display: flex; gap: 6px; margin: 12px 2px 0; }
+.ig-pills span { padding: 5px 12px; border: 1px solid #e2e8f0; border-radius: 8px; background: #fff; font-size: 10.5px; font-weight: 500; color: var(--ink); }
+.ig-pills .on { background: var(--navy); border-color: var(--navy); color: #fff; }
+.thead.ig-calls, .trow.ig-calls { grid-template-columns: 1.55fr 0.8fr 0.5fr 0.6fr 1.05fr; column-gap: 8px; }
+.trow.ig-calls { padding: 8px 10px; margin-top: 5px; }
+.ig-cp { width: fit-content; padding: 3px 9px; border-radius: 6px; font-size: 9.5px; font-weight: 600; }
+.ig-pills em { margin-left: 4px; font-style: normal; font-size: 9px; opacity: 0.6; }
+.wa-b { display: inline-grid; place-items: center; width: 15px; height: 15px; margin-left: 6px; border-radius: 50%; background: #e6f9ee; vertical-align: -3px; }
+.wa-b svg { width: 10px; height: 10px; fill: none; stroke: #16a34a; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.ig-cp.Missed { background: #fee4e2; color: #b42318; }
+.ig-cp.Answered { background: #e8f8ee; color: #15803d; }
+.ig-cp.Outbound { background: #e3edff; color: #1d4ed8; }
 
 /* calendar */
 .cal-bar { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 14px; background: #fff; }
@@ -888,40 +876,40 @@ onBeforeUnmount(() => {
 .cal-t b { font-size: 15px; font-weight: 600; }
 .cal-t small { font-size: 10.5px; color: var(--mute); }
 .cal-act { display: flex; gap: 6px; }
-.btn { display: inline-flex; align-items: center; gap: 5px; padding: 7px 11px; border: 1px solid #e2e8f0; border-radius: 8px; background: #fff; font-style: normal; font-size: 10.5px; font-weight: 500; }
-.btn svg { width: 12px; height: 12px; }
-.btn.o { background: var(--o); border-color: var(--o); color: #fff; }
-.btn.g { box-shadow: 0 0 0 0 rgba(66, 133, 244, 0.5); }
-.sl.on .btn.g { animation: ig-gs 2.8s ease-out 1s infinite; }
+.ig-btn { display: inline-flex; align-items: center; gap: 5px; padding: 7px 11px; border: 1px solid #e2e8f0; border-radius: 8px; background: #fff; font-style: normal; font-size: 10.5px; font-weight: 500; }
+.ig-btn svg { width: 12px; height: 12px; }
+.ig-btn.o { background: var(--o); border-color: var(--o); color: #fff; }
+.ig-btn.g { box-shadow: 0 0 0 0 rgba(66, 133, 244, 0.5); }
+.sl.on .ig-btn.g { animation: ig-gs 2.8s ease-out 1s infinite; }
 @keyframes ig-gs { 0% { box-shadow: 0 0 0 0 rgba(66, 133, 244, 0.45); } 70%, 100% { box-shadow: 0 0 0 10px rgba(66, 133, 244, 0); } }
 .day { position: relative; margin-top: 10px; height: 362px; padding: 4px 0; border: 1px solid var(--line); border-radius: 14px; background: #fff; overflow: hidden; }
 .hr { height: 44px; border-top: 1px solid #f3f4f7; padding: 3px 0 0 10px; }
 .hr:first-child { border-top: 0; }
 .hr small { font-size: 9.5px; color: var(--mute); }
-.now { position: absolute; left: 52px; right: 10px; top: 121px; border-top: 1.5px solid var(--o); }
+.now { position: absolute; left: 52px; right: 10px; top: 143px; border-top: 1.5px solid var(--o); }
 .now i { position: absolute; left: -4px; top: -5px; width: 8px; height: 8px; border-radius: 50%; background: var(--o); }
-.evt { position: absolute; left: 62px; width: 300px; padding: 7px 12px; border-radius: 10px; border-left: 4px solid var(--o); background: #fff1e9; opacity: 0; translate: 14px 0; transition: opacity 0.4s, translate 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.evt { position: absolute; left: 62px; width: 300px; padding: 6px 12px; border-radius: 10px; border-left: 4px solid var(--o); background: #fff1e9; opacity: 0; translate: 14px 0; transition: opacity 0.4s, translate 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); }
 .sl.on .evt { opacity: 1; translate: 0 0; }
-.evt b { display: block; font-size: 11.5px; font-weight: 600; color: #7c2d12; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.evt small { font-size: 9.5px; color: #9a5b3c; }
-.e4 { top: 28px; height: 40px; width: 270px; transition-delay: 0.55s; }
-.e2 { top: 92px; height: 40px; transition-delay: 0.65s; }
-.e5 { left: 390px; top: 160px; height: 40px; width: 250px; background: #e8f0fe; border-left-color: #4285f4; transition-delay: 0.75s; }
+.evt b { display: block; line-height: 1.3; font-size: 11.5px; font-weight: 600; color: #7c2d12; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.evt small { display: block; margin-top: 1px; font-size: 9.5px; line-height: 1.3; color: #9a5b3c; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.e4 { top: 28px; height: 46px; width: 270px; transition-delay: 0.55s; }
+.e2 { top: 92px; height: 46px; width: 290px; transition-delay: 0.65s; }
+.e5 { left: 390px; top: 160px; height: 46px; width: 270px; background: #e8f0fe; border-left-color: #4285f4; transition-delay: 0.75s; }
 .e5 b { color: #1a3f8a; }
 .e5 small { color: #4a6aa8; }
-.e1 { top: 248px; height: 52px; width: 340px; background: #e8f0fe; border-left-color: #4285f4; transition-delay: 0.85s; }
+.e1 { top: 248px; height: 58px; width: 340px; background: #e8f0fe; border-left-color: #4285f4; transition-delay: 0.85s; }
 .e1 b { color: #1a3f8a; }
 .e1 small { color: #4a6aa8; }
-.e3 { top: 312px; height: 40px; width: 250px; transition-delay: 0.95s; }
-.e6 { left: 430px; top: 272px; height: 40px; width: 250px; background: #e8f0fe; border-left-color: #4285f4; transition-delay: 1.05s; }
+.e3 { top: 314px; height: 44px; width: 270px; transition-delay: 0.95s; }
+.e6 { left: 430px; top: 272px; height: 46px; width: 270px; background: #e8f0fe; border-left-color: #4285f4; transition-delay: 1.05s; }
 .e6 b { color: #1a3f8a; }
 .e6 small { color: #4a6aa8; }
 .mini-cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px 0; margin-top: 8px; padding: 7px 8px; border-radius: 12px; background: #f8fafc; font-size: 10px; text-align: center; color: var(--ink); }
 .mini-cal .dw { font-weight: 600; color: var(--navy); }
 .mini-cal span { display: grid; place-items: center; height: 17px; }
 .mini-cal .today { width: 20px; margin: 0 auto; border-radius: 50%; background: var(--o); color: #fff; font-weight: 600; }
-.mini-cal .ev { position: relative; }
-.mini-cal .ev::after { content: ''; position: absolute; bottom: 0; width: 4px; height: 4px; border-radius: 50%; background: #4285f4; }
+.mini-cal .ig-ev { position: relative; }
+.mini-cal .ig-ev::after { content: ''; position: absolute; bottom: 0; width: 4px; height: 4px; border-radius: 50%; background: #4285f4; }
 
 /* floating toasts: hang over the bottom-right edge of the CRM window */
 .toast { position: absolute; z-index: 5; display: flex; align-items: center; gap: 11px; padding: 12px 15px; border-radius: 14px; font-size: 11px; }
@@ -946,7 +934,8 @@ onBeforeUnmount(() => {
 .compact .rc { display: none; }
 .compact .thead.web, .compact .trow.web { grid-template-columns: 1.3fr 1.4fr 1.15fr 0.7fr; }
 .compact .thead.two, .compact .trow.two { grid-template-columns: 1.3fr 1.2fr 0.8fr; }
-.compact .e5, .compact .e6 { left: 400px; width: 240px; }
+.compact .e5, .compact .e6 { left: 380px; width: 260px; }
+.compact .e1 { width: 306px; }
 .compact .t1, .compact .t3 { left: 380px; }
 .compact .t2, .compact .t4 { left: 420px; }
 
@@ -973,8 +962,11 @@ onBeforeUnmount(() => {
 .ig-prev { left: -10px; }
 .ig-next { right: -10px; }
 .ig-dots { display: flex; justify-content: center; gap: 6px; margin-top: 18px; }
-.ig-dot { width: 8px; height: 8px; border-radius: 8px; background: #cfcbd0; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s; }
-.ig-dot.on { width: 28px; background: var(--o); }
+.ig-dot { position: relative; width: 8px; height: 8px; padding: 0; border: 0; border-radius: 8px; background: #cfcbd0; cursor: pointer; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s; }
+.ig-dot::after { content: ''; position: absolute; inset: -10px -4px; } /* bigger tap target */
+.ig-dot:hover { background: #f5a07f; }
+.ig-dot:focus-visible { outline: 2px solid var(--o); outline-offset: 3px; }
+.ig-dot.on { width: 28px; background: var(--o); cursor: default; }
 
 /* reveal */
 .ig-head, .ig-tabs, .ig-stage { opacity: 0; transform: translateY(16px); transition: opacity 0.7s ease, transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
@@ -984,9 +976,6 @@ onBeforeUnmount(() => {
 
 /* ============ responsive ============ */
 @media (max-width: 860px) {
-  .ig-head { flex-direction: column; gap: 14px; }
-  .ig-hr { align-items: flex-start; padding-top: 0; flex-direction: column-reverse; gap: 16px; }
-  .ig-sub { text-align: left; }
   .ig-tabs { justify-content: flex-start; flex-wrap: nowrap; overflow-x: auto; margin-inline: calc(clamp(16px, 4vw, 64px) * -1); padding: 0 clamp(16px, 4vw, 64px) 4px; scrollbar-width: none; }
   .ig-tabs::-webkit-scrollbar { display: none; }
   .ig-tab { flex: none; }
