@@ -223,7 +223,7 @@ const icons = {
 }
 
 /* metric: [big value, label, small caption] */
-const cardPalette = 'radial-gradient(82% 76% at 88% 4%,rgba(255,143,38,.98) 0%,rgba(239,91,21,.84) 42%,transparent 78%),radial-gradient(88% 78% at 2% 92%,#10385f 0%,#1b5275 42%,transparent 79%),radial-gradient(55% 42% at 54% 72%,rgba(220,226,228,.88) 0%,rgba(180,190,193,.46) 48%,transparent 78%),linear-gradient(135deg,#78311f 0%,#b95735 38%,#7a8b92 100%)'
+const cardPalette = 'radial-gradient(70% 60% at 100% 100%,#0b9ab8 0%,rgba(11,154,184,.45) 45%,transparent 75%),linear-gradient(155deg,#031634 0%,#052848 45%,#06416a 78%,#0a6f93 100%)'
 
 const items = [
   {
@@ -1314,4 +1314,15 @@ onBeforeUnmount(() => {
     transform: none;
   }
 }
+
+/* ===== palette: Azul (deep navy → teal) ===== */
+.s5-scrim {
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(11, 154, 184, 0.22), transparent 60%),
+    linear-gradient(180deg, rgba(3, 22, 52, 0.1), transparent 50%, rgba(2, 14, 34, 0.24)) !important;
+}
+.s5-stage {
+  box-shadow: 0 30px 64px -38px rgba(3, 40, 72, 0.7), 0 1px 0 #fff inset;
+}
+
 </style>

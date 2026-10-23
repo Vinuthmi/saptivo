@@ -463,7 +463,7 @@ const icons = {
 
    metric: [big value, label, small caption]                                              */
 
-const cardPalette = 'radial-gradient(82% 76% at 88% 4%,rgba(255,143,38,.98) 0%,rgba(239,91,21,.84) 42%,transparent 78%),radial-gradient(88% 78% at 2% 92%,#10385f 0%,#1b5275 42%,transparent 79%),radial-gradient(55% 42% at 54% 72%,rgba(220,226,228,.88) 0%,rgba(180,190,193,.46) 48%,transparent 78%),linear-gradient(135deg,#78311f 0%,#b95735 38%,#7a8b92 100%)'
+const cardPalette = 'linear-gradient(172deg,#ff9a1f 0%,#ff7a2e 30%,#fb5a38 58%,#ee3340 82%,#d92a47 100%)'
 
 const items = [
 
@@ -3030,6 +3030,22 @@ onBeforeUnmount(() => {
 
   }
 
+}
+
+
+/* ===== palette: Naranja (warm orange → red) ===== */
+.s4-scrim {
+  background:
+    linear-gradient(180deg, rgba(120, 28, 0, 0.26), transparent 42%, rgba(110, 0, 24, 0.2)) !important;
+}
+.s4-ct,
+.s4-cd,
+.s4-pts li {
+  text-shadow: 0 1px 14px rgba(120, 30, 0, 0.3);
+}
+.s4-card {
+  border-color: rgba(255, 255, 255, 0.45);
+  box-shadow: 0 28px 54px -34px rgba(217, 42, 71, 0.55), 0 1px 0 rgba(255, 255, 255, 0.4) inset;
 }
 
 </style>

@@ -245,7 +245,7 @@ const icons = {
 }
 
 /* metric: [big value, label, small caption] */
-const cardPalette = 'radial-gradient(82% 76% at 88% 4%,rgba(255,143,38,.98) 0%,rgba(239,91,21,.84) 42%,transparent 78%),radial-gradient(88% 78% at 2% 92%,#10385f 0%,#1b5275 42%,transparent 79%),radial-gradient(55% 42% at 54% 72%,rgba(220,226,228,.88) 0%,rgba(180,190,193,.46) 48%,transparent 78%),linear-gradient(135deg,#78311f 0%,#b95735 38%,#7a8b92 100%)'
+const cardPalette = 'radial-gradient(60% 55% at 96% 4%,rgba(252,222,224,.95) 0%,transparent 70%),radial-gradient(60% 50% at 6% 96%,rgba(252,236,210,.95) 0%,transparent 72%),linear-gradient(140deg,#fff7ef 0%,#fdeee6 50%,#fce9e6 100%)'
 
 const items = [
   {
@@ -1479,4 +1479,55 @@ onBeforeUnmount(() => {
     transform: none;
   }
 }
+
+/* ===== palette: Marfil (ivory) — dark ink instead of white on the light card ===== */
+.s6-stage {
+  color: var(--ink);
+  border-color: rgba(20, 21, 43, 0.08);
+  box-shadow: 0 30px 64px -40px rgba(150, 70, 30, 0.4), 0 1px 0 #fff inset;
+}
+.s6-stage::after {
+  box-shadow: inset 0 0 0 1px rgba(20, 21, 43, 0.05);
+}
+.s6-scrim {
+  background: radial-gradient(ellipse at 92% 0%, rgba(255, 196, 160, 0.3), transparent 60%) !important;
+}
+.s6-ti {
+  background: rgba(20, 21, 43, 0.05);
+  border-color: rgba(20, 21, 43, 0.12);
+}
+.s6-ti svg {
+  stroke: var(--ink);
+}
+.s6-deco {
+  stroke: var(--o2);
+}
+.s6-layer.on .s6-deco {
+  opacity: 0.2;
+}
+.s6-w1 {
+  border-color: rgba(20, 21, 43, 0.06);
+  box-shadow: 0 26px 46px -26px rgba(150, 70, 30, 0.4);
+}
+.s6-w2 {
+  background: rgba(255, 255, 255, 0.62);
+  border-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 24px 40px -28px rgba(150, 70, 30, 0.35);
+}
+.dg-k,
+.dg-l {
+  color: rgba(20, 21, 43, 0.62);
+}
+.dg-big {
+  color: var(--ink);
+}
+.dg-tags span {
+  background: rgba(20, 21, 43, 0.07);
+  color: var(--ink-2);
+}
+.dg-ic {
+  background: #fff;
+  box-shadow: 0 4px 10px -4px rgba(20, 21, 43, 0.25);
+}
+
 </style>
