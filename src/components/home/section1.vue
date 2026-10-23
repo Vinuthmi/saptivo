@@ -27,7 +27,6 @@
         >
           <span class="ti"><svg viewBox="0 0 24 24" aria-hidden="true"><path v-for="d in f.icon" :key="d" :d="d" /></svg></span>
           {{ f.tab }}
-          <i v-if="active === i && motion" class="pg" :class="{ hold: paused }" @animationend="step(1)"></i>
         </button>
       </div>
 
@@ -517,19 +516,6 @@ onBeforeUnmount(() => {
 }
 .fs-tab.on .ti {
   background: #fff;
-}
-.fs-tab .pg {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  height: 2.5px;
-  width: 100%;
-  background: var(--og);
-  transform-origin: left;
-  animation: fs-fill 6s linear forwards;
-}
-.fs-tab .pg.hold {
-  animation-play-state: paused;
 }
 .fs-tab:focus-visible {
   outline: 2px solid var(--o);
@@ -1412,10 +1398,6 @@ onBeforeUnmount(() => {
 @keyframes fs-in {
   from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: none; }
-}
-@keyframes fs-fill {
-  from { transform: scaleX(0); }
-  to { transform: scaleX(1); }
 }
 @keyframes fs-ring {
   0% { box-shadow: 0 0 0 0 rgba(242, 84, 12, 0.45); }
