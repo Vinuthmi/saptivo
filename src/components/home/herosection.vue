@@ -87,12 +87,14 @@
     </div>
 
     <div id="features" class="brands">
-      <p class="brands-title">All your work. Working as one.</p>
-      <div class="marquee">
-        <div class="track">
-          <span v-for="(f, i) in loop" :key="f + i" class="chip">{{ f }}</span>
-        </div>
-      </div>
+      <h2 class="brands-title">
+        Trusted by businesses <span class="accent-inline">across Sri Lanka</span> and beyond
+      </h2>
+      <ul class="logos">
+        <li v-for="c in clients" :key="c.name">
+          <img :src="c.src" :alt="c.name" :width="c.w" :height="c.h" :style="{ '--dw': c.dw + 'px' }" loading="lazy" draggable="false" />
+        </li>
+      </ul>
     </div>
   </section>
 </template>
@@ -190,14 +192,16 @@ const dotsC = [
   { a: 52, s: 20 }, { a: 140, s: 10 }, { a: 214, s: 30 }, { a: 322, s: 14 },
 ];
 
-const features = [
-  "Omnichannel CRM",
-  "Multi-Store Sync",
-  "Smart Quotes",
-  "Sales Analytics",
-  "3CX Call Journal",
+// Client logos live in /public/images/clients. w/h = file size, dw = display width on desktop (px).
+const clients = [
+  { name: "Tree of Life Nature Resort", src: `${import.meta.env.BASE_URL}images/clients/tree-of-life1.png`, w: 136, h: 91, dw: 116 },
+  { name: "Nilkamal", src: `${import.meta.env.BASE_URL}images/clients/nilkamal1.png`, w: 144, h: 82, dw: 132 },
+  { name: "Nastars", src: `${import.meta.env.BASE_URL}images/clients/nastars1.png`, w: 1878, h: 203, dw: 148 },
+  { name: "Be Waxed Sri Lanka", src: `${import.meta.env.BASE_URL}images/clients/bewaxed1.png`, w: 220, h: 219, dw: 68 },
+  { name: "Paint House by Nadeeka", src: `${import.meta.env.BASE_URL}images/clients/paint-house1.png`, w: 2045, h: 727, dw: 145 },
+  { name: "Tera Computers", src: `${import.meta.env.BASE_URL}images/clients/tera1.png`, w: 447, h: 447, dw: 68 },
+  { name: "Lanka Grills", src: `${import.meta.env.BASE_URL}images/clients/lanka-grills1.png`, w: 1317, h: 783, dw: 100 },
 ];
-const loop = computed(() => [...features, ...features, ...features, ...features]);
 const copyOpacity = computed(() => Math.min(Math.max((progress.value - 0.35) / 0.4, 0), 1));
 const copyShift = computed(() => (1 - copyOpacity.value) * 36);
 
@@ -416,24 +420,38 @@ h1 {
 .sound svg { width: 21px; height: 21px; }
 .play svg path[d^="M8 5l"] { fill: currentColor; }
 
-/* ---------- marquee ---------- */
-.brands { position: relative; margin-top: 64px; }
-.brands-title { margin: 0 0 22px; font-size: 14px; font-weight: 500; color: var(--muted); }
-.marquee {
-  overflow: hidden;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+/* ---------- client logos ---------- */
+.brands { position: relative; width: min(1240px, calc(100% - 40px)); margin: 72px auto 0; }
+.brands-eyebrow {
+  display: inline-block; padding: 6px 14px; border: 1px solid #ffe0cf; border-radius: 999px;
+  background: #fff1e8; color: #c2410c; font-size: 12px; font-weight: 600; letter-spacing: 0.04em;
 }
-.track { display: flex; width: max-content; animation: slide 36s linear infinite; }
-.marquee:hover .track { animation-play-state: paused; }
-.chip {
-  display: inline-flex; align-items: center; gap: 16px; padding: 0 34px;
-  font-size: 22px; font-weight: 600; letter-spacing: -0.02em; color: #34363d; white-space: nowrap;
+.brands-title {
+  max-width: 760px; margin: 0 auto;
+  font-size: clamp(26px, 2.8vw, 40px); font-weight: 500; line-height: 1.15; letter-spacing: -0.045em; color: #0b0c0e;
+  text-wrap: balance;
 }
-.chip::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--orange); }
+.accent-inline {
+  background: linear-gradient(100deg, #ff9a3d 0%, #ff6a1a 45%, #f2540c 100%);
+  background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.logos {
+  display: flex; justify-content: center; align-items: stretch;
+  margin: 40px 0 0; padding: 0; list-style: none;
+}
+.logos li {
+  flex: 1 1 0; min-width: 0; display: grid; place-items: center;
+  height: 88px; padding: 0 clamp(12px, 1.4vw, 20px);
+}
+.logos li + li { border-left: 1px solid #e6e6ea; }
+.logos img {
+  display: block; width: var(--dw); max-width: 100%; height: auto; object-fit: contain;
+  user-select: none;
+  transition: filter 0.3s ease, transform 0.3s ease;
+}
+.logos li:hover img { filter: brightness(0); transform: scale(1.04); }
 
 @keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
-@keyframes slide { to { transform: translateX(-50%); } }
 
 /* ---------- responsive ---------- */
 @media (max-width: 900px) {
@@ -451,15 +469,23 @@ h1 {
   .video-copy { bottom: 84px; padding: 0 16px; }
   .play { opacity: 1; width: 58px; height: 58px; border-radius: 17px; }
   .sound { right: 14px; bottom: 14px; width: 42px; height: 42px; border-radius: 12px; }
-  .brands { margin-top: 44px; }
-  .chip { padding: 0 22px; gap: 12px; font-size: 17px; }
+  .brands { margin-top: 48px; }
+  .logos { margin-top: 26px; }
+}
+@media (max-width: 900px) {
+  .logos { flex-wrap: wrap; row-gap: 6px; }
+  .logos li { flex: 0 0 33.333%; height: 76px; border-left: 0 !important; }
+  .logos img { width: calc(var(--dw) * 0.85); }
+}
+@media (max-width: 480px) {
+  .logos li { flex-basis: 50%; }
+  .logos img { width: calc(var(--dw) * 0.78); }
 }
 @media (max-width: 380px) {
   .actions { flex-direction: column; align-items: stretch; }
 }
 @media (prefers-reduced-motion: reduce) {
   h1, .lead, .actions { animation: none; }
-  .track { animation: none; }
   .stage { height: auto; padding-top: var(--top0); }
   .orbit { height: calc(var(--top0) + 160px); }
   .sticky { position: relative; height: auto; display: block; }
