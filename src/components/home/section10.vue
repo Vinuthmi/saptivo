@@ -176,10 +176,11 @@ const textW = [330, 310, 340, 320, 310, 330]
 // tile falls back to a gradient. Each photo tile carries a small floating UI chip.
 const photos = [
   'https://images.unsplash.com/photo-1678227547316-fb79e35b085d?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D',
+  `${import.meta.env.BASE_URL}images/marquee-tablet-dashboard.png`,
 ]
 const photoMeta = [
   { w: 380, pos: '50% 30%', side: 'bl', pill: ['New lead captured', 'Kasun Perera · WhatsApp', 'M4 12.500 9 17.500 20 6.500'] },
-  { w: 420, pos: '25% 50%', side: 'br', pill: ['Quote accepted', 'QT-2026-000010 · LKR 18,500', 'M4 12.500 9 17.500 20 6.500'] },
+  { w: 420, pos: '50% 50%', side: 'br', pill: ['Quote accepted', 'QT-2026-000010 · LKR 18,500', 'M4 12.500 9 17.500 20 6.500'] },
   { w: 360, pos: '78% 40%', side: 'bl', pill: ['Deal moved to Won', 'Closed this week', 'M4 12.500 9 17.500 20 6.500'] },
 ]
 const photoTile = (n) => ({
