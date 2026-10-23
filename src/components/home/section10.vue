@@ -11,9 +11,18 @@
     <div class="cm-viewport">
       <div class="cm-track">
         <div v-for="n in 2" :key="n" class="cm-set" :aria-hidden="n === 2 ? 'true' : undefined">
-          <article v-for="t in tiles" :key="t.key" class="cm-tile" :class="t.kind === 'vis' ? ['cm-vis', t.bg] : 'cm-txt'" :style="{ '--w': t.w, '--k': t.k }">
+          <article v-for="t in tiles" :key="t.key" class="cm-tile" :class="t.kind === 'vis' ? ['cm-vis', t.bg] : t.kind === 'photo' ? 'cm-photo' : 'cm-txt'" :style="{ '--w': t.w, '--k': t.k }">
+            <!-- ============ photo tile ============ -->
+            <template v-if="t.kind === 'photo'">
+              <img class="cm-img" :src="t.src" :style="{ objectPosition: t.pos }" alt="" loading="lazy" draggable="false" @error="$event.target.style.display = 'none'" />
+              <div class="cm-pill lt ph" :class="t.side" aria-hidden="true">
+                <i class="ac"><svg viewBox="0 0 24 24"><path :d="t.pill[2]" /></svg></i>
+                <span><b>{{ t.pill[0] }}</b><small>{{ t.pill[1] }}</small></span>
+              </div>
+            </template>
+
             <!-- ============ visual tile ============ -->
-            <div v-if="t.kind === 'vis'" class="cm-st" :class="t.st" aria-hidden="true">
+            <div v-else-if="t.kind === 'vis'" class="cm-st" :class="t.st" aria-hidden="true">
               <!-- pipeline -->
               <template v-if="t.id === 'pipeline'">
                 <div class="cm-kb">
@@ -116,7 +125,7 @@
  *   Scheduled Tasks, Follow-Up Reminders & Overdue Deal Alerts · Instant PDF Quotations & Proposals ·
  *   Lead Recycle Bin & Anti-Loss Data Protection · Mobile Sales & Field Rep Companion
  * Header = eyebrow + heading only (no sub-paragraph).
- * Everything is CSS-only mock UI (no image assets needed). The set is rendered twice (second copy aria-hidden)
+ * Mock UIs are CSS-only; photo tiles use the `photos` list below. The set is rendered twice (second copy aria-hidden)
  * and translated by -50% for a seamless loop; it pauses on hover / focus and respects reduced motion.
  */
 // each feature = one visual tile + one text tile (w = tile width at desktop size, k = zoom of the mock UI)
@@ -160,10 +169,34 @@ const features = [
 ]
 // text-tile widths vary a little, like the reference
 const textW = [330, 310, 340, 320, 310, 330]
-const tiles = features.flatMap((f, i) => [
-  { ...f, kind: 'vis', key: f.id + '-v' },
-  { ...f, kind: 'txt', key: f.id + '-t', w: textW[i] },
-])
+
+// ---- photo tiles ------------------------------------------------------------------------------
+// Real photos between the feature pairs (like the reference). Add more URLs to this list for variety;
+// with a single photo the tiles simply reuse it with a different crop. If an image fails to load the
+// tile falls back to a gradient. Each photo tile carries a small floating UI chip.
+const photos = [
+  'https://images.unsplash.com/photo-1678227547316-fb79e35b085d?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D',
+]
+const photoMeta = [
+  { w: 380, pos: '50% 30%', side: 'bl', pill: ['New lead captured', 'Kasun Perera · WhatsApp', 'M4 12.500 9 17.500 20 6.500'] },
+  { w: 420, pos: '25% 50%', side: 'br', pill: ['Quote accepted', 'QT-2026-000010 · LKR 18,500', 'M4 12.500 9 17.500 20 6.500'] },
+  { w: 360, pos: '78% 40%', side: 'bl', pill: ['Deal moved to Won', 'Closed this week', 'M4 12.500 9 17.500 20 6.500'] },
+]
+const photoTile = (n) => ({
+  ...photoMeta[n % photoMeta.length],
+  kind: 'photo',
+  key: 'photo-' + n,
+  src: photos[n % photos.length],
+})
+
+// order: [feature pair] [feature pair] [photo] …  → 6 features, 3 photos
+const tiles = features.flatMap((f, i) => {
+  const pair = [
+    { ...f, kind: 'vis', key: f.id + '-v' },
+    { ...f, kind: 'txt', key: f.id + '-t', w: textW[i] },
+  ]
+  return i % 2 === 1 ? [...pair, photoTile((i - 1) / 2)] : pair
+})
 
 const kanban = [
   { n: 'Draft', k: 'd', cards: [['QT-…0010', 'LKR 18.5k'], ['QT-…0015', 'LKR 8.4k']] },
@@ -186,7 +219,7 @@ const visits = [
 .cm {
   --cm-ink: #14152b;
   --cm-mute: #6f6a63;
-  --cm-bg: #fff;
+  --cm-bg: #f8f6f1;
   --cm-card: #fff;
   --cm-line: rgba(20, 21, 43, 0.08);
   --cm-o: #f2540c;
@@ -539,6 +572,39 @@ const visits = [
 }
 .cm-vis.coral {
   background: linear-gradient(165deg, #d4503c 0%, #e5826a 55%, #f1c9b3 100%);
+}
+
+/* ---------- photo tiles ---------- */
+.cm-photo {
+  background: linear-gradient(160deg, #24456f, #e5762c); /* fallback while / if the photo is unavailable */
+}
+.cm-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.cm-photo:hover .cm-img {
+  transform: scale(1.04);
+}
+.cm-pill.ph {
+  bottom: calc(18px * var(--s));
+  padding-right: 18px;
+  z-index: 1;
+}
+.cm-pill.ph.bl {
+  left: calc(18px * var(--s));
+}
+.cm-pill.ph.br {
+  right: calc(18px * var(--s));
+}
+.cm-pill.ph b {
+  font-size: 12.500px;
+}
+.cm-pill.ph small {
+  font-size: 10.500px;
 }
 
 /* floating pills */

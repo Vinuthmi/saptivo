@@ -329,7 +329,7 @@ onBeforeUnmount(() => { clearInterval(tick); chatTimers.forEach(clearTimeout); c
 .eng-eyebrow::before { content: ''; width: 10px; height: 10px; background: var(--a); }
 .eng-head h2 { margin: 0; font-family: Inter, sans-serif; font-size: max(30px, 3.5vw); font-weight: var(--fw); line-height: 1.08; letter-spacing: -.04em; }
 .eng-head h2 span { color: var(--a); }
-.eng-sub { justify-self: end; max-width: 380px; margin: 0; color: var(--mut); font-size: 16px; line-height: 1.7; }
+.eng-sub { justify-self: end; max-width: 380px; margin: 0; color: #475569; font-family: 'Inter Display', Inter, system-ui, sans-serif; font-size: clamp(15px, 1vw, 18px); font-weight: 500; line-height: 1.45; letter-spacing: -0.02em; }
 
 /* Layout */
 .eng-grid { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: clamp(20px, 3vw, 48px); align-items: start; }

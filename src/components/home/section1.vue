@@ -457,7 +457,7 @@ onBeforeUnmount(() => {
   margin: clamp(6px, 1.2vh, 12px) auto 0;
   max-width: 600px;
   font-family: 'Inter Display', Inter, system-ui, sans-serif;
-  font-size: clamp(15px, 1.25vw, 18px);
+  font-size: clamp(15px, 1vw, 18px);
   font-weight: 500;
   line-height: 1.45;
   letter-spacing: -0.02em;

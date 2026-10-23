@@ -196,9 +196,12 @@ const partnerLinks = [
 .cta-sub {
   max-width: 560px;
   margin: 22px auto 32px;
-  color: #6b6c72;
-  font-size: 15px;
-  line-height: 1.9;
+  color: #475569;
+  font-family: 'Inter Display', Inter, system-ui, sans-serif;
+  font-size: clamp(15px, 1vw, 18px);
+  font-weight: 500;
+  line-height: 1.45;
+  letter-spacing: -0.02em;
 }
 .cta-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 14px; }
 .btn {

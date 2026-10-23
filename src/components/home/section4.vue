@@ -606,7 +606,7 @@ onBeforeUnmount(() => {
 }
 .ig-btn:hover { background: var(--navy); color: #fff; transform: translateY(-1px); box-shadow: 0 8px 20px rgba(15, 23, 42, 0.18); }
 .ig-btn:focus-visible, .ig-nav:focus-visible, .ig-tab:focus-visible { outline: 2px solid var(--o); outline-offset: 3px; }
-.ig-sub { margin: 0; max-width: 480px; text-align: right; font-family: 'Inter Display', Inter, system-ui, sans-serif; font-size: 24px; font-weight: 600; line-height: 34px; letter-spacing: -0.72px; color: var(--ink); }
+.ig-sub { margin: 0; max-width: 480px; text-align: right; font-family: 'Inter Display', Inter, system-ui, sans-serif; font-size: clamp(15px, 1vw, 18px); font-weight: 500; line-height: 1.45; letter-spacing: -0.02em; color: #475569; }
 
 /* ============ tabs ============ */
 .ig-tabs {

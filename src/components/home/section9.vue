@@ -483,11 +483,11 @@ onMounted(() => {
   max-width: 520px;
   margin: 22px 0 0;
   font-family: 'Inter Display', Inter, system-ui, sans-serif;
-  font-size: 24px;
-  font-weight: 600;
-  line-height: 34px;
-  letter-spacing: -0.72px;
-  color: var(--muted);
+  font-size: clamp(15px, 1vw, 18px);
+  font-weight: 500;
+  line-height: 1.45;
+  letter-spacing: -0.02em;
+  color: #475569;
 }
 .hx-cta {
   display: flex;

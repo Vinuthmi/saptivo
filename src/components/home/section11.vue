@@ -380,9 +380,12 @@ onBeforeUnmount(() => io?.disconnect());
   max-width: 390px;
   margin: 20px 0 0;
 
-  color: #747680;
-  font-size: clamp(14px, 1.15vw, 17px);
-  line-height: 1.8;
+  color: #475569;
+  font-family: 'Inter Display', Inter, system-ui, sans-serif;
+  font-size: clamp(15px, 1vw, 18px);
+  font-weight: 500;
+  line-height: 1.45;
+  letter-spacing: -0.02em;
 }
 
 /* CTA button */
@@ -604,7 +607,6 @@ onBeforeUnmount(() => io?.disconnect());
 
   .copy p {
     margin-top: 14px;
-    font-size: 14px;
   }
 
   .btn {
