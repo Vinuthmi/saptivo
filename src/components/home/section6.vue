@@ -39,10 +39,6 @@
     </svg>
 
     <header class="s4-security-intro">
-      <span class="s4-eyebrow">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4l1.6 4.4L15 10l-4.4 1.6L9 16l-1.6-4.4L3 10l4.4-1.6zM17.5 12l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9zM17 3.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7z" /></svg>
-        <span>Enterprise-Grade Security</span>
-      </span>
       <h2 id="s4-security-title" class="s4-security-title">
         Your data is protected. <span>Period.</span>
       </h2>
@@ -59,9 +55,7 @@
 
       <header class="s4-head">
 
-        <span class="s4-eyebrow">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4l1.6 4.4L15 10l-4.4 1.6L9 16l-1.6-4.4L3 10l4.4-1.6zM17.5 12l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9zM17 3.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z" /></svg>
-        </span>
+      
 
         <h2 id="s4-title" class="s4-title">
 
@@ -972,16 +966,17 @@ onBeforeUnmount(() => {
 .s4-security-title {
 
   margin: 18px 0 0;
+  padding-bottom: 0.2em;
 
   font-family: 'Inter Display', Inter, system-ui, sans-serif;
 
-  font-size: 3.5vw;
+  font-size: clamp(46px, 3.5vw, 104px);
 
   font-weight: 500;
 
-  line-height: 1.16;
+  line-height: 1.12;
 
-  letter-spacing: -0.05em;
+  letter-spacing: -0.06em;
 
   color: #0f172a;
 
@@ -1101,77 +1096,11 @@ onBeforeUnmount(() => {
 
 }
 
-.s4-eyebrow {
 
-  display: inline-flex;
 
-  align-items: center;
 
-  gap: 8px;
 
-  padding: 8px 15px 8px 11px;
 
-  border-radius: 999px;
-
-  border: 1.5px solid transparent;
-
-  background:
-    linear-gradient(#fff, #fff) padding-box,
-    linear-gradient(90deg, #ff9a3d, #e0407a) border-box;
-
-  font-size: 13.5px;
-
-  font-weight: 500;
-
-  text-decoration: none;
-
-  transition: transform 0.4s var(--ease), box-shadow 0.4s;
-
-}
-
-.s4-head > .s4-eyebrow {
-
-  display: none;
-
-}
-
-.s4-eyebrow span {
-
-  background: linear-gradient(90deg, #f2540c, #d6336c);
-
-  -webkit-background-clip: text;
-
-  background-clip: text;
-
-  color: transparent;
-
-}
-
-.s4-eyebrow svg {
-
-  width: 18px;
-
-  height: 18px;
-
-  fill: none;
-
-  stroke: #f2540c;
-
-  stroke-width: 1.7;
-
-  stroke-linejoin: round;
-
-  stroke-linecap: round;
-
-}
-
-.s4-eyebrow:hover {
-
-  transform: translateY(-2px);
-
-  box-shadow: 0 14px 24px -14px rgba(242, 84, 12, 0.6);
-
-}
 
 .s4-title {
 

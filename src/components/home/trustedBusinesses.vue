@@ -41,11 +41,11 @@ const clients = [
 .trusted-brands-title {
   max-width: 760px;
   margin: 0 auto;
-  color: #0b0c0e;
-  font-size: clamp(26px, 2.8vw, 40px);
+  color: #0f172a;
+  font-size: clamp(46px, 3.5vw, 104px);
   font-weight: 500;
-  line-height: 1.15;
-  letter-spacing: -0.045em;
+  line-height: 1.12;
+  letter-spacing: -0.06em;
   text-align: center;
   text-wrap: balance;
 }

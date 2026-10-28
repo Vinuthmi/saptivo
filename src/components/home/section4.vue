@@ -9,9 +9,7 @@
     <div class="ig-wrap">
       <!-- ============ header ============ -->
       <header class="ig-head">
-        <span class="ig-logo" aria-hidden="true">
-          <svg width="21" height="21" viewBox="0 0 24 24"><path d="m12 3 9 4.6-9 4.6-9-4.6z" /><path d="m3 12 9 4.6 9-4.6" /><path d="m3 16.4 9 4.6 9-4.6" /></svg>
-        </span>
+        
         <h2 id="ig-title" class="ig-title">
           Built-in integrations that work for you <em>24/7.</em>
         </h2>
@@ -578,18 +576,20 @@ onBeforeUnmount(() => {
   box-shadow: 0 4px 14px rgba(15, 23, 42, 0.07);
   margin-bottom: 14px;
 }
-.ig-logo svg { width: 21px; height: 21px; fill: none; stroke: var(--o); stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+
 .ig-title {
   margin: 0 auto;
+  padding-bottom: 0.2em;
   max-width: 760px;
   text-wrap: balance;
   font-family: 'Inter Display', Inter, system-ui, sans-serif;
-  font-size: 3.5vw;
-  line-height: 1.15;
+  font-size: clamp(46px, 3.5vw, 104px);
+  color: #0f172a;
+  line-height: 1.12;
   font-weight: 500;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.06em;
 }
-.ig-title em { font-style: normal; color: var(--o); white-space: nowrap; }
+.ig-title em { font-style: normal; background: linear-gradient(100deg, #ff9a3d 0%, #ff6a1a 45%, #f2540c 100%); -webkit-background-clip: text; background-clip: text; color: transparent; white-space: nowrap; }
 .ig-nav:focus-visible, .ig-tab:focus-visible { outline: 2px solid var(--o); outline-offset: 3px; }
 .ig-sub { margin: 16px auto 0; max-width: 640px; text-align: center; font-family: 'Inter Display', Inter, system-ui, sans-serif; font-size: clamp(15px, 1vw, 18px); font-weight: 500; line-height: 1.45; letter-spacing: -0.02em; color: #475569; }
 

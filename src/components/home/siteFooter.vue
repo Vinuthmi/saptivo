@@ -154,7 +154,7 @@ const partnerLinks = [
   --radius: 340px;
   position: relative;
   padding: 0 clamp(16px, 6vw, 88px) 40px;
-  background: #f2f1ee;
+  background: #fff;
   color: #17191d;
   font-family: 'Inter', 'Poppins', Arial, sans-serif;
   overflow: hidden;
@@ -162,10 +162,10 @@ const partnerLinks = [
 .site-footer::before {
   content: '';
   position: absolute;
-  top: -120px; left: 50%;
-  width: 900px; height: 500px;
+  top: 40px; left: 50%;
+  width: 1000px; height: 560px;
   transform: translateX(-50%);
-  background: radial-gradient(closest-side, rgba(240, 100, 43, 0.18), transparent);
+  background: radial-gradient(closest-side, rgba(240, 100, 43, 0.14), rgba(240, 100, 43, 0.05) 60%, transparent);
   pointer-events: none;
 }
 
@@ -174,20 +174,20 @@ const partnerLinks = [
   position: relative;
   max-width: 1300px;
   margin: 0 auto;
-  padding-top: 90px;
+  padding-top: clamp(110px, 12vw, 170px);
   text-align: center;
 }
 .cta-title {
   margin: 0;
-  color: #17191d;
-  font-size: clamp(34px, 3.5vw, 62px);
-  font-weight: 600;
-  line-height: 1.1;
-  letter-spacing: -0.035em;
+  color: #0f172a;
+  font-size: clamp(46px, 3.5vw, 104px);
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -0.06em;
 }
 .grad {
-  display: block;
-  background: linear-gradient(90deg, #ffa24c 0%, #f47c30 45%, #f0642b 100%);
+  
+  background: linear-gradient(100deg, #ff9a3d 0%, #ff6a1a 45%, #f2540c 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;

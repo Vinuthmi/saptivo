@@ -154,7 +154,6 @@ onBeforeUnmount(() => { clearInterval(tick); chatTimers.forEach(clearTimeout); c
   <section id="workflow" class="eng" aria-labelledby="eng-h">
     <div class="eng-wrap">
       <header class="eng-head">
-        <p class="eng-eyebrow">Core System Engines</p>
         <h2 id="eng-h">Engineered for your enterprise.<span> Built in.</span></h2>
         <p class="eng-sub">Beyond basic POS & CRM — discover the specialized controllers and automated engines powering your entire business.</p>
       </header>
@@ -325,10 +324,9 @@ onBeforeUnmount(() => { clearInterval(tick); chatTimers.forEach(clearTimeout); c
 
 /* Heading */
 .eng-head { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 22px 60px; align-items: end; margin-bottom: clamp(32px, 4vw, 64px); }
-.eng-eyebrow { grid-column: 1 / -1; display: flex; align-items: center; gap: 10px; margin: 0; font: 600 12px Poppins, sans-serif; letter-spacing: .16em; text-transform: uppercase; }
-.eng-eyebrow::before { content: ''; width: 10px; height: 10px; background: var(--a); }
-.eng-head h2 { margin: 0; font-family: Inter, sans-serif; font-size: max(30px, 3.5vw); font-weight: var(--fw); line-height: 1.08; letter-spacing: -.04em; }
-.eng-head h2 span { color: var(--a); }
+
+.eng-head h2 { margin: 0; font-family: Inter, sans-serif; font-size: clamp(46px, 3.5vw, 104px); color: #0f172a; font-weight: 500 ; line-height: 1.12; letter-spacing: -.06em; }
+.eng-head h2 span { background: linear-gradient(100deg, #ff9a3d 0%, #ff6a1a 45%, #f2540c 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .eng-sub { justify-self: end; max-width: 380px; margin: 0; color: #475569; font-family: 'Inter Display', Inter, system-ui, sans-serif; font-size: clamp(15px, 1vw, 18px); font-weight: 500; line-height: 1.45; letter-spacing: -0.02em; }
 
 /* Layout */

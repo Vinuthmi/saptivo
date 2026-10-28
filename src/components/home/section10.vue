@@ -1,10 +1,7 @@
 <template>
   <section class="cm" aria-labelledby="cm-title">
     <header class="cm-head">
-      <span class="cm-eyebrow">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 3.500 11.800 8.200 16.500 10 11.800 11.800 10 16.500 8.200 11.800 3.500 10 8.200 8.200Z" /><path d="M18 14l.9 2.100L21 17l-2.100.9L18 20l-.9-2.100L15 17l2.100-.9Z" /><path d="M18.500 3.500l.6 1.400 1.400.6-1.400.6-.6 1.400-.6-1.400-1.400-.6 1.400-.6Z" /></svg>
-        Unified CRM Ecosystem
-      </span>
+    
       <h2 id="cm-title" class="cm-title">All your leads, customer conversations &amp; deals in <span class="nb">one place.</span></h2>
     </header>
 
@@ -220,7 +217,7 @@ const visits = [
 .cm {
   --cm-ink: #14152b;
   --cm-mute: #6f6a63;
-  --cm-bg: #f8f6f1;
+  --cm-bg: #fff;
   --cm-card: #fff;
   --cm-line: rgba(20, 21, 43, 0.08);
   --cm-o: #f2540c;
@@ -276,41 +273,21 @@ const visits = [
   padding: 0 clamp(16px, 4vw, 48px) clamp(28px, 4vw, 52px);
   text-align: center;
 }
-.cm-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 18px;
-  border: 1px solid transparent;
-  border-radius: 999px;
-  background: linear-gradient(#f8f6f1, #f8f6f1) padding-box, linear-gradient(90deg, #ff9a3d, #e5336b) border-box;
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 0.01em;
-  color: #e2492b;
-}
-.cm-eyebrow svg {
-  width: 16px;
-  height: 16px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.800;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
+
 .cm-title {
   max-width: 980px;
-  margin: 22px 0 0;
+  margin: 0;
+  padding-bottom: 0.4em;
   color: #0f172a;
   font-family: 'Inter Display', Inter, system-ui, sans-serif;
-  font-size: clamp(30px, 4.4vw, 62px);
+  font-size: clamp(46px, 3.5vw, 104px);
   font-weight: 500;
   line-height: 1.12;
-  letter-spacing: -0.05em;
+  letter-spacing: -0.06em;
 }
 .cm-title span {
   white-space: nowrap;
-  background: linear-gradient(100deg, #ff9a3d 0%, #ff6a1a 45%, #f2540c 100%);
+   background: linear-gradient(100deg, #ff9a3d 0%, #ff6a1a 45%, #f2540c 100%);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;

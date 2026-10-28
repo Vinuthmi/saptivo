@@ -279,7 +279,7 @@ onBeforeUnmount(() => {
   padding: 112px 0 28px;
 }
 h1 {
-  margin: 0; font-weight: 500; line-height: 0.98; letter-spacing: -0.06em; color: #0b0c0e;
+  margin: 0; font-weight: 500; line-height: 1.12; letter-spacing: -0.06em; color: #0f172a;;
   font-size: var(--title);
   animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }

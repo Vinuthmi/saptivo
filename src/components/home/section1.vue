@@ -6,7 +6,7 @@
           Everything you need to
           <span>grow &amp; scale.</span>
         </h2>
-        <p>Customer relationships, multi-store sync, and automated sales in one platform.</p>
+        
       </header>
 
       <div class="fs-tabs" role="tablist" aria-label="Product features">
@@ -435,12 +435,13 @@ onBeforeUnmount(() => {
 .fs-title {
   max-width: 900px;
   margin: 0 auto;
+  padding-bottom: 0.4em;
   color: #0f172a;
   font-family: 'Inter Display', Inter, system-ui, sans-serif;
-  font-size: clamp(28px, min(3.4vw, 5.2vh), 48px);
+  font-size: clamp(46px, 3.5vw, 104px);
   font-weight: 500;
   line-height: 1.12;
-  letter-spacing: -0.05em;
+  letter-spacing: -0.06em;
 }
 .fs-title span {
   display: block;

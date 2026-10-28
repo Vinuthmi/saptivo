@@ -25,12 +25,9 @@
         </a>
 
         <div class="copy">
-          <span class="eyebrow">
-            <span class="dot"></span>
-            YOUR BUSINESS, SIMPLIFIED
-          </span>
+          
 
-          <h2 id="cta-title">Ready to get started?</h2>
+          <h2 id="cta-title">Ready to get <span>started?</span></h2>
 
           <p>Download Nexa CRM for free. No credit card required.</p>
 
@@ -242,9 +239,7 @@ onBeforeUnmount(() => io?.disconnect());
   border-radius: clamp(24px, 2.5vw, 42px)
     clamp(24px, 2.5vw, 42px) 0 0;
 
-  box-shadow:
-    0 -10px 45px rgba(255, 99, 56, 0.05),
-    0 20px 70px rgba(0, 0, 0, 0.045);
+  box-shadow: 0 -10px 45px rgba(255, 99, 56, 0.05);
 
   opacity: 0;
   transform: translateY(35px);
@@ -369,11 +364,22 @@ onBeforeUnmount(() => io?.disconnect());
   max-width: 570px;
   margin: 0;
 
-  color: #171717;
-  font-size: clamp(38px, 4vw, 68px);
-  font-weight: 600;
-  line-height: 1.02;
-  letter-spacing: -0.075em;
+  color: #0f172a;
+  font-family: "Inter Display", Inter, system-ui, sans-serif;
+  font-size: clamp(46px, 4vw, 76px);
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -0.06em;
+}
+
+.copy h2 span {
+  /* negative letter-spacing shrinks the last glyph's box, so the clipped gradient cut off the "?" */
+  padding: 0 0.12em 0.1em 0;
+  margin-right: -0.12em;
+  background: linear-gradient(100deg, #ff9a3d 0%, #ff6a1a 45%, #f2540c 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .copy p {
@@ -452,6 +458,22 @@ onBeforeUnmount(() => io?.disconnect());
 }
 
 /* Dashboard presentation */
+
+/* Fades the card's bottom edge into the white footer */
+.card::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 3;
+  height: 9%;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.45) 60%,
+    #fff 100%
+  );
+  pointer-events: none;
+}
 
 .shot {
   position: relative;
@@ -538,7 +560,7 @@ onBeforeUnmount(() => io?.disconnect());
 
   .copy h2 {
     max-width: 520px;
-    font-size: clamp(42px, 7vw, 64px);
+    font-size: clamp(46px, 7vw, 68px);
   }
 
   .shot {
@@ -602,7 +624,7 @@ onBeforeUnmount(() => io?.disconnect());
   }
 
   .copy h2 {
-    font-size: clamp(36px, 10vw, 46px);
+    font-size: clamp(38px, 10vw, 48px);
   }
 
   .copy p {

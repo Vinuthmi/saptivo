@@ -6,10 +6,7 @@
     aria-labelledby="hiw-title"
   >
     <header class="hiw-head">
-      <span class="hiw-eyebrow">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4l1.6 4.4L15 10l-4.4 1.6L9 16l-1.6-4.4L3 10l4.4-1.6zM17.5 12l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9zM17 3.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z" /></svg>
-        <span>How it works</span>
-      </span>
+    
       <h2 id="hiw-title" class="hiw-title">Integrates <b>easily</b></h2>
       <p>
         We empower sales, retail, and operations teams to streamline customer pipelines, instant
@@ -323,52 +320,24 @@ onBeforeUnmount(() => {
   margin: 0 auto clamp(32px, 5vw, 64px);
   text-align: center;
 }
-.hiw-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 15px 8px 11px;
-  border: 1.5px solid transparent;
-  border-radius: 999px;
-  background:
-    linear-gradient(#fff, #fff) padding-box,
-    linear-gradient(90deg, #ff9a3d, #e0407a) border-box;
-  font-size: 13.5px;
-  font-weight: 500;
-  text-decoration: none;
-  transition: transform 0.4s var(--ease), box-shadow 0.4s;
-}
-.hiw-eyebrow span {
-  background: linear-gradient(90deg, #f2540c, #d6336c);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-.hiw-eyebrow svg {
-  width: 18px;
-  height: 18px;
-  fill: none;
-  stroke: #f2540c;
-  stroke-width: 1.7;
-  stroke-linejoin: round;
-  stroke-linecap: round;
-}
-.hiw-eyebrow:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 14px 24px -14px rgba(242, 84, 12, 0.6);
-}
+
 .hiw-title {
   margin: 8px 0 16px;
+  padding-bottom: 0.2em;
   font-family: 'Inter Display', Inter, system-ui, sans-serif;
-  font-size: 3.5vw;
+  font-size: clamp(46px, 3.5vw, 104px);
+  color: #0f172a;
   line-height: 1.15;
   font-weight: 500;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.06em;
 }
 .hiw-title b {
   font-weight: 500;
 
-  color: var(--o);
+  background: linear-gradient(100deg, #ff9a3d 0%, #ff6a1a 45%, #f2540c 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 .hiw-head p {
   margin: 0;

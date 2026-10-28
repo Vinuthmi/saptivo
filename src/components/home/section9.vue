@@ -10,10 +10,6 @@
     <div class="hx-wrap">
       <!-- ============ copy ============ -->
       <div class="hx-copy">
-        <a class="hx-badge" :href="badgeHref">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4l1.6 4.4L15 10l-4.4 1.6L9 16l-1.6-4.4L3 10l4.4-1.6zM17.500 12l.9 2.600 2.600.9-2.600.9-.9 2.600-.9-2.600-2.600-.9 2.600-.9zM17 3.500l.7 1.800 1.800.7-1.800.7-.7 1.800-.7-1.800-1.800-.7 1.800-.7z" /></svg>
-          <span>Saptivo CRM · Google Calendar sync is live</span>
-        </a>
 
         <h1 id="hx-title" class="hx-title">
           <span class="l1">Turn every inquiry</span>
@@ -421,51 +417,16 @@ onMounted(() => {
   z-index: 2;
   max-width: 720px;
 }
-.hx-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 15px 8px 11px;
-  border-radius: 999px;
-  border: 1.5px solid transparent;
-  background:
-    linear-gradient(#fff, #fff) padding-box,
-    linear-gradient(90deg, #ff9a3d, #e0407a) border-box;
-  font-size: 13.5px;
-  font-weight: 500;
-  text-decoration: none;
-  transition: transform 0.4s var(--ease), box-shadow 0.4s;
-}
-.hx-badge span {
-  background: linear-gradient(90deg, #f2540c, #d6336c);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-.hx-badge svg {
-  width: 18px;
-  height: 18px;
-  fill: none;
-  stroke: #f2540c;
-  stroke-width: 1.7;
-  stroke-linejoin: round;
-  stroke-linecap: round;
-}
-.hx-badge:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 14px 24px -14px rgba(242, 84, 12, 0.6);
-}
-.hx-badge:focus-visible {
-  outline: 2px solid var(--o2);
-  outline-offset: 4px;
-}
+
 .hx-title {
   margin: 26px 0 0;
+  padding-bottom: 0.2em;
   font-family: 'Inter Display', Inter, system-ui, sans-serif;
-  font-size: 3.5vw;
+  font-size: clamp(46px, 3.5vw, 104px);
+  color: #0f172a;
   font-weight: 500;
-  line-height: 1.16;
-  letter-spacing: -0.045em;
+  line-height: 1.12;
+  letter-spacing: -0.06em;
 }
 .hx-title span {
   display: block;
