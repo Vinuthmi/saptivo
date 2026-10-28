@@ -224,8 +224,9 @@ onBeforeUnmount(() => {
   -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 80px), transparent 100%);
   mask-image: linear-gradient(180deg, #000 calc(100% - 80px), transparent 100%);
   background:
+    radial-gradient(ellipse 52% 42% at 50% 42%, #fff 0%, rgba(255, 255, 255, 0.88) 44%, rgba(255, 255, 255, 0.5) 68%, transparent 100%),
     linear-gradient(180deg, transparent 0%, #fff clamp(300px, 42vh, 480px)),
-    linear-gradient(90deg, #ffe4d9 0%, #ff8969 35%, #ff704f 52%, #ff9a7c 72%, #ffe3d8 100%);
+    linear-gradient(90deg, #ffb29a 0%, #ff9a7c 25%, #ff967b 50%, #ff9a7c 75%, #ffb29a 100%);
 }
 
 .bg::after {
@@ -237,10 +238,10 @@ onBeforeUnmount(() => {
       90deg,
       transparent 0px,
       transparent 34px,
-      rgba(255, 255, 255, 0.08) 38px,
-      rgba(255, 255, 255, 0.2) 41px,
-      rgba(255, 255, 255, 0.38) 43px,
-      rgba(255, 255, 255, 0.12) 46px,
+      rgba(255, 255, 255, 0.025) 38px,
+      rgba(255, 255, 255, 0.055) 41px,
+      rgba(255, 255, 255, 0.08) 43px,
+      rgba(255, 255, 255, 0.035) 46px,
       transparent 51px,
       transparent 82px
     );
@@ -262,7 +263,7 @@ onBeforeUnmount(() => {
   backdrop-filter: blur(3px);
 }
 
-.top { position: relative; }
+.top { position: relative; z-index: 1; }
 
 /* ---------- content ---------- */
 .content {
