@@ -21,13 +21,13 @@
 
 <script setup>
 const clients = [
-  { name: 'Tree of Life Nature Resort', src: `${import.meta.env.BASE_URL}images/clients/tree-of-life1.png`, w: 136, h: 91, dw: 116 },
-  { name: 'Nilkamal', src: `${import.meta.env.BASE_URL}images/clients/nilkamal1.png`, w: 144, h: 82, dw: 132 },
-  { name: 'Nastars', src: `${import.meta.env.BASE_URL}images/clients/nastars1.png`, w: 1878, h: 203, dw: 148 },
+  { name: 'Tree of Life Nature Resort', src: `${import.meta.env.BASE_URL}images/clients/tree-of-life1.png`, w: 136, h: 91, dw: 95 },
+  { name: 'Nilkamal', src: `${import.meta.env.BASE_URL}images/clients/nilkamal1.png`, w: 130, h: 90, dw: 80},
+  { name: 'Nastars', src: `${import.meta.env.BASE_URL}images/clients/nastars1.png`, w: 1878, h: 203, dw: 130 },
   { name: 'Be Waxed Sri Lanka', src: `${import.meta.env.BASE_URL}images/clients/bewaxed1.png`, w: 220, h: 219, dw: 68 },
-  { name: 'Paint House by Nadeeka', src: `${import.meta.env.BASE_URL}images/clients/paint-house1.png`, w: 2045, h: 727, dw: 145 },
-  { name: 'Tera Computers', src: `${import.meta.env.BASE_URL}images/clients/tera1.png`, w: 447, h: 447, dw: 68 },
-  { name: 'Lanka Grills', src: `${import.meta.env.BASE_URL}images/clients/lanka-grills1.png`, w: 1317, h: 783, dw: 100 },
+  { name: 'Paint House by Nadeeka', src: `${import.meta.env.BASE_URL}images/clients/paint-house1.png`, w: 2045, h: 727, dw: 115 },
+  { name: 'Tera Computers', src: `${import.meta.env.BASE_URL}images/clients/tera1.png`, w: 447, h: 447, dw: 60 },
+  { name: 'Lanka Grills', src: `${import.meta.env.BASE_URL}images/clients/lanka-grills1.png`, w: 1317, h: 783, dw: 75 },
 ]
 </script>
 
