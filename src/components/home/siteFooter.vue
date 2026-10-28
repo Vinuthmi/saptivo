@@ -7,9 +7,7 @@ const logoSrc = `${import.meta.env.BASE_URL}saptivo-logo.png`
 const orbitBase = `${import.meta.env.BASE_URL}orbit/`
 const orbitIcons = [
   { name: 'Instagram', src: `${orbitBase}instagram.svg`, size: 40 },
-  { name: 'YouTube', src: `${orbitBase}youtube.svg`, size: 42 },
   { name: 'Facebook', src: `${orbitBase}facebook.svg`, size: 40 },
-  { name: 'Discord', src: `${orbitBase}discord.svg`, size: 42 },
   { name: 'WordPress', src: `${orbitBase}wordpress.svg`, size: 40 },
   { name: '3CX', src: `${orbitBase}3cx.svg`, size: 56 },
   { name: 'Google Calendar', src: `${orbitBase}google-calendar.svg`, size: 38 },
@@ -94,6 +92,7 @@ const partnerLinks = [
 
     <!-- Dark footer card -->
     <div class="footer-card">
+      <div class="footer-dots" aria-hidden="true"></div>
       <!-- Trust bar -->
       <ul class="trust">
         <li v-for="t in trust" :key="t.title" class="trust-item">
@@ -152,8 +151,9 @@ const partnerLinks = [
 <style scoped>
 .site-footer {
   --radius: 340px;
+  --gutter: clamp(16px, 6vw, 88px);
   position: relative;
-  padding: 0 clamp(16px, 6vw, 88px) 40px;
+  padding: 0;
   background: #fff;
   color: #17191d;
   font-family: 'Inter', 'Poppins', Arial, sans-serif;
@@ -172,8 +172,10 @@ const partnerLinks = [
 /* ---------- CTA ---------- */
 .cta {
   position: relative;
-  max-width: 1300px;
+  box-sizing: border-box;
+  max-width: calc(1300px + var(--gutter) * 2);
   margin: 0 auto;
+  padding-inline: var(--gutter);
   padding-top: clamp(110px, 12vw, 170px);
   text-align: center;
 }
@@ -290,22 +292,26 @@ const partnerLinks = [
 .footer-card {
   position: relative;
   z-index: 2;
-  max-width: 1300px;
-  margin: -70px auto 0;
-  padding: 44px clamp(20px, 4vw, 56px) 22px;
-  border-radius: 24px;
+  width: 100%;
+  box-sizing: border-box;
+  margin: -70px 0 0;
+  /* full-bleed card; inner content stays aligned to the 1300px column */
+  padding: 44px max(clamp(20px, 4vw, 56px), calc((100% - 1300px) / 2 + 56px)) 26px;
+  
   background: #17191d;
   color: #fff;
   overflow: hidden;
   box-shadow: 0 30px 60px rgba(23, 25, 29, 0.25);
 }
-.footer-card::before { /* orange glow in the corner */
-  content: '';
+/* subtle ash-gray dots fade down from the top */
+.footer-dots {
   position: absolute;
-  top: -160px; right: -120px;
-  width: 460px; height: 360px;
-  background: radial-gradient(closest-side, rgba(240, 100, 43, 0.25), transparent);
+  inset: 0;
   pointer-events: none;
+  background-image: radial-gradient(circle, rgba(148, 153, 163, 0.42) 1px, transparent 1.4px);
+  background-size: 22px 22px;
+  -webkit-mask-image: radial-gradient(ellipse 85% 100% at 50% 0%, #000 0%, rgba(0, 0, 0, 0.5) 55%, transparent 95%);
+  mask-image: radial-gradient(ellipse 85% 100% at 50% 0%, #000 0%, rgba(0, 0, 0, 0.5) 55%, transparent 95%);
 }
 .footer-card::after { /* top accent line */
   content: '';
@@ -404,13 +410,13 @@ const partnerLinks = [
   .footer-brand-block, .footer-contact { grid-column: 1 / -1; }
 }
 @media (max-width: 640px) {
-  .site-footer { --radius: 200px; padding: 0 16px 24px; }
+  .site-footer { --radius: 200px; --gutter: 16px; }
   .cta { padding-top: 60px; }
   .orbit-wrap { height: 230px; }
   .orbit-item { width: 56px; height: 56px; margin: -28px 0 0 -28px; }
   .orbit-badge { border-radius: 15px; }
   .orbit-badge img { transform: scale(0.7); }
-  .footer-card { margin-top: -50px; padding: 32px 20px 18px; }
+  .footer-card { margin-top: -50px; padding: 32px 20px 22px; border-radius: 22px 22px 0 0; }
   .trust { grid-template-columns: 1fr; gap: 18px; padding-bottom: 28px; }
   .footer-main { grid-template-columns: 1fr 1fr; gap: 30px 20px; padding-bottom: 32px; }
   .footer-bottom { font-size: 11px; }

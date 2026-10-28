@@ -136,7 +136,9 @@ const toImg = (b) =>
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#${b.hex}" d="${b.path}"/></svg>`
   );
 
-const social = brands.map((b) => ({ name: b.name, img: toImg(b) }));
+const social = brands
+  .filter((b) => b.name !== "Discord" && b.name !== "YouTube")
+  .map((b) => ({ name: b.name, img: toImg(b) }));
 const ringIcons = [...social, ...social];
 
 // hollow circles riding the inner rings (a = angle, s = size in px)
@@ -200,7 +202,7 @@ onBeforeUnmount(() => {
   --ring: min(1560px, 175vw);   /* outer orbit diameter */
   --step: 95px;                 /* gap between concentric rings */
   --crest: 54px;                /* where the outer ring peaks inside the orbit strip */
-  --top0: clamp(150px, 17vw, 220px); /* dashboard card top offset (orbit strip height) */
+  --top0: clamp(110px, 12vw, 160px); /* dashboard card top offset (orbit strip height) */
   --w0: min(1180px, calc(100vw - 40px));
 
   position: relative;
@@ -224,8 +226,8 @@ onBeforeUnmount(() => {
   -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 80px), transparent 100%);
   mask-image: linear-gradient(180deg, #000 calc(100% - 80px), transparent 100%);
   background:
-    radial-gradient(ellipse 52% 42% at 50% 42%, #fff 0%, rgba(255, 255, 255, 0.88) 44%, rgba(255, 255, 255, 0.5) 68%, transparent 100%),
-    linear-gradient(180deg, transparent 0%, #fff clamp(300px, 42vh, 480px)),
+    radial-gradient(ellipse 52% 48% at 50% 38%, #fff 0%, rgba(255, 255, 255, 0.88) 44%, rgba(255, 255, 255, 0.5) 68%, transparent 100%),
+    linear-gradient(180deg, transparent 0%, #fff clamp(240px, 32vh, 360px)),
     linear-gradient(90deg, #ffb29a 0%, #ff9a7c 25%, #ff967b 50%, #ff9a7c 75%, #ffb29a 100%);
 }
 
@@ -385,7 +387,7 @@ h1 {
   .content { padding-top: 96px; }
 }
 @media (max-width: 760px) {
-  .hero { --ring: min(1100px, 230vw); --step: 58px; --crest: 44px; --top0: 150px; --w0: calc(100vw - 24px); --title: clamp(38px, 10.5vw, 64px); padding-bottom: 40px; }
+  .hero { --ring: min(1100px, 230vw); --step: 58px; --crest: 44px; --top0: 120px; --w0: calc(100vw - 24px); --title: clamp(38px, 10.5vw, 64px); padding-bottom: 40px; }
   .content { width: calc(100% - 32px); padding: 76px 0 24px; }
   .lead { font-size: 15px; margin-top: 22px; }
   .actions { width: 100%; gap: 10px; margin-top: 28px; }

@@ -251,7 +251,8 @@ const visits = [
   animation: cm-loop 62s linear infinite;
   will-change: transform;
 }
-.cm:hover .cm-track {
+.cm-viewport:hover .cm-track,
+.cm-viewport:active .cm-track {
   animation-play-state: paused;
 }
 .cm-set {
