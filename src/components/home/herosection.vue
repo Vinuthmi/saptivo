@@ -1,5 +1,6 @@
 <template>
   <section id="top" ref="hero" class="hero" aria-labelledby="hero-title">
+    <div class="bg" aria-hidden="true"></div>
     <div class="top">
     <div class="content">
       <h1 id="hero-title">
@@ -269,6 +270,54 @@ onBeforeUnmount(() => {
 }
 .hero *, .hero *::before, .hero *::after { box-sizing: border-box; }
 .hero a:focus-visible, .hero button:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; }
+
+.bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 80px), transparent 100%);
+  mask-image: linear-gradient(180deg, #000 calc(100% - 80px), transparent 100%);
+  background:
+    radial-gradient(ellipse 22% 78% at 0% 72%, rgba(255, 99, 56, 0.78), transparent 100%),
+    radial-gradient(ellipse 22% 78% at 100% 72%, rgba(255, 99, 56, 0.78), transparent 100%),
+    linear-gradient(180deg, #fff 0%, #fff 48%, #fff8f5 70%, #fff 100%);
+}
+
+.bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      transparent 34px,
+      rgba(255, 255, 255, 0.08) 38px,
+      rgba(255, 255, 255, 0.2) 41px,
+      rgba(255, 255, 255, 0.38) 43px,
+      rgba(255, 255, 255, 0.12) 46px,
+      transparent 51px,
+      transparent 82px
+    );
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    #000 0%,
+    transparent 30%,
+    transparent 70%,
+    #000 100%
+  );
+  mask-image: linear-gradient(
+    90deg,
+    #000 0%,
+    transparent 30%,
+    transparent 70%,
+    #000 100%
+  );
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+}
 
 .top { position: relative; }
 

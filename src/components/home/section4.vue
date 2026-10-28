@@ -528,7 +528,7 @@ onBeforeUnmount(() => {
   /* boxed: a rounded card inset from the page edges */
   width: calc(100% - 2 * clamp(12px, 3vw, 40px));
   max-width: 1680px;
-  margin: clamp(16px, 3vw, 40px) auto;
+  margin: clamp(16px, 3vw, 40px) auto clamp(48px, 6vw, 88px);
   border: 1px solid rgba(15, 23, 42, 0.06);
   border-radius: clamp(22px, 2.6vw, 36px);
   box-shadow: 0 30px 60px -36px rgba(150, 70, 30, 0.35), 0 1px 0 #fff inset;
@@ -536,7 +536,7 @@ onBeforeUnmount(() => {
   isolation: isolate;
   font-family: 'Poppins', system-ui, sans-serif;
   color: var(--navy);
-  padding: clamp(28px, 4vw, 56px) 0 clamp(32px, 4vw, 52px);
+  padding: clamp(28px, 4vw, 56px) 0 clamp(56px, 6vw, 80px);
   background:
     radial-gradient(900px 420px at 100% 0%, #fde3d9 0%, transparent 70%),
     radial-gradient(800px 500px at 0% 0%, #fce7e0 0%, transparent 65%),

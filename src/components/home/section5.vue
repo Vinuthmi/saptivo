@@ -316,7 +316,7 @@ onBeforeUnmount(() => { clearInterval(tick); chatTimers.forEach(clearTimeout); c
 
 <style scoped>
 /* CHANGED: --ink is now a softer charcoal (was #17191d) */
-.eng { --a: #f0642b; --ink: #2b2f38; --txt: #17191d; --mut: #6b6f78; --line: #e4e0d9; --fw: 500; position: relative; overflow: hidden; padding: clamp(64px, 9vw, 120px) clamp(16px, 5vw, 72px); color: var(--txt); background: #faf8f5; font-family: Inter, "Segoe UI", system-ui, sans-serif; }
+.eng { --a: #f0642b; --ink: #2b2f38; --txt: #17191d; --mut: #6b6f78; --line: #e4e0d9; --fw: 500; position: relative; overflow: hidden; padding: clamp(64px, 9vw, 120px) clamp(16px, 5vw, 72px); color: var(--txt); background: #fff; font-family: Inter, "Segoe UI", system-ui, sans-serif; }
 .eng *, .eng *::before, .eng *::after { box-sizing: border-box; }
 .eng button { font: inherit; color: inherit; cursor: pointer; }
 .eng button:focus-visible, .eng input:focus-visible { outline: 2px solid var(--a); outline-offset: 3px; }
