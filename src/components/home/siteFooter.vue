@@ -295,6 +295,7 @@ const partnerLinks = [
   width: 100%;
   box-sizing: border-box;
   margin: -70px 0 0;
+  border-radius: 50px 50px 0px 0px;
   /* full-bleed card; inner content stays aligned to the 1300px column */
   padding: 44px max(clamp(20px, 4vw, 56px), calc((100% - 1300px) / 2 + 56px)) 26px;
   
