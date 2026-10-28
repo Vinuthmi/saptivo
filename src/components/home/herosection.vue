@@ -224,9 +224,8 @@ onBeforeUnmount(() => {
   -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 80px), transparent 100%);
   mask-image: linear-gradient(180deg, #000 calc(100% - 80px), transparent 100%);
   background:
-    radial-gradient(ellipse 22% 78% at 0% 72%, rgba(255, 99, 56, 0.78), transparent 100%),
-    radial-gradient(ellipse 22% 78% at 100% 72%, rgba(255, 99, 56, 0.78), transparent 100%),
-    linear-gradient(180deg, #fff 0%, #fff 48%, #fff8f5 70%, #fff 100%);
+    linear-gradient(180deg, transparent 0%, #fff clamp(300px, 42vh, 480px)),
+    linear-gradient(90deg, #ffe4d9 0%, #ff8969 35%, #ff704f 52%, #ff9a7c 72%, #ffe3d8 100%);
 }
 
 .bg::after {
@@ -310,6 +309,19 @@ h1 {
 
 /* ---------- stage ---------- */
 .stage { position: relative; padding-top: var(--top0); }
+.stage::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  left: 50%;
+  width: min(1320px, 100%);
+  height: clamp(320px, 62vw, 760px);
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(255, 112, 79, 0.3) 0%, rgba(255, 154, 124, 0.2) 38%, rgba(255, 227, 216, 0.08) 58%, transparent 74%);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
 
 /* ---------- orbit (below the text, behind the card) ---------- */
 .orbit {
