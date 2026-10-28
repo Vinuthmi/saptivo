@@ -9,8 +9,9 @@
     <Section5 />
     <Section10 />
     <Section6 />
-    <TrustedBusinesses />
+  
     <Section9 />
+    <TrustedBusinesses />
     <Section11 />
 
     <SiteFooter />
