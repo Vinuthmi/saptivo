@@ -24,7 +24,7 @@
     </div>
 
     <div ref="stage" class="stage">
-      <!-- orbit lives BELOW the text, behind the video card -->
+      <!-- orbit lives BELOW the text, behind the dashboard image -->
       <div class="orbit" aria-hidden="true">
         <div class="ring ring-c" :style="{ '--rot': rotC + 'deg' }">
           <i v-for="(d, i) in dotsC" :key="'c' + i" class="dot" :style="{ '--a': d.a + 'deg', '--s': d.s + 'px' }"></i>
@@ -46,44 +46,9 @@
         </div>
       </div>
 
-      <div class="sticky">
-        <div class="video-card" :style="{ '--p': progress }">
-          <video
-            ref="heroVideo"
-            class="video"
-            autoplay
-            muted
-            loop
-            playsinline
-            preload="metadata"
-            @play="isPlaying = true"
-            @pause="isPlaying = false"
-          >
-            <source src="/video/crm-hero.mp4" type="video/mp4" />
-          </video>
-          <div class="video-shade" aria-hidden="true"></div>
-
-          <h3
-            class="video-copy"
-            :style="{ opacity: copyOpacity, transform: 'translateY(' + copyShift + 'px)' }"
-            aria-hidden="true"
-          >
-            One view.
-            <span>Infinite momentum.</span>
-          </h3>
-
-          <button class="play" type="button" @click="togglePlay"
-            :aria-label="isPlaying ? 'Pause video' : 'Play video'">
-            <svg v-if="isPlaying" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14" /></svg>
-            <svg v-else viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z" /></svg>
-          </button>
-
-          <button class="sound" type="button" @click="toggleMute"
-            :aria-label="isMuted ? 'Unmute video' : 'Mute video'">
-            <svg v-if="isMuted" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Z" /><path d="m17 9 4 6m0-6-4 6" /></svg>
-            <svg v-else viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Z" /><path d="M17 9a5 5 0 0 1 0 6" /><path d="M19 6a9 9 0 0 1 0 12" /></svg>
-          </button>
-        </div>
+      <!-- dashboard image: scrolls up with the page, eases from full size to ~83% and fades out at the bottom -->
+      <div ref="card" class="hero-card" :style="{ '--p': progress, '--pull': pull + 'px' }">
+        <img class="hero-image" :src="heroDashboardImage" alt="Saptivo CRM dashboard" />
       </div>
     </div>
 
@@ -94,11 +59,11 @@
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 defineOptions({ name: "HeroSection" });
 
+const heroDashboardImage = `${import.meta.env.BASE_URL}images/hero-dashboard.png`;
 const hero = ref(null);
 const stage = ref(null);
-const heroVideo = ref(null);
-const isMuted = ref(true);
-const isPlaying = ref(true);
+const card = ref(null);
+const pull = ref(0);
 const rot = ref(0);
 const progress = ref(0);
 
@@ -183,34 +148,19 @@ const dotsC = [
   { a: 52, s: 20 }, { a: 140, s: 10 }, { a: 214, s: 30 }, { a: 322, s: 14 },
 ];
 
-const copyOpacity = computed(() => Math.min(Math.max((progress.value - 0.35) / 0.4, 0), 1));
-const copyShift = computed(() => (1 - copyOpacity.value) * 36);
-
-async function togglePlay() {
-  const v = heroVideo.value;
-  if (!v) return;
-  if (v.paused) {
-    try { await v.play(); } catch { /* blocked */ }
-  } else {
-    v.pause();
-  }
-}
-function toggleMute() {
-  const v = heroVideo.value;
-  if (!v) return;
-  v.muted = !v.muted;
-  isMuted.value = v.muted;
-}
-
 let ticking = false;
 let raf = null;
 function update() {
   rot.value = window.scrollY * 0.12;
-  const el = stage.value;
+  const el = card.value;
   if (el) {
-    const total = el.offsetHeight - window.innerHeight;
-    const p = total > 0 ? -el.getBoundingClientRect().top / total : 0;
+    // progress 0 → 1 while the card's top travels from 88% down the viewport to 8%
+    const vh = window.innerHeight;
+    const top = el.getBoundingClientRect().top;
+    const p = (vh * 0.88 - top) / (vh * 0.8);
     progress.value = Math.min(Math.max(p, 0), 1);
+    // the card scales from its top edge, so pull the content below it up by the space it frees
+    pull.value = -Math.round(el.offsetHeight * 0.17 * progress.value);
   }
   ticking = false;
 }
@@ -221,13 +171,10 @@ function onScroll() {
 }
 
 onMounted(() => {
-  const v = heroVideo.value;
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (reduce) {
-    v?.pause();
     return;
   }
-  v?.play().catch(() => { isPlaying.value = false; });
   update();
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", onScroll, { passive: true });
@@ -236,7 +183,6 @@ onBeforeUnmount(() => {
   window.removeEventListener("scroll", onScroll);
   window.removeEventListener("resize", onScroll);
   if (raf !== null) cancelAnimationFrame(raf);
-  heroVideo.value?.pause();
 });
 </script>
 
@@ -249,15 +195,13 @@ onBeforeUnmount(() => {
   --ink: #17191d;
   --paper: #fff;
   --muted: #5d6068;
-  --title: clamp(46px, 3.5vw, 104px); /* headline + video text share this size */
+  --title: clamp(46px, 3.5vw, 104px);
 
   --ring: min(1560px, 175vw);   /* outer orbit diameter */
   --step: 95px;                 /* gap between concentric rings */
   --crest: 54px;                /* where the outer ring peaks inside the orbit strip */
-  --top0: clamp(150px, 17vw, 220px); /* video card top offset (orbit strip height) */
+  --top0: clamp(150px, 17vw, 220px); /* dashboard card top offset (orbit strip height) */
   --w0: min(1180px, calc(100vw - 40px));
-  --ratio: 0.53;
-  --h0: min(calc(var(--w0) * var(--ratio)), calc(100svh - var(--top0) - 32px));
 
   position: relative;
   isolation: isolate;
@@ -332,8 +276,7 @@ h1 {
   font-size: var(--title);
   animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
-.accent,
-.video-copy span {
+.accent {
   display: block;
   width: fit-content; /* gradient spans the text itself */
   margin: 0 auto -0.14em;
@@ -366,7 +309,7 @@ h1 {
 .btn-outline:hover { transform: translateY(-2px); box-shadow: inset 0 0 0 1px rgba(255,255,255,.28), 0 16px 32px rgba(0,0,0,.28); }
 
 /* ---------- stage ---------- */
-.stage { position: relative; height: 250svh; }
+.stage { position: relative; padding-top: var(--top0); }
 
 /* ---------- orbit (below the text, behind the card) ---------- */
 .orbit {
@@ -405,49 +348,22 @@ h1 {
 }
 .ring-c .dot { border-color: rgba(23, 25, 29, 0.55); border-width: 1.5px; }
 
-/* ---------- scroll-driven video ---------- */
-.sticky {
-  position: sticky; top: 0; z-index: 1;
-  display: grid; grid-template-rows: 100svh; justify-items: center; align-items: start;
-  width: 100%; height: 100svh;
-}
-.video-card {
+/* ---------- dashboard image (normal scroll, scales down + fades as it leaves) ---------- */
+.hero-card {
   --p: 0;
-  position: relative; isolation: isolate; overflow: hidden; background: var(--ink);
-  margin-top: calc(var(--top0) * (1 - var(--p)));
-  width: calc(var(--w0) + (100% - var(--w0)) * var(--p));
-  height: calc(var(--h0) + (100% - var(--h0)) * var(--p));
-  border: calc(6px * (1 - var(--p))) solid #fff;
-  border-radius: calc(28px * (1 - var(--p)));
-  box-shadow: 0 calc(40px * (1 - var(--p))) calc(90px * (1 - var(--p))) rgba(23, 25, 29, 0.22);
-  will-change: width, height;
+  --pull: 0px;
+  position: relative; z-index: 1; isolation: isolate; overflow: hidden;
+  width: var(--w0); margin: 0 auto var(--pull);
+  background: #fff;
+  border: 6px solid #fff; border-radius: 28px;
+  box-shadow: 0 40px 90px rgba(23, 25, 29, 0.22);
+  transform: scale(calc(1 - 0.17 * var(--p)));
+  transform-origin: top center;
+  will-change: transform;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 62%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 62%, transparent 100%);
 }
-.video { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
-.video-shade {
-  position: absolute; inset: 0; z-index: 1; pointer-events: none;
-  background: linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,0.8) 100%);
-}
-.video-copy {
-  position: absolute; z-index: 2; margin: 0; left: 0; right: 0; bottom: clamp(40px, 10vh, 110px);
-  padding: 0 24px; text-align: center; color: #fff; pointer-events: none;
-  font-weight: 500; line-height: 0.98; letter-spacing: -0.06em; font-size: var(--title);
-  will-change: transform, opacity;
-}
-
-.play, .sound {
-  position: absolute; z-index: 4; display: grid; place-items: center;
-  color: var(--ink); background: #fff; border: 0; cursor: pointer;
-  transition: opacity 0.25s, transform 0.25s, background 0.2s, color 0.2s;
-}
-.play { top: 50%; left: 50%; width: 72px; height: 72px; border-radius: 20px; opacity: 0; transform: translate(-50%, -50%); }
-.video-card:hover .play, .play:focus-visible { opacity: 1; }
-.play:hover { color: #fff; background: var(--orange); transform: translate(-50%, -50%) scale(1.06); }
-.sound { right: 22px; bottom: 22px; width: 48px; height: 48px; border-radius: 14px; }
-.sound:hover { color: #fff; background: var(--orange); }
-.play svg, .sound svg { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.play svg { width: 26px; height: 26px; }
-.sound svg { width: 21px; height: 21px; }
-.play svg path[d^="M8 5l"] { fill: currentColor; }
+.hero-image { display: block; width: 100%; height: auto; user-select: none; }
 
 @keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
 
@@ -456,27 +372,20 @@ h1 {
   .content { padding-top: 96px; }
 }
 @media (max-width: 760px) {
-  .hero { --ring: min(1100px, 230vw); --step: 58px; --crest: 44px; --top0: 150px; --w0: calc(100vw - 24px); --ratio: 0.85; --title: clamp(38px, 10.5vw, 64px); padding-bottom: 40px; }
+  .hero { --ring: min(1100px, 230vw); --step: 58px; --crest: 44px; --top0: 150px; --w0: calc(100vw - 24px); --title: clamp(38px, 10.5vw, 64px); padding-bottom: 40px; }
   .content { width: calc(100% - 32px); padding: 76px 0 24px; }
   .lead { font-size: 15px; margin-top: 22px; }
   .actions { width: 100%; gap: 10px; margin-top: 28px; }
   .btn { min-height: 50px; padding: 0 20px; font-size: 14px; }
   .node { width: 52px; height: 52px; border-radius: 16px; }
   .node img { width: 26px; height: 26px; }
-  .stage { height: 220svh; }
-  .video-copy { bottom: 84px; padding: 0 16px; }
-  .play { opacity: 1; width: 58px; height: 58px; border-radius: 17px; }
-  .sound { right: 14px; bottom: 14px; width: 42px; height: 42px; border-radius: 12px; }
 }
 @media (max-width: 380px) {
   .actions { flex-direction: column; align-items: stretch; }
 }
 @media (prefers-reduced-motion: reduce) {
   h1, .lead, .actions { animation: none; }
-  .stage { height: auto; padding-top: var(--top0); }
   .orbit { height: calc(var(--top0) + 160px); }
-  .sticky { position: relative; height: auto; display: block; }
-  .video-card { margin: 0 auto; width: var(--w0); height: auto; aspect-ratio: 16 / 9; border: 3px solid #fff; border-radius: 20px; }
-  .play { opacity: 1; }
+  .hero-card { transform: none; margin-bottom: 0; }
 }
 </style>

@@ -35,11 +35,6 @@
           </h2>
         </div>
 
-        <div class="s6-hr">
-          <p class="s6-sub">
-            Every sign-in attempt is throttled, every change is recorded and every deletion can be undone — your data always stays accountable.
-          </p>
-        </div>
       </header>
 
       <div class="s6-grid">
@@ -245,7 +240,7 @@ const icons = {
 }
 
 /* metric: [big value, label, small caption] */
-const cardPalette = 'radial-gradient(60% 55% at 96% 4%,rgba(252,222,224,.95) 0%,transparent 70%),radial-gradient(60% 50% at 6% 96%,rgba(252,236,210,.95) 0%,transparent 72%),linear-gradient(140deg,#fff7ef 0%,#fdeee6 50%,#fce9e6 100%)'
+const cardPalette = 'radial-gradient(70% 60% at 100% 100%,#e84a0a 0%,rgba(232,74,10,.4) 45%,transparent 75%),linear-gradient(155deg,#ff9a5c 0%,#fa7a3a 38%,#F45A13 72%,#e8480a 100%)'
 
 const items = [
   {
@@ -449,10 +444,7 @@ onBeforeUnmount(() => {
 
 /* ============ heading row ============ */
 .s6-head {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 360px);
-  gap: 28px 48px;
-  align-items: end;
+  display: block;
 }
 .s6-eyebrow {
   display: inline-flex;
@@ -492,13 +484,14 @@ onBeforeUnmount(() => {
 .s6-title {
   margin: 22px 0 0;
   font-family: 'Inter Display', Inter, system-ui, sans-serif;
-  font-size: 2vw;
+  font-size: clamp(18px, 2vw, 36px);
   font-weight: 500;
   line-height: 1.12;
   letter-spacing: -0.025em;
+  white-space: nowrap;
 }
 .s6-title span {
-  display: block;
+  display: inline;
   font-weight: 500;
 }
 .s6-title b {
@@ -525,13 +518,6 @@ onBeforeUnmount(() => {
 .s6-in .s6-title b path {
   stroke-dashoffset: 0;
 }
-.s6-sub {
-  margin: 0;
-  font-size: 13px;
-  line-height: 1.8;
-  color: var(--muted);
-}
-
 /* ============ grid ============ */
 .s6-grid {
   display: grid;
@@ -1423,10 +1409,6 @@ onBeforeUnmount(() => {
 
 /* ============ responsive ============ */
 @media (max-width: 960px) {
-  .s6-head {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 300px);
-    gap: 24px 28px;
-  }
   .s6-grid {
     grid-template-columns: 1fr;
   }
@@ -1438,9 +1420,6 @@ onBeforeUnmount(() => {
   }
 }
 @media (max-width: 760px) {
-  .s6-head {
-    grid-template-columns: 1fr;
-  }
   .s6-stage {
     height: 420px;
     border-radius: 24px;
@@ -1480,54 +1459,41 @@ onBeforeUnmount(() => {
   }
 }
 
-/* ===== palette: Marfil (ivory) — dark ink instead of white on the light card ===== */
-.s6-stage {
-  color: var(--ink);
-  border-color: rgba(20, 21, 43, 0.08);
-  box-shadow: 0 30px 64px -40px rgba(150, 70, 30, 0.4), 0 1px 0 #fff inset;
-}
-.s6-stage::after {
-  box-shadow: inset 0 0 0 1px rgba(20, 21, 43, 0.05);
-}
+/* ===== palette: light orange gradient (same white-on-colour look as Network & Infrastructure) ===== */
 .s6-scrim {
-  background: radial-gradient(ellipse at 92% 0%, rgba(255, 196, 160, 0.3), transparent 60%) !important;
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(255, 226, 180, 0.28), transparent 60%),
+    linear-gradient(180deg, rgba(150, 50, 0, 0.1), transparent 50%, rgba(170, 60, 0, 0.16)) !important;
 }
-.s6-ti {
-  background: rgba(20, 21, 43, 0.05);
-  border-color: rgba(20, 21, 43, 0.12);
-}
-.s6-ti svg {
-  stroke: var(--ink);
-}
-.s6-deco {
-  stroke: var(--o2);
-}
-.s6-layer.on .s6-deco {
-  opacity: 0.2;
+.s6-stage {
+  box-shadow: 0 30px 64px -38px rgba(244, 90, 19, 0.6), 0 1px 0 #fff inset;
 }
 .s6-w1 {
-  border-color: rgba(20, 21, 43, 0.06);
-  box-shadow: 0 26px 46px -26px rgba(150, 70, 30, 0.4);
+  box-shadow: 0 30px 50px -26px rgba(150, 60, 0, 0.45);
 }
 .s6-w2 {
-  background: rgba(255, 255, 255, 0.62);
-  border-color: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 24px 40px -28px rgba(150, 70, 30, 0.35);
+  background: rgba(205, 80, 8, 0.3);
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 24px 40px -26px rgba(150, 60, 0, 0.45);
 }
+.dg-big,
 .dg-k,
-.dg-l {
-  color: rgba(20, 21, 43, 0.62);
-}
-.dg-big {
-  color: var(--ink);
+.dg-l,
+.dg-tags span {
+  text-shadow: 0 1px 8px rgba(130, 45, 0, 0.35);
 }
 .dg-tags span {
-  background: rgba(20, 21, 43, 0.07);
-  color: var(--ink-2);
-}
-.dg-ic {
-  background: #fff;
-  box-shadow: 0 4px 10px -4px rgba(20, 21, 43, 0.25);
+  background: rgba(255, 255, 255, 0.26);
 }
 
+/* same card padding as Network & Infrastructure when embedded (even without the wrapper's overrides) */
+.s6-grid {
+  margin-inline: 0;
+  padding: 24px;
+}
+@media (max-width: 760px) {
+  .s6-grid {
+    padding: 16px;
+  }
+}
 </style>

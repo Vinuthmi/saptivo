@@ -41,7 +41,7 @@
         @focusout="paused = false"
       >
         <!-- stacked frames + window -->
-        <div ref="stageEl" class="fs-stage" :class="{ crop: cropped }" aria-hidden="true">
+        <div ref="stageEl" class="fs-stage" aria-hidden="true">
           <div ref="fitEl" class="fs-fit" :style="fitH ? { height: fitH + 'px' } : undefined">
             <div class="fs-scene" :style="{ transform: `translateX(-50%) scale(${scale})` }">
               <div class="fs-stack">
@@ -161,7 +161,6 @@
               </div>
             </div>
           </div>
-          <div class="fs-fade"></div>
         </div>
 
         <!-- caption -->
@@ -289,13 +288,11 @@ const calls = [
   ['UC', 'Unknown customer', '112 457 803', 'Missed', '8001', '0:18', '2026-10-20 11:27'],
 ]
 
-/* Preview geometry. The scene is authored at SW × SH (the 4 strips of the cards behind + one 620px window)
+/* Preview geometry. The scene is authored at SW × SH (the 4 strips of the cards behind + one 480px window)
    and scaled uniformly, so proportions never change. */
 const SW = 960 + 56 // window + beige frame
 const STACK = 112 // 4 strips × 28px of the cards behind the front one
-const SH = STACK + 620
-const MIN_K = 0.85 // never scale below this: keeps the dashboard text readable
-const WIDE = 900 // below this width the page is allowed to scroll naturally
+const SH = STACK + 380
 
 const rootEl = ref(null)
 const stageEl = ref(null)
@@ -306,8 +303,7 @@ const order = ref([0, 1, 2, 3, 4]) // front → back
 const paused = ref(false)
 const revealed = ref(false)
 const scale = ref(1)
-const fitH = ref(0) // visible height of the preview in px (0 until measured)
-const cropped = ref(false) // true when the bottom of the windows is faded out to save height
+const fitH = ref(0)
 const motion = ref(true)
 const cur = computed(() => features[active.value])
 
@@ -323,28 +319,14 @@ function goTo(i) {
 }
 const depth = (i) => order.value.indexOf(i)
 const step = (d) => goTo(active.value + d)
-/* Scale by width first, then (on wide screens) by the height that is really left in the viewport once the
-   heading, tabs and caption have taken their share. If even MIN_K does not fit, the preview is cropped at the
-   bottom and faded out instead of being shrunk further. */
+/* Scale the full preview to its available width; let the page scroll to show its full height. */
 function fit() {
   const stage = stageEl.value
-  const root = rootEl.value
   const box = fitEl.value
-  if (!stage || !root || !box) return
-  const ws = Math.min(1.08, stage.clientWidth / SW) || 1
-  let k = ws
-  let h = SH * ws
-  if (window.innerWidth >= WIDE) {
-    const vh = window.visualViewport?.height || window.innerHeight // equivalent of 100dvh
-    const cs = getComputedStyle(root)
-    const chrome = root.offsetHeight - box.offsetHeight + (parseFloat(cs.marginTop) || 0) + (parseFloat(cs.marginBottom) || 0)
-    const avail = Math.max(180, vh - chrome)
-    k = Math.min(ws, Math.max(MIN_K, avail / SH))
-    h = Math.min(SH * k, avail)
-  }
+  if (!stage || !box) return
+  const k = Math.min(0.86, stage.clientWidth / SW) || 1
   scale.value = +k.toFixed(3)
-  fitH.value = Math.round(h)
-  cropped.value = h < SH * k - 1
+  fitH.value = Math.round(SH * k)
 }
 function queueFit() {
   cancelAnimationFrame(raf)
@@ -393,13 +375,13 @@ onBeforeUnmount(() => {
   position: relative;
   width: calc(100% - 2 * clamp(8px, 1.6vw, 24px));
   max-width: 1680px;
-  margin: clamp(8px, 1.6vh, 20px) auto;
-  padding: clamp(18px, 3.4vh, 40px) clamp(14px, 4vw, 64px) clamp(14px, 2.6vh, 28px);
+  margin: clamp(32px, 5vw, 64px) auto clamp(48px, 7vw, 96px);
+  padding: clamp(18px, 3vh, 40px) clamp(14px, 4vw, 64px) clamp(64px, 6vw, 84px);
   overflow: hidden;
   isolation: isolate;
   border: 1px solid rgba(15, 23, 42, 0.06);
   border-radius: clamp(22px, 2.6vw, 36px);
-  box-shadow: 0 30px 60px -36px rgba(150, 70, 30, 0.35), 0 1px 0 #fff inset;
+  box-shadow: 0 18px 36px rgba(15, 23, 42, 0.16), 0 1px 0 #fff inset;
   font-family: 'Poppins', system-ui, sans-serif;
   color: var(--navy);
   background: #fff;
@@ -436,6 +418,7 @@ onBeforeUnmount(() => {
   max-width: 900px;
   margin: 0 auto;
   padding-bottom: 0.4em;
+  padding-top: 0.8em;
   color: #0f172a;
   font-family: 'Inter Display', Inter, system-ui, sans-serif;
   font-size: clamp(46px, 3.5vw, 104px);
@@ -477,7 +460,7 @@ onBeforeUnmount(() => {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 4px 13px 4px 4px;
+  padding: 9px 13px;
   border: 1px solid #f0e3d8;
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.85);
@@ -537,22 +520,7 @@ onBeforeUnmount(() => {
 .fs-fit {
   position: relative;
   overflow: hidden;
-  height: 660px; /* only until the script has measured; fit() then sets the exact height */
-}
-/* when the preview is cropped to fit the viewport, the windows fade out instead of ending abruptly */
-.fs-fade {
-  display: none;
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 28%;
-  z-index: 30;
-  pointer-events: none;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 60%, #fff 100%);
-}
-.fs-stage.crop .fs-fade {
-  display: block;
+  height: 592px;
 }
 .fs-scene {
   position: absolute;
@@ -561,7 +529,7 @@ onBeforeUnmount(() => {
   width: 1016px; /* 960 + frame */
   max-width: none;
   flex: none;
-  height: 732px; /* = STACK + window, see the script */
+  height: 592px; /* = STACK + window, see the script */
   transform-origin: 50% 0;
 }
 .fs .fs-stack {
@@ -585,7 +553,7 @@ onBeforeUnmount(() => {
   top: 112px;
   left: 0;
   right: 0;
-  height: 620px;
+  height: 480px;
   padding: 18px 18px 0;
   border-radius: 30px 30px 0 0;
   background: linear-gradient(180deg, #fde8da, var(--frame));

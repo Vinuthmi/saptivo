@@ -299,7 +299,7 @@ onBeforeUnmount(() => {
   --ok: #1fa971;
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
   position: relative;
-  padding: clamp(48px, 7vw, 96px) clamp(16px, 4vw, 40px);
+  padding: clamp(24px, 3vw, 40px) clamp(16px, 4vw, 40px) clamp(48px, 7vw, 96px);
   font-family: Poppins, system-ui, sans-serif;
   color: var(--ink);
   background: #fff;

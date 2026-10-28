@@ -40,11 +40,6 @@
           </h2>
         </div>
 
-        <div class="s5-hr">
-          <p class="s5-sub">
-            Traffic is filtered, absorbed and encrypted at the edge — before a single request reaches your Saptivo workspace.
-          </p>
-        </div>
       </header>
 
       <div class="s5-grid">
@@ -413,10 +408,7 @@ onBeforeUnmount(() => {
 
 /* ============ heading row ============ */
 .s5-head {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 360px);
-  gap: 28px 48px;
-  align-items: end;
+  display: block;
 }
 .s5-eyebrow {
   display: inline-flex;
@@ -456,13 +448,14 @@ onBeforeUnmount(() => {
 .s5-title {
   margin: 22px 0 0;
   font-family: 'Inter Display', Inter, system-ui, sans-serif;
-  font-size: 2vw;
+  font-size: clamp(18px, 2vw, 36px);
   font-weight: 500;
   line-height: 1.12;
   letter-spacing: -0.025em;
+  white-space: nowrap;
 }
 .s5-title span {
-  display: block;
+  display: inline;
   font-weight: 500;
 }
 .s5-title b {
@@ -488,12 +481,6 @@ onBeforeUnmount(() => {
 }
 .s5-in .s5-title b path {
   stroke-dashoffset: 0;
-}
-.s5-sub {
-  margin: 0;
-  font-size: 13px;
-  line-height: 1.8;
-  color: var(--muted);
 }
 /* ============ grid ============ */
 .s5-grid {
@@ -1258,10 +1245,6 @@ onBeforeUnmount(() => {
 
 /* ============ responsive ============ */
 @media (max-width: 960px) {
-  .s5-head {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 300px);
-    gap: 24px 28px;
-  }
   .s5-grid {
     grid-template-columns: 1fr;
   }
@@ -1273,9 +1256,6 @@ onBeforeUnmount(() => {
   }
 }
 @media (max-width: 760px) {
-  .s5-head {
-    grid-template-columns: 1fr;
-  }
   .s5-stage {
     height: 420px;
     border-radius: 24px;

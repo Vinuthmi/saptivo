@@ -1,7 +1,7 @@
 <template>
   <section id="features" class="trusted-brands" aria-labelledby="trusted-brands-title">
     <h2 id="trusted-brands-title" class="trusted-brands-title">
-      Trusted by businesses <span>across Sri Lanka</span> and beyond
+      Trusted by Businesses That <span>Move Forward </span> 
     </h2>
     <ul class="trusted-logos">
       <li v-for="client in clients" :key="client.name">
