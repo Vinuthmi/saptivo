@@ -11,6 +11,7 @@ import Section10 from '../components/home/section10.vue'
 import Section6 from '../components/home/section6.vue'
 import Section9 from '../components/home/section9.vue'
 import Section11 from '../components/home/section11.vue'
+import TrustedBusinesses from '../components/home/trustedBusinesses.vue'
 
 
 
@@ -31,6 +32,7 @@ const isSection6Preview = computed(() => route.query.preview === 'section6')
       <Section5 />
       <Section10 />
       <Section6 preview />
+      <TrustedBusinesses />
       <Section9 />
       <Section11 />
     </template>

@@ -9,6 +9,7 @@
     <Section5 />
     <Section10 />
     <Section6 />
+    <TrustedBusinesses />
     <Section9 />
     <Section11 />
 
@@ -25,6 +26,7 @@ import Section5 from "./components/home/section5.vue";
 import Section6 from "./components/home/section6.vue";
 import Section9 from "./components/home/section9.vue";
 import Section10 from "./components/home/section10.vue";
+import TrustedBusinesses from "./components/home/trustedBusinesses.vue";
 import SiteHeader from "./components/home/siteHeader.vue";
 import SiteFooter from "./components/home/siteFooter.vue";
 import Section11 from "./components/home/section11.vue";
