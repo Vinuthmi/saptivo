@@ -5,40 +5,41 @@
     :class="{ 'hx-js': mounted, 'hx-in': revealed }"
     aria-labelledby="hx-title"
   >
-    <div class="hx-frame" aria-hidden="true"></div>
-
     <div class="hx-wrap">
       <!-- ============ copy ============ -->
       <div class="hx-copy">
 
         <h2 id="hx-title" class="hx-title">
-          <span class="l1">Turn every inquiry</span>
-          <span class="l2">into a closed deal.</span>
+          <span class="l1">How Saptivo</span>
+          <span class="l2">works.</span>
         </h2>
 
-        <p class="hx-sub">
-          When leads, calls and quotes live in five different tools, deals slip away. Saptivo puts them in one pipeline.
-        </p>
-
-        <div class="hx-cta">
-          <a class="hx-btn pri" :href="ctaHref">
-            <span>Try Free for 14 Days</span>
-            <i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></svg></i>
-          </a>
-          <a class="hx-btn sec" :href="demoHref">Book a Demo</a>
-        </div>
-
-        <ul class="hx-list">
-          <li v-for="t in points" :key="t">
-            <i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m6.500 12.500 3.500 3.500 7.500-8" /></svg></i>
-            {{ t }}
+        <ol
+          class="hx-list"
+          aria-label="How Saptivo works"
+          @pointerenter="paused = true"
+          @pointerleave="paused = false"
+          @focusin="paused = true"
+          @focusout="paused = false"
+        >
+          <li v-for="(st, n) in steps" :key="st.k" class="hx-st" :class="{ on: active === n, done: n < active }">
+            <button type="button" class="hx-sb" :aria-current="active === n ? 'step' : undefined" @click="select(n)">
+              <i aria-hidden="true">
+                <svg v-if="n < active" viewBox="0 0 24 24"><path d="m6.500 12.500 3.500 3.500 7.500-8" /></svg>
+                <template v-else>{{ n + 1 }}</template>
+              </i>
+              <span><b>{{ st.k }}:</b> {{ st.t }}</span>
+            </button>
+            <span v-if="n < steps.length - 1" class="hx-ln" aria-hidden="true">
+              <u :style="{ height: n < active ? '100%' : n === active ? progress * 100 + '%' : '0%' }"></u>
+            </span>
           </li>
-        </ul>
+        </ol>
       </div>
 
       <!-- ============ isometric scene ============ -->
       <div class="hx-art" aria-hidden="true">
-        <svg class="hx-svg" viewBox="0 0 780 600" focusable="false">
+        <svg class="hx-svg" :class="{ dim: active !== 0 }" viewBox="0 0 780 600" focusable="false">
           <defs>
             <linearGradient id="hx-or" x1="0" y1="0" x2="1" y2="1">
               <stop offset="0" stop-color="#ff9a4c" />
@@ -87,7 +88,7 @@
           </g>
 
           <!-- data packets flowing into Saptivo -->
-          <g v-if="!reduce">
+          <g v-if="!reduce" class="packets">
             <g v-for="(n, i) in nodes" :key="`p${n.id}`">
               <circle r="9" class="pk-h">
                 <animateMotion :path="n.rev" dur="4s" :begin="`${i}s`" repeatCount="indefinite" />
@@ -111,9 +112,8 @@
                   <text y="10" text-anchor="middle" class="bi fb">f</text>
                 </template>
                 <template v-else-if="n.id === 'cal'">
-                  <rect x="-21" y="-21" width="42" height="42" rx="11" fill="#fff" stroke="#dfe3ee" stroke-width="1.500" />
-                  <path d="M-21 -9h42v-1a10 10 0 0 0-10-10h-22a10 10 0 0 0-10 10z" fill="#4285f4" />
-                  <text y="14" text-anchor="middle" class="bi gc">31</text>
+                  <circle r="22" fill="#14152b" />
+                  <g transform="translate(-13 -13) scale(1.08)"><path :d="icons.phone" class="ph" /></g>
                 </template>
                 <template v-else-if="n.id === 'wp'">
                   <circle r="22" fill="#21759b" />
@@ -122,7 +122,8 @@
                 </template>
                 <template v-else>
                   <circle r="22" fill="#25d366" />
-                  <g transform="translate(-13 -13) scale(1.08)"><path :d="icons.phone" class="ph" /></g>
+                  <path d="M-10 11 -8 4a11 11 0 1 1 4 4z" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round" />
+                  <path d="M-4 -4q0 6 7 8l2-2-3-2-1.500 1q-2-1-3-3l1-1.500-2-3z" fill="#fff" />
                 </template>
               </g>
             </g>
@@ -166,34 +167,96 @@
               <polygon :points="card.top" fill="#fff" />
             </g>
             <g :transform="mtx(80, -60, 8)">
-              <!-- prompt box -->
-              <rect x="14" y="14" width="262" height="64" rx="12" fill="#fff" stroke="#efe8e4" />
-              <rect x="22" y="22" width="150" height="20" rx="10" fill="#f6f2ef" />
-              <circle cx="34" cy="32" r="6" fill="#14152b" />
-              <text x="46" y="35.500" class="t s">Inquiry_#28.pdf</text>
-              <text x="158" y="35.500" class="t s">×</text>
-              <text x="22" y="64" class="t m">Follow up with John Smith</text>
-              <rect x="192" y="53" width="1.600" height="14" fill="#f2540c" class="caret" />
-              <!-- chips -->
-              <g transform="translate(14 88)">
-                <rect width="66" height="20" rx="10" fill="#fff" stroke="#efe8e4" />
-                <circle cx="13" cy="10" r="4" fill="#25d366" />
-                <text x="22" y="13.500" class="t s">WhatsApp</text>
+              <!-- process tracker -->
+              <g v-for="(st, n) in steps" :key="`tr${st.k}`" :transform="`translate(${14 + n * 67} 12)`">
+                <rect width="60" height="20" rx="10" class="trk" :class="{ on: active === n }" />
+                <text x="30" y="13.500" text-anchor="middle" class="t s trk-t" :class="{ on: active === n }">{{ st.k }}</text>
               </g>
-              <g transform="translate(88 88)">
-                <rect width="56" height="20" rx="10" fill="#fff" stroke="#efe8e4" />
-                <circle cx="13" cy="10" r="4" fill="#f2540c" />
-                <text x="22" y="13.500" class="t s">Quote</text>
+
+              <!-- 1 · Capture: enquiries from every channel land in one list -->
+              <g v-if="active === 0" key="s0">
+                <text x="14" y="55" class="t s hd">Leads · all channels</text>
+                <g v-for="(l, k) in leads" :key="l.n" :transform="`translate(14 ${62 + k * 28})`">
+                  <g class="rowin" :style="{ '--k': k }">
+                    <rect width="262" height="24" rx="8" fill="#fff" stroke="#efe8e4" />
+                    <circle cx="14" cy="12" r="4.500" :fill="l.c" />
+                    <text x="26" y="15.500" class="t m2">{{ l.n }}</text>
+                    <text x="122" y="15.500" class="t s">{{ l.s }}</text>
+                    <rect x="212" y="6" width="38" height="13" rx="6.500" class="newp" :style="{ '--k': k }" />
+                    <text x="231" y="15.500" text-anchor="middle" class="t s newt" :style="{ '--k': k }">NEW</text>
+                  </g>
+                </g>
               </g>
-              <!-- suggestions -->
-              <g v-for="(r, k) in rows" :key="r.t" :opacity="1 - k * 0.27">
-                <rect x="10" :y="r.y - 12" width="232" height="18" rx="9" class="hl" :style="{ '--k': k }" />
-                <g :transform="`translate(20 ${r.y - 9}) scale(.55)`"><path :d="r.i" class="ri" /></g>
-                <text x="40" :y="r.y + 1.500" class="t r">{{ r.t }}</text>
+
+              <!-- 2 · Convert: a deal moves through the pipeline to Won -->
+              <g v-else-if="active === 1" key="s1">
+                <g v-for="(c, k) in cols" :key="c" :transform="`translate(${14 + k * 67} 46)`">
+                  <text x="30" y="9" text-anchor="middle" class="t s hd">{{ c }}</text>
+                  <rect y="16" width="60" height="122" rx="9" :class="k === 3 ? 'col won' : 'col'" />
+                </g>
+                <rect x="21" y="102" width="46" height="22" rx="6" class="ghost" />
+                <rect x="21" y="130" width="46" height="22" rx="6" class="ghost" />
+                <rect x="88" y="102" width="46" height="22" rx="6" class="ghost" />
+                <g class="deal">
+                  <rect x="19" y="68" width="50" height="30" rx="7" fill="#fff" stroke="#ff8a3a" stroke-width="1.500" filter="url(#hx-sh2)" />
+                  <text x="26" y="80.500" class="t s">John S.</text>
+                  <text x="26" y="92" class="t s amt">LKR 85k</text>
+                </g>
+                <g class="wonok">
+                  <circle cx="244" cy="124" r="11" fill="#1fa971" />
+                  <path d="M238.500 124.500l4 4 7-8" fill="none" stroke="#fff" stroke-width="2.200" stroke-linecap="round" stroke-linejoin="round" />
+                  <text x="244" y="148" text-anchor="middle" class="t s okt">Deal won</text>
+                </g>
               </g>
-              <!-- send -->
-              <circle cx="260" cy="162" r="12" fill="url(#hx-or)" />
-              <path d="M255 162h10M261 157l5 5-5 5" class="arrow" />
+
+              <!-- 3 · Serve: invoice, ticket and visit sit on the same customer record -->
+              <g v-else-if="active === 2" key="s2">
+                <circle cx="28" cy="64" r="13" fill="url(#hx-or)" />
+                <text x="28" y="68" text-anchor="middle" class="t s av">JS</text>
+                <text x="50" y="60" class="t m2">John Smith</text>
+                <text x="50" y="73" class="t s">Customer record · #C-204</text>
+                <path d="M28 78V152" class="link" />
+                <g v-for="(r, k) in serveRows" :key="r.n" :transform="`translate(40 ${88 + k * 30})`">
+                  <g class="rowin" :style="{ '--k': k }">
+                    <path d="M-12 12H0" class="link" />
+                    <rect width="236" height="24" rx="8" fill="#fff" stroke="#efe8e4" />
+                    <g :transform="`translate(9 5) scale(.6)`"><path :d="r.i" class="ri" /></g>
+                    <text x="30" y="15.500" class="t m2">{{ r.n }}</text>
+                    <g class="st-a" :style="{ '--k': k }">
+                      <rect x="172" y="5" width="54" height="14" rx="7" fill="#fff3e8" />
+                      <text x="199" y="15" text-anchor="middle" class="t s oo">{{ r.a }}</text>
+                    </g>
+                    <g class="st-b" :style="{ '--k': k }">
+                      <rect x="172" y="5" width="54" height="14" rx="7" fill="#ecfdf3" />
+                      <text x="199" y="15" text-anchor="middle" class="t s gg">{{ r.b }}</text>
+                    </g>
+                  </g>
+                </g>
+              </g>
+
+              <!-- 4 · Grow: reports and AI show what drives revenue -->
+              <g v-else key="s3">
+                <text x="14" y="55" class="t s hd">Revenue · 6 months</text>
+                <g v-for="(h, k) in bars" :key="k" :transform="`translate(${14 + k * 22} 150)`">
+                  <rect :y="-h" width="14" :height="h" rx="4" :fill="k === 5 ? 'url(#hx-or)' : '#f6d9c6'" class="bar" :style="{ '--k': k }" />
+                </g>
+                <g class="uplift">
+                  <rect x="102" y="58" width="42" height="15" rx="7.500" fill="#ecfdf3" />
+                  <text x="123" y="68.500" text-anchor="middle" class="t s gg">+18%</text>
+                </g>
+                <text x="160" y="55" class="t s hd">By channel</text>
+                <g v-for="(ch, k) in channels" :key="ch.n" :transform="`translate(160 ${64 + k * 27})`">
+                  <text y="9" class="t s">{{ ch.n }}</text>
+                  <text x="116" y="9" text-anchor="end" class="t s pct">{{ ch.p }}%</text>
+                  <rect y="14" width="116" height="7" rx="3.500" fill="#f1ece8" />
+                  <rect y="14" :width="ch.p * 2.6" height="7" rx="3.500" :fill="ch.c" class="fillx" :style="{ '--k': k }" />
+                </g>
+                <g class="ai">
+                  <rect x="14" y="158" width="262" height="24" rx="12" fill="#fff1e8" stroke="#ffe0cc" />
+                  <path d="M30 164l1.600 4.200 4.200 1.600-4.200 1.600L30 175.600l-1.600-4.200-4.200-1.600 4.200-1.600z" fill="#f2540c" />
+                  <text x="42" y="173.500" class="t s oo">AI: WhatsApp drives the most revenue — invest there</text>
+                </g>
+              </g>
             </g>
           </g>
 
@@ -215,13 +278,13 @@
                     <line v-for="k in 8" :key="k" x1="0" y1="-10" x2="0" y2="-5" stroke="#f2540c" stroke-width="2.200" stroke-linecap="round" :opacity="0.15 + k * 0.1" :transform="`rotate(${k * 45})`" />
                   </g>
                 </g>
-                <text x="46" y="27" class="t m">Capturing lead…</text>
+                <text :key="`l${active}`" x="46" y="27" class="t m swap">{{ scene[active].label }}</text>
               </g>
             </g>
           </g>
 
-          <!-- floating toasts -->
-          <g v-for="(t, i) in toasts" :key="t.t" class="pop" :style="{ '--d': 1.1 + i * 0.15 + 's' }">
+          <!-- floating toasts (change with the step) -->
+          <g v-for="(t, i) in toasts[active]" :key="`${active}-${t.t}`" class="pop tin" :style="{ '--d': 1.1 + i * 0.15 + 's', '--i': i }">
             <g class="float" :style="{ '--f': i * 0.9 + 's' }">
               <g :transform="`translate(${t.x} ${t.y})`" filter="url(#hx-sh2)">
                 <rect :width="t.w" height="30" rx="15" fill="#fff" stroke="#f0e9e5" />
@@ -241,32 +304,46 @@ defineOptions({ name: 'HomeHeroSection' })
 /**
  * SectionHero.vue — Saptivo hero with an isometric "integrations → one pipeline" scene (Vue 3, <script setup>)
  *
- * Left: badge, gradient headline, copy, CTAs and a checklist.
- * Right: an SVG isometric scene — WordPress, Facebook, Google Calendar and Phone/WhatsApp feed glowing
+ * Left: gradient headline, the four steps (Capture · Convert · Serve · Grow) and CTAs.
+ * Right: an SVG isometric scene — website, Facebook, phone and WhatsApp feed glowing
  * circuit routes into the Saptivo cube, next to a CRM card showing a follow-up being prepared.
  * Everything is drawn from the small `P()` iso projection below, so positions are easy to tweak.
  *
- * Props: ctaHref, demoHref, badgeHref. Browser APIs are only used in onMounted (SSR / Nuxt safe).
- * Respects prefers-reduced-motion (the scene is drawn static, no travelling packets or spinner).
+ * The four steps auto-advance (click one to jump; pauses on hover) and the scene label follows.
+ * Browser APIs are only used in onMounted (SSR / Nuxt safe). Respects prefers-reduced-motion (static scene, no auto-advance).
  */
-import { ref, onMounted } from 'vue'
-
-defineProps({
-  ctaHref: { type: String, default: '#signup' },
-  demoHref: { type: String, default: '#demo' },
-  badgeHref: { type: String, default: '#integrations' },
-})
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 
 const rootEl = ref(null)
 const mounted = ref(false)
 const revealed = ref(false)
 const reduce = ref(false)
+const active = ref(0)
+const progress = ref(0)
+const paused = ref(false)
 
-const points = [
-  'Capture leads from web, social and calls',
-  'Quote, invoice and follow up in one place',
-  'Manage your whole team easily',
+const steps = [
+  { k: 'Capture', t: 'enquiries from your website, Facebook, WhatsApp and phone land in one list automatically.' },
+  { k: 'Convert', t: 'your team qualifies leads, sends quotations and moves deals through the pipeline.' },
+  { k: 'Serve', t: 'invoices, support tickets and service visits build on the same customer record.' },
+  { k: 'Grow', t: 'reports and AI show which channels, products and people drive revenue, so you invest where it pays.' },
 ]
+
+/* label chip text for each step */
+const scene = [
+  { label: 'Capturing lead…' },
+  { label: 'Moving deal forward…' },
+  { label: 'Serving customer…' },
+  { label: 'Analysing revenue…' },
+]
+
+const STEP_MS = 5000
+const TICK = 80
+function select(n) {
+  if (n === active.value) return
+  active.value = n
+  progress.value = 0
+}
 
 /* ------------------------------------------------------------------ isometric projection
    world x → down-right, world y → down-left, z → up.  World (0,0,0) sits at screen (OX, OY). */
@@ -345,23 +422,59 @@ const lab = box(110, 150, 200, 44, 6, 0)
 const cube = P(0, 0, 0).map(f)
 const ring = P(0, 0, 56).map(f)
 
-const rows = [
-  { t: 'Send quotation', y: 128, i: icons.doc },
-  { t: 'Call back customer', y: 148, i: icons.phone },
-  { t: 'Book appointment', y: 168, i: icons.cal },
+/* per-step card content */
+const leads = [
+  { n: 'Kasun P.', s: 'Website form', c: '#21759b' },
+  { n: 'Nisha F.', s: 'Facebook', c: '#1877f2' },
+  { n: 'Ravi M.', s: 'WhatsApp', c: '#25d366' },
+  { n: 'Unknown', s: 'Phone call · 1:40', c: '#14152b' },
 ]
+const cols = ['New', 'Qualified', 'Quote', 'Won']
+const serveRows = [
+  { n: 'Invoice #INV-118', a: 'Sent', b: 'Paid', i: icons.doc },
+  { n: 'Support ticket #T-42', a: 'Open', b: 'Resolved', i: icons.phone },
+  { n: 'Service visit · 14 Nov', a: 'Booked', b: 'Done', i: icons.cal },
+]
+const bars = [28, 36, 34, 52, 62, 84]
+const channels = [
+  { n: 'WhatsApp', p: 42, c: '#25d366' },
+  { n: 'Facebook', p: 31, c: '#1877f2' },
+  { n: 'Website', p: 27, c: '#f2540c' },
+]
+const tw = (t) => Math.round(t.length * 6.1 + 46)
+const T = (x, y, t, c) => ({ x, y, w: tw(t), t, c })
 const toasts = [
-  { x: 548, y: 118, w: 112, t: '+1 new lead', c: '#1fa971' },
-  { x: 24, y: 268, w: 148, t: 'Call logged · 1:40', c: '#25d366' },
-  { x: 636, y: 262, w: 118, t: 'Event synced', c: '#4285f4' },
-  { x: 34, y: 492, w: 140, t: 'Form submitted', c: '#f2540c' },
+  [T(548, 118, '+1 new lead', '#1fa971'), T(24, 268, 'Call logged · 1:40', '#25d366'), T(636, 262, 'Message received', '#25d366'), T(34, 492, 'Form submitted', '#f2540c')],
+  [T(548, 118, 'Lead qualified', '#1fa971'), T(24, 268, 'Quote sent', '#f2540c'), T(636, 262, 'Deal moved to Won', '#1fa971'), T(34, 492, 'Follow-up booked', '#4285f4')],
+  [T(548, 118, 'Invoice paid', '#1fa971'), T(24, 268, 'Ticket resolved', '#25d366'), T(636, 262, 'Visit completed', '#1fa971'), T(34, 492, 'Same customer record', '#f2540c')],
+  [T(548, 118, 'Revenue +18%', '#1fa971'), T(24, 268, 'Top channel: WhatsApp', '#25d366'), T(636, 262, 'Report ready', '#4285f4'), T(34, 492, 'AI insight', '#f2540c')],
 ]
 
 /* ------------------------------------------------------------------ lifecycle */
+let timer = null
+let io = null
+let inView = false
+
 onMounted(() => {
   mounted.value = true
   reduce.value = window.matchMedia('(prefers-reduced-motion: reduce)').matches
   requestAnimationFrame(() => (revealed.value = true))
+
+  io = new IntersectionObserver((es) => (inView = es[0].isIntersecting), { threshold: 0.25 })
+  io.observe(rootEl.value)
+
+  if (!reduce.value) {
+    // each step fills its connector, then hands over to the next one
+    timer = setInterval(() => {
+      if (paused.value || !inView || document.hidden) return
+      progress.value = Math.min(1, progress.value + TICK / STEP_MS)
+      if (progress.value >= 1) select((active.value + 1) % steps.length)
+    }, TICK)
+  }
+})
+onBeforeUnmount(() => {
+  io?.disconnect()
+  clearInterval(timer)
 })
 </script>
 
@@ -394,32 +507,26 @@ onMounted(() => {
 .hx svg {
   display: block;
 }
-.hx-frame {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  max-width: 1376px;
-  margin: 0 auto;
-  border-inline: 1px solid var(--line);
-  pointer-events: none;
-}
 .hx-wrap {
   position: relative;
-  max-width: 1280px;
-  min-height: 740px;
+  max-width: 1240px;
   margin: 0 auto;
-  padding: clamp(28px, 3.6vw, 48px) clamp(20px, 3.6vw, 40px) clamp(36px, 5vw, 80px);
+  padding: clamp(40px, 5vw, 72px) clamp(20px, 4vw, 40px);
+  display: grid;
+  grid-template-columns: minmax(0, 450px) minmax(0, 1fr);
+  gap: clamp(16px, 3vw, 40px);
+  align-items: center;
 }
 
 /* ============ copy ============ */
 .hx-copy {
   position: relative;
   z-index: 2;
-  max-width: 720px;
+  min-width: 0;
 }
 
 .hx-title {
-  margin: 26px 0 0;
+  margin: 0;
   padding-bottom: 0.2em;
   font-family: 'Inter Display', Inter, system-ui, sans-serif;
   font-size: clamp(46px, 3.5vw, 104px);
@@ -440,120 +547,113 @@ onMounted(() => {
   opacity: 1;
   padding-bottom: 0.08em;
 }
-.hx-sub {
-  max-width: 520px;
-  margin: 22px 0 0;
-  font-family: 'Inter Display', Inter, system-ui, sans-serif;
-  font-size: clamp(15px, 1vw, 18px);
-  font-weight: 500;
-  line-height: 1.45;
-  letter-spacing: -0.02em;
-  color: #475569;
-}
-.hx-cta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-  margin-top: 32px;
-}
-.hx-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 18px;
-  height: 52px;
-  padding: 0 22px;
-  border-radius: 14px;
-  font-size: 15.5px;
-  font-weight: 500;
-  text-decoration: none;
-  transition: transform 0.4s var(--ease), box-shadow 0.4s, background 0.3s;
-}
-.hx-btn:hover {
-  transform: translateY(-2px);
-}
-.hx-btn:focus-visible {
-  outline: 2px solid var(--o2);
-  outline-offset: 4px;
-}
-.hx-btn.pri {
-  padding: 0 7px 0 22px;
-  color: #fff;
-  background: linear-gradient(180deg, #ff8f4a, #f2540c);
-  box-shadow: 0 18px 30px -16px rgba(242, 84, 12, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.35);
-}
-.hx-btn.pri i {
-  width: 38px;
-  height: 38px;
-  border-radius: 10px;
-  display: grid;
-  place-items: center;
-  background: rgba(255, 255, 255, 0.22);
-  transition: transform 0.4s var(--ease), background 0.3s;
-}
-.hx-btn.pri:hover i {
-  transform: translateX(3px);
-  background: rgba(255, 255, 255, 0.32);
-}
-.hx-btn.pri svg {
-  width: 18px;
-  height: 18px;
-  fill: none;
-  stroke: #fff;
-  stroke-width: 2.2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.hx-btn.sec {
-  color: var(--ink);
-  background: #fff;
-  border: 1px solid rgba(20, 21, 43, 0.14);
-}
-.hx-btn.sec:hover {
-  border-color: var(--o2);
-  box-shadow: 0 14px 24px -16px rgba(242, 84, 12, 0.6);
-}
 .hx-list {
-  margin: 34px 0 0;
+  max-width: 450px;
+  margin: 30px 0 0;
   padding: 0;
   list-style: none;
   display: grid;
-  gap: 14px;
+  gap: 0;
 }
-.hx-list li {
+.hx-st {
+  position: relative;
+  padding-bottom: 20px;
+}
+.hx-st:last-child {
+  padding-bottom: 0;
+}
+.hx-sb {
+  width: 100%;
   display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 15.5px;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 12px;
+  font-size: 15px;
   font-weight: 500;
-  color: var(--ink-2);
+  line-height: 1.55;
+  color: var(--muted);
+  opacity: 0.72;
+  transition: opacity 0.4s, color 0.4s;
 }
-.hx-list i {
+.hx-sb:focus-visible {
+  outline: 2px solid var(--o2);
+  outline-offset: 4px;
+}
+.hx-st.on .hx-sb,
+.hx-sb:hover {
+  opacity: 1;
+}
+.hx-sb b {
+  color: var(--ink);
+  font-weight: 600;
+}
+.hx-sb i {
   flex: none;
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
+  margin-top: 1px;
   border-radius: 50%;
   display: grid;
   place-items: center;
   background: #fff1e8;
   border: 1px solid #ffe0cc;
+  color: var(--o2);
+  font-style: normal;
+  font-size: 11.5px;
+  font-weight: 600;
+  transition: background 0.4s, color 0.4s, box-shadow 0.4s, transform 0.5s var(--ease);
 }
-.hx-list svg {
+.hx-sb i svg {
   width: 13px;
   height: 13px;
   fill: none;
-  stroke: var(--o2);
-  stroke-width: 2.6;
+  stroke: currentColor;
+  stroke-width: 2.8;
   stroke-linecap: round;
   stroke-linejoin: round;
+}
+.hx-st.on .hx-sb i {
+  background: linear-gradient(145deg, var(--o1), var(--o2));
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 10px 18px -8px rgba(242, 84, 12, 0.7);
+  transform: scale(1.1);
+}
+.hx-st.done .hx-sb i {
+  background: #fff;
+  border-color: var(--o2);
+}
+/* connector between steps, filled by the autoplay progress */
+.hx-ln {
+  position: absolute;
+  left: 11px;
+  top: 30px;
+  bottom: 4px;
+  width: 2px;
+  border-radius: 2px;
+  background: var(--line);
+  overflow: hidden;
+}
+.hx-ln u {
+  display: block;
+  width: 100%;
+  background: linear-gradient(180deg, var(--o1), var(--o2));
+  transition: height 0.1s linear;
 }
 
 /* ============ art ============ */
 .hx-art {
-  position: absolute;
-  right: -2%;
-  bottom: -2%;
+  position: relative;
   z-index: 1;
-  width: min(800px, 64vw);
+  width: 100%;
+  max-width: 780px;
+  justify-self: end;
   pointer-events: none;
 }
 .hx-svg {
@@ -623,6 +723,19 @@ onMounted(() => {
   transform-origin: center;
   animation: hx-ring 3.6s ease-out infinite;
   animation-delay: var(--f, 0s);
+}
+.routes,
+.packets {
+  transition: opacity 0.7s var(--ease);
+}
+.hx-svg.dim .routes {
+  opacity: 0.45;
+}
+.hx-svg.dim .packets {
+  opacity: 0.3;
+}
+.swap {
+  animation: hx-swap 0.6s var(--ease) both;
 }
 .bi {
   font-weight: 700;
@@ -719,6 +832,35 @@ onMounted(() => {
   animation: hx-caret 1s steps(1) infinite;
 }
 
+/* process animation (one scene per step) */
+.hd { font-weight: 600; fill: #9a9db0; letter-spacing: 0.04em; text-transform: uppercase; font-size: 8.5px; }
+.t.m2 { font-size: 11px; font-weight: 500; fill: var(--ink); }
+.trk { fill: #fff; stroke: #efe8e4; transition: fill 0.4s; }
+.trk.on { fill: url(#hx-or); stroke: none; }
+.trk-t.on { fill: #fff; }
+.rowin { animation: hx-rowin 0.6s var(--ease) both; animation-delay: calc(0.2s + var(--k) * 0.55s); }
+.newp { fill: #fff3e8; animation: hx-newp 1.2s ease both; animation-delay: calc(0.5s + var(--k) * 0.55s); }
+.newt { fill: #b84a0a; animation: hx-newp 1.2s ease both; animation-delay: calc(0.5s + var(--k) * 0.55s); }
+.col { fill: #f7f3f0; }
+.col.won { fill: #f2fbf6; animation: hx-wonbg 0.6s ease 3.7s both; }
+.ghost { fill: #fff; stroke: #efe8e4; opacity: 0.7; }
+.amt { font-weight: 700; fill: #f2540c; }
+.deal { animation: hx-deal 4.6s var(--ease) 0.4s both; }
+.wonok { opacity: 0; animation: hx-swap 0.5s ease 3.9s both; }
+.okt { fill: #15803d; font-weight: 700; }
+.av { fill: #fff; font-weight: 700; }
+.link { fill: none; stroke: #e7dfda; stroke-width: 1.5; stroke-linecap: round; stroke-dasharray: 3 4; }
+.st-a { animation: hx-out 0.4s ease both; animation-delay: calc(2.2s + var(--k) * 0.5s); }
+.st-b { opacity: 0; animation: hx-swap 0.5s ease both; animation-delay: calc(2.4s + var(--k) * 0.5s); }
+.oo { fill: #b84a0a; font-weight: 600; }
+.gg { fill: #15803d; font-weight: 700; }
+.bar { transform-box: fill-box; transform-origin: bottom; animation: hx-growy 0.8s var(--ease) both; animation-delay: calc(0.2s + var(--k) * 0.12s); }
+.fillx { transform-box: fill-box; transform-origin: left; animation: hx-growx 0.9s var(--ease) both; animation-delay: calc(0.7s + var(--k) * 0.25s); }
+.pct { font-weight: 700; fill: var(--ink); }
+.uplift { opacity: 0; animation: hx-swap 0.5s ease 1.1s both; }
+.ai { opacity: 0; animation: hx-swap 0.7s ease 2s both; }
+.tin { animation: hx-tin 0.6s var(--ease) both; animation-delay: calc(0.35s + var(--i) * 0.12s); }
+
 /* motion helpers */
 .float {
   animation: hx-bob 5s ease-in-out infinite;
@@ -740,26 +882,18 @@ onMounted(() => {
 }
 
 /* copy entrance */
-.hx-js .hx-badge,
 .hx-js .hx-title,
-.hx-js .hx-sub,
-.hx-js .hx-cta,
 .hx-js .hx-list {
   opacity: 0;
   transform: translateY(22px);
 }
-.hx-js.hx-in .hx-badge,
 .hx-js.hx-in .hx-title,
-.hx-js.hx-in .hx-sub,
-.hx-js.hx-in .hx-cta,
 .hx-js.hx-in .hx-list {
   opacity: 1;
   transform: none;
   transition: opacity 0.8s var(--ease), transform 0.9s var(--ease);
 }
 .hx-js.hx-in .hx-title { transition-delay: 0.08s; }
-.hx-js.hx-in .hx-sub { transition-delay: 0.16s; }
-.hx-js.hx-in .hx-cta { transition-delay: 0.24s; }
 .hx-js.hx-in .hx-list { transition-delay: 0.32s; }
 
 /* ============ keyframes ============ */
@@ -769,24 +903,31 @@ onMounted(() => {
 @keyframes hx-pulse { 0% { opacity: 0.7; transform: scale(0.75); } 100% { opacity: 0; transform: scale(1.3); } }
 @keyframes hx-hl { 0%, 100% { opacity: 0; } 8%, 26% { opacity: 0.14; } 34% { opacity: 0; } }
 @keyframes hx-caret { 50% { opacity: 0; } }
+@keyframes hx-swap { from { opacity: 0; } to { opacity: 1; } }
+@keyframes hx-out { to { opacity: 0; } }
+@keyframes hx-tin { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes hx-rowin { from { opacity: 0; transform: translateX(36px); } to { opacity: 1; transform: none; } }
+@keyframes hx-newp { 0%, 100% { opacity: 1; } 40% { opacity: 0.35; } 70% { opacity: 1; } }
+@keyframes hx-growy { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@keyframes hx-growx { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes hx-wonbg { from { opacity: 0.4; } to { opacity: 1; } }
+@keyframes hx-deal {
+  0%, 12% { transform: translateX(0); }
+  30%, 44% { transform: translateX(67px); }
+  62%, 76% { transform: translateX(134px); }
+  92%, 100% { transform: translateX(201px); }
+}
 
 /* ============ responsive ============ */
-@media (max-width: 1100px) {
-  .hx-art { width: min(720px, 62vw); right: -4%; }
-}
 @media (max-width: 900px) {
-  .hx-wrap { min-height: 0; padding-bottom: 20px; }
-  .hx-art {
-    position: relative;
-    right: auto;
-    bottom: auto;
-    width: min(680px, 100%);
-    margin: 18px auto 0;
+  .hx-wrap {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
   }
-}
-@media (max-width: 480px) {
-  .hx-btn { width: 100%; justify-content: space-between; }
-  .hx-btn.sec { justify-content: center; }
+  .hx-art {
+    max-width: 680px;
+    justify-self: center;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .hx *, .hx *::before, .hx *::after {
@@ -795,7 +936,7 @@ onMounted(() => {
     transition-duration: 0.001s !important;
     transition-delay: 0s !important;
   }
-  .hx-js .pop, .hx-js .hx-badge, .hx-js .hx-title, .hx-js .hx-sub, .hx-js .hx-cta, .hx-js .hx-list {
+  .hx-js .pop, .hx-js .hx-title, .hx-js .hx-list {
     opacity: 1;
     transform: none;
   }

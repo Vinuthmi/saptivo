@@ -1,7 +1,7 @@
 <template>
   <section id="features" class="trusted-brands" aria-labelledby="trusted-brands-title">
     <h2 id="trusted-brands-title" class="trusted-brands-title">
-      Trusted by Businesses That <span>Move Forward </span> 
+      Trusted by Businesses That <span>Move Forward</span>
     </h2>
     <ul class="trusted-logos">
       <li v-for="client in clients" :key="client.name">
@@ -41,19 +41,23 @@ const clients = [
 .trusted-brands-title {
   max-width: 760px;
   margin: 0 auto;
+  padding-bottom: 0.2em;
+  font-family: 'Inter Display', Inter, system-ui, sans-serif;
   color: #0f172a;
   font-size: clamp(46px, 3.5vw, 104px);
   font-weight: 500;
   line-height: 1.12;
   letter-spacing: -0.06em;
   text-align: center;
-  text-wrap: balance;
 }
 
 .trusted-brands-title span {
+  display: block;
+  padding-bottom: 0.08em;
   background: linear-gradient(100deg, #ff9a3d 0%, #ff6a1a 45%, #f2540c 100%);
   background-clip: text;
   -webkit-background-clip: text;
+  color: transparent;
   -webkit-text-fill-color: transparent;
 }
 
