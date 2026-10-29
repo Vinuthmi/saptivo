@@ -33,6 +33,7 @@
       <div
         id="fs-panel"
         class="fs-show"
+        :style="{ '--k': scale }"
         role="tabpanel"
         :aria-labelledby="`fs-tab-${cur.id}`"
         @pointerenter="paused = true"
@@ -45,83 +46,29 @@
           <div ref="fitEl" class="fs-fit" :style="fitH ? { height: fitH + 'px' } : undefined">
             <div class="fs-scene" :style="{ transform: `translateX(-50%) scale(${scale})` }">
               <div class="fs-stack">
-                <!-- ================= 1 · CRM ================= -->
+                <!-- ================= 1 · Leads ================= -->
                 <div class="fs-card" :class="{ front: active === 0, out: prev === 0 && active !== 0 }" :style="{ '--d': depth(0) }">
                   <div class="sc" :class="{ on: active === 0 }">
-                  <div class="bar"><b>Customers</b><span class="srch">⌕ Search customers…</span><span class="flt">Filter</span><span class="avs"><i>KP</i><i>NF</i><i>RS</i></span></div>
-                  <div class="body crm">
-                    <div class="list">
-                      <div v-for="(c, n) in customers" :key="c[1]" class="li" :class="{ sel: n === 0 }" :style="{ '--n': n }">
-                        <i class="av" :style="{ background: c[4] }">{{ c[0] }}</i>
-                        <span class="nm"><b>{{ c[1] }}</b><small>{{ c[2] }}</small></span>
-                        <span class="tier" :class="c[3]">{{ c[3] }}</span>
-                      </div>
-                    </div>
-                    <div class="det">
-                      <div class="pf">
-                        <i class="av lg">KP</i>
-                        <span class="nm"><b>Kasun Perera</b><small>Customer since Mar 2025 · 18 visits</small></span>
-                        <span class="tier Gold">★ VIP Gold</span>
-                      </div>
-                      <div class="kv">
-                        <span><small>LIFETIME VALUE</small><b>$4,820</b></span>
-                        <span><small>REPEAT PURCHASES</small><b>+46%</b></span>
-                        <span><small>LAST BUY</small><b>2 days ago</b></span>
-                      </div>
-                      <div class="prog"><div class="pl"><span>Gold</span><span>Platinum · 180 pts to go</span></div><div class="pb"><i style="--w: 78%"></i></div></div>
-                      <div class="tl">
-                        <div v-for="(t, n) in timeline" :key="t[0]" class="ev" :style="{ '--n': n }"><i :class="t[2]"></i><span><b>{{ t[0] }}</b><small>{{ t[1] }}</small></span></div>
+                  <div class="bar"><b>Lead inbox</b><span class="srch">⌕ Search leads…</span><span class="flt">All sources</span><span class="avs"><i>AS</i><i>NP</i><i>RK</i></span></div>
+                  <div class="body">
+                    <div class="pills"><i v-for="(p, n) in leadPills" :key="p" :class="{ on: n === 0 }">{{ p }}</i></div>
+                    <div class="tbl ld">
+                      <div class="th"><span>LEAD</span><span>SOURCE</span><span>SCORE</span><span>ASSIGNED TO</span></div>
+                      <div v-for="(r, n) in leadRows" :key="r[1]" class="tr" :class="{ fresh: n === 0 }" :style="{ '--n': n }">
+                        <span class="who"><i class="av dk">{{ r[0] }}</i><span class="nm"><b>{{ r[1] }}</b><small>{{ r[2] }}</small></span><em v-if="r[7]" class="ld-mrg">{{ r[7] }}</em></span>
+                        <span><i class="ld-src" :class="r[3]">{{ r[3] }}</i></span>
+                        <span class="rv"><b>{{ r[4] }}</b><i><u :style="{ width: r[4] + '%' }"></u></i></span>
+                        <span class="ld-asg"><i>{{ r[5] }}</i>{{ r[6] }}</span>
                       </div>
                     </div>
                   </div>
                 </div>
                 </div>
 
-                <!-- ================= 2 · Stores ================= -->
+                <!-- ================= 2 · Pipeline ================= -->
                 <div class="fs-card" :class="{ front: active === 1, out: prev === 1 && active !== 1 }" :style="{ '--d': depth(1) }">
                   <div class="sc" :class="{ on: active === 1 }">
-                  <div class="bar"><b>HQ Dashboard</b><span class="srch">⌕ Search branches…</span><span class="flt">Today</span><span class="avs"><i>HQ</i></span></div>
-                  <div class="body">
-                    <div class="tiles">
-                      <div v-for="(t, n) in storeTiles" :key="t[0]" class="tile" :style="{ '--n': n }"><small>{{ t[0] }}</small><b>{{ t[1] }}</b><em :class="t[3]">{{ t[2] }}</em></div>
-                    </div>
-                    <div class="tbl">
-                      <div class="th"><span>BRANCH</span><span>SALES TODAY</span><span>STAFF ROLES</span><span>SYNC</span></div>
-                      <div v-for="(b, n) in branches" :key="b[0]" class="tr" :style="{ '--n': n }">
-                        <span class="nm"><b>{{ b[0] }}</b><small>{{ b[1] }}</small></span>
-                        <span class="rv"><b>{{ b[2] }}</b><i><u :style="{ width: b[3] + '%' }"></u></i></span>
-                        <span class="chips"><i>Manager</i><i>Cashier ×{{ b[4] }}</i></span>
-                        <span class="ok"><i></i>{{ b[5] }}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                </div>
-
-                <!-- ================= 3 · Quotes ================= -->
-                <div class="fs-card" :class="{ front: active === 2, out: prev === 2 && active !== 2 }" :style="{ '--d': depth(2) }">
-                  <div class="sc" :class="{ on: active === 2 }">
-                  <div class="bar"><b>New quotation</b><span class="srch">⌕ QT-2048</span><span class="flt">Preview PDF</span><span class="avs"><i>AS</i></span></div>
-                  <div class="body qt">
-                    <div class="steps">
-                      <div v-for="(s, n) in steps" :key="s[0]" class="stp" :class="{ cur: n === 1, done: n === 0 }" :style="{ '--n': n }"><small>Step {{ n + 1 }}</small><b>{{ s[0] }}</b></div>
-                      <div class="bill"><small>BILL TO</small><b>Apex Motors Ltd</b><span>amal@apexmotors.lk</span></div>
-                    </div>
-                    <div class="doc">
-                      <div class="dh"><span class="nm"><b>Line items</b><small>Prices include 8% VAT · valid for 14 days</small></span><span class="stt">APPROVED</span></div>
-                      <div v-for="(l, n) in lines" :key="l[0]" class="ln" :style="{ '--n': n }"><span>{{ l[0] }}</span><span>{{ l[1] }}</span><b>{{ l[2] }}</b></div>
-                      <div class="tot"><span>Total</span><b>$7,420.00</b></div>
-                      <div class="acts"><span class="btn o">Convert to invoice →</span><span class="btn">Send on WhatsApp</span></div>
-                      <div class="flow"><span v-for="(s, n) in ['Sent', 'Viewed', 'Approved']" :key="s" :style="{ '--n': n }"><i>✓</i>{{ s }}</span></div>
-                    </div>
-                  </div>
-                </div>
-                </div>
-
-                <!-- ================= 4 · Analytics ================= -->
-                <div class="fs-card" :class="{ front: active === 3, out: prev === 3 && active !== 3 }" :style="{ '--d': depth(3) }">
-                  <div class="sc" :class="{ on: active === 3 }">
-                  <div class="bar"><b>Sales pipeline</b><span class="srch">⌕ Search deals…</span><span class="flt">Filter</span><span class="rev">$128,400 <em>▲ 38.4%</em></span></div>
+                  <div class="bar"><b>Sales pipeline</b><span class="srch">⌕ Search deals…</span><span class="flt">Filter</span><span class="rev">Weighted forecast $86,900 <em>live</em></span></div>
                   <div class="body">
                     <div class="kan">
                       <div v-for="(col, c) in kanban" :key="col.t" class="col" :style="{ '--c': c }">
@@ -136,12 +83,55 @@
                 </div>
                 </div>
 
-                <!-- ================= 5 · Calls ================= -->
+                <!-- ================= 3 · Quotations ================= -->
+                <div class="fs-card" :class="{ front: active === 2, out: prev === 2 && active !== 2 }" :style="{ '--d': depth(2) }">
+                  <div class="sc" :class="{ on: active === 2 }">
+                  <div class="bar"><b>New quotation</b><span class="srch">⌕ QT-2048</span><span class="flt">Preview PDF</span><span class="avs"><i>AS</i></span></div>
+                  <div class="body qt">
+                    <div class="steps">
+                      <div v-for="(s, n) in steps" :key="s[0]" class="stp" :class="{ cur: n === 1, done: n === 0 }" :style="{ '--n': n }"><small>Step {{ n + 1 }}</small><b>{{ s[0] }}</b></div>
+                      <div class="bill"><small>BILL TO</small><b>Apex Motors Ltd</b><span>amal@apexmotors.lk</span></div>
+                    </div>
+                    <div class="doc">
+                      <div class="dh"><span class="nm"><b>Line items</b><small>8% VAT · 5% discount · multicurrency</small></span><span class="stt">APPROVED</span></div>
+                      <div v-for="(l, n) in lines" :key="l[0]" class="ln" :style="{ '--n': n }"><span>{{ l[0] }}</span><span>{{ l[1] }}</span><b>{{ l[2] }}</b></div>
+                      <div class="tot"><span>Total</span><b>$7,420.00</b></div>
+                      <div class="acts"><span class="btn o">Convert to invoice →</span><span class="btn">Send on WhatsApp</span><span class="btn">Email</span></div>
+                      <div class="flow"><span v-for="(s, n) in ['Sent', 'Viewed', 'Approved']" :key="s" :style="{ '--n': n }"><i>✓</i>{{ s }}</span></div>
+                    </div>
+                  </div>
+                </div>
+                </div>
+
+                <!-- ================= 4 · WhatsApp CRM ================= -->
+                <div class="fs-card" :class="{ front: active === 3, out: prev === 3 && active !== 3 }" :style="{ '--d': depth(3) }">
+                  <div class="sc" :class="{ on: active === 3 }">
+                  <div class="bar"><b>WhatsApp inbox</b><span class="srch">⌕ Search chats…</span><span class="flt">All agents</span><span class="avs"><i>AS</i><i>NP</i><i>RK</i></span></div>
+                  <div class="body wa">
+                    <div class="wa-list">
+                      <div v-for="(c, n) in chats" :key="c[1]" class="wa-chat" :class="{ sel: n === 0 }" :style="{ '--n': n }">
+                        <i class="av" :style="{ background: c[4] }">{{ c[0] }}</i>
+                        <span class="nm"><b>{{ c[1] }}</b><small>{{ c[2] }}</small></span>
+                        <span class="wa-meta"><small>{{ c[3] }}</small><em v-if="c[5]">{{ c[5] }}</em></span>
+                      </div>
+                    </div>
+                    <div class="wa-conv">
+                      <div class="wa-head"><i class="av dk">NR</i><span class="nm"><b>Nuwan Rathnayake</b><small>+94 77 412 8890 · Official WhatsApp API</small></span><span class="wa-asg">Assigned · Amal S.</span></div>
+                      <div class="wa-msgs">
+                        <div v-for="(m, n) in msgs" :key="m[1]" class="wa-msg" :class="m[0]" :style="{ '--n': n + 2 }"><span>{{ m[1] }}</span><small v-if="m[2]">{{ m[2] }}</small></div>
+                      </div>
+                      <div class="wa-tools"><span>/ Saved replies</span><span>Templates</span><span>Assign ▾</span></div>
+                    </div>
+                  </div>
+                </div>
+                </div>
+
+                <!-- ================= 5 · Calls (3CX + Vodia) ================= -->
                 <div class="fs-card" :class="{ front: active === 4, out: prev === 4 && active !== 4 }" :style="{ '--d': depth(4) }">
                   <div class="sc" :class="{ on: active === 4 }">
                   <div class="bar"><b>Call journal</b><span class="srch">⌕ Search calls…</span><span class="flt">Today</span><span class="avs"><i>1001</i></span></div>
                   <div class="body">
-                    <div class="pills"><i class="on">All</i><i>Missed</i><i>Answered</i><i>Outbound</i></div>
+                    <div class="pills"><i class="on">All</i><i>Missed</i><i>Answered</i><i>Outbound</i><i>Vodia AI</i></div>
                     <div class="tbl calls">
                       <div class="th"><span>CUSTOMER</span><span>TYPE</span><span>EXT</span><span>DURATION</span><span>DATE / TIME</span></div>
                       <div v-for="(c, n) in calls" :key="c[1]" class="tr" :class="{ fresh: n === 0 }" :style="{ '--n': n }">
@@ -158,25 +148,51 @@
                   </div>
                 </div>
                 </div>
+
+                <!-- ================= 6 · Service & AMC ================= -->
+                <div class="fs-card" :class="{ front: active === 5, out: prev === 5 && active !== 5 }" :style="{ '--d': depth(5) }">
+                  <div class="sc" :class="{ on: active === 5 }">
+                  <div class="bar"><b>Service &amp; AMC</b><span class="srch">⌕ Search contracts…</span><span class="flt">This month</span><span class="avs"><i>NP</i><i>RK</i><i>TM</i></span></div>
+                  <div class="body">
+                    <div class="tiles">
+                      <div v-for="(t, n) in amTiles" :key="t[0]" class="tile" :style="{ '--n': n }"><small>{{ t[0] }}</small><b>{{ t[1] }}</b><em :class="t[3]">{{ t[2] }}</em></div>
+                    </div>
+                    <div class="tbl am">
+                      <div class="th"><span>CONTRACT</span><span>SERVICE</span><span>TECHNICIAN</span><span>STATUS</span></div>
+                      <div v-for="(r, n) in amRows" :key="r[0]" class="tr" :style="{ '--n': n }">
+                        <span class="nm"><b>{{ r[0] }}</b><small>{{ r[1] }}</small></span>
+                        <span class="nm"><b>{{ r[2] }}</b><small>{{ r[3] }}</small></span>
+                        <span class="ld-asg"><i>{{ r[4] }}</i>{{ r[5] }}</span>
+                        <span><i class="am-st" :class="r[6]">{{ r[7] }}</i></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
         <!-- caption -->
-        <div :key="cur.id" class="fs-cap">
-          <div class="cp1">
-            <span class="lbl">{{ cur.label }}</span>
-            <h3>{{ cur.title }}</h3>
-            <p>{{ cur.description }}</p>
+        <div class="fs-cap" :style="capW ? { maxWidth: capW + 'px' } : undefined">
+          <div class="fs-cap-in">
+          <Transition name="fs-swap">
+          <div :key="cur.id" class="fs-cap-swap">
+            <div class="cp1">
+              <h3>{{ cur.title }}</h3>
+              <p>{{ cur.description }}</p>
+            </div>
+            <ul class="cp2">
+              <li v-for="pt in cur.points" :key="pt">
+                <i><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 8 2.500 2.500L12 5" /></svg></i>{{ pt }}
+              </li>
+            </ul>
+            <div class="cp3">
+              <div v-for="m in cur.metrics" :key="m.label"><strong>{{ m.value }}</strong><span>{{ m.label }}</span></div>
+            </div>
           </div>
-          <ul class="cp2">
-            <li v-for="pt in cur.points" :key="pt">
-              <i><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 8 2.500 2.500L12 5" /></svg></i>{{ pt }}
-            </li>
-          </ul>
-          <div class="cp3">
-            <div v-for="m in cur.metrics" :key="m.label"><strong>{{ m.value }}</strong><span>{{ m.label }}</span></div>
+          </Transition>
           </div>
         </div>
       </div>
@@ -190,83 +206,98 @@ import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 
 const features = [
   {
-    id: 'crm',
+    id: 'leads',
     icon: ['M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z', 'M2 21v-2a7 7 0 0 1 14 0v2', 'M19 8a4 4 0 0 1 0 8M22 21v-2a5 5 0 0 0-3-4.58'],
-    tab: 'Omnichannel CRM',
-    label: 'CRM & Customer Intelligence',
-    title: 'Build customer loyalty that drives repeat growth.',
-    description: 'Capture buyer history, track VIP reward tiers, and auto-dispatch personalized WhatsApp follow-ups.',
-    points: ['Real-time customer frequency & lifetime value', 'Automated loyalty tiers & VIP reward triggers', 'Instant WhatsApp digital receipts & offers'],
-    metrics: [{ value: '+46%', label: 'Repeat Buyers' }, { value: '98.4%', label: 'Retention Rate' }, { value: '0-Click', label: 'WhatsApp Receipts' }],
+    tab: 'Leads & Contacts',
+    label: 'Lead capture',
+    title: 'Lead and contact management',
+    description: 'Enquiries from your website, Facebook Lead Ads and WhatsApp arrive in Saptivo automatically, tagged with their source. Duplicates are merged, leads are scored and each one is assigned to the right salesperson within seconds.',
+    points: ['Website, Facebook Lead Ads and WhatsApp enquiries captured automatically', 'Every lead tagged with its source, duplicates merged', 'Leads scored and assigned to the right salesperson in seconds'],
+    metrics: [{ value: '3 sources', label: 'Auto-Captured' }, { value: 'Auto', label: 'Duplicate Merge' }, { value: 'Seconds', label: 'To Assign' }],
   },
   {
-    id: 'stores',
-    icon: ['m12 3 9 5-9 5-9-5 9-5Z', 'm3 12 9 5 9-5M3 16l9 5 9-5'],
-    tab: 'Multi-Store Sync',
-    label: 'Multi-Branch Management',
-    title: 'Manage 1 to 100+ stores from a single HQ dashboard.',
-    description: 'Centralized control over branch operations, staff permissions, customer assignments, and consolidated company financials.',
-    points: ['Instant multi-branch operations & centralized control', 'Granular staff role permissions & audit trails', 'Global catalog & pricing updates in under 50ms'],
-    metrics: [{ value: '100+', label: 'Stores Scalable' }, { value: '<50ms', label: 'Sync Latency' }, { value: '100%', label: 'HQ Audit Control' }],
+    id: 'pipeline',
+    icon: ['M3 4h18l-7 8v6l-4 2v-8L3 4Z'],
+    tab: 'Sales Pipeline',
+    label: 'Pipeline',
+    title: 'Sales pipeline',
+    description: 'Drag deals across stages you define, set follow-up reminders and see weighted revenue forecasts in real time. Overdue deals are flagged before they go cold.',
+    points: ['Drag deals across stages you define', 'Follow-up reminders on every deal', 'Overdue deals flagged before they go cold'],
+    metrics: [{ value: 'Real-time', label: 'Weighted Forecast' }, { value: 'Custom', label: 'Pipeline Stages' }, { value: 'Early', label: 'Overdue Alerts' }],
   },
   {
     id: 'quotes',
     icon: ['M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z', 'M14 2v6h6M8 13h8M8 17h8'],
-    tab: 'Smart Quotes',
-    label: 'Fast Proposals & Automated Invoicing',
-    title: 'Instant professional quotations. Faster approvals.',
-    description: 'Generate branded PDF estimates in seconds, track client views, and convert approved quotes into invoices in 1 click.',
-    points: ['Instant branded PDF quotation & estimate generation', 'Real-time client view tracking & WhatsApp dispatch', '1-Click quote-to-invoice conversion & payment logs'],
-    metrics: [{ value: '3x Faster', label: 'Quote Turnaround' }, { value: '1-Click', label: 'Invoice Conversion' }, { value: '100%', label: 'Tax & Audit Ready' }],
+    tab: 'Quotes & Invoicing',
+    label: 'Billing',
+    title: 'Quotations and invoicing',
+    description: 'Create branded PDF quotations from your product catalog in seconds, send them on WhatsApp or email, and convert approved quotes into tax invoices in one click. VAT, discounts and multicurrency are built in.',
+    points: ['Branded PDF quotations from your product catalog', 'Send on WhatsApp or email', 'VAT, discounts and multicurrency built in'],
+    metrics: [{ value: '1-Click', label: 'Quote to Invoice' }, { value: 'PDF', label: 'Branded Quotes' }, { value: 'Multi', label: 'Currency & VAT' }],
   },
   {
-    id: 'analytics',
-    icon: ['M3 3v18h18M8 16V9M13 16V5M18 16v-4'],
-    tab: 'Sales Analytics',
-    label: 'Revenue & Pipeline Intelligence',
-    title: 'Real-time visibility into revenue & pipeline velocity.',
-    description: 'Track deal conversion velocity, won revenue, sales rep quotas, and generate exportable tax and audit reports with 1 click.',
-    points: ['Live deal pipeline stages & conversion tracking', 'Net profit margins & commission audit trails', 'One-click tax & financial summary exports'],
-    metrics: [{ value: '+38.4%', label: 'Pipeline Velocity' }, { value: 'Real-time', label: 'Margin Reports' }, { value: '1-Click', label: 'Tax & CSV Export' }],
+    id: 'whatsapp',
+    icon: ['M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z'],
+    tab: 'WhatsApp CRM',
+    label: 'Messaging',
+    title: 'WhatsApp CRM',
+    description: "Give your whole team one shared WhatsApp Business inbox on the official API. Assign chats, use saved replies and approved templates, and keep every conversation on the customer's timeline.",
+    points: ['One shared WhatsApp Business inbox for the whole team', 'Assign chats, with saved replies and approved templates', "Every conversation kept on the customer's timeline"],
+    metrics: [{ value: '1 inbox', label: 'Team Inbox' }, { value: 'Official', label: 'Business API' }, { value: 'Full', label: 'Timeline' }],
   },
   {
     id: 'calls',
     icon: ['M22 16.92v3a2 2 0 0 1-2.18 2A19.8 19.8 0 0 1 11.2 18.8a19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.09 3.2 2 2 0 0 1 4.08 1h3a2 2 0 0 1 2 1.72c.12.96.35 1.9.69 2.8a2 2 0 0 1-.45 2.11L8.05 8.9a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.84.57 2.8.69a2 2 0 0 1 1.77 2.05Z'],
-    tab: '3CX Call Journal',
-    label: '3CX Call Journal & Telephony',
-    title: 'Inbound & outbound customer calls, logged automatically.',
-    description: 'Track every customer call, missed inquiry, and callback in one unified journal. Connect phone numbers directly to buyer history with instant caller ID matching.',
-    points: ['Automated 3CX inbound, outbound & missed call logging', 'Instant caller ID lookup & customer history popup', 'Quick callback queues to eliminate missed customer leads'],
-    metrics: [{ value: '100%', label: 'Calls Logged' }, { value: '<1s', label: 'Caller Matching' }, { value: '0', label: 'Lost Inquiries' }],
+    tab: '3CX & Vodia Calls',
+    label: 'Telephony',
+    title: '3CX and Vodia call integration',
+    description: "See who is calling before you answer. Saptivo connects to your 3CX or Vodia phone system, pops up the caller's profile and logs every inbound, outbound and missed call automatically. With Vodia, AI voice agents can also make reminder and follow-up calls using your CRM data.",
+    points: ["Caller's profile pops up before you answer", 'Every inbound, outbound and missed call logged automatically', 'Vodia AI voice agents make reminder and follow-up calls'],
+    metrics: [{ value: '3CX/Vodia', label: 'Phone Systems' }, { value: 'Auto', label: 'Calls Logged' }, { value: 'AI', label: 'Voice Agents' }],
+  },
+  {
+    id: 'service',
+    icon: ['M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z'],
+    tab: 'Service & AMC',
+    label: 'Field service',
+    title: 'Service and AMC management',
+    description: 'For businesses that install and maintain equipment, Saptivo manages annual maintenance contracts, preventive service schedules, technician dispatch, spare parts and warranty billing.',
+    points: ['Annual maintenance contracts and preventive service schedules', 'Technician dispatch and spare parts', 'Warranty billing in the same place'],
+    metrics: [{ value: 'AMC', label: 'Contracts' }, { value: 'Preventive', label: 'Service Schedules' }, { value: 'Warranty', label: 'Billing Built In' }],
   },
 ]
 
 /* demo data for the artwork */
-const customers = [
-  ['KP', 'Kasun Perera', 'Colombo · $4,820', 'Gold', '#0f172a'],
-  ['NF', 'Nimali Fernando', 'Kandy · $3,140', 'Silver', '#f2540c'],
-  ['RS', 'Ravindu Silva', 'Galle · $2,960', 'Silver', '#6366f1'],
-  ['IJ', 'Ishara Jayasuriya', 'Colombo · $1,720', 'Bronze', '#0ea5a4'],
-  ['DW', 'Dilan Wickrama', 'Jaffna · $980', 'Bronze', '#e11d74'],
-  ['TM', 'Tharushi M.', 'Kandy · $640', 'New', '#f59e0b'],
+const leadPills = ['All 48', 'Website 21', 'Facebook Lead Ads 14', 'WhatsApp 13']
+const leadRows = [
+  ['NR', 'Nuwan Rathnayake', 'Website form · 12 s ago', 'Website', 92, 'AS', 'Amal S.', ''],
+  ['FR', 'Fathima Rizwan', 'Facebook Lead Ad · 1 min ago', 'Facebook', 84, 'NP', 'Nadeesha P.', ''],
+  ['PG', 'Pradeep Gunasekara', 'WhatsApp · 3 min ago', 'WhatsApp', 76, 'AS', 'Amal S.', 'Merged ×2'],
+  ['SD', 'Sachini Dias', 'Website form · 6 min ago', 'Website', 58, 'RK', 'Ruwan K.', ''],
 ]
-const timeline = [
-  ['Receipt sent on WhatsApp', 'Invoice #INV-3391 · $186.00 · 2 min ago', 'wa'],
-  ['Reward unlocked: 10% off', 'Triggered at 3,800 pts · automatic', 'gift'],
-  ['Purchase completed', 'Colombo branch · 6 items · 2 days ago', 'bag'],
+const chats = [
+  ['NR', 'Nuwan Rathnayake', 'Do you have the POS bundle in stock?', '10:42', '#0f172a', '2'],
+  ['FR', 'Fathima Rizwan', 'Thanks! Payment sent ✓', '10:31', '#f2540c', ''],
+  ['PG', 'Pradeep Gunasekara', 'Can we reschedule the demo?', '09:58', '#6366f1', '1'],
+  ['SD', 'Sachini Dias', 'Template · Order confirmation', '09:20', '#0ea5a4', ''],
 ]
-const storeTiles = [
-  ['Total sales today', '$106.2k', '▲ 12.4%', 'up'],
-  ['Active branches', '12', 'All online', 'up'],
-  ['Catalog sync', '38 ms', 'Under 50 ms', 'up'],
-  ['Staff on shift', '148', '9 roles', 'mu'],
+const msgs = [
+  ['in', 'Hi! Do you have the POS bundle in stock?', '10:42'],
+  ['out', 'Hi Nuwan, yes. Sending your quotation now.', '10:43 ✓✓'],
+  ['tpl', 'Quotation QT-2048 is ready to view and approve', 'Delivered ✓✓'],
+  ['note', "✓ Saved to Nuwan's customer timeline", ''],
 ]
-const branches = [
-  ['Colombo HQ', '214 sales · 41 customers', '$42.1k', 92, 12, 'Synced'],
-  ['Kandy', '139 sales · 27 customers', '$28.6k', 64, 8, 'Synced'],
-  ['Galle', '96 sales · 18 customers', '$19.4k', 44, 6, 'Synced'],
-  ['Jaffna', '71 sales · 12 customers', '$15.8k', 36, 5, 'Syncing'],
-  ['Negombo', '58 sales · 9 customers', '$11.3k', 28, 4, 'Synced'],
+const amTiles = [
+  ['Active AMC contracts', '126', '▲ 8 this month', 'up'],
+  ['Services due this week', '18', '4 dispatched', 'up'],
+  ['Spare parts low', '5', 'Reorder', 'mu'],
+  ['Warranty claims', '7', 'Billing ready', 'up'],
+]
+const amRows = [
+  ['Apex Motors', 'Lift L-204 · AMC-0192', 'Preventive service', 'Next visit · 02 Nov', 'NP', 'Nadeesha P.', 'sch', 'Scheduled'],
+  ['Metro Pharmacy', 'Cold room CR-12 · AMC-0188', 'Compressor replacement', 'Spare part issued', 'RK', 'Ruwan K.', 'prog', 'On site'],
+  ['Blue Wave Hotel', 'Generator G-3', 'Warranty repair', 'Warranty billing ready', 'TM', 'Thilina M.', 'war', 'Warranty'],
+  ['Island Books', 'Printer fleet · AMC-0175', 'Quarterly service', 'Overdue · 2 days', 'AS', 'Amal S.', 'ovr', 'Overdue'],
 ]
 const steps = [['Client details'], ['Line items'], ['Taxes & terms'], ['Send & track']]
 const lines = [
@@ -276,7 +307,7 @@ const lines = [
 ]
 const kanban = [
   { t: 'Leads', n: 24, c: '#94a3b8', cards: [['Lanka Traders', 'Inquiry via website', '$6,400', 'Medium'], ['Blue Wave Hotel', 'Facebook lead ad', '$12,900', 'High'], ['Ceylon Auto', 'WhatsApp inquiry', '$3,200', 'Low']] },
-  { t: 'Quoted', n: 18, c: '#f59e0b', cards: [['Metro Pharmacy', 'QT-2051 · viewed', '$8,750', 'High'], ['Green Leaf Café', 'QT-2049 · sent', '$2,980', 'Low'], ['Pearl Retail', 'QT-2047 · viewed', '$5,300', 'Medium']] },
+  { t: 'Quoted', n: 18, c: '#f59e0b', cards: [['Metro Pharmacy', 'QT-2051 · viewed', '$8,750', 'High'], ['Green Leaf Café', 'Follow-up overdue · 3 d', '$2,980', 'Overdue'], ['Pearl Retail', 'QT-2047 · viewed', '$5,300', 'Medium']] },
   { t: 'Approved', n: 11, c: '#f2540c', cards: [['Apex Motors', 'QT-2048 · approved', '$7,420', 'High'], ['Sunrise Mart', 'QT-2044 · approved', '$4,100', 'Medium'], ['Silver Coast', 'QT-2042 · approved', '$6,050', 'Low']] },
   { t: 'Paid', n: 9, c: '#10b981', cards: [['Island Books', 'INV-3380 · paid', '$3,640', 'Low'], ['Coral Dental', 'INV-3377 · paid', '$9,210', 'High'], ['Zen Studio', 'INV-3370 · paid', '$2,480', 'Low']] },
 ]
@@ -285,21 +316,22 @@ const calls = [
   ['KP', 'Kasun Perera', '770 629 341', 'Answered', '1032', '1:40', '2026-10-21 08:12'],
   ['YA', 'Yasasi Alwis', '947 039 708', 'Outbound', '1001', '4:05', '2026-10-20 16:39'],
   ['NF', 'Nimali Fernando', '771 880 214', 'Answered', '1008', '2:31', '2026-10-20 15:02'],
-  ['UC', 'Unknown customer', '112 457 803', 'Missed', '8001', '0:18', '2026-10-20 11:27'],
+  ['AI', 'Reminder call', 'Vodia AI voice agent', 'Vodia', '1001', '1:12', '2026-10-20 11:27'],
 ]
 
 /* Preview geometry. The scene is authored at SW × SH (the 4 strips of the cards behind + one 480px window)
    and scaled uniformly, so proportions never change. */
 const SW = 960 + 56 // window + beige frame
-const STACK = 112 // 4 strips × 28px of the cards behind the front one
+const STACK = 100 // 5 strips × 20px of the cards behind the front one
 const SH = STACK + 380
 
 const rootEl = ref(null)
 const stageEl = ref(null)
+const capW = ref(0) // caption is exactly as wide as the stacked window above it
 const fitEl = ref(null)
 const active = ref(0)
 const prev = ref(-1)
-const order = ref([0, 1, 2, 3, 4]) // front → back
+const order = ref([0, 1, 2, 3, 4, 5]) // front → back
 const paused = ref(false)
 const revealed = ref(false)
 const scale = ref(1)
@@ -326,6 +358,7 @@ function fit() {
   if (!stage || !box) return
   const k = Math.min(0.86, stage.clientWidth / SW) || 1
   scale.value = +k.toFixed(3)
+  capW.value = Math.round(SW * k)
   fitH.value = Math.round(SH * k)
 }
 function queueFit() {
@@ -508,7 +541,7 @@ onBeforeUnmount(() => {
 
 /* ================= stage ================= */
 .fs-show {
-  margin-top: clamp(14px, 2.4vh, 22px);
+  margin-top: clamp(8px, 1.4vh, 14px);
 }
 .fs-stage {
   position: relative;
@@ -520,7 +553,7 @@ onBeforeUnmount(() => {
 .fs-fit {
   position: relative;
   overflow: hidden;
-  height: 592px;
+  height: 580px;
 }
 .fs-scene {
   position: absolute;
@@ -529,7 +562,7 @@ onBeforeUnmount(() => {
   width: 1016px; /* 960 + frame */
   max-width: none;
   flex: none;
-  height: 592px; /* = STACK + window, see the script */
+  height: 580px; /* = STACK + window, see the script */
   transform-origin: 50% 0;
 }
 .fs .fs-stack {
@@ -550,18 +583,18 @@ onBeforeUnmount(() => {
   min-width: 0;
   margin: 0;
   display: block;
-  top: 112px;
+  top: 100px;
   left: 0;
   right: 0;
   height: 480px;
-  padding: 18px 18px 0;
-  border-radius: 30px 30px 0 0;
+  padding: 10px 10px 0;
+  border-radius: 26px 26px 0 0;
   background: linear-gradient(180deg, #fde8da, var(--frame));
   border-top: 1px solid rgba(255, 255, 255, 0.8);
   box-shadow: 0 -10px 24px -16px rgba(150, 70, 30, 0.35);
   z-index: calc(10 - var(--d));
   transform-origin: 50% 0;
-  transform: translateY(calc(var(--d) * -28px)) scale(calc(1 - var(--d) * 0.03));
+  transform: translateY(calc(var(--d) * -20px)) scale(calc(1 - var(--d) * 0.03));
   transition: transform 0.95s cubic-bezier(0.16, 0.84, 0.3, 1), filter 0.7s ease;
   filter: saturate(calc(1 - var(--d) * 0.12));
 }
@@ -574,7 +607,7 @@ onBeforeUnmount(() => {
 }
 .sc {
   position: absolute;
-  inset: 18px 18px 0;
+  inset: 10px 10px 0;
   border-radius: 14px 14px 0 0;
   background: #fff;
   overflow: hidden;
@@ -691,156 +724,19 @@ onBeforeUnmount(() => {
   background: var(--navy);
   box-shadow: 0 0 0 2px #fff, 0 0 0 3.5px var(--o);
 }
-.tier {
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: 600;
-  background: #f1f5f9;
-  color: #475569;
-}
-.tier.Gold { background: #fff3d6; color: #b45309; }
-.tier.Silver { background: #eef2f7; color: #475569; }
-.tier.Bronze { background: #fbe9dd; color: #9a4a1d; }
-.tier.New { background: #e3edff; color: #1d4ed8; }
-
 /* staggered row entrance */
-.sc .li, .sc .tile, .sc .tr, .sc .ev, .sc .stp, .sc .ln, .sc .dl, .sc .flow span {
+.sc .wa-chat, .sc .wa-msg, .sc .tile, .sc .tr, .sc .stp, .sc .ln, .sc .dl, .sc .flow span {
   opacity: 0;
   translate: 0 10px;
 }
-.sc.on .li, .sc.on .tile, .sc.on .tr, .sc.on .ev, .sc.on .stp, .sc.on .ln, .sc.on .dl, .sc.on .flow span {
+.sc.on .wa-chat, .sc.on .wa-msg, .sc.on .tile, .sc.on .tr, .sc.on .stp, .sc.on .ln, .sc.on .dl, .sc.on .flow span {
   opacity: 1;
   translate: 0 0;
   transition: opacity 0.4s ease, translate 0.55s var(--ease);
   transition-delay: calc(0.35s + var(--n, 0) * 0.08s);
 }
 
-/* 1 · CRM */
-.crm {
-  display: grid;
-  grid-template-columns: 290px 1fr;
-  gap: 22px;
-}
-.list {
-  display: grid;
-  gap: 4px;
-  align-content: start;
-}
-.li {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 7px 10px;
-  border: 1px solid transparent;
-  border-radius: 12px;
-}
-.li .nm {
-  flex: 1;
-}
-.li.sel {
-  border-color: #ffd2b8;
-  background: linear-gradient(90deg, #fff6f0, #fff);
-}
-.det {
-  min-width: 0;
-}
-.pf {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-.pf .nm {
-  flex: 1;
-}
-.pf .nm b {
-  font-size: 18px;
-}
-.kv {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin-top: 12px;
-}
-.kv span {
-  display: grid;
-  gap: 2px;
-  padding: 9px 14px;
-  border-radius: 12px;
-  background: #faf7f4;
-}
-.kv small {
-  font-size: 9.5px;
-  letter-spacing: 0.06em;
-}
-.kv b {
-  font-size: 20px;
-  font-weight: 500;
-}
-.prog {
-  margin-top: 12px;
-}
-.pl {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 7px;
-  font-size: 12px;
-  color: var(--ink);
-}
-.pb {
-  height: 9px;
-  border-radius: 9px;
-  background: #ffe9dd;
-  overflow: hidden;
-}
-.pb i {
-  display: block;
-  width: 0;
-  height: 100%;
-  border-radius: 9px;
-  background: linear-gradient(90deg, #ff9a3d, #f2540c);
-}
-.sc.on .pb i {
-  width: var(--w);
-  transition: width 1.3s var(--ease) 0.8s;
-}
-.tl {
-  display: grid;
-  gap: 7px;
-  margin-top: 12px;
-}
-.ev {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 8px 12px;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-}
-.ev > i {
-  width: 30px;
-  height: 30px;
-  flex: none;
-  border-radius: 10px;
-  background: #fff1e8;
-  position: relative;
-}
-.ev > i::after {
-  content: '';
-  position: absolute;
-  inset: 9px;
-  border-radius: 50%;
-  background: var(--og);
-}
-.ev > i.wa { background: #e6f9ee; }
-.ev > i.wa::after { background: #16a34a; }
-.ev b {
-  display: block;
-  font-size: 13px;
-  font-weight: 500;
-}
-
-/* 2 · stores + shared table */
+/* shared tiles + table */
 .tiles {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -924,33 +820,6 @@ onBeforeUnmount(() => {
   border-radius: 6px;
   background: linear-gradient(90deg, #ff9a3d, #f2540c);
 }
-.chips {
-  display: flex;
-  gap: 6px;
-}
-.chips i {
-  padding: 4px 9px;
-  border: 1px solid #ebe5e0;
-  border-radius: 8px;
-  font-style: normal;
-  font-size: 11px;
-  color: var(--ink);
-}
-.ok {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  color: #15803d;
-}
-.ok i {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #22c55e;
-  box-shadow: 0 0 0 3px #dcfce7;
-}
-
 /* 3 · quotes */
 .qt {
   display: grid;
@@ -1158,7 +1027,7 @@ onBeforeUnmount(() => {
   font-size: 10.5px;
   font-weight: 500;
 }
-.pr.High { background: #fee4e2; color: #b42318; }
+.pr.High, .pr.Overdue { background: #fee4e2; color: #b42318; }
 .pr.Medium { background: #fff3d6; color: #b45309; }
 .pr.Low { background: #e8f8ee; color: #15803d; }
 
@@ -1215,6 +1084,7 @@ onBeforeUnmount(() => {
 .cp.Missed { background: #fee4e2; color: #b42318; }
 .cp.Answered { background: #e8f8ee; color: #15803d; }
 .cp.Outbound { background: #e3edff; color: #1d4ed8; }
+.cp.Vodia { background: #efe9ff; color: #6d28d9; }
 .pop {
   position: absolute;
   right: 22px;
@@ -1260,34 +1130,85 @@ onBeforeUnmount(() => {
   color: var(--navy);
 }
 
+/* 1 · lead inbox */
+.tbl.ld .th, .tbl.ld .tr { grid-template-columns: 1.8fr 0.9fr 0.9fr 1.1fr; }
+.tbl.ld .tr.fresh { background: linear-gradient(90deg, #fff6f0, #fff); }
+.ld-src { display: inline-block; padding: 3px 10px; border-radius: 7px; font-size: 11px; font-style: normal; font-weight: 600; }
+.ld-src.Website { background: #e3edff; color: #1d4ed8; }
+.ld-src.Facebook { background: #e7ecfb; color: #3b5bdb; }
+.ld-src.WhatsApp { background: #e8f8ee; color: #15803d; }
+.ld-mrg { margin-left: 6px; padding: 2px 8px; border-radius: 999px; background: #fff1e8; color: #c2410c; font-size: 10px; font-style: normal; font-weight: 600; white-space: nowrap; }
+.ld-asg { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--navy); }
+.ld-asg i { display: grid; place-items: center; flex: none; width: 24px; height: 24px; border-radius: 50%; background: var(--og); color: #fff; font: 600 9px/1 'Poppins', sans-serif; font-style: normal; }
+
+/* 4 · WhatsApp inbox */
+.wa { display: grid; grid-template-columns: 290px 1fr; gap: 20px; }
+.wa-list { display: grid; gap: 4px; align-content: start; }
+.wa-chat { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid transparent; border-radius: 12px; }
+.wa-chat.sel { border-color: #ffd2b8; background: linear-gradient(90deg, #fff6f0, #fff); }
+.wa-chat .nm { flex: 1; }
+.wa-chat .nm small { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; max-width: 150px; }
+.wa-meta { display: grid; justify-items: end; gap: 4px; }
+.wa-meta em { min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: #16a34a; color: #fff; font: 600 10px/18px 'Poppins', sans-serif; font-style: normal; text-align: center; }
+.wa-conv { display: grid; gap: 10px; align-content: start; padding: 12px; border: 1px solid var(--line); border-radius: 14px; background: #fcfaf8; }
+.wa-head { display: flex; align-items: center; gap: 10px; }
+.wa-head .nm { flex: 1; }
+.wa-asg { padding: 4px 10px; border-radius: 999px; background: #fff1e8; color: #c2410c; font-size: 11px; font-weight: 600; }
+.wa-msgs { display: grid; gap: 8px; }
+.wa-msg { max-width: 78%; padding: 8px 12px; border-radius: 12px; font-size: 12px; line-height: 1.4; }
+.wa-msg small { display: block; margin-top: 2px; font-size: 10px; color: var(--mute); text-align: right; }
+.wa-msg.in { justify-self: start; border: 1px solid var(--line); border-top-left-radius: 4px; background: #fff; }
+.wa-msg.out { justify-self: end; border-top-right-radius: 4px; background: #e1f7d5; color: #14532d; }
+.wa-msg.tpl { justify-self: end; display: grid; gap: 2px; border: 1px dashed #ffc9a8; background: #fff7f2; }
+.wa-msg.tpl::before { content: 'APPROVED TEMPLATE'; font-size: 9px; font-weight: 600; letter-spacing: 0.08em; color: var(--o); }
+.wa-msg.note { justify-self: center; max-width: none; padding: 4px 12px; border-radius: 999px; background: #f1f5f9; color: var(--ink); font-size: 11px; }
+.wa-tools { display: flex; gap: 8px; }
+.wa-tools span { padding: 5px 10px; border: 1px solid #ebe5e0; border-radius: 8px; background: #fff; font-size: 11px; color: var(--ink); }
+
+/* 6 · service & AMC */
+.tbl.am .th, .tbl.am .tr { grid-template-columns: 1.5fr 1.4fr 1.1fr 0.9fr; }
+.am-st { display: inline-block; padding: 3px 10px; border-radius: 7px; font-size: 11px; font-style: normal; font-weight: 600; }
+.am-st.sch { background: #e3edff; color: #1d4ed8; }
+.am-st.prog { background: #fff3d6; color: #b45309; }
+.am-st.war { background: #e8f8ee; color: #15803d; }
+.am-st.ovr { background: #fee4e2; color: #b42318; }
+
 /* ================= caption ================= */
+/* description: plain text under the window, exactly as wide as the window above it */
 .fs-cap {
   position: relative;
   z-index: 2;
+  max-width: 1040px; /* replaced at runtime by the width of the stacked window */
+  margin: 0 auto;
+  padding: clamp(16px, 2.4vh, 26px) 0 0;
+}
+.fs-cap-in {
+  position: relative;
+}
+.fs-cap-swap {
   display: grid;
   grid-template-columns: 1.1fr 1fr;
   grid-template-areas: 'a b' 'a c';
-  gap: clamp(8px, 1.6vh, 16px) clamp(20px, 4vw, 48px);
-  max-width: 1040px;
-  margin: 6px auto 0;
-  padding: 0 clamp(4px, 2vw, 24px);
-  animation: fs-in 0.6s var(--ease) both;
+  gap: clamp(6px, 1.1vh, 12px) clamp(20px, 3vw, 40px);
 }
+/* same easing and timing as the screen that comes to the front, so text and window change together */
+.fs-swap-enter-active {
+  transition: opacity 0.7s ease 0.12s, transform 0.95s cubic-bezier(0.16, 0.84, 0.3, 1), filter 0.8s ease 0.06s;
+}
+.fs-swap-leave-active {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.16, 0.84, 0.3, 1), filter 0.45s ease;
+}
+.fs-swap-enter-from { opacity: 0; transform: translateY(16px); filter: blur(3px); }
+.fs-swap-leave-to { opacity: 0; transform: translateY(-8px); filter: blur(5px); }
 .cp1 { grid-area: a; }
 .cp2 { grid-area: b; align-self: end; }
 .cp3 { grid-area: c; align-self: start; }
-.lbl {
-  display: inline-block;
-  padding: 4px 11px;
-  border: 1px solid #ffe0cf;
-  border-radius: 999px;
-  background: var(--o-soft);
-  color: #c2410c;
-  font-size: 11.5px;
-  font-weight: 500;
-}
 .cp1 h3 {
-  margin: 8px 0 0;
+  margin: 0;
   max-width: 560px;
   font-family: 'Inter Display', Inter, system-ui, sans-serif;
   font-size: clamp(18px, min(1.9vw, 3.2vh), 26px);
@@ -1296,7 +1217,7 @@ onBeforeUnmount(() => {
   letter-spacing: -0.05em;
 }
 .cp1 p {
-  margin: 6px 0 0;
+  margin: 4px 0 0;
   max-width: 580px;
   font-family: 'Inter Display', Inter, system-ui, sans-serif;
   font-size: clamp(13px, 1.1vw, 15px);
@@ -1342,10 +1263,10 @@ onBeforeUnmount(() => {
 .cp3 {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
+  gap: 8px;
 }
 .cp3 div {
-  padding: 7px 12px;
+  padding: 7px 10px;
   border: 1px solid #f3e6dc;
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.8);
@@ -1353,7 +1274,7 @@ onBeforeUnmount(() => {
 .cp3 strong {
   display: block;
   color: var(--o);
-  font-size: clamp(15px, 1.3vw, 18px);
+  font-size: clamp(14px, 1.2vw, 17px);
   font-weight: 500;
   line-height: 1.25;
   overflow-wrap: anywhere;
@@ -1393,7 +1314,7 @@ onBeforeUnmount(() => {
 
 /* responsive */
 @media (max-width: 760px) {
-  .fs-cap {
+  .fs-cap-swap {
     grid-template-columns: minmax(0, 1fr);
     grid-template-areas: 'a' 'b' 'c';
   }
@@ -1415,4 +1336,4 @@ onBeforeUnmount(() => {
   .fs *::before,
   .fs *::after { transition-duration: 0.01s !important; transition-delay: 0s !important; }
 }
-</style>git add .
+</style>

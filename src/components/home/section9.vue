@@ -11,10 +11,10 @@
       <!-- ============ copy ============ -->
       <div class="hx-copy">
 
-        <h1 id="hx-title" class="hx-title">
+        <h2 id="hx-title" class="hx-title">
           <span class="l1">Turn every inquiry</span>
           <span class="l2">into a closed deal.</span>
-        </h1>
+        </h2>
 
         <p class="hx-sub">
           When leads, calls and quotes live in five different tools, deals slip away. Saptivo puts them in one pipeline.

@@ -11,7 +11,7 @@
       <header class="ig-head">
         
         <h2 id="ig-title" class="ig-title">
-          Built-in integrations that work for you <em>24/7.</em>
+          Integrations that work for you <em>24/7.</em>
         </h2>
         <p class="ig-sub">
           Saptivo connects your entire operational stack seamlessly. Auto-log phone calls, sync

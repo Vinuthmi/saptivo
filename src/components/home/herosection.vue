@@ -4,22 +4,27 @@
     <div class="top">
     <div class="content">
       <h1 id="hero-title">
-        Manage and automate
+        Manage and automate your
         <span class="accent">CRM, your way.</span>
       </h1>
 
       <p class="lead">
-        Bring customers, conversations and your entire team into one
-        connected workspace. Work smarter, move faster and make every
-        opportunity count.
+        Saptivo is the all-in-one cloud CRM that brings your customers,
+        conversations and team into one connected workspace. Capture every
+        lead, answer every WhatsApp message, log every phone call and turn
+        quotations into invoices in one click. Built by a Colombo software
+        house with more than 25 years of experience, Saptivo is the CRM
+        software Sri Lanka businesses use to sell faster and serve customers
+        better.
       </p>
 
       <div class="actions">
-        <a href="#contact" class="btn btn-primary">
-          Build your advantage <span class="arrow" aria-hidden="true">↗</span>
+        <a href="mailto:hello@saptivo.com?subject=Start%20my%2014-day%20free%20trial" class="btn btn-primary">
+          Start free for 14 days <span class="arrow" aria-hidden="true">↗</span>
         </a>
-        <a href="#features" class="btn btn-outline">See how it works</a>
+        <a href="mailto:hello@saptivo.com?subject=Book%20a%20Saptivo%20demo" class="btn btn-outline">Book a demo</a>
       </div>
+      <p class="support">No setup fee · No upgrade fees · No credit card required</p>
     </div>
     </div>
 
@@ -289,13 +294,17 @@ h1 {
   -webkit-text-fill-color: transparent;
 }
 .lead {
-  max-width: 560px; margin: 28px 0 0;
-  font-size: 17px; line-height: 1.75; color: #4a4d55;
+  max-width: 760px; margin: 24px 0 0;
+  font-size: 16px; line-height: 1.7; color: #4a4d55;
   animation: rise 0.9s 0.1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
 .actions {
   display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 36px;
   animation: rise 0.9s 0.2s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.support {
+  margin: 18px 0 0; font-size: 13.5px; line-height: 1.5; color: #5b5e66;
+  animation: rise 0.9s 0.3s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 12px;
@@ -399,7 +408,7 @@ h1 {
   .actions { flex-direction: column; align-items: stretch; }
 }
 @media (prefers-reduced-motion: reduce) {
-  h1, .lead, .actions { animation: none; }
+  h1, .lead, .actions, .support { animation: none; }
   .orbit { height: calc(var(--top0) + 160px); }
   .hero-card { transform: none; margin-bottom: 0; }
 }
