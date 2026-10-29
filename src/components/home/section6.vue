@@ -21,33 +21,17 @@
 
     <header class="s4-security-intro">
       <h2 id="s4-security-title" class="s4-security-title">
-        Your data is protected. <span>Period.</span>
+        Your customer data is protected. <span>Period.</span>
       </h2>
       <p class="s4-security-sub">
-        Every layer of Saptivo is hardened with multi-factor authentication, real-time threat detection, and enterprise infrastructure security — so your business data never sleeps unguarded.
+        Every layer of Saptivo is hardened: SMS and email one-time passwords, role-based access control, device fingerprinting, automatic session timeout and a complete audit log. Your data stays private, and only the people you choose can see it.
       </p>
     </header>
-
-    <NetworkSection />
 
     <!-- ============ Authentication & Access — same design as Network & Infrastructure ============ -->
     <div ref="authEl" class="s4a" :class="{ 's4a-in': authIn }" aria-labelledby="s4-title">
       <div class="s4a-panel">
-        <!-- heading row -->
-        <header class="s4a-head">
-          <div class="s4a-hl">
-            <h2 id="s4-title" class="s4a-title">
-              Authentication
-              <span>
-                &amp;
-                <b
-                  >Access<svg viewBox="0 0 200 16" preserveAspectRatio="none" aria-hidden="true">
-                    <path d="M2 11 C 30 3, 52 15, 84 8 S 146 3, 170 9 C 182 12, 192 8, 198 6" /></svg
-                ></b>
-              </span>
-            </h2>
-          </div>
-        </header>
+      
 
         <div class="s4a-grid">
           <!-- ============ left: visual stage ============ -->
@@ -84,7 +68,7 @@
               </div>
 
               <!-- white "product UI" widget -->
-              <div class="s4a-w s4a-w1" :class="{ wrong: wrong && it.id === 'captcha' }" aria-hidden="true">
+              <div class="s4a-w s4a-w1" aria-hidden="true">
                 <template v-if="it.id === 'otp'">
                   <div class="m-h"><i class="m-dot"></i>Saptivo · SMS<em class="m-sep">Your login code</em></div>
                   <div class="m-code sm">
@@ -100,30 +84,6 @@
                     <span v-for="(d, k) in ['3', '0', '6', '5', '8', '1']" :key="k" :style="{ '--k': k + 6 }">{{ d }}</span>
                   </div>
                   <span class="m-pill o"><i></i>Expires in 10 min</span>
-                </template>
-
-                <template v-else-if="it.id === 'captcha'">
-                  <p class="m-t b">Select all circles</p>
-                  <div class="m-tiles six">
-                    <span v-for="(t, k) in tiles" :key="k" class="tile" :class="{ on: t === 'c' }" :style="{ '--k': k }">
-                      <svg viewBox="0 0 24 24">
-                        <circle v-if="t === 'c'" cx="12" cy="12" r="6.5" />
-                        <rect v-else-if="t === 's'" x="6" y="6" width="12" height="12" rx="2" />
-                        <path v-else d="M12 5.5 19 18H5z" />
-                      </svg>
-                      <em v-if="t === 'c'"><svg viewBox="0 0 24 24"><path d="m6 12.5 4 4 8-9" /></svg></em>
-                    </span>
-                  </div>
-                  <hr class="m-hr" />
-                  <p class="m-t b">Or prove you're human</p>
-                  <div class="m-eq">
-                    <b :key="eqIdx">{{ equations[eqIdx] }} =</b>
-                    <span class="m-box"><i class="m-caret"></i></span>
-                    <span class="m-btn">Verify</span>
-                  </div>
-                  <span class="m-pill" :class="wrong ? 'r' : 'g'">
-                    <i></i>{{ wrong ? 'Invalid · new equation' : 'No third-party CDN' }}
-                  </span>
                 </template>
 
                 <template v-else-if="it.id === 'rbac'">
@@ -151,6 +111,22 @@
                       <span class="m-pill o"><i></i>Auto logout</span>
                     </div>
                   </div>
+                </template>
+
+                <template v-else-if="it.id === 'audit'">
+                  <div class="m-h">
+                    <svg viewBox="0 0 24 24" class="m-i" v-html="icons.audit"></svg>
+                    Audit trail<em class="m-imm">Immutable</em>
+                  </div>
+                  <div v-for="(r, k) in auditRows" :key="k" class="m-ev" :style="{ '--k': k }">
+                    <span class="m-av" :style="{ '--c': r.c }">{{ r.u }}</span>
+                    <div class="m-evm">
+                      <p><b>{{ r.n }}</b> {{ r.a }} <u>{{ r.t }}</u></p>
+                      <span>{{ r.f }}: <s>{{ r.from }}</s> → <strong>{{ r.to }}</strong></span>
+                    </div>
+                    <span class="m-time">{{ r.time }}</span>
+                  </div>
+                  <span class="m-pill o"><i></i>User · action · IP · time</span>
                 </template>
 
                 <template v-else>
@@ -217,18 +193,14 @@
       </div>
     </div>
 
-    <DataProtectionSection />
   </section>
 </template>
 
 <script setup>
 defineOptions({ name: 'HomeSecuritySection' })
 
-import NetworkSection from './section7.vue'
-import DataProtectionSection from './section8.vue'
-
 /**
- * SectionSecurity.vue — "Your data is protected. Period." (Vue 3, <script setup>)
+ * SectionSecurity.vue — "Your customer data is protected. Period." (Vue 3, <script setup>)
  *
  * Contains the Network & Infrastructure section, the Authentication & Access section and the
  * Data Protection & Audit section.
@@ -261,6 +233,7 @@ const icons = {
   math: '<rect x="3.5" y="3" width="17" height="18" rx="3"/><path d="M12 7v6M9 10h6M9 17h6"/>',
   roles: '<circle cx="9" cy="8.5" r="3.2"/><path d="M3 19c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><path d="M16.5 6.2a3 3 0 0 1 0 5.6M18 14c2 .6 3.2 2.4 3.2 5"/>',
   timer: '<circle cx="12" cy="13" r="7.5"/><path d="M12 9v4l2.5 1.5M9.5 3h5"/>',
+  audit: '<path d="M7 3.5h7.5l4.5 4.5v12.5H7z"/><path d="M14.5 3.5V8H19M10 12.5h6M10 16h6"/>',
   finger: '<path d="M12 3.5a7.5 7.5 0 0 0-7.5 7.5v2"/><path d="M12 7.5A3.5 3.5 0 0 0 8.5 11v3a7 7 0 0 1-1.8 4.7"/><path d="M12 11v3.5a10 10 0 0 1-2.2 6.2"/><path d="M15.5 20.5A12 12 0 0 0 17.5 14v-3a5.5 5.5 0 0 0-1-3.1"/><path d="M15 11v3a9 9 0 0 1-.9 4"/><path d="M19.5 12.5V11A7.5 7.5 0 0 0 17 5.4"/>',
 }
 
@@ -283,19 +256,6 @@ const items = [
     ],
   },
   {
-    id: 'captcha', icon: 'image', img: '',
-    name: 'Image & Math Captcha',
-    desc: 'Image and math challenges that keep bots out.',
-    bg: cardPalette,
-    metric: ['0 ms', 'External CDN latency', 'Self-hosted'],
-    tags: ['Blocks bots', 'Auto-rotates'],
-    points: [
-      'Picture challenge blocks automated sign-ins',
-      'Simple math check with no third-party service',
-      'New equation after every wrong answer',
-    ],
-  },
-  {
     id: 'rbac', icon: 'roles', img: '',
     name: 'Role-Based Access Control',
     desc: 'Each staff member sees only what their role allows.',
@@ -306,6 +266,19 @@ const items = [
       'Roles for SuperAdmin, Manager and Staff',
       'Read, edit, delete and export set per module',
       'Financial and customer data kept to approved roles',
+    ],
+  },
+  {
+    id: 'device', icon: 'finger', img: '',
+    name: 'Device Fingerprinting',
+    desc: 'Unknown devices are flagged and challenged.',
+    bg: cardPalette,
+    metric: ['3 signals', 'Hardware · canvas · OS', 'Fingerprint'],
+    tags: ['Admin alerts', 'Instant challenge'],
+    points: [
+      'Recognises each device by its hardware, browser and OS',
+      'Asks for extra verification on new devices',
+      'Alerts your administrators',
     ],
   },
   {
@@ -322,30 +295,31 @@ const items = [
     ],
   },
   {
-    id: 'device', icon: 'finger', img: '',
-    name: 'Device Fingerprinting',
-    desc: 'Unknown devices are flagged and challenged.',
+    id: 'audit', icon: 'audit', img: '',
+    name: 'Audit Trail Logs',
+    desc: 'Every change is recorded: who did what, and when.',
     bg: cardPalette,
-    metric: ['3 signals', 'Hardware · canvas · OS', 'Fingerprint'],
-    tags: ['Admin alerts', 'Instant challenge'],
+    metric: ['4 fields', 'User, action, IP and time', 'Immutable'],
+    tags: ['Before / after', 'CSV export'],
     points: [
-      'Recognises each device by its hardware, browser and OS',
-      'Asks for extra verification on new devices',
-      'Alerts your administrators',
+      'Records who made each change, from where and when',
+      'Shows the before and after value of every edit',
+      'Export the log for compliance and reviews',
     ],
   },
 ]
 
 /* mock data */
-const tiles = ['c', 's', 'c', 't', 'c', 's']
 const roles = [
   { n: 'SuperAdmin', p: [1, 1, 1, 1] },
   { n: 'Manager', p: [1, 1, 0, 1] },
   { n: 'Staff', p: [1, 0, 0, 0] },
 ]
-const equations = ['7 + 4', '12 − 5', '3 × 6', '9 + 8']
-const eqIdx = ref(0)
-const wrong = ref(false)
+const auditRows = [
+  { u: 'NP', c: '#f2540c', n: 'Nimal P.', a: 'edited', t: 'Quote #Q-2041', f: 'Discount', from: '5%', to: '10%', time: '10:42' },
+  { u: 'SK', c: '#245aa6', n: 'Sara K.', a: 'updated', t: 'Lead #L-318', f: 'Stage', from: 'New', to: 'Won', time: '10:39' },
+  { u: 'RM', c: '#c26a16', n: 'Ravi M.', a: 'deleted', t: 'Lead #L-297', f: 'Status', from: 'Active', to: 'Deleted', time: '10:24' },
+]
 
 /* ------------------------------------------------------------------ interaction */
 const AUTOPLAY_MS = 6500
@@ -410,17 +384,6 @@ onMounted(() => {
     }, TICK)
     timers.add(ap)
 
-    // math captcha demo: wrong entry → equation rotates (only while that item is active)
-    const mc = setInterval(() => {
-      if (items[active.value].id !== 'captcha' || !inView) return
-      wrong.value = true
-      const t = setTimeout(() => {
-        eqIdx.value = (eqIdx.value + 1) % equations.length
-        wrong.value = false
-      }, 900)
-      timers.add(t)
-    }, 3600)
-    timers.add(mc)
   }
 })
 onBeforeUnmount(() => {
@@ -552,47 +515,6 @@ onBeforeUnmount(() => {
     transform 0.9s var(--ease);
 }
 
-/* ---------- heading row ---------- */
-.s4a-head {
-  display: block;
-}
-.s4a-title {
-  margin: 22px 0 0;
-  font-family: 'Inter Display', Inter, system-ui, sans-serif;
-  font-size: clamp(20px, 2vw, 42px);
-  font-weight: 500;
-  line-height: 1.12;
-  letter-spacing: -0.025em;
-  white-space: nowrap;
-}
-.s4a-title span {
-  display: inline;
-  font-weight: 500;
-}
-.s4a-title b {
-  position: relative;
-  font-weight: 500;
-}
-.s4a-title b svg {
-  position: absolute;
-  left: -3%;
-  bottom: -0.16em;
-  width: 106%;
-  height: 0.28em;
-  overflow: visible;
-}
-.s4a-title b path {
-  fill: none;
-  stroke: url(#s4-ul);
-  stroke-width: 3.2;
-  stroke-linecap: round;
-  stroke-dasharray: 260;
-  stroke-dashoffset: 260;
-  transition: stroke-dashoffset 1.3s 0.6s var(--ease);
-}
-.s4a-in .s4a-title b path {
-  stroke-dashoffset: 0;
-}
 /* ---------- grid ---------- */
 .s4a-grid {
   display: grid;
@@ -1116,110 +1038,6 @@ onBeforeUnmount(() => {
   flex-wrap: wrap;
 }
 
-/* image captcha */
-.m-tiles {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 6px;
-}
-.tile {
-  position: relative;
-  height: 34px;
-  border-radius: 8px;
-  display: grid;
-  place-items: center;
-  background: #f4f2ef;
-  border: 1.5px solid transparent;
-}
-.tile svg {
-  width: 19px;
-  height: 19px;
-  fill: #b9bccb;
-}
-.tile.on {
-  background: var(--peach);
-  border-color: var(--o1);
-}
-.tile.on > svg {
-  fill: var(--o2);
-}
-.tile em {
-  position: absolute;
-  right: -4px;
-  top: -4px;
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: var(--o2);
-  border: 1.5px solid #fff;
-  transform: scale(0);
-}
-.s4a-layer.on .tile em {
-  animation: s4-pop 0.45s var(--ease) both;
-  animation-delay: calc(0.8s + var(--k) * 0.1s);
-}
-.tile em svg {
-  width: 9px;
-  height: 9px;
-  fill: none;
-  stroke: #fff;
-  stroke-width: 3.2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-/* math captcha */
-.m-eq {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.m-eq b {
-  font-size: 22px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  white-space: nowrap;
-  animation: s4-in 0.5s var(--ease);
-}
-.m-box {
-  flex: 1;
-  height: 36px;
-  border-radius: 9px;
-  display: flex;
-  align-items: center;
-  padding: 0 10px;
-  background: #f7f6f4;
-  border: 1.5px solid var(--o1);
-  box-shadow: 0 0 0 3px rgba(255, 122, 26, 0.15);
-  transition: 0.3s;
-}
-.m-caret {
-  width: 1.5px;
-  height: 16px;
-  background: var(--ink);
-  animation: s4-blink-c 1s steps(1) infinite;
-}
-.m-btn {
-  height: 30px;
-  border-radius: 999px;
-  display: grid;
-  place-items: center;
-  background: linear-gradient(95deg, var(--o1), var(--o2));
-  color: #fff;
-  font-size: 11.5px;
-  font-weight: 600;
-}
-.s4a-w1.wrong {
-  animation: s4-shake 0.45s;
-}
-.s4a-w1.wrong .m-box {
-  border-color: #ef4444;
-  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.14);
-  background: #fff7f7;
-}
-
 /* roles */
 .m-role {
   display: flex;
@@ -1458,23 +1276,6 @@ onBeforeUnmount(() => {
   height: 30px;
   font-size: 15px;
 }
-.m-tiles.six {
-  grid-template-columns: repeat(6, 1fr);
-}
-.m-tiles.six .tile {
-  height: 32px;
-}
-.m-eq b {
-  font-size: 18px;
-}
-.m-eq .m-box {
-  height: 32px;
-}
-.m-eq .m-btn {
-  flex: none;
-  height: 32px;
-  padding: 0 14px;
-}
 .s4a-w1 {
   gap: 8px;
 }
@@ -1570,5 +1371,83 @@ onBeforeUnmount(() => {
   .s4a-list {
     order: 1;
   }
+}
+
+/* ===== audit trail widget ===== */
+.m-imm {
+  margin-left: auto;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--peach);
+  color: #b84a0a;
+  font-style: normal;
+  font-size: 9.5px;
+  font-weight: 700;
+}
+.m-ev {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 9px;
+  border-radius: 11px;
+  background: #f7f6f4;
+  min-width: 0;
+}
+.s4a-layer.on .m-ev {
+  animation: s4-in 0.55s var(--ease) both;
+  animation-delay: calc(0.5s + var(--k) * 0.14s);
+}
+.m-av {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--c);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+}
+.m-evm {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+.m-evm p {
+  margin: 0;
+  font-size: 10.5px;
+  line-height: 1.3;
+  color: var(--ink-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.m-evm p b {
+  color: var(--ink);
+  font-weight: 600;
+}
+.m-evm p u {
+  text-decoration: none;
+  color: var(--o2);
+  font-weight: 600;
+}
+.m-evm > span {
+  font-size: 9px;
+  color: var(--muted);
+}
+.m-evm s {
+  color: #c2262b;
+}
+.m-evm strong {
+  color: #15803d;
+  font-weight: 700;
+}
+.m-time {
+  flex: none;
+  font-size: 9.5px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
 }
 </style>
