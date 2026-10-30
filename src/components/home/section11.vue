@@ -33,9 +33,6 @@
 
           <a href="#contact" class="btn">
             Get Started
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M5 12h14M13 6l6 6-6 6" />
-            </svg>
           </a>
 
           <span class="note">
@@ -400,50 +397,38 @@ onBeforeUnmount(() => io?.disconnect());
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 25px;
+  gap: 12px;
 
-  min-height: 56px;
+  min-height: 54px;
   margin-top: 30px;
-  padding: 0 25px;
+  padding: 0 24px;
 
   color: #fff;
-  background: #171717;
-  border: 1px solid #171717;
+  background: linear-gradient(180deg, #ff7a45, #f2531f);
+  border: 0;
   border-radius: 12px;
 
   font-size: 15px;
   font-weight: 600;
   text-decoration: none;
 
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.10);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35), 0 10px 24px rgba(240, 75, 35, 0.3);
 
-  transition:
-    background 0.25s ease,
-    border-color 0.25s ease,
-    transform 0.25s ease,
-    box-shadow 0.25s ease;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.btn svg {
-  width: 20px;
-  height: 20px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  transition: transform 0.25s ease;
+.btn .arrow {
+  display: inline-block;
+  transition: transform 0.25s;
 }
 
 .btn:hover {
-  background: var(--orange);
-  border-color: var(--orange);
-  transform: translateY(-3px);
-  box-shadow: 0 12px 28px rgba(255, 99, 56, 0.22);
+  transform: translateY(-2px);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.4), 0 16px 32px rgba(240, 75, 35, 0.4);
 }
 
-.btn:hover svg {
-  transform: translateX(4px);
+.btn:hover .arrow {
+  transform: rotate(45deg);
 }
 
 .note {
@@ -632,10 +617,10 @@ onBeforeUnmount(() => io?.disconnect());
   }
 
   .btn {
-    min-height: 52px;
+    min-height: 50px;
     margin-top: 24px;
-    gap: 18px;
     padding: 0 20px;
+    font-size: 14px;
   }
 
   .shot {
@@ -656,7 +641,7 @@ onBeforeUnmount(() => io?.disconnect());
   .dash,
   .store,
   .btn,
-  .btn svg {
+  .btn .arrow {
     transition: none !important;
   }
 

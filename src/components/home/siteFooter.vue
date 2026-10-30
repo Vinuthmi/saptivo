@@ -63,9 +63,9 @@ const partnerLinks = [
       </p>
       <div class="cta-actions">
         <a class="btn btn-primary" href="mailto:hello@saptivo.com">
-          Talk to our team <span aria-hidden="true">↗</span>
+          Start your free trial
         </a>
-        <a class="btn btn-light" href="#workflow">See how it works</a>
+        <a class="btn btn-light" href="#workflow">Talk to our team: 0112 000 569</a>
       </div>
 
       <div class="orbit-wrap" aria-hidden="true">
@@ -207,22 +207,28 @@ const partnerLinks = [
 }
 .cta-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 14px; }
 .btn {
-  display: inline-flex; align-items: center; gap: 10px;
-  padding: 16px 28px; border-radius: 10px;
-  font-size: 14px; font-weight: 600; text-decoration: none;
-  transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+  display: inline-flex; align-items: center; justify-content: center; gap: 12px;
+  min-height: 54px; padding: 0 24px; border-radius: 12px;
+  font-size: 15px; font-weight: 600; text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
+.btn span { display: inline-block; transition: transform 0.25s; }
 .btn:hover { transform: translateY(-2px); }
 .btn-primary {
   color: #fff;
-  background: linear-gradient(180deg, #fb7a3a, #ef5d22);
-  box-shadow: 0 8px 22px rgba(240, 100, 43, 0.4);
+  background: linear-gradient(180deg, #ff7a45, #f2531f);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35), 0 10px 24px rgba(240, 75, 35, 0.3);
 }
-.btn-primary:hover { filter: brightness(1.06); }
+.btn-primary:hover {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.4), 0 16px 32px rgba(240, 75, 35, 0.4);
+}
+.btn-primary:hover span { transform: rotate(45deg); }
 .btn-light {
-  color: #17191d; background: #fff;
-  border: 1px solid rgba(23, 25, 29, 0.14);
-  box-shadow: 0 4px 14px rgba(23, 25, 29, 0.06);
+  color: #fff; background: #0b0c0e;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14), 0 10px 24px rgba(0, 0, 0, 0.18);
+}
+.btn-light:hover {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.28), 0 16px 32px rgba(0, 0, 0, 0.28);
 }
 
 /* ---------- Rotating orbit ---------- */

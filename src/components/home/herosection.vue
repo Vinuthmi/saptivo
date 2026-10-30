@@ -12,7 +12,7 @@
         Saptivo is the all-in-one cloud CRM that brings your customers,
         conversations and team into one connected workspace. Capture every
         lead, answer every WhatsApp message, log every phone call and turn
-        quotations into invoices in one click. Built by a Colombo software
+        quotations into invoices in one click.<br> Built by a Colombo software
         house with more than 25 years of experience, Saptivo is the CRM
         software Sri Lanka businesses use to sell faster and serve customers
         better.
@@ -20,7 +20,7 @@
 
       <div class="actions">
         <a href="mailto:hello@saptivo.com?subject=Start%20my%2014-day%20free%20trial" class="btn btn-primary">
-          Start free for 14 days <span class="arrow" aria-hidden="true">↗</span>
+          Start free for 14 days
         </a>
         <a href="mailto:hello@saptivo.com?subject=Book%20a%20Saptivo%20demo" class="btn btn-outline">Book a demo</a>
       </div>

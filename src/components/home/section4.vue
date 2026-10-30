@@ -14,9 +14,7 @@
           Integrations that work for you <em>24/7.</em>
         </h2>
         <p class="ig-sub">
-          Saptivo connects your entire operational stack seamlessly. Auto-log phone calls, sync
-          WhatsApp chats, ingest social leads instantly, and mirror tasks to Google Calendar in
-          real time.
+          Saptivo connects your operational stack so information flows in without copy-and-paste:
         </p>
       </header>
 
@@ -39,6 +37,14 @@
           {{ s.tab }}
         </button>
       </div>
+
+      <!-- ============ description for the active tab ============ -->
+      <ul :key="active" class="ig-desc" aria-live="polite">
+        <li v-for="(pt, i) in activePoints" :key="i" :style="{ '--i': i }">
+          <i class="ck"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 12.5 4 4 8-9" /></svg></i>
+          <span><b>{{ pt.b }}</b>{{ pt.t }}</span>
+        </li>
+      </ul>
 
       <!-- ============ stage ============ -->
       <div
@@ -63,7 +69,7 @@
             <svg width="18" height="18" viewBox="0 0 24 24"><path d="m9.5 6 6 6-6 6" /></svg>
           </button>
 
-          <div class="ig-scene" :class="{ compact }" :style="{ transform: `translateX(-50%) scale(${scale})` }">
+          <div class="ig-scene" :class="{ compact, phone }" :style="{ transform: `translateX(-50%) scale(${scale})` }">
             <!-- ================= 1 · WordPress website ================= -->
             <div
               :id="`ig-panel-0`"
@@ -99,8 +105,8 @@
                 </div>
               </div>
 
-              <svg class="link" viewBox="0 0 120 40" aria-hidden="true">
-                <path id="lk0" d="M2 20 H118" />
+              <svg class="link" viewBox="0 0 44 40" aria-hidden="true">
+                <path id="lk0" d="M2 20 H42" />
                 <circle v-if="motion" r="4"><animateMotion dur="2.2s" repeatCount="indefinite" begin="0s"><mpath href="#lk0" /></animateMotion></circle>
                 <circle v-if="motion" r="4"><animateMotion dur="2.2s" repeatCount="indefinite" begin="1.1s"><mpath href="#lk0" /></animateMotion></circle>
               </svg>
@@ -164,8 +170,8 @@
                 </div>
               </div>
 
-              <svg class="link" viewBox="0 0 120 40" aria-hidden="true">
-                <path id="lk1" d="M2 20 H118" />
+              <svg class="link" viewBox="0 0 44 40" aria-hidden="true">
+                <path id="lk1" d="M2 20 H42" />
                 <circle v-if="motion" r="4"><animateMotion dur="2.2s" repeatCount="indefinite" begin="0s"><mpath href="#lk1" /></animateMotion></circle>
                 <circle v-if="motion" r="4"><animateMotion dur="2.2s" repeatCount="indefinite" begin="1.1s"><mpath href="#lk1" /></animateMotion></circle>
               </svg>
@@ -213,8 +219,8 @@
                     <span class="brand ph"><svg width="30" height="30" viewBox="0 0 24 24" v-html="icon.phone"></svg></span>
                     <span class="st ig-ok"><i></i>ENABLED</span>
                   </div>
-                  <b class="src-n">3CX Telephony Mapping</b>
-                  <span class="src-s">Incoming calls open the vendor panel</span>
+                  <b class="src-n">3CX, Vodia &amp; WhatsApp</b>
+                  <span class="src-s">Calls, AI agents and chats log to the customer</span>
                   <div class="metas four">
                     <span><small>MAIN DID</small><b>117432944</b></span>
                     <span><small>QUEUE</small><b>8001</b></span>
@@ -234,8 +240,8 @@
                 </div>
               </div>
 
-              <svg class="link" viewBox="0 0 120 40" aria-hidden="true">
-                <path id="lk2" d="M2 20 H118" />
+              <svg class="link" viewBox="0 0 44 40" aria-hidden="true">
+                <path id="lk2" d="M2 20 H42" />
                 <circle v-if="motion" r="4"><animateMotion dur="2.2s" repeatCount="indefinite" begin="0s"><mpath href="#lk2" /></animateMotion></circle>
                 <circle v-if="motion" r="4"><animateMotion dur="2.2s" repeatCount="indefinite" begin="1.1s"><mpath href="#lk2" /></animateMotion></circle>
               </svg>
@@ -245,7 +251,7 @@
                   <div><small>PBX CALL JOURNAL</small><h3>Calls</h3></div>
                   <span class="ready"><svg width="18" height="18" viewBox="0 0 24 24" v-html="icon.phone"></svg><span><b>Call Back Ready</b><small>extension 1001 can place callbacks</small></span></span>
                 </div>
-                <div class="ig-pills"><span class="on">All <em>126</em></span><span>Missed <em>9</em></span><span>Answered <em>98</em></span><span>Outbound <em>19</em></span></div>
+                <div class="ig-pills"><span class="on">All <em>126</em></span><span>Missed <em>9</em></span><span>Answered <em>98</em></span><span>AI calls <em>19</em></span></div>
                 <div class="thead ig-calls"><span>CUSTOMER</span><span>CALL TYPE</span><span>EXT</span><span>DURATION</span><span>DATE / TIME</span></div>
                 <div v-for="(c, k) in calls" :key="c.p" class="trow ig-calls" :class="{ fresh: k === 0 }" :style="{ '--k': k }">
                   <span class="ig-who"><i class="av dk">{{ c.i }}</i><span><b>{{ c.n }}<i v-if="c.wa" class="wa-b" title="WhatsApp chat linked"><svg viewBox="0 0 24 24" aria-hidden="true" v-html="icon.wa"></svg></i></b><small>{{ c.p }}</small></span></span>
@@ -297,8 +303,8 @@
                 </div>
               </div>
 
-              <svg class="link" viewBox="0 0 120 40" aria-hidden="true">
-                <path id="lk3" d="M2 20 H118" />
+              <svg class="link" viewBox="0 0 44 40" aria-hidden="true">
+                <path id="lk3" d="M2 20 H42" />
                 <circle v-if="motion" r="4"><animateMotion dur="2.2s" repeatCount="indefinite" begin="0s"><mpath href="#lk3" /></animateMotion></circle>
                 <circle v-if="motion" r="4"><animateMotion dur="2.2s" repeatCount="indefinite" begin="1.1s" keyPoints="1;0" keyTimes="0;1" calcMode="linear"><mpath href="#lk3" /></animateMotion></circle>
               </svg>
@@ -328,6 +334,72 @@
               <div class="toast t4" style="--d: 3">
                 <span class="tic"><svg width="18" height="18" viewBox="0 0 24 24" v-html="icon.refresh"></svg></span>
                 <span><b>Event mirrored</b><small>CRM task → Google Calendar</small></span>
+              </div>
+            </div>
+
+            <!-- ================= 5 · REST API & webhooks ================= -->
+            <div
+              :id="`ig-panel-4`"
+              class="sl"
+              :class="{ on: active === 4 }"
+              role="tabpanel"
+              aria-labelledby="ig-tab-4"
+              :aria-hidden="active === 4 ? undefined : 'true'"
+            >
+              <div class="col">
+                <div class="src card" style="--d: 0">
+                  <div class="src-top">
+                    <span class="brand ph"><svg width="30" height="30" viewBox="0 0 24 24" v-html="icon.code"></svg></span>
+                    <span class="st ig-ok"><i></i>LIVE</span>
+                  </div>
+                  <b class="src-n">REST API &amp; Webhooks</b>
+                  <span class="src-s">Connect accounting, e-commerce and in-house systems</span>
+                  <div class="metas">
+                    <span><small>AUTH</small><b>API key</b></span>
+                    <span><small>FORMAT</small><b>JSON</b></span>
+                  </div>
+                </div>
+                <div class="side card" style="--d: 1">
+                  <div class="sd-h"><b>{{ sides[4].title }}</b><span class="sd-tag"><i></i>{{ sides[4].tag }}</span></div>
+                  <svg class="spark" viewBox="0 0 260 56" preserveAspectRatio="none" aria-hidden="true">
+                    <path class="sa" :d="sides[4].area" />
+                    <path class="sln" pathLength="100" :d="sides[4].line" />
+                  </svg>
+                  <div class="sd-stats">
+                    <span v-for="m in sides[4].stats" :key="m.l"><b>{{ m.v }}</b><small>{{ m.l }}</small></span>
+                  </div>
+                </div>
+              </div>
+
+              <svg class="link" viewBox="0 0 44 40" aria-hidden="true">
+                <path id="lk4" d="M2 20 H42" />
+                <circle v-if="motion" r="4"><animateMotion dur="2.2s" repeatCount="indefinite" begin="0s"><mpath href="#lk4" /></animateMotion></circle>
+                <circle v-if="motion" r="4"><animateMotion dur="2.2s" repeatCount="indefinite" begin="1.1s" keyPoints="1;0" keyTimes="0;1" calcMode="linear"><mpath href="#lk4" /></animateMotion></circle>
+              </svg>
+
+              <div class="win" style="--d: 1">
+                <div class="hero">
+                  <div><small>DEVELOPER API</small><h3>Event stream</h3><p>Every CRM event is pushed to your other systems as it happens.</p></div>
+                  <span class="count"><b>3</b><small>SYSTEMS</small></span>
+                </div>
+                <div class="kpis">
+                  <span v-for="(k, i) in apiKpis" :key="k.l" :style="{ '--k': i }">
+                    <b>{{ k.v }}</b><small>{{ k.l }}</small><i>{{ k.d }}</i>
+                  </span>
+                </div>
+                <div class="thead two"><span>EVENT</span><span>DESTINATION</span><span>STATUS</span><span class="rc">SENT</span></div>
+                <div v-for="(e, k) in events" :key="e.n" class="trow two" :class="{ fresh: k === 0 }" :style="{ '--k': k }">
+                  <span class="ig-who"><i class="av dk">{{ e.i }}</i><span><b>{{ e.n }}</b><small>{{ e.no }}</small></span></span>
+                  <span class="chip">{{ e.dest }}</span>
+                  <span class="pend" :class="e.cls">{{ e.s }}</span>
+                  <span class="ct rc">{{ e.t }}</span>
+                </div>
+                <p class="foot">Showing the latest 3 of 1,248 events today</p>
+              </div>
+
+              <div class="toast t5" style="--d: 3">
+                <span class="tic g"><svg width="18" height="18" viewBox="0 0 24 24" v-html="icon.refresh"></svg></span>
+                <span><b>Webhook delivered</b><small>invoice.paid → Accounting</small></span>
               </div>
             </div>
           </div>
@@ -363,18 +435,42 @@ defineOptions({ name: 'HomeIntegrationsSection' })
  *
  * Browser APIs are only used in onMounted / handlers (SSR / Nuxt safe).
  */
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
 
 const SCENE_W = 1160
 const SCENE_H = 490
 const COMPACT_W = 700
+const PHONE_W = 400
 const AUTOPLAY_MS = 7000
 
 const slides = [
-  { id: 'web', tab: 'Website leads', icon: 'globe' },
-  { id: 'fb', tab: 'Social lead ads', icon: 'bolt' },
-  { id: 'calls', tab: 'Calls & WhatsApp', icon: 'phone' },
+  { id: 'web', tab: 'WordPress forms', icon: 'globe' },
+  { id: 'fb', tab: 'Facebook Lead Ads', icon: 'bolt' },
+  { id: 'calls', tab: 'Calls, WhatsApp & AI', icon: 'phone' },
   { id: 'cal', tab: 'Google Calendar', icon: 'calendar' },
+  { id: 'api', tab: 'REST API & webhooks', icon: 'code' },
+]
+
+/* the seven integration points (each jumps to the slide that shows it) */
+const points = [
+  { b: 'WordPress website forms', t: ' become new inquiries instantly', s: 0 },
+  { b: 'Facebook Lead Ads', t: ' create scored, assigned leads within seconds', s: 1 },
+  { b: 'WhatsApp Business API', t: ' chats sync both ways', s: 2 },
+  { b: '3CX and Vodia calls', t: ' log themselves against the right customer', s: 2 },
+  { b: 'Vodia AI voice agents', t: ' make reminder and follow-up calls from CRM data', s: 2 },
+  { b: 'Google Calendar', t: ' mirrors CRM follow-ups and meetings in real time', s: 3 },
+  { b: 'A REST API and webhooks', t: ' connect accounting, e-commerce and in-house systems', s: 4 },
+]
+const activePoints = computed(() => points.filter((p) => p.s === active.value))
+const apiKpis = [
+  { v: '1,248', l: 'Events sent today', d: '+86' },
+  { v: '99.9%', l: 'Delivered', d: 'OK' },
+  { v: '3', l: 'Systems linked', d: '+1' },
+]
+const events = [
+  { i: '$', n: 'invoice.paid', no: 'Webhook #4821', dest: 'Accounting', s: 'DELIVERED', cls: 'lead', t: 'just now' },
+  { i: '#', n: 'order.created', no: 'Webhook #4820', dest: 'E-commerce', s: 'DELIVERED', cls: 'lead', t: '1 min ago' },
+  { i: '+', n: 'customer.updated', no: 'REST · PATCH', dest: 'In-house ERP', s: 'SYNCED', cls: 'blue', t: '4 min ago' },
 ]
 
 /* demo data (mirrors the CRM screens) */
@@ -404,7 +500,7 @@ const leads = [
 const calls = [
   { i: 'DP', n: 'Daniel Perera', p: '755 322 689', t: 'Missed', x: '8001', d: '0:56', at: '2026-10-16 08:49', wa: true },
   { i: 'KP', n: 'Kasun Perera', p: '+94 71 234 5098', t: 'Answered', x: '1032', d: '2:05', at: '2026-10-16 08:12', wa: true },
-  { i: 'YA', n: 'Yasasi Alwis', p: '+94 70 397 0813', t: 'Outbound', x: '1001', d: '4:05', at: '2026-10-15 16:39', wa: false },
+  { i: 'YA', n: 'Yasasi Alwis', p: '+94 70 397 0813', t: 'AI call', x: 'Vodia', d: '1:12', at: '2026-10-15 16:39', wa: false },
   { i: 'NF', n: 'Nadeesha Fernando', p: '+94 77 123 4567', t: 'Answered', x: '1001', d: '3:12', at: '2026-10-15 15:02', wa: true },
 ]
 const monthDays = Array.from({ length: 31 }, (_, i) => i + 1)
@@ -424,6 +520,7 @@ const sides = [
   { title: 'Lead ads performance', tag: 'This week', v: [2, 3, 6, 5, 9, 8, 14], stats: [{ v: '64', l: 'Leads captured' }, { v: '0.6 s', l: 'Sync time' }, { v: '92%', l: 'Contacted' }] },
   { title: 'Call & chat activity', tag: 'Today', v: [3, 7, 5, 11, 8, 6, 10], stats: [{ v: '126', l: 'Calls logged' }, { v: '18', l: 'WhatsApp chats' }, { v: '96%', l: 'Auto-matched' }] },
   { title: 'Calendar sync', tag: 'Live', v: [5, 5, 8, 6, 9, 7, 8], stats: [{ v: '42', l: 'Events mirrored' }, { v: '2-way', l: 'Direction' }, { v: '< 5 s', l: 'Latency' }] },
+  { title: 'API & webhook traffic', tag: 'Today', v: [4, 5, 9, 7, 12, 10, 15], stats: [{ v: '1,248', l: 'Events sent' }, { v: '99.9%', l: 'Delivered' }, { v: '120 ms', l: 'Avg latency' }] },
 ].map((s) => ({ ...s, ...spark(s.v) }))
 
 const icon = {
@@ -433,11 +530,12 @@ const icon = {
   calendar: '<rect x="4" y="5.5" width="16" height="14.5" rx="3"/><path d="M4 10h16M8.5 4v3M15.5 4v3"/>',
   chat: '<path d="M4 5h16v11H9.5L5 20v-4H4z"/><path d="M8.5 10.5h7"/>',
   pin: '<path d="m14.5 4.5 5 5-3 .8-3.2 3.2.2 3.5-1.3 1.3-3.5-3.5L5 19l-.7-.7 4.2-5.200-3.5-3.5L6.300 8.3l3.5.2L13 5.3z"/>',
+  code: '<path d="m8 8-4 4 4 4M16 8l4 4-4 4M13.500 5l-3 14"/>',
   refresh: '<path d="M19 11a7 7 0 0 0-12.500-3.800L5 9"/><path d="M5 4.5V9h4.5"/><path d="M5 13a7 7 0 0 0 12.500 3.800L19 15"/><path d="M19 19.500V15h-4.500"/>',
   wa: '<path d="M12 3.8a8.200 8.200 0 0 0-7 12.400L3.800 20.200l4.100-1.100A8.200 8.200 0 1 0 12 3.800z"/><path d="M9 8.600c.3 2.600 2.300 5.100 5.700 6.200l1.400-1.500-2-1.200-1 .8c-.8-.3-1.700-1.200-2.100-2.100l.8-.9-1-2.200z"/>',
 }
 const art = {
-  wp: '<circle cx="24" cy="24" r="21" fill="#21759b"/><circle cx="24" cy="24" r="17.8" fill="none" stroke="#fff" stroke-width="1.8"/><path d="M13.5 17h4.4l3.700 11.600L24 21.200l-1.300-4.200h4.500l3.600 11.600 2.300-7.600c.3-1.100-.3-2-1.500-2h-1.400v-1.400h6.200v1.400h-1c-1.100 0-1.900.7-2.300 1.800l-3.600 11.600h-1.600L25.600 21l-3.300 9.400h-1.700z" fill="#fff" transform="translate(-2.4 2) scale(1.06)"/>',
+  wp: '<g transform="scale(2)"><path fill="#21759b" d="M21.469 6.825c.84 1.537 1.318 3.3 1.318 5.175 0 3.979-2.156 7.456-5.363 9.325l3.295-9.527c.615-1.54.82-2.771.82-3.864 0-.405-.026-.78-.07-1.11m-7.981.105c.647-.034 1.23-.1 1.23-.1.58-.07.51-.93-.067-.896 0 0-1.742.136-2.868.136-1.056 0-2.833-.136-2.833-.136-.58-.034-.648.862-.068.896 0 0 .549.067 1.128.1l1.676 4.597-2.355 7.063-3.92-11.66c.648-.033 1.23-.1 1.23-.1.58-.067.512-.93-.068-.896 0 0-1.74.136-2.866.136-.2 0-.438-.005-.69-.013C4.907 3.742 8.2 1.213 12 1.213c2.832 0 5.411 1.083 7.346 2.855-.047-.003-.093-.009-.14-.009-1.056 0-1.803.92-1.803 1.907 0 .886.511 1.634 1.056 2.52.41.714.887 1.634.887 2.963 0 .92-.354 1.988-.82 3.476l-1.075 3.59-3.894-11.582zM12 22.784c-1.058 0-2.077-.155-3.04-.437l3.228-9.38 3.306 9.058c.021.053.048.1.077.147-1.12.395-2.322.612-3.571.612M1.211 12c0-1.564.336-3.05.935-4.39l5.147 14.1C3.693 19.96 1.211 16.274 1.211 12M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0"/></g>',
   fb: '<circle cx="24" cy="24" r="21" fill="#1877f2"/><path d="M26.200 41V27.600h4.100l.7-4.800h-4.800v-3c0-1.400.6-2.500 2.500-2.500H31V13c-.5-.1-2-.2-3.700-.2-3.700 0-6.100 2.200-6.100 6.200v3.800H17v4.800h4.200V41z" fill="#fff"/>',
   g: '<path d="M43.600 20.500H42V20H24v8h11.300A12 12 0 1 1 24 12c3 0 5.800 1.100 7.900 3l5.700-5.700A20 20 0 1 0 44 24c0-1.200-.1-2.400-.4-3.500z" fill="#4285f4"/>',
   gcal: '<rect x="3" y="3" width="18" height="18" rx="3.500" fill="#fff" stroke="#4285f4" stroke-width="1.6"/><path d="M3 8.500h18" stroke="#4285f4" stroke-width="3.4"/><text x="12" y="18.200" text-anchor="middle" font-size="8" font-weight="700" fill="#4285f4" font-family="Poppins,sans-serif">31</text>',
@@ -451,7 +549,14 @@ const inView = ref(false)
 const revealed = ref(false)
 const scale = ref(1)
 const compact = ref(false)
+const phone = ref(false)
 const motion = ref(true)
+
+watch(active, () => nextTick(() => {
+  const el = document.getElementById(`ig-tab-${active.value}`)
+  const row = el && el.parentElement
+  if (row && row.scrollWidth > row.clientWidth) row.scrollTo({ left: el.offsetLeft - (row.clientWidth - el.offsetWidth) / 2, behavior: 'smooth' })
+}))
 
 let timer = null
 let ro = null
@@ -488,9 +593,12 @@ function onTouchEnd(e) {
 
 function fit() {
   if (!stageEl.value) return
-  const w = stageEl.value.clientWidth
-  compact.value = w < 820 // phones/small tablets: show the CRM window only, so text stays readable
-  scale.value = Math.min(1, +(w / (compact.value ? COMPACT_W : SCENE_W)).toFixed(3)) || 1
+  const cs = getComputedStyle(stageEl.value)
+  const w = stageEl.value.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight)
+  compact.value = w < 900 // tablets + phones: CRM window only, so text stays readable
+  phone.value = w < 560 // phones: a narrower, simplified window
+  const base = phone.value ? PHONE_W : compact.value ? COMPACT_W : SCENE_W
+  scale.value = Math.min(1, +(w / base).toFixed(3)) || 1
 }
 
 onMounted(() => {
@@ -536,7 +644,7 @@ onBeforeUnmount(() => {
   isolation: isolate;
   font-family: 'Poppins', system-ui, sans-serif;
   color: var(--navy);
-  padding: clamp(28px, 4vw, 56px) 0 clamp(56px, 6vw, 80px);
+  padding: clamp(24px, 3vw, 40px) 0 clamp(40px, 4vw, 56px);
   background:
     radial-gradient(900px 420px at 100% 0%, #fde3d9 0%, transparent 70%),
     radial-gradient(800px 500px at 0% 0%, #fce7e0 0%, transparent 65%),
@@ -591,7 +699,17 @@ onBeforeUnmount(() => {
 }
 .ig-title em { font-style: normal; background: linear-gradient(100deg, #ff9a3d 0%, #ff6a1a 45%, #f2540c 100%); -webkit-background-clip: text; background-clip: text; color: transparent; white-space: nowrap; }
 .ig-nav:focus-visible, .ig-tab:focus-visible { outline: 2px solid var(--o); outline-offset: 3px; }
-.ig-sub { margin: 16px auto 0; max-width: 640px; text-align: center; font-family: 'Inter Display', Inter, system-ui, sans-serif; font-size: clamp(15px, 1vw, 18px); font-weight: 500; line-height: 1.45; letter-spacing: -0.02em; color: #475569; }
+.ig-sub { margin: 10px auto 0; max-width: 640px; text-align: center; font-family: 'Inter Display', Inter, system-ui, sans-serif; font-size: clamp(15px, 1vw, 18px); font-weight: 500; line-height: 1.45; letter-spacing: -0.02em; color: #475569; }
+
+
+/* ============ active-tab description ============ */
+.ig-desc { list-style: none; margin: 16px auto 0; padding: 0 clamp(16px, 4vw, 64px); max-width: 1240px; min-height: 52px; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: center; align-items: flex-start; gap: 10px 28px; }
+.ig-desc li { display: flex; align-items: flex-start; gap: 10px; flex: 1 1 0; min-width: 0; max-width: 400px; font-size: 14px; line-height: 1.4; color: var(--ink); animation: ig-descin 0.45s ease both; animation-delay: calc(var(--i, 0) * 0.08s); }
+.ig-desc b { font-weight: 600; color: var(--navy); }
+.ig-desc .ck { flex: none; display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: linear-gradient(160deg, #ff8a4c, #f2540c); }
+.ig-desc .ck svg { width: 12px; height: 12px; fill: none; stroke: #fff; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+@keyframes ig-descin { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (max-width: 860px) { .ig-desc { flex-direction: column; align-items: flex-start; min-height: 64px; max-width: 560px; } .ig-desc li { flex: none; max-width: none; font-size: 13px; } }
 
 /* ============ tabs ============ */
 .ig-tabs {
@@ -599,7 +717,7 @@ onBeforeUnmount(() => {
   flex-wrap: wrap;
   justify-content: center;
   gap: 8px;
-  margin: 34px auto 0;
+  margin: 22px auto 0;
 }
 .ig-tab {
   display: inline-flex;
@@ -619,7 +737,7 @@ onBeforeUnmount(() => {
 .ig-tab.on { background: var(--navy); border-color: var(--navy); color: #fff; box-shadow: 0 10px 22px -8px rgba(15, 23, 42, 0.5); }
 
 /* ============ stage ============ */
-.ig-stage { position: relative; margin: 22px auto 0; max-width: 1240px; outline: none; }
+.ig-stage { position: relative; margin: 14px auto 0; max-width: 1160px; padding: 0 60px; /* room for the arrows */ outline: none; }
 .ig-view { position: relative; }
 .ig-view:has(.compact) { margin-bottom: 4px; }
 .ig-scene {
@@ -651,18 +769,18 @@ onBeforeUnmount(() => {
 /* entrances */
 .card, .win, .toast, .link {
   opacity: 0;
-  translate: 0 18px;
-  transition: opacity 0.5s ease, translate 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+  translate: 0 10px;
+  transition: opacity 0.4s ease, translate 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
-.card { translate: -22px 0; }
+.card { translate: -12px 0; }
 .sl.on .card, .sl.on .win, .sl.on .toast, .sl.on .link {
   opacity: 1;
   translate: 0 0;
   transition-delay: calc(var(--d, 0) * 0.14s + 0.1s);
 }
 .sl.on .link { transition-delay: 0.45s; }
-.sl.on .toast { animation: ig-bob 5.5s ease-in-out 1.2s infinite; }
-@keyframes ig-bob { 50% { margin-top: -7px; } }
+.sl.on .toast { animation: ig-bob 6s ease-in-out 1.2s infinite; }
+@keyframes ig-bob { 50% { margin-top: -3px; } }
 
 /* ---------- shared surfaces ---------- */
 .card, .win, .toast {
@@ -692,7 +810,7 @@ onBeforeUnmount(() => {
 }
 .src-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
 .brand { display: grid; place-items: center; width: 54px; height: 54px; border-radius: 15px; background: #f8fafc; border: 1px solid var(--line); }
-.brand svg { width: 34px; height: 34px; }
+.brand svg { width: 40px; height: 40px; }
 .brand.ph { background: var(--o-soft); border-color: #ffe0cf; }
 .brand.ph svg { fill: none; stroke: var(--o); stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
 .st { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 999px; font-size: 10px; font-weight: 600; letter-spacing: 0.04em; }
@@ -747,16 +865,16 @@ onBeforeUnmount(() => {
 .sd-stats small { font-size: 8.5px; color: var(--mute); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 /* connector */
-.link { position: absolute; left: 306px; top: 120px; width: 110px; height: 40px; overflow: visible; }
+.link { position: absolute; left: 304px; top: 120px; width: 44px; height: 40px; overflow: visible; }
 .link path { fill: none; stroke: #ffb48c; stroke-width: 2; stroke-dasharray: 3 6; stroke-linecap: round; }
 .link circle { fill: var(--o); filter: drop-shadow(0 0 5px rgba(255, 87, 34, 0.8)); }
 
 /* CRM window */
 .win {
   position: absolute;
-  left: 406px;
+  left: 348px;
   top: 0;
-  width: 754px;
+  width: 812px;
   height: 458px;
   padding: 14px;
   overflow: hidden;
@@ -865,6 +983,7 @@ onBeforeUnmount(() => {
 .wa-b svg { width: 10px; height: 10px; fill: none; stroke: #16a34a; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .ig-cp.Missed { background: #fee4e2; color: #b42318; }
 .ig-cp.Answered { background: #e8f8ee; color: #15803d; }
+.ig-cp.AI { background: #fff1e9; color: #c2410c; }
 .ig-cp.Outbound { background: #e3edff; color: #1d4ed8; }
 
 /* calendar */
@@ -888,7 +1007,7 @@ onBeforeUnmount(() => {
 .hr small { font-size: 9.5px; color: var(--mute); }
 .now { position: absolute; left: 52px; right: 10px; top: 143px; border-top: 1.5px solid var(--o); }
 .now i { position: absolute; left: -4px; top: -5px; width: 8px; height: 8px; border-radius: 50%; background: var(--o); }
-.evt { position: absolute; left: 62px; width: 300px; padding: 6px 12px; border-radius: 10px; border-left: 4px solid var(--o); background: #fff1e9; opacity: 0; translate: 14px 0; transition: opacity 0.4s, translate 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.evt { position: absolute; left: 62px; width: 300px; padding: 6px 12px; border-radius: 10px; border-left: 4px solid var(--o); background: #fff1e9; opacity: 0; translate: 8px 0; transition: opacity 0.4s, translate 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); }
 .sl.on .evt { opacity: 1; translate: 0 0; }
 .evt b { display: block; line-height: 1.3; font-size: 11.5px; font-weight: 600; color: #7c2d12; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .evt small { display: block; margin-top: 1px; font-size: 9.5px; line-height: 1.3; color: #9a5b3c; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -926,6 +1045,7 @@ onBeforeUnmount(() => {
 .t2 { left: 880px; top: 428px; }
 .t3 { left: 830px; top: 424px; width: 310px; }
 .t4 { left: 880px; top: 430px; }
+.t5 { left: 880px; top: 430px; }
 
 /* compact (phone) scene: CRM window only */
 .compact { width: 700px; }
@@ -937,7 +1057,43 @@ onBeforeUnmount(() => {
 .compact .e5, .compact .e6 { left: 380px; width: 260px; }
 .compact .e1 { width: 306px; }
 .compact .t1, .compact .t3 { left: 380px; }
-.compact .t2, .compact .t4 { left: 420px; }
+.compact .t2, .compact .t4, .compact .t5 { left: 420px; }
+
+/* tablet + phone: no looping animation, lighter motion */
+.compact .sl.on .toast,
+.compact .sl.on .trow.fresh,
+.compact .sl.on .stage:nth-child(4) .orb,
+.compact .sl.on .ig-btn.g { animation: none; }
+.compact .toast { box-shadow: 0 10px 22px -12px rgba(150, 70, 30, 0.4); }
+
+/* phone scene: 400px wide, simplified window so everything stays readable */
+.phone { width: 400px; }
+.phone .win { width: 400px; padding: 10px; }
+.phone .hero { padding: 10px 12px; }
+.phone .hero p, .phone .ready small { display: none; }
+.phone .hero h3 { font-size: 18px; }
+.phone .count { width: 62px; height: 42px; }
+.phone .ready { padding: 7px 9px; }
+.phone .kpis { gap: 6px; }
+.phone .kpis span { padding: 8px 9px; }
+.phone .kpis i { display: none; }
+.phone .web > :nth-child(2), .phone .web > :nth-child(3), .phone .two > :nth-child(2) { display: none; }
+.phone .thead.web, .phone .trow.web, .phone .thead.two, .phone .trow.two { grid-template-columns: 1fr auto; }
+.phone .ig-calls > :nth-child(3), .phone .ig-calls > :nth-child(4) { display: none; }
+.phone .thead.ig-calls, .phone .trow.ig-calls { grid-template-columns: 1fr auto auto; column-gap: 10px; }
+.phone .ig-pills { margin-top: 10px; }
+.phone .ig-pills span { padding: 5px 9px; }
+.phone .cal-act { display: none; }
+.phone .day { height: 362px; }
+.phone .now { left: 48px; }
+.phone .e1, .phone .e2, .phone .e3, .phone .e4, .phone .e5, .phone .e6 { left: 54px; width: 316px; }
+.phone .e4 { top: 26px; height: 44px; }
+.phone .e2 { top: 78px; height: 44px; }
+.phone .e5 { top: 130px; height: 44px; }
+.phone .e6 { top: 182px; height: 44px; }
+.phone .e1 { top: 234px; height: 54px; }
+.phone .e3 { top: 296px; height: 44px; }
+.phone .toast { left: 56px; top: 422px; width: auto; max-width: 330px; padding: 10px 12px; }
 
 /* ============ nav + dots ============ */
 .ig-nav {
@@ -959,8 +1115,8 @@ onBeforeUnmount(() => {
 }
 .ig-nav svg { width: 18px; height: 18px; fill: none; stroke: var(--navy); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 .ig-nav:hover { transform: scale(1.08); box-shadow: 0 10px 22px rgba(15, 23, 42, 0.18); }
-.ig-prev { left: -10px; }
-.ig-next { right: -10px; }
+.ig-prev { left: -58px; }
+.ig-next { right: -58px; }
 .ig-dots { display: flex; justify-content: center; gap: 6px; margin-top: 18px; }
 .ig-dot { position: relative; width: 8px; height: 8px; padding: 0; border: 0; border-radius: 8px; background: #cfcbd0; cursor: pointer; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s; }
 .ig-dot::after { content: ''; position: absolute; inset: -10px -4px; } /* bigger tap target */
@@ -980,6 +1136,7 @@ onBeforeUnmount(() => {
   .ig-tabs::-webkit-scrollbar { display: none; }
   .ig-tab { flex: none; }
   .ig-nav { display: none; }
+  .ig-stage { padding: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   .ig *, .ig *::before { animation: none !important; }
