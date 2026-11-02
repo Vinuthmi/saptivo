@@ -1,59 +1,106 @@
 <template>
-  <section ref="rootEl" class="oc3" :class="{ 'oc3-in': revealed }" aria-labelledby="oc3-title">
-    <div class="oc3-wrap">
-      <h2 id="oc3-title" class="oc3-title">
+  <section
+    ref="rootEl"
+    class="op"
+    :class="{ 'op-in': revealed, 'op-hold': paused || !inView }"
+    aria-labelledby="op-title"
+  >
+    <div class="op-wrap">
+      <h2 id="op-title" class="op-title">
         One CRM for leads, conversations <em>and revenue.</em>
       </h2>
 
-      <div class="oc3-grid">
-        <!-- ============ 1 · the problem (photo) ============ -->
-        <article class="oc3-card oc3-photo" style="--i: 0">
-          <img class="oc3-img" :src="photos.problem" alt="A salesperson with a tablet checking customer details at a car dealership" loading="lazy" decoding="async" />
-          <span class="oc3-glass oc3-glass-1"><svg width="16" height="16" viewBox="0 0 24 24" v-html="icon.chat"></svg>WhatsApp · Calls · Spreadsheets</span>
-          <div class="oc3-cap">
-            <h3>Deals slip away quietly</h3>
-            <p>
-              When leads sit in WhatsApp, calls go unlogged and quotations live in spreadsheets, deals slip away
-              quietly. Your best salesperson leaves and takes the customer history with them. A branch manager
-              can't see what head office promised.
-            </p>
-          </div>
-        </article>
+      <div
+        class="op-row"
+        @pointerenter="paused = true"
+        @pointerleave="paused = false"
+        @focusin="paused = true"
+        @focusout="paused = false"
+      >
+        <article
+          v-for="(p, i) in panels"
+          :key="p.id"
+          class="op-panel"
+          :class="[{ on: active === i }, 'op-' + p.id]"
+          :style="{ '--i': i }"
+          role="button"
+          tabindex="0"
+          :aria-expanded="active === i"
+          :aria-label="p.title"
+          @pointerenter="onEnter($event, i)"
+          @pointerleave="cancelEnter"
+          @click="select(i)"
+          @keydown.enter.prevent="select(i)"
+          @keydown.space.prevent="select(i)"
+          @keydown.right.prevent="select(i + 1)"
+          @keydown.left.prevent="select(i - 1)"
+        >
+          <img class="op-img" :src="p.img" alt="" loading="lazy" decoding="async" draggable="false" @error="$event.target.style.display = 'none'" />
 
-        <!-- ============ 2 · the solution (colour card + flow chips) ============ -->
-        <article class="oc3-card oc3-color" style="--i: 1">
-          <span class="oc3-badge"><svg width="22" height="22" viewBox="0 0 24 24" v-html="icon.merge"></svg></span>
+          <!-- label at the top of the card -->
+          <span class="op-tag">
+            <i><svg viewBox="0 0 24 24" aria-hidden="true" v-html="icon[p.tagIcon]"></svg></i>{{ p.tag }}
+          </span>
 
-          <div class="oc3-flow" aria-hidden="true">
-            <template v-for="(r, i) in rows" :key="i">
-              <span class="oc3-chip" :class="{ on: step % 3 === i }"><svg width="18" height="18" viewBox="0 0 24 24" v-html="icon[r[0].icon]"></svg>{{ r[0].t }}</span>
-              <svg class="oc3-arrow" width="18" height="18" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
-              <span class="oc3-chip" :class="{ on: step % 3 === i }"><svg width="18" height="18" viewBox="0 0 24 24" v-html="icon[r[1].icon]"></svg>{{ r[1].t }}</span>
+          <!-- ============ animated product demo over the photo ============ -->
+          <div class="op-ui" aria-hidden="true">
+            <!-- problem: scattered tools arrive one by one -->
+            <template v-if="p.id === 'problem'">
+              <div class="ui-head">
+                <span class="ui-t"><b>Team inbox</b><small>3 tools · nothing connected</small></span>
+                <em class="ui-bd bad">Out of sync</em>
+              </div>
+              <div class="ui-row" :class="{ show: tick >= 1 }">
+                <i class="ui-ic wa"><svg viewBox="0 0 24 24" v-html="icon.chat"></svg></i>
+                <span class="ui-t"><b>WhatsApp · Kasun</b><small>“Is the SUV still available?”</small></span>
+                <em class="ui-bd ok">3 new</em>
+              </div>
+              <div class="ui-row" :class="{ show: tick >= 3 }">
+                <i class="ui-ic red"><svg viewBox="0 0 24 24" v-html="icon.phone"></svg></i>
+                <span class="ui-t"><b>Missed call · 0:56</b><small>Daniel Perera</small></span>
+                <em class="ui-bd bad" :class="{ show: tick >= 4 }">Unlogged</em>
+              </div>
+              <div class="ui-row" :class="{ show: tick >= 5 }">
+                <i class="ui-ic grn"><svg viewBox="0 0 24 24" v-html="icon.sheet"></svg></i>
+                <span class="ui-t"><b>quotes_final_v7.xlsx</b><small>Which version is current?</small></span>
+              </div>
+              <span class="ui-chip" :class="{ show: tick >= 7 }"><i></i>Deal slipping · LKR 4.2M</span>
+              <svg class="ui-cur" :style="{ transform: `translate(${curProblem.x}px, ${curProblem.y}px)` }" width="22" height="22" viewBox="0 0 24 24"><path d="M5 3l14 7.500-6 1.800L10.500 19z" /></svg>
             </template>
-            <span class="oc3-record"><i></i>One customer record</span>
+
+            <!-- solution: everything lands on one customer record -->
+            <template v-else>
+              <div class="ui-head">
+                <i class="ui-av">KP</i>
+                <span class="ui-t"><b>Kasun Perera</b><small>One customer record</small></span>
+                <em class="ui-bd live"><i></i>Live</em>
+              </div>
+              <ol class="ui-tl">
+                <li v-for="(e, k) in events" :key="e.t" :class="{ show: tick >= k + 1, hot: tick === k + 1 }">
+                  <i><svg viewBox="0 0 24 24" v-html="icon[e.icon]"></svg></i>
+                  <b>{{ e.t }}</b>
+                  <small>{{ e.s }}</small>
+                </li>
+              </ol>
+              <div class="ui-facts" :class="{ show: tick >= 8 }">
+                <span v-for="f in facts" :key="f.k"><small>{{ f.k }}</small><b>{{ f.v }}</b></span>
+              </div>
+              <svg class="ui-cur" :style="{ transform: `translate(${curRecord.x}px, ${curRecord.y}px)` }" width="22" height="22" viewBox="0 0 24 24"><path d="M5 3l14 7.500-6 1.800L10.500 19z" /></svg>
+            </template>
           </div>
 
-          <div class="oc3-cap">
-            <h3>One all-in-one CRM</h3>
-            <p>
-              Saptivo replaces those scattered tools with one all-in-one CRM built around the way sales, support
-              and service teams actually work. Every enquiry, chat, call, quote, invoice and service visit sits on
-              a single customer record.
-            </p>
+          <!-- ============ caption ============ -->
+          <div class="op-cap">
+            <h3>{{ p.title }}</h3>
+            <div class="op-desc">
+              <div class="op-desc-in">
+                <p v-for="(t, j) in p.body" :key="j">{{ t }}</p>
+              </div>
+            </div>
           </div>
-        </article>
 
-        <!-- ============ 3 · the outcome (photo) ============ -->
-        <article class="oc3-card oc3-photo" style="--i: 2">
-          <img class="oc3-img" :src="photos.team" alt="A sales and support team reviewing customer details together" loading="lazy" decoding="async" />
-          <span class="oc3-glass oc3-glass-2"><svg width="16" height="16" viewBox="0 0 24 24" v-html="icon.shield"></svg>Everyone on the same page</span>
-          <div class="oc3-cap">
-            <h3>Everyone stays aligned</h3>
-            <p>
-              Anyone on your team can open it and know exactly where the relationship stands, what was promised
-              and what happens next.
-            </p>
-          </div>
+          <!-- autoplay progress; when it finishes the next card opens -->
+          <i v-if="active === i" :key="'bar' + active" class="op-bar" @animationend="next"></i>
         </article>
       </div>
     </div>
@@ -61,86 +108,155 @@
 </template>
 
 <script setup>
-defineOptions({ name: 'HomeOneCrmCardsSection' })
+defineOptions({ name: 'HomeOneCrmPanelsSection' })
 /**
- * SectionOneCrmCards.vue — "One CRM for leads, conversations and revenue" (Vue 3, <script setup>)
- * Three tall cards: photo · colour card with a flow animation · photo.
- * Place directly after the hero. SSR/Nuxt safe (browser APIs only inside onMounted).
+ * SectionOneCrmPanels.vue — "One CRM for leads, conversations and revenue" (Vue 3, <script setup>)
+ * Two photo cards: the problem and the fix. Move the mouse over a card to open it (tap on touch screens,
+ * ← → work too). The open card plays a short product demo (items arrive, a cursor moves, the record fills in).
+ * Auto-advances (a thin progress bar fills, then the other card opens); pauses on hover/focus and off-screen.
+ * SSR/Nuxt safe (browser APIs only in onMounted).
  *
- * PHOTOS: swap the two Unsplash URLs below for any images you prefer (keep ?w=1200&q=80&auto=format&fit=crop).
+ * PHOTOS: swap the two Unsplash URLs below for any images you prefer.
  */
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
 
-const photos = {
-  problem: 'https://elements-resized.envatousercontent.com/envato-dam-assets-production/EVA/TRX/e9/d2/cf/80/25/v1_E10/E10RNGP.jpg?w=1600&cf_fit=scale-down&q=85&format=auto&s=391b3a0bd3d1da4d616b3593c3a0a538303cd56f90af486c5e7755d3b27858dc', // Clayton Cardinalli / Unsplash
-  team: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&q=80&auto=format&fit=crop',
-}
+const photos = [
+  'https://images.unsplash.com/photo-1556745757-8d76bdb6984b?w=1400&q=80&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1400&q=80&auto=format&fit=crop',
+]
 
-const rows = [
-  [{ icon: 'inbox', t: 'Enquiry' }, { icon: 'chat', t: 'Chat' }],
-  [{ icon: 'phone', t: 'Call' }, { icon: 'quote', t: 'Quote' }],
-  [{ icon: 'invoice', t: 'Invoice' }, { icon: 'wrench', t: 'Service visit' }],
+const panels = [
+  {
+    id: 'problem',
+    tag: 'Scattered tools',
+    tagIcon: 'scatter',
+    img: photos[0],
+    title: 'Deals slip away quietly',
+    body: [
+      "When leads sit in WhatsApp, calls go unlogged and quotations live in spreadsheets, deals slip away quietly. Your best salesperson leaves and takes the customer history with them. A branch manager can't see what head office promised.",
+    ],
+  },
+  {
+    id: 'solution',
+    tag: 'One customer record',
+    tagIcon: 'check',
+    img: photos[1],
+    title: 'One all-in-one CRM',
+    body: [
+      'Saptivo replaces those scattered tools with one all-in-one CRM built around the way sales, support and service teams actually work. Every enquiry, chat, call, quote, invoice and service visit sits on a single customer record.',
+      'Anyone on your team can open it and know exactly where the relationship stands, what was promised and what happens next.',
+    ],
+  },
+]
+
+const events = [
+  { icon: 'inbox', t: 'Enquiry', s: '9:02' },
+  { icon: 'chat', t: 'WhatsApp chat', s: '9:14' },
+  { icon: 'phone', t: 'Call logged', s: '10:05' },
+  { icon: 'quote', t: 'Quote sent', s: '11:30' },
+  { icon: 'invoice', t: 'Invoice paid', s: 'Tue' },
+  { icon: 'wrench', t: 'Service visit', s: 'Fri' },
+]
+const facts = [
+  { k: 'Where it stands', v: 'Deposit paid' },
+  { k: 'Promised', v: '5% off, Friday' },
+  { k: 'Next', v: 'Handover · Thu' },
 ]
 
 const icon = {
   chat: '<path d="M4 5h16v11H9.5L5 20v-4H4z"/><path d="M8.5 10.5h7"/>',
   phone: '<path d="M7 4.5h3l1.4 4-2 1.4a10 10 0 0 0 4.7 4.7l1.4-2 4 1.4v3a2 2 0 0 1-2.2 2A14.5 14.5 0 0 1 5 6.7 2 2 0 0 1 7 4.5z"/>',
+  sheet: '<rect x="4" y="4" width="16" height="16" rx="2.5"/><path d="M4 9.5h16M4 14.5h16M10 4v16"/>',
   inbox: '<path d="M4 13.5 6.5 5h11L20 13.5V19H4z"/><path d="M4 13.5h4.5l1 2h5l1-2H20"/>',
   quote: '<path d="M7 3.5h7l4 4V20.5H7z"/><path d="M14 3.5v4h4M9.5 12h6M9.5 15.5h6"/>',
   invoice: '<path d="M6 3.5h12v17l-3-1.8-3 1.8-3-1.8-3 1.8z"/><path d="M9.5 8.5h5M9.5 12h5"/>',
   wrench: '<path d="M14.5 6a4 4 0 0 0 4.9 5L9.5 20.9a2 2 0 0 1-2.8-2.8L16.6 8.2A4 4 0 0 0 14.5 6z"/>',
-  merge: '<path d="M5 5c0 6 4 7 7 7s7 1 7 7M19 5c0 6-4 7-7 7"/><circle cx="12" cy="12" r="1.2"/>',
-  shield: '<path d="M12 3.5 19 6v5.500c0 4.200-2.800 7.600-7 9-4.200-1.400-7-4.800-7-9V6z"/><path d="m9 12 2.200 2.200L15.500 10"/>',
+  scatter: '<circle cx="6" cy="7" r="2.2"/><circle cx="17.500" cy="6" r="2.200"/><circle cx="12" cy="17.500" r="2.200"/><path d="M8 8l2.500 7M15.500 7.500l-2.500 8" stroke-dasharray="2 2.500"/>',
+  check: '<path d="m5 12.500 4.500 4.500L19 7"/>',
 }
 
 const rootEl = ref(null)
 const revealed = ref(false)
 const inView = ref(false)
-const step = ref(0)
+const paused = ref(false)
+const active = ref(0)
+const tick = ref(0) // demo clock, restarts whenever a card opens
+const CYCLE = 13
 let io = null
-let timer = null
+let clock = null
+let enterTimer = null
+
+const select = (i) => { active.value = (i + panels.length) % panels.length }
+const next = () => select(active.value + 1)
+watch(active, () => { tick.value = 0 })
+
+// hover (mouse) opens a card; a short delay stops it flickering when the cursor just passes over
+function onEnter(e, i) {
+  if (e.pointerType && e.pointerType !== 'mouse') return // touch / pen: tap to open
+  clearTimeout(enterTimer)
+  if (active.value === i) return
+  enterTimer = setTimeout(() => select(i), 90)
+}
+const cancelEnter = () => clearTimeout(enterTimer)
+
+/* cursor positions inside the demo card (px from its top-left) */
+const curProblem = computed(() => {
+  const t = tick.value
+  const row = t < 3 ? 0 : t < 5 ? 1 : 2
+  return { x: t < 1 ? 330 : 250, y: 58 + row * 56 + (t >= 7 ? 40 : 14) - (t >= 7 ? 0 : 0) }
+})
+const curRecord = computed(() => {
+  const t = tick.value
+  if (t < 1) return { x: 360, y: 20 }
+  if (t >= 8) return { x: 170 + ((t - 8) % 3) * 80, y: 232 }
+  const k = t - 1 // newest row
+  return { x: k % 2 === 0 ? 90 : 300, y: 62 + Math.floor(k / 2) * 46 + 18 }
+})
 
 onMounted(() => {
-  const reduce = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches
   io = new IntersectionObserver(([en]) => {
     inView.value = en.isIntersecting
     if (en.isIntersecting) revealed.value = true
-  }, { threshold: 0.2 })
+  }, { threshold: 0.3 })
   io.observe(rootEl.value)
-  if (!reduce) {
-    timer = setInterval(() => {
-      if (inView.value && !document.hidden) step.value++
-    }, 1600)
-  }
+  const reduce = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches
+  if (reduce) { tick.value = CYCLE; return }
+  clock = setInterval(() => {
+    if (inView.value && !document.hidden) tick.value = tick.value >= CYCLE ? 0 : tick.value + 1
+  }, 850)
 })
 onBeforeUnmount(() => {
-  if (timer) clearInterval(timer)
+  clearInterval(clock)
+  clearTimeout(enterTimer)
   io?.disconnect()
 })
 </script>
 
 <style>
-.oc3, .oc3 * { box-sizing: border-box; }
-.oc3 {
+.op, .op * { box-sizing: border-box; }
+.op {
+  --op-ms: 11000ms;
   font-family: 'Poppins', system-ui, sans-serif;
-  color: #14152b;
+  color: #0f172a;
   background: #fff;
 }
-.oc3-wrap { max-width: 1280px; margin: 0 auto; padding: clamp(32px, 4vw, 56px) clamp(16px, 3vw, 32px); }
-.oc3-title {
-  margin: 0 auto clamp(20px, 2.4vw, 32px);
+.op-wrap { max-width: 1280px; margin: 0 auto; padding: clamp(32px, 4vw, 64px) clamp(16px, 3vw, 32px); }
+
+/* heading: same style as the other sections */
+.op-title {
+  margin: 0 auto clamp(24px, 3vw, 40px);
   max-width: 1000px;
   padding-bottom: 0.15em;
   text-align: center;
   text-wrap: balance;
   font-family: 'Inter Display', Inter, system-ui, sans-serif;
-  font-size: clamp(46px, 3.5vw, 104px);
+  font-size: clamp(32px, 3.6vw, 52px);
   font-weight: 500;
   line-height: 1.1;
   letter-spacing: -0.06em;
   color: #0f172a;
 }
-.oc3-title em {
+.op-title em {
   font-style: normal;
   background: linear-gradient(100deg, #ff9a3d 0%, #ff6a1a 45%, #f2540c 100%);
   -webkit-background-clip: text;
@@ -148,144 +264,179 @@ onBeforeUnmount(() => {
   color: transparent;
 }
 
-/* ---------- grid + cards ---------- */
-.oc3-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(12px, 1.6vw, 20px); }
-.oc3-card {
+/* ---------- cards ---------- */
+.op-row { display: flex; gap: clamp(10px, 1.2vw, 16px); height: clamp(480px, 39vw, 560px); }
+.op-panel {
   position: relative;
   display: flex;
+  flex: 1 1 0;
   flex-direction: column;
   justify-content: flex-end;
-  min-height: clamp(430px, 33vw, 480px);
-  padding: clamp(18px, 1.6vw, 24px);
-  border-radius: 24px;
+  min-width: 0;
+  padding: clamp(18px, 1.8vw, 26px);
+  border-radius: 26px;
   overflow: hidden;
   isolation: isolate;
   color: #fff;
+  background: linear-gradient(160deg, #4a3a32, #1b1512);
+  cursor: pointer;
+  outline: none;
   opacity: 0;
   translate: 0 22px;
-  transition: opacity 0.7s ease, translate 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
-  transition-delay: calc(var(--i) * 0.12s);
+  transition: flex-grow 0.85s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.7s ease, translate 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition-delay: 0s, calc(var(--i) * 0.12s), calc(var(--i) * 0.12s);
 }
-.oc3-in .oc3-card { opacity: 1; translate: 0 0; }
+.op-in .op-panel { opacity: 1; translate: 0 0; }
+.op-panel.on { flex-grow: 2.3; cursor: default; }
+.op-panel:focus-visible { box-shadow: 0 0 0 3px #ff6a1a; }
 
-/* photo cards */
-.oc3-photo { background: linear-gradient(160deg, #3a3a4a, #14152b); }
-.oc3-img { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; transition: scale 1.2s cubic-bezier(0.2, 0.8, 0.2, 1); }
-.oc3-photo:hover .oc3-img { scale: 1.04; }
-.oc3-photo::after {
+.op-img { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; filter: saturate(0.9) brightness(0.86); transition: scale 1.4s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.6s ease; }
+.op-problem .op-img { filter: grayscale(1) contrast(1.05) brightness(0.78); }
+.op-panel:hover .op-img { filter: saturate(1) brightness(0.95); }
+.op-problem:hover .op-img, .op-problem.on .op-img { filter: grayscale(0.85) contrast(1.05) brightness(0.85); }
+.op-panel.on .op-img { scale: 1.04; filter: saturate(1) brightness(0.95); }
+.op-problem.on .op-img { filter: grayscale(0.85) contrast(1.05) brightness(0.85); }
+.op-panel::after {
   content: '';
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(180deg, rgba(10, 10, 20, 0) 30%, rgba(10, 10, 20, 0.55) 62%, rgba(10, 10, 20, 0.88) 100%);
+  background: linear-gradient(180deg, rgba(14, 10, 8, 0.1) 0%, rgba(14, 10, 8, 0.1) 30%, rgba(14, 10, 8, 0.62) 62%, rgba(14, 10, 8, 0.92) 100%);
+}
+.op-solution::after {
+  background: linear-gradient(180deg, rgba(14, 10, 8, 0.05) 0%, rgba(14, 10, 8, 0.1) 28%, rgba(150, 50, 6, 0.5) 62%, rgba(24, 10, 6, 0.93) 100%);
 }
 
-/* glass tag on photos */
-.oc3-glass {
+/* label at the top of each card (no numbers) */
+.op-tag {
   position: absolute;
+  left: clamp(18px, 1.8vw, 26px);
+  top: clamp(18px, 1.8vw, 26px);
+  z-index: 2;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 9px 14px;
-  border: 1px solid rgba(255, 255, 255, 0.22);
+  gap: 9px;
+  padding: 7px 15px 7px 8px;
   border-radius: 999px;
-  background: rgba(40, 36, 34, 0.38);
+  background: rgba(40, 34, 30, 0.5);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   font-size: 13px;
   font-weight: 500;
   white-space: nowrap;
 }
-.oc3-glass svg { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.oc3-glass-1 { left: 18%; top: 22%; }
-.oc3-glass-2 { right: 8%; top: 28%; }
-.oc3-in .oc3-glass { animation: oc3-float 6s ease-in-out infinite; }
-.oc3-in .oc3-glass-2 { animation-delay: -3s; }
-@keyframes oc3-float { 50% { translate: 0 -5px; } }
+.op-tag i { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: rgba(255, 255, 255, 0.18); }
+.op-tag svg { width: 14px; height: 14px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.op-problem .op-tag { border: 1px dashed rgba(255, 255, 255, 0.45); }
+.op-solution .op-tag { background: linear-gradient(135deg, rgba(255, 138, 76, 0.95), rgba(242, 84, 12, 0.95)); box-shadow: 0 10px 22px -12px rgba(242, 84, 12, 0.9); }
+.op-solution .op-tag i { background: rgba(255, 255, 255, 0.25); }
 
 /* caption */
-.oc3-cap h3 { margin: 0; font-family: 'Inter Display', Inter, system-ui, sans-serif; font-size: clamp(20px, 1.7vw, 24px); font-weight: 500; letter-spacing: -0.03em; line-height: 1.15; }
-.oc3-cap p { margin: 8px 0 0; font-size: clamp(12.5px, 0.95vw, 13.5px); line-height: 1.55; color: rgba(255, 255, 255, 0.82); }
+.op-cap h3 { margin: 0; font-family: 'Inter Display', Inter, system-ui, sans-serif; font-size: clamp(20px, 1.8vw, 26px); font-weight: 500; letter-spacing: -0.03em; line-height: 1.2; transition: font-size 0.5s ease; }
+.op-panel.on .op-cap h3 { font-size: clamp(24px, 2.2vw, 32px); }
+.op-cap { max-width: 640px; }
+.op-desc { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.7s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.op-desc-in { min-height: 0; overflow: hidden; opacity: 0; transform: translateY(10px); transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.op-panel.on .op-desc { grid-template-rows: 1fr; }
+.op-panel.on .op-desc-in { opacity: 1; transform: none; transition-delay: 0.3s; }
+.op-desc p { margin: 12px 0 0; font-size: clamp(13.5px, 1vw, 15px); line-height: 1.6; color: rgba(255, 255, 255, 0.88); }
+.op-desc p + p { margin-top: 8px; }
 
-/* colour card */
-.oc3-color {
-  background:
-    radial-gradient(420px 300px at 20% 12%, rgba(255, 190, 140, 0.55), transparent 70%),
-    radial-gradient(380px 300px at 90% 70%, rgba(180, 40, 0, 0.35), transparent 70%),
-    linear-gradient(165deg, #ff8a4c 0%, #f45a13 55%, #e04a0a 100%);
-}
-.oc3-badge {
+/* autoplay progress */
+.op-bar { position: absolute; left: 0; bottom: 0; height: 3px; width: 100%; transform-origin: 0 50%; background: linear-gradient(90deg, #ff9a3d, #f2540c); animation: op-fill var(--op-ms) linear forwards; }
+.op-hold .op-bar { animation-play-state: paused; }
+@keyframes op-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* ---------- animated product demo card ---------- */
+.op-ui {
   position: absolute;
-  left: clamp(20px, 2vw, 28px);
-  top: clamp(20px, 2vw, 28px);
+  left: clamp(18px, 1.8vw, 26px);
+  top: clamp(60px, 4.6vw, 72px);
+  width: min(440px, calc(100% - 2 * clamp(18px, 1.8vw, 26px)));
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.95);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  color: #14152b;
+  box-shadow: 0 28px 44px -24px rgba(0, 0, 0, 0.6);
   display: grid;
-  place-items: center;
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.28);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
+  gap: 6px;
+  opacity: 0;
+  transform: translateY(14px) scale(0.98);
+  transform-origin: 0 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease, transform 0.35s ease;
 }
-.oc3-badge svg { fill: none; stroke: #fff; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+.op-panel.on .op-ui { opacity: 1; transform: none; transition: opacity 0.6s ease 0.4s, transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s; }
 
-.oc3-flow {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-  align-items: center;
-  gap: 8px 8px;
-  margin: auto 0;
-  padding: 56px 0 14px;
-}
-.oc3-chip {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  min-width: 0;
-  padding: 11px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.2);
-  font-size: 14px;
-  font-weight: 500;
-  white-space: nowrap;
-  transition: background 0.4s ease, color 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
-}
-.oc3-chip svg { flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.oc3-chip.on { background: #fff; color: #c2410c; transform: translateY(-2px); box-shadow: 0 12px 22px -10px rgba(120, 30, 0, 0.55); }
-.oc3-arrow { fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; opacity: 0.9; }
-.oc3-record {
-  grid-column: 1 / -1;
-  justify-self: center;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 8px;
-  padding: 8px 14px;
-  border-radius: 999px;
-  background: rgba(20, 21, 43, 0.82);
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-.oc3-record i { width: 7px; height: 7px; border-radius: 50%; background: #4ade80; animation: oc3-blink 1.6s ease-in-out infinite; }
-@keyframes oc3-blink { 50% { opacity: 0.3; } }
+.ui-head { display: flex; align-items: center; gap: 10px; padding: 2px 4px 8px; border-bottom: 1px solid rgba(20, 21, 43, 0.08); }
+.ui-row { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 12px; background: #f8f6f1; opacity: 0; transform: translateX(-14px); transition: opacity 0.45s ease, transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.ui-row.show { opacity: 1; transform: none; }
+.ui-ic { flex: none; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 9px; }
+.ui-ic svg { width: 16px; height: 16px; fill: none; stroke: #fff; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+.ui-ic.wa { background: #22c55e; }
+.ui-ic.red { background: #ef4444; }
+.ui-ic.grn { background: #16a34a; }
+.ui-av { flex: none; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 10px; background: linear-gradient(160deg, #ff8a4c, #f2540c); color: #fff; font-style: normal; font-size: 12px; font-weight: 600; }
+.ui-t { display: flex; flex: 1; flex-direction: column; min-width: 0; line-height: 1.25; }
+.ui-t b { font-size: 12.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ui-t small { font-size: 11px; color: #6b7280; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ui-bd { flex: none; padding: 3px 9px; border-radius: 999px; font-style: normal; font-size: 10.5px; font-weight: 700; white-space: nowrap; }
+.ui-bd.ok { background: #dcfce7; color: #15803d; }
+.ui-bd.bad { background: #fee2e2; color: #b91c1c; }
+.ui-row .ui-bd.bad { opacity: 0; scale: 0.6; transition: opacity 0.35s ease, scale 0.35s ease; }
+.ui-row .ui-bd.bad.show { opacity: 1; scale: 1; }
+.ui-bd.live { display: inline-flex; align-items: center; gap: 5px; background: #e8f8ee; color: #15803d; }
+.ui-bd.live i { width: 6px; height: 6px; border-radius: 50%; background: currentColor; animation: op-blink 1.6s ease-in-out infinite; }
+@keyframes op-blink { 50% { opacity: 0.3; } }
+.ui-chip { justify-self: start; display: inline-flex; align-items: center; gap: 7px; margin-top: 2px; padding: 5px 11px; border: 1px dashed #f3a37a; border-radius: 999px; background: #fff1e7; color: #c2410c; font-size: 11px; font-weight: 600; opacity: 0; scale: 0.9; transition: opacity 0.4s ease, scale 0.4s ease; }
+.ui-chip.show { opacity: 1; scale: 1; animation: op-fade 2.6s ease-in-out 0.5s infinite; }
+.ui-chip i { width: 6px; height: 6px; border-radius: 50%; background: #f2540c; }
+@keyframes op-fade { 50% { opacity: 0.55; } }
 
-/* ---------- responsive ---------- */
-@media (max-width: 960px) {
-  .oc3-grid { grid-template-columns: minmax(0, 1fr); max-width: 600px; margin: 0 auto; }
-  .oc3-card { min-height: 420px; }
-  .oc3-color { min-height: 440px; }
-  .oc3-glass-1 { left: 8%; top: 18%; }
-  .oc3-glass-2 { right: 8%; top: 22%; }
+/* record timeline: two columns of three, filled one by one */
+.ui-tl { list-style: none; margin: 0; padding: 2px 0 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.ui-tl li { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; column-gap: 8px; align-items: center; padding: 6px 9px; border-radius: 12px; background: #f8f6f1; opacity: 0; transform: translateY(8px) scale(0.97); transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), background 0.4s ease, box-shadow 0.4s ease; }
+.ui-tl li.show { opacity: 1; transform: none; }
+.ui-tl li.hot { background: #fff1e7; box-shadow: inset 0 0 0 1px #ffc9a8; }
+.ui-tl i { grid-row: 1 / 3; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(160deg, #ff8a4c, #f2540c); }
+.ui-tl svg { width: 13px; height: 13px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.ui-tl b { font-size: 11.5px; font-weight: 600; line-height: 1.2; white-space: nowrap; }
+.ui-tl small { font-size: 10px; color: #6b7280; }
+
+/* facts strip */
+.ui-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; opacity: 0; transform: translateY(8px); transition: opacity 0.45s ease, transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.ui-facts.show { opacity: 1; transform: none; }
+.ui-facts span { display: flex; flex-direction: column; gap: 1px; padding: 6px 9px; border-radius: 12px; background: #14152b; color: #fff; min-width: 0; }
+.ui-facts small { font-size: 9px; letter-spacing: 0.05em; text-transform: uppercase; color: rgba(255, 255, 255, 0.6); white-space: nowrap; }
+.ui-facts b { font-size: 11.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* animated cursor */
+.ui-cur { position: absolute; left: 0; top: 0; z-index: 3; fill: #14152b; stroke: #fff; stroke-width: 1.6; stroke-linejoin: round; filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.35)); transition: transform 0.75s cubic-bezier(0.4, 0, 0.2, 1); }
+
+/* ---------- tablet + phone: stacked accordion ---------- */
+@media (max-width: 860px) {
+  .op-row { flex-direction: column; height: auto; }
+  .op-panel { flex: none; height: 96px; justify-content: flex-end; transition: height 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.7s ease, translate 0.9s cubic-bezier(0.2, 0.8, 0.2, 1); transition-delay: 0s, calc(var(--i) * 0.12s), calc(var(--i) * 0.12s); }
+  .op-panel.on { height: 640px; }
+  .op-tag { display: none; }
+  .op-panel.on .op-tag { display: inline-flex; }
+  .op-panel:not(.on) { justify-content: center; }
+  .op-ui { top: 64px; width: min(440px, calc(100% - 36px)); }
+  .op-cap { max-width: none; }
 }
 @media (max-width: 420px) {
-  .oc3-chip { padding: 12px 10px; font-size: 13px; gap: 7px; }
-  .oc3-chip svg { width: 16px; height: 16px; }
-  .oc3-glass { font-size: 12px; padding: 8px 12px; }
+  .op-panel { border-radius: 22px; padding: 18px; }
+  .op-panel.on { height: 700px; }
+  .ui-tl li { padding: 5px 7px; column-gap: 6px; }
+  .ui-tl small { display: none; }
+  .ui-tl i { grid-row: 1; }
+  .ui-facts small { font-size: 8px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .oc3 * { animation: none !important; transition-duration: 0.01s !important; transition-delay: 0s !important; }
+  .op * { animation-duration: 0.01s !important; transition-duration: 0.01s !important; transition-delay: 0s !important; }
+  .op-bar { display: none; }
 }
-</style>    
+</style>
