@@ -12,6 +12,8 @@ import Section6 from '../components/home/section6.vue'
 import Section9 from '../components/home/section9.vue'
 import Section11 from '../components/home/section11.vue'
 import TrustedBusinesses from '../components/home/trustedBusinesses.vue'
+import FAQ from '../components/home/FAQ.vue'
+import Sectionwhy from '../components/home/Sectionwhy.vue'
 
 
 
@@ -29,12 +31,13 @@ const isSection6Preview = computed(() => route.query.preview === 'section6')
       <Section2 :preview="isSection2Preview" />
       <Section3 />
       <Section4 />
-      <Section5 />
+      <Sectionwhy />
       <Section10 />
       <Section6 preview />
       <TrustedBusinesses />
       <Section9 />
       <Section11 />
+      <FAQ />
     </template>
   </main>
 </template>
