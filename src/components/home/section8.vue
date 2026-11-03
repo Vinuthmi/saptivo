@@ -29,8 +29,8 @@
               &amp;
               <b
                 >Audit<svg viewBox="0 0 200 16" preserveAspectRatio="none" aria-hidden="true">
-                  <path d="M2 11 C 30 3, 52 15, 84 8 S 146 3, 170 9 C 182 12, 192 8, 198 6" /></svg
-              ></b>
+                  <path d="M2 11 C 30 3, 52 15, 84 8 S 146 3, 170 9 C 182 12, 192 8, 198 6" /></svg>
+              </b>
             </span>
           </h2>
         </div>
@@ -61,7 +61,8 @@
             <!-- glass metric widget -->
             <div class="s6-w s6-w2" aria-hidden="true">
               <div class="dg-top">
-                <span class="dg-ic"><svg viewBox="0 0 24 24" v-html="icons[it.icon]"></svg></span>
+                <span class="dg-ic"><svg viewBox="0 0 24 24" v-html="icons[it.icon]"></svg>
+                </span>
                 <span class="dg-k">{{ it.metric[2] }}</span>
               </div>
               <div class="dg-big">{{ it.metric[0] }}</div>
