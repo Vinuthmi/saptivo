@@ -6,13 +6,13 @@
     <Section1 />
     <Section3 />
     <Section4 />
-    <Section5 />
+    
     <Section10 />
     <Section6 />
     <TrustedBusinesses />
     <Sectionwhy />
     <Section9 />
-    <Faq />
+    <FAQ />
     <Section11 />
     <SiteFooter />
   </main>
@@ -24,7 +24,6 @@ import Section1 from "./components/home/section1.vue";
 import Section2 from "./components/home/section2.vue";
 import Section3 from "./components/home/section3.vue";
 import Section4 from "./components/home/section4.vue";
-import Section5 from "./components/home/section5.vue";
 import Section6 from "./components/home/section6.vue";
 import Sectionwhy from "./components/home/Sectionwhy.vue";
 import Section9 from "./components/home/section9.vue";
@@ -33,7 +32,7 @@ import TrustedBusinesses from "./components/home/trustedBusinesses.vue";
 import SiteHeader from "./components/home/siteHeader.vue";
 import SiteFooter from "./components/home/siteFooter.vue";
 import Section11 from "./components/home/section11.vue";
-import Faq from "./components/home/faq.vue";
+import FAQ from "./components/home/FAQ.vue";
 
 </script>
 
