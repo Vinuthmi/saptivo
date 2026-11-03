@@ -34,6 +34,7 @@ import TrustedBusinesses from "./components/home/trustedBusinesses.vue";
 import SiteHeader from "./components/home/siteHeader.vue";
 import SiteFooter from "./components/home/siteFooter.vue";
 import Section11 from "./components/home/section11.vue";
+import FAQ from "./components/home/faq.vue";
 
 </script>
 
