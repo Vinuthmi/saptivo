@@ -99,6 +99,8 @@
 </template>
 
 <script setup>
+defineOptions({ name: "HomeSectionTen" });
+
 /**
  * CrmIndustries.vue — "CRM solutions for your industry": continuously scrolling marquee (Vue 3, <script setup>).
  * Five industries: Retail & supermarkets · Wholesale & distribution · Contractors & services ·
@@ -522,10 +524,10 @@ const plan = [
 
 /* ---------- visual backdrops ---------- */
 .cm-vis.img1 {
-  background: url('./assets/crm-grad-orange.jpg') center / cover no-repeat, linear-gradient(160deg, #e9732a, #2c5d93);
+  background: linear-gradient(160deg, #e9732a, #2c5d93);
 }
 .cm-vis.img2 {
-  background: url('./assets/crm-grad-sky.jpg') center / cover no-repeat, linear-gradient(180deg, #4677ac, #ff6a1a);
+  background: linear-gradient(180deg, #4677ac, #ff6a1a);
 }
 .cm-vis.stone {
   background: linear-gradient(180deg, #ece6df, #e6dfd6);
