@@ -2,10 +2,8 @@
   <main>
     <SiteHeader />
     <HeroSection />
-    <S_crm />
+    <Section2 />
     <Section1 />
-
-
     <Section3 />
     <Section4 />
     <Section5 />
@@ -34,7 +32,8 @@ import TrustedBusinesses from "./components/home/trustedBusinesses.vue";
 import SiteHeader from "./components/home/siteHeader.vue";
 import SiteFooter from "./components/home/siteFooter.vue";
 import Section11 from "./components/home/section11.vue";
-
+import Section9 from "./components/home/section9.vue";
+import FAQ from "./components/home/FAQ.vue";
 </script>
 
 <style>
