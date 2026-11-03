@@ -202,7 +202,7 @@ onBeforeUnmount(() => {
   --ink: #17191d;
   --paper: #fff;
   --muted: #5d6068;
-  --title: clamp(46px, 3.5vw, 104px);
+  --title: clamp(46px, 4.2vw, 104px);
 
   --ring: min(1560px, 175vw);   /* outer orbit diameter */
   --step: 95px;                 /* gap between concentric rings */
