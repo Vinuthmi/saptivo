@@ -529,11 +529,11 @@ onBeforeUnmount(() => {
   margin: 0;
   padding-bottom: 0.2em;
   font-family: 'Inter Display', Inter, system-ui, sans-serif;
-  font-size: clamp(46px, 3.5vw, 104px);
+  font-size: clamp(32px, 4.2vw, 62px);
   color: #0f172a;
   font-weight: 500;
   line-height: 1.12;
-  letter-spacing: -0.06em;
+  letter-spacing: -0.05em;
 }
 .hx-title span {
   display: block;

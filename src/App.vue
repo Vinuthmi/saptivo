@@ -23,6 +23,7 @@
 <script setup>
 import HeroSection from "./components/home/herosection.vue";
 import Section1 from "./components/home/section1.vue";
+import Section2 from "./components/home/section2.vue";
 import Section3 from "./components/home/section3.vue";
 import Section4 from "./components/home/section4.vue";
 import Section5 from "./components/home/section5.vue";
@@ -33,9 +34,7 @@ import TrustedBusinesses from "./components/home/trustedBusinesses.vue";
 import SiteHeader from "./components/home/siteHeader.vue";
 import SiteFooter from "./components/home/siteFooter.vue";
 import Section11 from "./components/home/section11.vue";
-import S_crm from "./components/home/s_crm.vue";
-import Section9 from "./components/home/section9.vue";
-import FAQ from "./components/home/FAQ.vue";
+
 </script>
 
 <style>

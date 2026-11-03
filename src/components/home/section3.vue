@@ -1,985 +1,417 @@
 <template>
-  <section
-    ref="rootEl"
-    class="hiw"
-    :class="{ 'hiw-js': mounted, 'hiw-in': revealed }"
-    aria-labelledby="hiw-title"
-  >
-    <header class="hiw-head">
-    
-      <h2 id="hiw-title" class="hiw-title">Integrates <b>easily</b></h2>
-      <p>
-        We empower sales, retail, and operations teams to streamline customer pipelines, instant
-        quotations, and multi-store workflows visually
-      </p>
-    </header>
+  <section ref="rootEl" class="bn" :class="{ 'bn-in': revealed }" aria-labelledby="bn-title">
+    <div class="bn-wrap">
+      <h2 id="bn-title" class="bn-title">
+        Built for businesses with <em>more than one branch, counter or crew</em>
+      </h2>
 
-    <div
-      class="hiw-wrap"
-      @pointerenter="paused = true"
-      @pointerleave="paused = false"
-      @focusin="paused = true"
-      @focusout="paused = false"
-    >
-      <!-- ============ left: accordion list ============ -->
-      <ul class="hiw-list" role="tablist" aria-orientation="vertical" @keydown="onKey">
-        <li v-for="(t, i) in tabs" :key="t.title" class="hiw-item" :class="{ on: active === i }">
-          <button
-            :id="`hiw-tab-${i}`"
-            type="button"
-            role="tab"
-            class="hiw-row"
-            :aria-selected="active === i"
-            :aria-controls="`hiw-panel-${i}`"
-            :tabindex="active === i ? 0 : -1"
-            @click="select(i)"
-            @pointerenter="onEnter(i, $event)"
-            @pointerleave="onLeave"
-          >
-            <span class="hiw-rt">{{ t.title }}</span>
-            <svg class="hiw-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
-          </button>
-          <div class="hiw-more">
-            <p>{{ t.text }}</p>
-          </div>
-          <span class="hiw-bar" aria-hidden="true">
-            <i v-if="active === i" :key="`${active}-${cycle}`" @animationend="next"></i>
-          </span>
-        </li>
-      </ul>
-
-      <!-- ============ right: stage ============ -->
-      <div class="hiw-stage">
-        <!-- 1 · Leads -->
-        <div
-          id="hiw-panel-0"
-          class="hiw-panel"
-          :class="{ on: active === 0 }"
-          role="tabpanel"
-          aria-labelledby="hiw-tab-0"
-          :aria-hidden="active === 0 ? undefined : 'true'"
-        >
-          <span class="pl-top"><svg viewBox="0 0 24 24" v-html="ic.user"></svg>New lead captured</span>
-          <div class="pl-card">
-            <h4>Customers <span>248 active this month</span></h4>
-            <div v-for="(l, k) in leads.slice(0, 3)" :key="l.n" class="pl-row" :class="{ hot: k === 0, dim: k > 0 }" :style="{ '--k': k }">
-              <i class="av" :style="{ background: l.c }">{{ l.i }}</i>
-              <span class="m"><b>{{ l.n }}</b><small>{{ l.s }}</small></span>
-              <em class="tag" :class="l.k">{{ l.t }}</em>
+      <div class="bn-grid">
+        <!-- ============ 1 · head-office dashboard ============ -->
+        <article class="bn-card bn-c1 bn-dark" style="--i: 0" tabindex="0">
+          <h3 class="bn-t">One head-office dashboard</h3>
+          <div class="bn-hov" aria-hidden="false"><p>Run one store or one hundred from a single head-office dashboard.</p></div>
+          <div class="bn-win bn-dash">
+            <div class="bn-dl">
+              <span class="bn-k"><s></s>Live · all 4 branches</span>
+              <strong class="bn-tot">LKR {{ total }}</strong>
+              <span class="bn-seg">
+                <button v-for="r in ranges" :key="r" type="button" :class="{ on: range === r }" @click="range = r">{{ r }}</button>
+              </span>
             </div>
+            <ul class="bn-cols">
+              <li v-for="(b, i) in view" :key="b.n" :class="{ top: i === 0 }">
+                <small>{{ b.v }}</small>
+                <span class="bn-cb"><i :style="{ height: b.w + '%' }"></i></span>
+                <em>{{ b.n }}</em>
+              </li>
+            </ul>
           </div>
-          <span class="pl-bot"><i class="dot wa"></i>Receipt sent on WhatsApp</span>
-          <span class="nt nt-l"><svg viewBox="0 0 12 14"><path d="M1 1l9 4.5-4 1.4L4.6 11z" /></svg>Amal Perera</span>
-          <span class="nt nt-r dark"><svg viewBox="0 0 12 14"><path d="M1 1l9 4.5-4 1.4L4.6 11z" /></svg>VIP reward · 10% off</span>
-        </div>
+        </article>
 
-        <!-- 2 · Quotations -->
-        <div
-          id="hiw-panel-1"
-          class="hiw-panel"
-          :class="{ on: active === 1 }"
-          role="tabpanel"
-          aria-labelledby="hiw-tab-1"
-          :aria-hidden="active === 1 ? undefined : 'true'"
-        >
-          <span class="pl-top"><svg viewBox="0 0 24 24" v-html="ic.send"></svg>Quotation sent</span>
-          <div class="pl-card">
-            <h4>QT-2048 <span>Acme Holdings</span></h4>
-            <div class="qt">
-              <div><small>Total amount</small><b>$24,850</b></div>
-              <em class="tag g big"><i class="dot"></i>Approved</em>
-            </div>
-            <div class="flow">
-              <div v-for="(s, k) in ['Draft', 'Sent', 'Approved']" :key="s" class="step" :style="{ '--k': k }">
-                <i><svg viewBox="0 0 24 24" v-html="ic[['edit', 'send', 'check'][k]]"></svg></i>{{ s }}
+        <!-- ============ 2 · role-based permissions (photo) ============ -->
+        <article class="bn-card bn-c2" style="--i: 1" tabindex="0">
+          <h3 class="bn-t">Role-based permissions</h3>
+          <div class="bn-hov" aria-hidden="false"><p>Set role-based permissions for each branch.</p></div>
+          <div class="bn-ph">
+            <img :src="photos.team" alt="Two shop employees in aprons smiling inside a store" loading="lazy" decoding="async" />
+            <div class="bn-float bn-roles">
+              <div class="bn-rt">Kandy branch access</div>
+              <div v-for="(r, ri) in roles" :key="r.n" class="bn-rr" :class="{ hot: roleHot === ri }">
+                <span class="bn-role"><i>{{ r.n[0] }}</i>{{ r.n }}</span>
+                <span class="bn-chips"><b v-for="(on, pi) in r.p" :key="pi" :class="{ on }">{{ perms[pi] }}</b></span>
               </div>
-              <u></u><u></u>
-            </div>
-            <div class="pl-row file">
-              <i class="av sq" style="background: #d64545">PDF</i>
-              <span class="m"><b>QT-2048.pdf</b><small>Branded · 3 pages</small></span>
-              <em class="btn">Convert to invoice</em>
             </div>
           </div>
-          <span class="pl-bot"><i class="dot"></i>Converted to invoice in 1 click</span>
-          <span class="nt nt-r dark"><svg viewBox="0 0 12 14"><path d="M1 1l9 4.5-4 1.4L4.6 11z" /></svg>Client approved · 2 min</span>
-        </div>
+        </article>
 
-        <!-- 3 · Inventory -->
-        <div
-          id="hiw-panel-2"
-          class="hiw-panel"
-          :class="{ on: active === 2 }"
-          role="tabpanel"
-          aria-labelledby="hiw-tab-2"
-          :aria-hidden="active === 2 ? undefined : 'true'"
-        >
-          <span class="pl-top"><svg viewBox="0 0 24 24" v-html="ic.sync"></svg>Synced · 12 branches</span>
-          <div class="stack">
-            <div v-for="(b, k) in branches.slice(0, 4)" :key="b.n" class="sk" :class="{ low: b.low, tilt: k === 3 }" :style="{ '--k': k }">
-              <span class="m"><b>{{ b.n }}</b><small>{{ b.r }}</small></span>
-              <span class="stock"><u :style="{ width: b.p + '%' }"></u></span>
-              <b class="q">{{ b.q.toLocaleString('en-US') }}</b>
-            </div>
+        <!-- ============ 3 · stock sync ============ -->
+        <article class="bn-card bn-c3" style="--i: 2" tabindex="0">
+          <h3 class="bn-t">Stock stays in sync</h3>
+          <div class="bn-hov" aria-hidden="false"><p>Keep stock synced across warehouses and service vans.</p></div>
+          <div class="bn-win bn-stk">
+            <span class="bn-ok" :class="{ pop: pulse }">12 units moved · Synced ✓</span>
+            <ul class="bn-sl">
+              <li><span class="bn-si bn-si-o"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" v-html="ico.box"></svg></span><b>Central warehouse</b><em>{{ whQty.toLocaleString('en-US') }}</em><span class="bn-mt"><i :style="{ width: Math.round(whQty / 1240 * 100) + '%' }"></i></span></li>
+              <li><span class="bn-si"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" v-html="ico.van"></svg></span><b>Service van 07</b><em>{{ vanQty }}</em><span class="bn-mt"><i :style="{ width: Math.round(vanQty / 120 * 100) + '%' }"></i></span></li>
+              <li><span class="bn-si"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" v-html="ico.store"></svg></span><b>Galle branch</b><em>212</em><span class="bn-mt"><i style="width: 18%"></i></span></li>
+            </ul>
           </div>
-          <span class="pl-bot"><i class="dot r"></i>Low stock · Transfer 200 from HQ</span>
-          <span class="nt nt-l"><svg viewBox="0 0 12 14"><path d="M1 1l9 4.5-4 1.4L4.6 11z" /></svg>Kandy · Manager</span>
-        </div>
+        </article>
 
-        <!-- 4 · Calls -->
-        <div
-          id="hiw-panel-3"
-          class="hiw-panel"
-          :class="{ on: active === 3 }"
-          role="tabpanel"
-          aria-labelledby="hiw-tab-3"
-          :aria-hidden="active === 3 ? undefined : 'true'"
-        >
-          <span class="pl-top"><svg viewBox="0 0 24 24" v-html="ic.phone"></svg>Incoming · Amal Perera</span>
-          <div class="pl-card">
-            <h4>Call log <span>Connected to 3CX</span></h4>
-            <div v-for="(c, k) in calls.slice(0, 3)" :key="c.n + c.s" class="pl-row" :class="{ hot: k === 0, dim: k > 1 }" :style="{ '--k': k }">
-              <i class="av" :style="{ background: c.c }">{{ c.a }}</i>
-              <span class="m"><b>{{ c.n }}</b><small>{{ c.s }}</small></span>
-              <em class="tag" :class="c.k">{{ c.t }}</em>
+        <!-- ============ 4 · consolidated revenue (photo) ============ -->
+        <article class="bn-card bn-c4" style="--i: 3" tabindex="0">
+          <h3 class="bn-t">Consolidated revenue</h3>
+          <div class="bn-hov" aria-hidden="false"><p>See consolidated revenue without waiting for end-of-day reports.</p></div>
+          <div class="bn-ph">
+            <img :src="photos.owner" alt="A tablet point-of-sale at a store checkout counter" loading="lazy" decoding="async" />
+            <div class="bn-float bn-rev">
+              <div class="bn-rv-h"><span>Revenue today</span><em><s></s>Live</em></div>
+              <div class="bn-big">LKR {{ revNum }}M</div>
+              <div class="bn-bars">
+                <i v-for="(h, i) in bars" :key="i" :class="{ last: i === bars.length - 1 }" :style="{ '--h': h + '%', '--d': i * 0.05 + 's' }"></i>
+              </div>
             </div>
           </div>
-          <span class="pl-bot"><i class="dot"></i>Matched to VIP · 14 visits</span>
-          <span class="nt nt-r dark"><svg viewBox="0 0 12 14"><path d="M1 1l9 4.5-4 1.4L4.6 11z" /></svg>Caller ID matched</span>
-        </div>
+        </article>
 
-        <!-- 5 · Analytics -->
-        <div
-          id="hiw-panel-4"
-          class="hiw-panel"
-          :class="{ on: active === 4 }"
-          role="tabpanel"
-          aria-labelledby="hiw-tab-4"
-          :aria-hidden="active === 4 ? undefined : 'true'"
-        >
-          <span class="pl-top"><svg viewBox="0 0 24 24" v-html="ic.chart"></svg>Live pipeline</span>
-          <div class="pl-card">
-            <h4>Revenue <span>Last 8 weeks</span></h4>
-            <div class="kpis">
-              <div v-for="k in kpis" :key="k.l" class="kpi"><small>{{ k.l }}</small><b>{{ k.v }}</b><em>{{ k.d }}</em></div>
-            </div>
-            <svg viewBox="0 0 400 150" class="chart" aria-hidden="true">
-              <defs>
-                <linearGradient id="hiw-g" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0" stop-color="#ff8a4c" />
-                  <stop offset="1" stop-color="#e8501a" />
-                </linearGradient>
-              </defs>
-              <rect v-for="(h, k) in bars" :key="k" class="bar-r" :style="{ '--k': k }" :x="12 + k * 46" :y="140 - h" width="34" :height="h" rx="6" fill="url(#hiw-g)" />
-              <path d="M29 80L75 64 121 72 167 46 213 54 259 28 305 36 351 8" fill="none" stroke="#14162b" stroke-width="2" stroke-linecap="round" stroke-dasharray="1 5" />
-            </svg>
+        <!-- ============ 5 · grows with you ============ -->
+        <article class="bn-card bn-c5" style="--i: 4" tabindex="0">
+          <h3 class="bn-t">Saptivo grows with you</h3>
+          <div class="bn-hov" aria-hidden="false"><p>Add users, branches and modules whenever you need them, with no upgrade fees.</p></div>
+          <div class="bn-win bn-win-s">
+            <ul class="bn-plan">
+              <li v-for="(p, i) in plan" :key="p.n" :class="{ flash: flashI === i }">
+                <span class="bn-pn">{{ p.n }}</span>
+                <span class="bn-pv">{{ p.v }}</span>
+                <span class="bn-add">+ Add</span>
+              </li>
+            </ul>
+            <div class="bn-fee"><span>Upgrade fee</span><strong>LKR 0</strong><b>✓</b></div>
           </div>
-          <span class="pl-bot"><i class="dot"></i>Tax report ready · Export PDF or Excel</span>
-          <span class="nt nt-l"><svg viewBox="0 0 12 14"><path d="M1 1l9 4.5-4 1.4L4.6 11z" /></svg>Net margin 31.8%</span>
-        </div>
+        </article>
       </div>
     </div>
   </section>
 </template>
 
 <script setup>
-defineOptions({ name: 'HomeSection3' })
-import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue'
+defineOptions({ name: 'HomeMultiBranchBentoSection' })
+/**
+ * MultiBranchBento.vue — "Built for businesses with more than one branch, counter or crew"
+ * Vue 3, <script setup>. Two rows of cards (2 + 3) that fit one desktop screen.
+ * Restrained palette: white / navy / one orange accent. Two photo cards (swap URLs below).
+ * Each card shows its title; the description slides up when the card is hovered or focused (always shown on touch).
+ * SSR/Nuxt safe (browser APIs only inside onMounted).
+ */
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+
+const photos = {
+  team: 'https://images.unsplash.com/photo-1753354868616-544973e405c9?w=1200&q=80&auto=format&fit=crop', // Vitaly Gariev / Unsplash
+  owner: 'https://images.unsplash.com/photo-1742836531271-98fd8151d257?w=1200&q=80&auto=format&fit=crop', // Unsplash
+}
+
+const ico = {
+  store: '<path d="M4 9l1.5-5h13L20 9v1a2.5 2.5 0 0 1-5 0 2.5 2.5 0 0 1-6 0 2.5 2.5 0 0 1-5 0z"/><path d="M5.5 12v8h13v-8"/>',
+  van: '<path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/>',
+  box: '<path d="M3.5 8 12 4l8.5 4v8L12 20l-8.5-4z"/><path d="M3.5 8 12 12l8.5-4M12 12v8"/>',
+}
+
+/* ---- 1 · dashboard ---- */
+const ranges = ['Day', 'Week', 'Month']
+const range = ref('Day')
+// LKR thousands per branch (Day total = the "Revenue today" figure in the revenue card)
+const data = {
+  Day: [['Colombo', 842], ['Kandy', 628], ['Galle', 496], ['Jaffna', 364]],
+  Week: [['Colombo', 5370], ['Kandy', 4060], ['Galle', 3190], ['Jaffna', 2350]],
+  Month: [['Colombo', 22400], ['Kandy', 17100], ['Galle', 13900], ['Jaffna', 10300]],
+}
+const fmt = (k) => (k >= 1000 ? `${(k / 1000).toFixed(2)}M` : `${k}k`)
+const shown = ref(false)
+const view = computed(() => {
+  const rows = data[range.value]
+  const max = Math.max(...rows.map((r) => r[1]))
+  return rows.map(([n, v]) => ({ n, v: fmt(v), w: shown.value ? Math.round((v / max) * 100) : 0 }))
+})
+const total = computed(() => fmt(data[range.value].reduce((a, r) => a + r[1], 0)))
+
+/* ---- 2 · roles ---- */
+const perms = ['Sell', 'Stock', 'Reports']
+const roles = [
+  { n: 'Branch manager', p: [1, 1, 1] },
+  { n: 'Cashier', p: [1, 0, 0] },
+  { n: 'Stock clerk', p: [0, 1, 0] },
+]
+const roleHot = ref(0)
+
+/* ---- 3 · stock ---- */
+const whQty = ref(1240)
+const vanQty = ref(36)
+const pulse = ref(false)
+
+/* ---- 4 · revenue ---- */
+const bars = [24, 36, 30, 48, 42, 60, 54, 72, 66, 84, 100]
+const rev = ref(0)
+const revNum = computed(() => rev.value.toFixed(2))
+
+/* ---- 5 · plan ---- */
+const plan = ref([
+  { n: 'Users', v: 24 },
+  { n: 'Branches', v: 6 },
+  { n: 'Modules', v: 8 },
+])
+const flashI = ref(-1)
 
 const rootEl = ref(null)
-const mounted = ref(false)
 const revealed = ref(false)
-const active = ref(0)
-const paused = ref(false)
-const cycle = ref(0)
+const inView = ref(false)
+let io = null
+let timer = null
+let raf = 0
+let tick = 0
 
-const ic = {
-  user: '<circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c.5-3.600 3.300-5.500 7-5.500s6.500 1.900 7 5.500"/>',
-  send: '<path d="m4 12 16-8-5.500 16-3-6.500z"/>',
-  edit: '<path d="M4 20h4L19 9l-4-4L4 16z"/>',
-  check: '<path d="m5 12.500 4.500 4.500L19 7.500"/>',
-  sync: '<path d="M19 11a7 7 0 0 0-12.500-3.800L5 9"/><path d="M5 4.500V9h4.500"/><path d="M5 13a7 7 0 0 0 12.500 3.800L19 15"/><path d="M19 19.500V15h-4.500"/>',
-  phone: '<path d="M5 4h4l2 5-2.500 1.500a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/>',
-  chart: '<path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/>',
-}
-
-const tabs = [
-  { title: 'Capture & Manage Leads', text: 'Organize buyer profiles, track customer frequency, and auto-dispatch instant WhatsApp digital receipts and VIP rewards' },
-  { title: 'Instant Smart Quotations', text: 'Build branded PDF quotations in seconds, track client approvals, and convert won deals into invoices in 1 click' },
-  { title: 'Multi-Store Inventory Sync', text: 'Manage 1 to 100+ retail branches from a single HQ dashboard with real-time stock sync and role-based staff permissions' },
-  { title: 'Automated Customer Calls', text: 'Connect 3CX telephony to automatically log inbound, outbound, and missed calls with instant caller ID matching' },
-  { title: 'Revenue Analytics & Audit', text: 'Monitor live sales pipeline velocity, audit net profit margins, and export one-click tax and financial reports' },
-]
-
-const leads = [
-  { i: 'AP', c: '#e8501a', n: 'Amal Perera', s: '14 visits · last seen today', t: 'VIP', k: '' },
-  { i: 'NF', c: '#3f63d8', n: 'Nadia Fernando', s: '6 visits · Rs. 182,400 lifetime', t: 'Returning', k: 'g' },
-  { i: 'KS', c: '#1fa971', n: 'Kasun Silva', s: 'New lead · from website', t: 'New', k: 'b' },
-]
-const branches = [
-  { n: 'Colombo Fort', r: 'Manager · full access', p: 86, q: 1240 },
-  { n: 'Kandy City Centre', r: 'Staff · view & sell', p: 58, q: 830 },
-  { n: 'Galle', r: 'Staff · view & sell', p: 34, q: 412 },
-  { n: 'Negombo', r: 'Manager · full access', p: 12, q: 96, low: true },
-]
-const calls = [
-  { a: '↙', c: '#1fa971', n: 'Amal Perera', s: 'Inbound · 4:12', t: 'Answered', k: 'g' },
-  { a: '↗', c: '#3f63d8', n: 'Acme Holdings', s: 'Outbound · 1:48', t: 'Completed', k: 'b' },
-  { a: '✕', c: '#d64545', n: '+94 77 123 4567', s: 'Missed · 10:42 AM', t: 'Missed', k: 'r' },
-]
-const bars = [50, 64, 56, 82, 74, 100, 92, 124]
-const kpis = [
-  { l: 'Net revenue', v: '$184k', d: '▲ 12.4%' },
-  { l: 'Profit margin', v: '31.8%', d: '▲ 2.1%' },
-  { l: 'Deals won', v: '86', d: '▲ 9' },
-]
-
-/* ------------------------------------------------------------------ interaction */
-let hoverTimer = 0
-let reduce = false
-let io
-
-function select(i) {
-  if (i === active.value) return
-  active.value = i
-  cycle.value++
-}
-function next() {
-  if (paused.value) return
-  select((active.value + 1) % tabs.length)
-}
-function onEnter(i, e) {
-  if (e.pointerType !== 'mouse' || i === active.value) return
-  clearTimeout(hoverTimer)
-  hoverTimer = setTimeout(() => select(i), 110)
-}
-function onLeave() {
-  clearTimeout(hoverTimer)
-}
-async function onKey(e) {
-  const dir = e.key === 'ArrowDown' ? 1 : e.key === 'ArrowUp' ? -1 : 0
-  if (!dir) return
-  e.preventDefault()
-  const n = (active.value + dir + tabs.length) % tabs.length
-  select(n)
-  await nextTick()
-  rootEl.value?.querySelectorAll('.hiw-row')[n]?.focus()
+function countUp() {
+  const t0 = performance.now()
+  const step = (t) => {
+    const k = Math.min(1, (t - t0) / 1600)
+    rev.value = 2.33 * (1 - Math.pow(1 - k, 3))
+    if (k < 1) raf = requestAnimationFrame(step)
+  }
+  raf = requestAnimationFrame(step)
 }
 
 onMounted(() => {
-  mounted.value = true
-  reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  if (reduce) rootEl.value.classList.add('hiw-still')
-  io = new IntersectionObserver(
-    (es) => {
-      const vis = es[0].isIntersecting
-      if (vis) revealed.value = true
-      rootEl.value.classList.toggle('hiw-off', !vis) // pauses the progress line off-screen
-    },
-    { threshold: 0.2 },
-  )
+  const reduce = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches
+  io = new IntersectionObserver(([en]) => {
+    inView.value = en.isIntersecting
+    if (en.isIntersecting && !revealed.value) {
+      revealed.value = true
+      setTimeout(() => { shown.value = true }, 500)
+      if (reduce) rev.value = 2.33
+      else countUp()
+    }
+  }, { threshold: 0.25 })
   io.observe(rootEl.value)
+  if (reduce) return
+  timer = setInterval(() => {
+    if (!inView.value || document.hidden) return
+    tick++
+    roleHot.value = tick % roles.length
+    if (tick % 3 === 0) {
+      whQty.value -= 12
+      vanQty.value += 12
+      pulse.value = true
+      setTimeout(() => { pulse.value = false }, 900)
+      if (whQty.value < 1100) { whQty.value = 1240; vanQty.value = 36 }
+    }
+    const i = tick % plan.value.length
+    plan.value[i].v++
+    flashI.value = i
+    setTimeout(() => { flashI.value = -1 }, 900)
+    if (plan.value[i].v > [30, 12, 12][i]) plan.value[i].v = [24, 6, 8][i]
+  }, 1600)
 })
 onBeforeUnmount(() => {
+  clearInterval(timer)
+  cancelAnimationFrame(raf)
   io?.disconnect()
-  clearTimeout(hoverTimer)
 })
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
-
-.hiw {
-  --o: #ff5722;
-  --o1: #e8501a;
-  --o2: #ff8a4c;
-  --ink: #14162b;
-  --mut: #6b6f80;
-  --line: #e7e5e4;
-  --ok: #1fa971;
-  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
-  position: relative;
-  padding: clamp(24px, 3vw, 40px) clamp(16px, 4vw, 40px) clamp(48px, 7vw, 96px);
-  font-family: Poppins, system-ui, sans-serif;
+.bn, .bn * { box-sizing: border-box; }
+.bn {
+  --o: #f2540c;
+  --ink: #0f172a;
+  --mut: #6b7280;
+  --line: #ececf0;
+  --u: clamp(26px, 4.4vh, 38px); /* row unit for mocks */
+  --bn-offset: 72px; /* height of your sticky site header; set 0 if none */
+  font-family: 'Poppins', system-ui, sans-serif;
   color: var(--ink);
   background: #fff;
 }
-.hiw,
-.hiw *,
-.hiw *::before,
-.hiw *::after {
-  box-sizing: border-box;
-}
-.hiw svg {
-  display: block;
-}
+.bn-wrap { max-width: 1240px; margin: 0 auto; padding: clamp(40px, 6vw, 80px) clamp(16px, 3vw, 32px); }
 
-/* ============ heading ============ */
-.hiw-head {
-  max-width: 640px;
-  margin: 0 auto clamp(32px, 5vw, 64px);
+.bn-title {
+  margin: 0 auto clamp(24px, 3.4vw, 44px);
+  max-width: 900px;
+  padding-bottom: 0.12em;
   text-align: center;
-}
-
-.hiw-title {
-  margin: 8px 0 16px;
-  padding-bottom: 0.2em;
+  text-wrap: balance;
   font-family: 'Inter Display', Inter, system-ui, sans-serif;
-  font-size: clamp(46px, 3.5vw, 104px);
-  color: #0f172a;
-  line-height: 1.15;
+  font-size: clamp(36px, 3.6vw, 56px);
   font-weight: 500;
+  line-height: 1.1;
   letter-spacing: -0.06em;
 }
-.hiw-title b {
-  font-weight: 500;
-
+.bn-title em {
+  display: inline-block;
+  font-style: normal;
   background: linear-gradient(100deg, #ff9a3d 0%, #ff6a1a 45%, #f2540c 100%);
   -webkit-background-clip: text;
   background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.hiw-head p {
-  margin: 0;
-  font-family: 'Inter Display', Inter, system-ui, sans-serif;
-  font-size: clamp(15px, 1vw, 18px);
-  font-weight: 500;
-  line-height: 1.45;
-  letter-spacing: -0.02em;
-  color: #475569;
-}
-.hiw-js .hiw-head,
-.hiw-js .hiw-wrap {
-  opacity: 0;
-  transform: translateY(22px);
-}
-.hiw-in .hiw-head,
-.hiw-in .hiw-wrap {
-  opacity: 1;
-  transform: none;
-  transition: opacity 0.8s var(--ease), transform 0.9s var(--ease);
-}
-.hiw-in .hiw-wrap {
-  transition-delay: 0.12s;
+  color: transparent;
 }
 
-/* ============ layout ============ */
-.hiw-wrap {
-  max-width: 1180px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: minmax(0, 435fr) minmax(0, 625fr);
-  gap: clamp(28px, 4.8vw, 56px);
-  align-items: center;
-}
+/* ---------- grid: 2 + 3 ---------- */
+.bn-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: clamp(10px, 1.3vw, 16px); }
+.bn-c1, .bn-c2 { grid-column: span 3; }
+.bn-c3, .bn-c4, .bn-c5 { grid-column: span 2; }
 
-/* ============ list ============ */
-.hiw-list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  border-top: 1px solid var(--line);
-}
-.hiw-item {
+.bn-card {
   position: relative;
-  border-bottom: 1px solid var(--line);
-}
-.hiw-row {
-  all: unset;
-  box-sizing: border-box;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 28px 0;
-  cursor: pointer;
-  transition: padding 0.5s var(--ease);
-}
-.hiw-row:focus-visible {
-  outline: 2px solid var(--o);
-  outline-offset: -2px;
-  border-radius: 6px;
-}
-.hiw-rt {
-  font-family: Inter, system-ui, sans-serif;
-  font-size: clamp(1vw, 1.8vw, 22px);
-  font-weight: 500;
-  letter-spacing: -0.015em;
-  color: #3b3d52;
-  transition: color 0.3s, transform 0.5s var(--ease);
-}
-.hiw-row:hover .hiw-rt,
-.hiw-item.on .hiw-rt {
-  color: var(--ink);
-}
-.hiw-arrow {
-  flex: none;
-  width: 18px;
-  height: 18px;
-  fill: none;
-  stroke: var(--o);
-  stroke-width: 2.4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  opacity: 0;
-  transform: translateX(-8px);
-  transition: opacity 0.3s, transform 0.5s var(--ease);
-}
-.hiw-item.on .hiw-arrow {
-  opacity: 1;
-  transform: none;
-}
-.hiw-more {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows 0.55s var(--ease);
-}
-.hiw-more p {
-  min-height: 0;
-  overflow: hidden;
-  margin: 0;
-  max-width: 400px;
-  font-size: 15px;
-  line-height: 1.75;
-  color: var(--mut);
-  opacity: 0;
-  transform: translateY(6px);
-  transition: opacity 0.25s, transform 0.25s;
-}
-.hiw-item.on .hiw-more {
-  grid-template-rows: 1fr;
-}
-.hiw-item.on .hiw-more p {
-  padding-bottom: 28px;
-  opacity: 1;
-  transform: none;
-  transition: opacity 0.5s var(--ease) 0.15s, transform 0.6s var(--ease) 0.15s;
-}
-.hiw-item.on .hiw-row {
-  padding-bottom: 12px;
-}
-.hiw-bar {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -1px;
-  height: 2px;
-  overflow: hidden;
-  pointer-events: none;
-}
-.hiw-bar i {
-  display: block;
-  height: 100%;
-  width: 0;
-  background: linear-gradient(90deg, var(--o1), var(--o2));
-  animation: hiw-fill 6s linear forwards;
-}
-.hiw-wrap:hover .hiw-bar i,
-.hiw-wrap:focus-within .hiw-bar i,
-.hiw-off .hiw-bar i {
-  animation-play-state: paused;
-}
-@keyframes hiw-fill {
-  to {
-    width: 100%;
-  }
-}
-
-/* ============ stage ============ */
-.hiw-stage {
-  position: relative;
-  aspect-ratio: 625 / 471;
-  min-height: 400px;
-  border-radius: 28px;
-  overflow: hidden;
-  isolation: isolate;
-  background:
-    radial-gradient(70% 80% at 0% 0%, #ffc9a6 0%, transparent 62%),
-    radial-gradient(60% 70% at 100% 100%, #ffe3e0 0%, transparent 65%),
-    linear-gradient(135deg, #ffd8bf 0%, #ffe9dc 48%, #fff3ee 100%);
-}
-.hiw-stage::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.95) 2px, transparent 2.6px);
-  background-size: 75px 75px;
-  background-position: 30px 30px;
-  pointer-events: none;
-}
-.hiw-panel {
-  position: absolute;
-  inset: 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 22px;
-  padding: 24px;
+  min-height: 380px;
+  padding: clamp(18px, 2vw, 26px);
+  border: 1px solid var(--line);
+  border-radius: 26px;
+  overflow: hidden;
+  background: #fafafb;
   opacity: 0;
-  visibility: hidden;
-  transform: scale(0.97);
-  transition: opacity 0.45s ease, transform 0.6s var(--ease), visibility 0s 0.45s;
+  translate: 0 22px;
+  transition: opacity 0.7s ease, translate 0.9s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s ease;
+  transition-delay: calc(var(--i) * 0.1s);
 }
-.hiw-panel.on {
-  opacity: 1;
-  visibility: visible;
-  transform: none;
-  transition: opacity 0.5s ease 0.08s, transform 0.7s var(--ease) 0.08s, visibility 0s;
+.bn-in .bn-card { opacity: 1; translate: 0 0; }
+.bn-card:hover { box-shadow: 0 26px 46px -32px rgba(15, 23, 42, 0.35); }
+
+.bn-t { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 clamp(12px, 2vh, 18px); font-family: 'Inter Display', Inter, system-ui, sans-serif; font-size: clamp(18px, 1.5vh + 6px, 22px); font-weight: 500; line-height: 1.25; letter-spacing: -0.025em; color: #14152b; }
+/* "+" marker that turns into "x" on hover */
+.bn-t::after { content: ''; flex: none; width: 26px; height: 26px; border-radius: 50%; border: 1px solid rgba(20, 21, 43, 0.14); background: linear-gradient(currentColor, currentColor) center / 10px 1.5px no-repeat, linear-gradient(currentColor, currentColor) center / 1.5px 10px no-repeat; color: #14152b; transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.3s, border-color 0.3s, color 0.3s; }
+.bn-card:hover .bn-t::after, .bn-card:focus-visible .bn-t::after { transform: rotate(135deg); background-color: var(--o); border-color: var(--o); color: #fff; }
+
+/* description opens inline under the title; the visual below makes room */
+.bn-card { outline: none; }
+.bn-card:focus-visible { box-shadow: 0 0 0 3px rgba(242, 84, 12, 0.55); }
+.bn-hov { flex: none; display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.35s ease; }
+.bn-hov p::after { content: ''; display: block; height: clamp(12px, 2vh, 18px); }
+.bn-hov p { min-height: 0; overflow: hidden; margin: 0; padding-right: 34px; font-size: clamp(13.5px, 1.4vh + 3px, 15px); line-height: 1.55; color: #64748b; }
+.bn-card:hover .bn-hov, .bn-card:focus-visible .bn-hov { grid-template-rows: 1fr; opacity: 1; }
+
+/* single dark card keeps the section rich without extra colours */
+.bn-dark { border-color: transparent; background: radial-gradient(420px 260px at 100% 0%, rgba(242, 84, 12, 0.28), transparent 70%), linear-gradient(160deg, #1a2338, #0b1120); }
+.bn-dark .bn-t { color: #fff; }
+.bn-dark .bn-t::after { border-color: rgba(255, 255, 255, 0.3); color: #fff; }
+.bn-dark .bn-hov p { color: rgba(255, 255, 255, 0.72); }
+
+/* ---------- white mock window ---------- */
+.bn-win { flex: 1; min-height: 0; display: flex; flex-direction: column; overflow: hidden; border-radius: 16px; background: #fff; box-shadow: 0 22px 40px -26px rgba(0, 0, 0, 0.55); }
+.bn-seg { display: inline-flex; gap: 2px; padding: 3px; border-radius: 10px; background: #f4f4f6; }
+.bn-seg button { padding: 3px 10px; border: 0; border-radius: 8px; background: transparent; color: var(--mut); font: 500 12px 'Poppins', system-ui, sans-serif; cursor: pointer; transition: background 0.25s, color 0.25s; }
+.bn-seg button:hover { color: var(--ink); }
+.bn-seg button.on { background: #fff; color: var(--o); box-shadow: 0 1px 3px rgba(15, 23, 42, 0.12); }
+.bn-live s, .bn-rv-h s { width: 7px; height: 7px; border-radius: 50%; background: #22c55e; animation: bn-blink 1.6s ease-in-out infinite; }
+@keyframes bn-blink { 50% { opacity: 0.3; } }
+
+/* dashboard: total on the left, one column per branch on the right */
+.bn-dash { flex-direction: row; gap: clamp(14px, 2vw, 28px); padding: clamp(14px, 2.4vh, 22px) clamp(16px, 1.8vw, 24px); }
+.bn-dl { flex: 0 0 38%; min-width: 0; display: flex; flex-direction: column; justify-content: space-between; gap: 8px; }
+.bn-k { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--mut); }
+.bn-k s { width: 7px; height: 7px; border-radius: 50%; background: #22c55e; animation: bn-blink 1.6s ease-in-out infinite; }
+.bn-tot { font-family: 'Inter Display', Inter, system-ui, sans-serif; font-size: clamp(26px, 4.4vh, 38px); font-weight: 500; letter-spacing: -0.05em; line-height: 1; font-variant-numeric: tabular-nums; }
+.bn-dl .bn-seg { align-self: flex-start; }
+.bn-cols { flex: 1; min-width: 0; margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(8px, 1vw, 14px); }
+.bn-cols li { display: flex; flex-direction: column; align-items: center; gap: 6px; min-height: 0; }
+.bn-cols small { font-size: 11.5px; font-weight: 500; color: #475569; font-variant-numeric: tabular-nums; }
+.bn-cols em { font-size: 11.5px; font-style: normal; color: var(--mut); }
+.bn-cb { flex: 1; width: 100%; min-height: 0; display: flex; align-items: flex-end; border-radius: 9px; background: #f4f4f6; overflow: hidden; }
+.bn-cb i { width: 100%; border-radius: 9px; background: #d5d9e0; transition: height 1.1s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.bn-cols li.top .bn-cb i { background: var(--o); }
+.bn-cols li.top small { color: var(--o); font-weight: 600; }
+
+/* stock window */
+.bn-stk { position: relative; padding: clamp(10px, 2vh, 18px) 16px; }
+.bn-sl { flex: 1; min-height: 0; margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; justify-content: space-evenly; }
+.bn-sl li { display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; grid-template-areas: 'i n q' 'i m m'; column-gap: 10px; row-gap: 5px; align-items: center; }
+.bn-sl .bn-si { grid-area: i; align-self: center; }
+.bn-sl b { grid-area: n; font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bn-sl em { grid-area: q; font-style: normal; font-size: 12.5px; color: var(--mut); font-variant-numeric: tabular-nums; }
+.bn-mt { grid-area: m; height: 5px; border-radius: 99px; background: #f0f0f3; overflow: hidden; }
+.bn-mt i { display: block; height: 100%; border-radius: 99px; background: #cfd5de; transition: width 0.8s ease; }
+.bn-sl li:first-child .bn-mt i { background: var(--o); }
+.bn-ok { position: absolute; right: 12px; top: -11px; z-index: 2; padding: 3px 10px; border-radius: 999px; background: #ecfdf3; color: #15803d; font-size: 10.5px; font-weight: 600; box-shadow: 0 6px 14px -8px rgba(21, 128, 61, 0.6); opacity: 0; translate: 0 4px; transition: opacity 0.3s, translate 0.3s; }
+.bn-ok.pop { opacity: 1; translate: 0 0; }
+.bn-stk { overflow: visible; }
+.bn-si { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 9px; background: #f4f4f6; color: #475569; }
+.bn-si-o { background: #fff1ea; color: var(--o); }
+
+/* ---------- photo block ---------- */
+.bn-ph { position: relative; flex: 1; min-height: 0; border-radius: 16px; overflow: hidden; background: linear-gradient(160deg, #cfd3da, #9aa1ad); }
+.bn-ph > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: scale 1.2s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.bn-card:hover .bn-ph > img { scale: 1.04; }
+.bn-float { position: absolute; left: 12px; bottom: 12px; border-radius: 16px; background: rgba(255, 255, 255, 0.96); box-shadow: 0 18px 34px -18px rgba(15, 23, 42, 0.55); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+
+/* roles panel */
+.bn-roles { width: min(92%, 340px); padding: 10px 10px 8px; }
+.bn-rt { padding: 0 6px 6px; font-size: 12px; font-weight: 500; }
+.bn-rr { display: flex; align-items: center; justify-content: space-between; gap: 8px; height: calc(var(--u) * 0.9); padding: 0 6px; border-radius: 10px; transition: background 0.4s; }
+.bn-rr.hot { background: #fff3ec; }
+.bn-role { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 500; white-space: nowrap; }
+.bn-role i { flex: none; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--ink); color: #fff; font-size: 10px; font-style: normal; font-weight: 600; }
+.bn-chips { display: inline-flex; gap: 4px; }
+.bn-chips b { padding: 2px 7px; border-radius: 99px; background: #f1f2f5; color: #a3a9b5; font-size: 10px; font-weight: 500; text-decoration: line-through; text-decoration-color: transparent; transition: background 0.3s, color 0.3s; }
+.bn-chips b.on { background: #fff1ea; color: var(--o); font-weight: 600; }
+
+/* revenue float */
+.bn-rev { width: min(76%, 240px); padding: 12px 14px 12px; }
+.bn-rv-h { display: flex; align-items: center; justify-content: space-between; font-size: 12px; color: var(--mut); }
+.bn-rv-h em { display: inline-flex; align-items: center; gap: 6px; padding: 2px 8px; border-radius: 999px; background: #ecfdf3; color: #15803d; font-size: 10.5px; font-style: normal; font-weight: 600; }
+.bn-big { margin-top: 4px; font-family: 'Inter Display', Inter, system-ui, sans-serif; font-size: clamp(26px, 4.2vh, 34px); font-weight: 500; letter-spacing: -0.05em; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.bn-bars { display: flex; align-items: flex-end; gap: 4px; height: calc(var(--u) * 0.85); margin-top: 8px; }
+.bn-bars i { flex: 1; height: 0; border-radius: 4px 4px 2px 2px; background: #f6c9b3; transition: height 0.9s cubic-bezier(0.2, 0.8, 0.2, 1); transition-delay: calc(0.5s + var(--d)); }
+.bn-in .bn-bars i { height: var(--h); }
+.bn-bars i.last { background: var(--o); }
+
+/* plan */
+.bn-plan { flex: 1; min-height: 0; margin: 0; padding: 4px 16px 0; list-style: none; display: flex; flex-direction: column; justify-content: space-evenly; }
+.bn-plan li { display: flex; align-items: center; gap: 10px; flex: 1; border-bottom: 1px solid #f0f0f3; border-radius: 8px; transition: background 0.4s; }
+.bn-plan li.flash { background: #fff6f1; }
+.bn-pn { font-size: 13.5px; font-weight: 500; }
+.bn-pv { margin-left: auto; min-width: 26px; text-align: right; font-size: 17px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.bn-plan li.flash .bn-pv { color: var(--o); }
+.bn-add { padding: 3px 10px; border-radius: 999px; background: #fff1ea; color: var(--o); font-size: 11.5px; font-weight: 600; }
+.bn-fee { display: flex; align-items: center; gap: 10px; margin: 10px 14px 14px; padding: 10px 12px; border-radius: 12px; background: #f4f4f6; color: #334155; font-size: 12.5px; }
+.bn-fee strong { margin-left: auto; font-size: 15px; font-weight: 600; color: var(--ink); }
+.bn-fee b { display: grid; place-items: center; width: 19px; height: 19px; border-radius: 50%; background: var(--ink); color: #fff; font-size: 11px; }
+
+/* ---------- fit one desktop screen ---------- */
+@media (min-width: 1024px) and (min-height: 600px) {
+  .bn { height: calc(100svh - var(--bn-offset)); min-height: 560px; display: flex; }
+  .bn-wrap { width: 100%; display: flex; flex-direction: column; padding-top: clamp(12px, 2.6vh, 32px); padding-bottom: clamp(12px, 2.6vh, 32px); }
+  .bn-title { flex: none; font-size: clamp(26px, min(3.2vw, 5vh), 50px); margin-bottom: clamp(10px, 2.2vh, 24px); }
+  .bn-grid { flex: 1; min-height: 0; grid-template-rows: repeat(2, minmax(0, 1fr)); }
+  .bn-card { min-height: 0; padding: clamp(14px, 2.6vh, 24px) clamp(16px, 1.7vw, 24px); }
 }
 
-/* pills */
-.pl-top,
-.pl-bot {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 9px 17px;
-  border-radius: 999px;
-  font-size: 13.5px;
-  font-weight: 500;
-  white-space: nowrap;
-}
-.pl-top {
-  background: linear-gradient(135deg, #ff7a3d, var(--o));
-  color: #fff;
-  box-shadow: 0 12px 22px -10px rgba(255, 87, 34, 0.7);
-}
-.pl-top svg {
-  width: 15px;
-  height: 15px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2.2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.pl-bot {
-  background: rgba(255, 255, 255, 0.78);
-  color: #4b4e60;
-  box-shadow: 0 8px 18px -12px rgba(20, 22, 43, 0.35);
-}
-.dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--ok);
-}
-.dot.wa {
-  background: #25d366;
-}
-.dot.r {
-  background: #d64545;
+/* touch screens: no hover, so show the description under the title */
+@media (hover: none) {
+  .bn-t::after { display: none; }
+  .bn-hov { grid-template-rows: 1fr; opacity: 1; margin-top: calc(clamp(12px, 2vh, 18px) * -0.5); }
+  .bn-hov p { padding-right: 0; }
 }
 
-/* card */
-.pl-card {
-  width: min(350px, 100%);
-  padding: 14px 14px 10px;
-  border-radius: 14px;
-  background: #fff;
-  box-shadow: 0 1px 0 #fff inset, 0 26px 44px -24px rgba(150, 70, 30, 0.45), 0 3px 8px rgba(150, 70, 30, 0.06);
-}
-.pl-card h4 {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 0 0 10px;
-  font-size: 13px;
-  font-weight: 600;
-}
-.pl-card h4 span {
-  font-size: 11px;
-  font-weight: 400;
-  color: #8a8ea0;
-}
-.pl-row {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  padding: 9px 10px;
-  margin-bottom: 4px;
-  border-radius: 11px;
-  font-size: 12px;
-}
-.pl-row.hot {
-  background: #fff;
-  box-shadow: 0 0 0 1px #f0ece8, 0 10px 18px -10px rgba(20, 22, 43, 0.3);
-}
-.pl-row.dim {
-  opacity: 0.55;
-}
-.av {
-  flex: none;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  color: #fff;
-  font-size: 11.5px;
-  font-weight: 600;
-  font-style: normal;
-}
-.av.sq {
-  border-radius: 9px;
-  font-size: 10px;
-}
-.m {
-  flex: 1;
-  min-width: 0;
-}
-.m b {
-  display: block;
-  font-size: 12px;
-  font-weight: 600;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.m small {
-  display: block;
-  font-size: 10.5px;
-  color: #8a8ea0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.tag {
-  flex: none;
-  padding: 3px 10px;
-  border-radius: 999px;
-  background: #fff1ea;
-  color: var(--o1);
-  font-size: 10px;
-  font-weight: 500;
-  font-style: normal;
-}
-.tag.g {
-  background: #e6f7ef;
-  color: var(--ok);
-}
-.tag.r {
-  background: #fdecec;
-  color: #d64545;
-}
-.tag.b {
-  background: #e9efff;
-  color: #3f63d8;
-}
-.tag.big {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 13px;
-  font-size: 12px;
-}
-
-/* quotation */
-.qt {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  padding: 4px 4px 0;
-}
-.qt small {
-  display: block;
-  font-size: 10.5px;
-  color: #8a8ea0;
-}
-.qt b {
-  font-size: 32px;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-}
-.flow {
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  margin: 14px 18px 14px;
-}
-.flow u {
-  position: absolute;
-  top: 16px;
-  height: 2px;
-  width: calc(50% - 38px);
-  background: repeating-linear-gradient(90deg, #d9d4cf 0 5px, transparent 5px 9px);
-}
-.flow u:nth-of-type(1) {
-  left: 36px;
-}
-.flow u:nth-of-type(2) {
-  right: 36px;
-}
-.step {
-  position: relative;
-  z-index: 1;
-  text-align: center;
-  font-size: 10px;
-  color: var(--mut);
-}
-.step i {
-  display: grid;
-  place-items: center;
-  width: 32px;
-  height: 32px;
-  margin: 0 auto 5px;
-  border-radius: 50%;
-  background: var(--o);
-}
-.step svg {
-  width: 15px;
-  height: 15px;
-  fill: none;
-  stroke: #fff;
-  stroke-width: 2.2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.pl-row.file {
-  background: #f7f5f2;
-  margin-bottom: 4px;
-}
-.btn {
-  flex: none;
-  padding: 8px 12px;
-  border-radius: 9px;
-  background: linear-gradient(135deg, var(--o1), var(--o2));
-  color: #fff;
-  font-size: 10.5px;
-  font-weight: 500;
-  font-style: normal;
-}
-
-/* inventory stack */
-.stack {
-  width: min(340px, 100%);
-  display: grid;
-  gap: 8px;
-}
-.sk {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 11px 14px;
-  border-radius: 12px;
-  background: #fff;
-  box-shadow: 0 14px 24px -16px rgba(150, 70, 30, 0.5), 0 2px 5px rgba(150, 70, 30, 0.06);
-}
-.sk.tilt {
-  transform: rotate(-2.2deg) translateY(4px);
-  box-shadow: 0 18px 28px -14px rgba(150, 70, 30, 0.6), 0 2px 5px rgba(150, 70, 30, 0.08), 0 7px 0 -2px rgba(255, 255, 255, 0.7);
-}
-.sk .m {
-  flex: 1.1;
-}
-.sk .stock {
-  flex: 1;
-  height: 7px;
-  border-radius: 9px;
-  background: #f0ece8;
-  overflow: hidden;
-}
-.sk .stock u {
-  display: block;
-  height: 100%;
-  border-radius: 9px;
-  background: linear-gradient(90deg, var(--o1), var(--o2));
-}
-.sk.low .stock u {
-  background: #d64545;
-}
-.sk .q {
-  min-width: 42px;
-  text-align: right;
-  font-size: 12.5px;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-}
-.sk.low .q {
-  color: #d64545;
-}
-
-/* analytics */
-.kpis {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 7px;
-  margin-bottom: 8px;
-}
-.kpi {
-  padding: 9px 10px;
-  border-radius: 11px;
-  background: #f7f5f2;
-}
-.kpi small {
-  display: block;
-  font-size: 9.5px;
-  color: #8a8ea0;
-}
-.kpi b {
-  display: block;
-  font-size: 17px;
-  font-weight: 600;
-  line-height: 1.25;
-}
-.kpi em {
-  font-style: normal;
-  font-size: 9.5px;
-  color: var(--ok);
-}
-.chart {
-  width: 100%;
-  height: auto;
-  margin-bottom: 2px;
-}
-
-/* cursor name tags */
-.nt {
-  position: absolute;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 5px 11px 5px 8px;
-  border-radius: 999px;
-  background: #fff;
-  color: var(--ink);
-  font-size: 10.5px;
-  font-weight: 500;
-  box-shadow: 0 8px 18px -8px rgba(20, 22, 43, 0.4);
-  white-space: nowrap;
-}
-.nt svg {
-  width: 11px;
-  height: 13px;
-  fill: currentColor;
-  stroke: #fff;
-  stroke-width: 1;
-}
-.nt.dark {
-  background: #1b1630;
-  color: #fff;
-}
-.nt-l {
-  left: 5%;
-  top: 77%;
-}
-.nt-r {
-  right: 5%;
-  top: 21%;
-}
-
-/* ============ entrance choreography ============ */
-.hiw-panel .pl-top,
-.hiw-panel .pl-card,
-.hiw-panel .stack,
-.hiw-panel .pl-bot,
-.hiw-panel .nt {
-  opacity: 0;
-  transform: translateY(14px);
-}
-.hiw-panel.on .pl-top,
-.hiw-panel.on .pl-card,
-.hiw-panel.on .stack,
-.hiw-panel.on .pl-bot,
-.hiw-panel.on .nt {
-  opacity: 1;
-  transform: none;
-  transition: opacity 0.6s var(--ease), transform 0.8s var(--ease);
-}
-.hiw-panel.on .pl-top {
-  transition-delay: 0.12s;
-}
-.hiw-panel.on .pl-card,
-.hiw-panel.on .stack {
-  transition-delay: 0.22s;
-}
-.hiw-panel.on .pl-bot {
-  transition-delay: 0.34s;
-}
-.hiw-panel.on .nt {
-  transition-delay: 0.5s;
-  animation: hiw-bob 5s ease-in-out 1.2s infinite;
-}
-.hiw-panel.on .nt-r {
-  animation-delay: 2.4s;
-}
-.hiw-panel.on .pl-row,
-.hiw-panel.on .sk,
-.hiw-panel.on .step {
-  animation: hiw-in 0.6s var(--ease) both;
-  animation-delay: calc(0.4s + var(--k, 0) * 0.12s);
-}
-.hiw-panel.on .sk.tilt {
-  animation-name: hiw-tilt;
-}
-.hiw-panel.on .stock u,
-.hiw-panel.on .bar-r {
-  transform-origin: left;
-  animation: hiw-grow 0.9s var(--ease) 0.5s both;
-}
-.hiw-panel.on .bar-r {
-  transform-origin: bottom;
-  transform-box: fill-box;
-  animation: hiw-up 0.8s var(--ease) both;
-  animation-delay: calc(0.45s + var(--k) * 0.05s);
-}
-@keyframes hiw-in {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: none; }
-}
-@keyframes hiw-tilt {
-  from { opacity: 0; transform: rotate(0) translateY(14px); }
-  to { opacity: 1; transform: rotate(-2.2deg) translateY(4px); }
-}
-@keyframes hiw-grow {
-  from { transform: scaleX(0); }
-  to { transform: scaleX(1); }
-}
-@keyframes hiw-up {
-  from { transform: scaleY(0); }
-  to { transform: scaleY(1); }
-}
-@keyframes hiw-bob {
-  50% { translate: 0 -6px; }
-}
-
-/* ============ responsive ============ */
-@media (max-width: 900px) {
-  .hiw-wrap {
-    grid-template-columns: 1fr;
-  }
-  .hiw-stage {
-    order: -1;
-    aspect-ratio: auto;
-    min-height: 460px;
-  }
-}
-@media (max-width: 520px) {
-  .nt {
-    display: none;
-  }
-  .hiw-panel {
-    gap: 16px;
-    padding: 16px;
-  }
-}
 @media (prefers-reduced-motion: reduce) {
-  .hiw *,
-  .hiw *::before,
-  .hiw *::after {
-    animation: none !important;
-    transition-duration: 0.001s !important;
-    transition-delay: 0s !important;
-  }
-  .hiw-js .hiw-head,
-  .hiw-js .hiw-wrap {
-    opacity: 1;
-    transform: none;
-  }
-  .hiw-bar i {
-    display: none;
-  }
+  .bn * { animation: none !important; transition-duration: 0.01s !important; transition-delay: 0s !important; }
+}
+
+/* ---------- smaller screens: natural stacking ---------- */
+@media (max-width: 1023px), (max-height: 599px) {
+  .bn-c3, .bn-c4 { grid-column: span 3; }
+  .bn-c5 { grid-column: span 6; }
+  .bn-win, .bn-ph { flex: none; }
+  .bn-win { min-height: 220px; }
+  .bn-dash { min-height: 230px; }
+  .bn-ph { height: 260px; }
+  .bn-plan { min-height: 150px; }
+}
+@media (max-width: 760px) {
+  .bn-c1, .bn-c2, .bn-c3, .bn-c4, .bn-c5 { grid-column: span 6; }
+  .bn-card { min-height: 0; }
+  .bn-ph { height: 280px; }
+  .bn-dash { flex-direction: column; }
+  .bn-dl { flex: none; }
+  .bn-cols { min-height: 150px; }
+  .bn-role i { display: none; }
 }
 </style>
