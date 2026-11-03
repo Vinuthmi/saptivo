@@ -23,20 +23,17 @@ const isSection6Preview = computed(() => route.query.preview === 'section6')
 
 <template>
   <main>
-    <Section6 v-if="isSection6Preview" preview />
-    <template v-else>
-      <HeroSection />
-      <Section1 v-if="!isSection2Preview" />
-      <Section2 />
-      <Section3 />
-      <Section4 />
-      <Sectionwhy />
-      <Section10 />
-      <Section6 preview />
-      <TrustedBusinesses />
-      <Section9 />
-      <Section11 />
-      <FAQ />
-    </template>
+    <HeroSection />
+    <Section2 />
+    <Section1 />
+    <Section3 />
+    <Section4 />
+    <Section10 />
+    <Section6 />
+    <TrustedBusinesses />
+    <Sectionwhy />
+    <Section9 />
+    <FAQ />
+    <Section11 />
   </main>
 </template>
