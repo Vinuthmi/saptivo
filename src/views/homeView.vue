@@ -27,7 +27,7 @@ const isSection6Preview = computed(() => route.query.preview === 'section6')
     <template v-else>
       <HeroSection />
       <Section1 v-if="!isSection2Preview" />
-      <Section2 :preview="isSection2Preview" />
+      <Section2 />
       <Section3 />
       <Section4 />
       <Sectionwhy />
