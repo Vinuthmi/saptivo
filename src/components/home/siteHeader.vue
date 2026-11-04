@@ -292,11 +292,11 @@ onBeforeUnmount(() => {
           {{ item.label }}
         </router-link>
 
-        <!-- RESELLER (simple dropdown) -->
+        <!-- RESELLER (mega) -->
         <div
           v-for="menu in simpleMenus"
           :key="menu.key"
-          class="nav-dd nav-dd-simple"
+          class="nav-dd"
           @pointerenter="openOn(menu.key, $event)"
           @pointerleave="closeSoon($event)"
         >
@@ -314,21 +314,28 @@ onBeforeUnmount(() => {
             </svg>
           </button>
 
-          <Transition name="drop">
-            <div v-if="openMenu === menu.key" class="simple-menu">
-              <router-link
-                v-for="item in menu.items"
-                :key="item.href"
-                :to="item.href"
-                class="simple-link"
-                @click="closeAll"
-              >
-                <span>
-                  <strong>{{ item.title }}</strong>
-                  <small>{{ item.description }}</small>
-                </span>
-                <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10h12m-5-5 5 5-5 5" /></svg>
-              </router-link>
+          <Transition name="mega">
+            <div v-if="openMenu === menu.key" class="mega-menu mm mm-narrow">
+              <div class="mm-grid mm-grid-2">
+                <div class="mm-left mm-left-list">
+                  <router-link v-for="item in menu.items" :key="item.href" :to="item.href" class="mm-cat mm-cat-desc" @click="closeAll">
+                    <span>
+                      <strong>{{ item.title }}</strong>
+                      <small>{{ item.description }}</small>
+                    </span>
+                    <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10h12m-5-5 5 5-5 5" /></svg>
+                  </router-link>
+                  <p class="mm-note"><i></i>Earn recurring income reselling Saptivo CRM</p>
+                </div>
+
+                <div class="mm-card">
+                  <img :src="menuPhotos.features" alt="" loading="lazy" decoding="async" @error="$event.target.style.display = 'none'" />
+                  <div class="mm-card-box">
+                    <strong>Ready to grow with Saptivo?</strong>
+                    <router-link to="/reseller/signup/" class="mm-cta" @click="closeAll">Become a Reseller</router-link>
+                  </div>
+                </div>
+              </div>
             </div>
           </Transition>
         </div>
@@ -730,6 +737,26 @@ onBeforeUnmount(() => {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   align-content: start;
   gap: 2px 6px;
+}
+
+.mm-cat-desc strong {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 700;
+}
+
+.mm-cat-desc small {
+  display: block;
+  margin-top: 4px;
+  color: #7a879a;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.mm-cat-desc:hover small,
+.mm-cat-desc.on small {
+  color: #a0613f;
 }
 
 .mm-two .mm-note {
