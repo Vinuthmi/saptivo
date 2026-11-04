@@ -86,7 +86,7 @@ const items = [
 .fq-wrap {
   max-width: 1240px;
   margin: 0 auto;
-  padding: clamp(48px, 6vw, 96px) clamp(20px, 4vw, 40px);
+  padding: clamp(56px, 7vw, 110px) clamp(20px, 4vw, 40px) clamp(48px, 6vw, 96px);
   display: grid;
   grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
   gap: clamp(28px, 6vw, 96px);
@@ -94,7 +94,7 @@ const items = [
 }
 .fq-title {
   position: sticky;
-  top: 32px;
+  top: calc(var(--fq-header, 72px) + 40px); /* pins below your site header; set --fq-header to its height */
   margin: 0;
   padding-bottom: 0.2em;
   font-family: 'Inter Display', Inter, system-ui, sans-serif;

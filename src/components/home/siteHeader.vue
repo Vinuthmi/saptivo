@@ -3,86 +3,165 @@ import { ref, onMounted, onBeforeUnmount } from 'vue'
 
 defineOptions({ name: 'IpsovaNavbar' })
 
+/**
+ * Saptivo header — navigation follows the sitemap in "Saptivo Website Content & SEO Copy" (v1.0):
+ *   Features (hub + 16 feature pages) · Industries (hub + 5 industry pages) · Integrations · Security · Pricing
+ *   Reseller (program, signup) · About · Blog · Contact (separate links)
+ *   CTAs: Book a Demo (/demo/) and Free Trial (/free-trial/)
+ */
+
 const menuOpen = ref(false)
-const industriesOpen = ref(false)
+const openMenu = ref(null) // 'features' | 'industries' | 'reseller' | null (desktop dropdowns)
+const mobileSection = ref(null) // open accordion in the mobile menu
 const scrolled = ref(false)
 
 const logoSrc = `${import.meta.env.BASE_URL}saptivo-logo.png`
 const featuresHref = `${import.meta.env.BASE_URL}features`
 
-const navItems = [
-  { label: 'Features', href: featuresHref },
-  { label: 'Pricing', href: '#pricing' },
-  { label: 'Reseller', href: '#reseller' },
-  { label: 'Reseller Signup', href: '#signup' },
-  { label: 'Contact Us', href: '#contact' },
+/* ---------------- FEATURES (all 16 pages, in the order of the doc's sitemap) ---------------- */
+const features = [
+  { title: 'Lead & Contact Management', href: '/features/lead-management/' },
+  { title: 'Sales Pipeline & Deals', href: '/features/sales-pipeline/' },
+  { title: 'Quotations & Invoicing', href: '/features/quotations-invoicing/' },
+  { title: 'WhatsApp CRM', href: '/features/whatsapp-crm/' },
+  { title: '3CX Call Integration', href: '/features/3cx-crm-integration/' },
+  { title: 'Vodia Integration & AI Calls', href: '/features/vodia-integration/' },
+  { title: 'Workflow Automation', href: '/features/workflow-automation/' },
+  { title: 'Multi-Branch Management', href: '/features/multi-branch-management/' },
+  { title: 'Inventory & Multi-Warehouse', href: '/features/inventory-management/' },
+  { title: 'Service & AMC Management', href: '/features/service-maintenance-management/' },
+  { title: 'Help Desk & Ticketing', href: '/features/help-desk/' },
+  { title: 'Marketing Campaigns', href: '/features/marketing-campaigns/' },
+  { title: 'Reports & Analytics', href: '/features/reports-analytics/' },
+  { title: 'AI CRM', href: '/features/ai-crm/' },
+  { title: 'Customer Portal', href: '/features/customer-portal/' },
+  { title: 'Mobile CRM', href: '/features/mobile-crm/' }
 ]
 
+/* ---------------- INDUSTRIES (names, URLs and copy from the /industries/ hub) ---------------- */
 const industries = [
   {
     title: 'Retail & Supermarkets',
-    description: 'Multi-counter barcode POS & instant inventory audit',
-    icon: 'cart',
-    href: '#retail'
+    description: 'Multi-counter checkouts, instant inventory audits, VIP loyalty tiers and WhatsApp receipts',
+    href: '/industries/retail/'
   },
   {
     title: 'Wholesale & Distribution',
-    description: 'Bulk tier pricing & supplier credit repayment tracking',
-    icon: 'layers',
-    href: '#wholesale'
+    description: 'Bulk tier pricing, dealer credit limits and repayment tracking',
+    href: '/industries/wholesale-distribution/'
   },
   {
     title: 'Contractors & Services',
-    description: 'Job tracking, milestone deposits & mobile receipts',
-    icon: 'briefcase',
-    href: '#contractors'
+    description: 'Job tracking from enquiry to final payment, milestone deposits and mobile receipts',
+    href: '/industries/contractors-services/'
   },
   {
-    title: 'Fast-Growing Startups',
-    description: 'Zero-friction quotation dispatch & client pipeline',
-    icon: 'rocket',
-    href: '#startups'
+    title: 'Field Service & Maintenance',
+    description: 'Installed asset registers, annual maintenance contracts and technician apps',
+    href: '/industries/field-service/'
+  },
+  {
+    title: 'Startups & SMEs',
+    description: 'Zero-friction quotations and a clear client pipeline, with no setup fee',
+    href: '/industries/startups/'
   }
 ]
+
+/* photos on the right-hand help card of each mega menu (swap freely) */
+const menuPhotos = {
+  features: 'https://images.unsplash.com/photo-1742836531271-98fd8151d257?w=900&q=80&auto=format&fit=crop',
+  industries: 'https://images.unsplash.com/photo-1753354868616-544973e405c9?w=900&q=80&auto=format&fit=crop'
+}
+
+/* ---------------- SIMPLE DROPDOWNS ---------------- */
+const simpleMenus = [
+  {
+    key: 'reseller',
+    label: 'Reseller',
+    items: [
+      { title: 'Reseller Program', description: 'Partner with Saptivo and grow with us', href: '/reseller/' },
+      { title: 'Become a Reseller', description: 'Apply to join the program', href: '/reseller/signup/' }
+    ]
+  }
+]
+
+const plainLinks = [
+  { label: 'Integrations', href: '/integrations/' },
+  { label: 'Security', href: '/security/' },
+  { label: 'Pricing', href: '/pricing/' }
+]
+
+/* shown after the Reseller dropdown — names and URLs as in the doc's sitemap */
+const trailingLinks = [
+  { label: 'About', href: '/about/' },
+  { label: 'Blog', href: '/blog/' },
+  { label: 'Contact', href: '/contact/' }
+]
+
+/* ---------------- behaviour ---------------- */
+let closeTimer = 0
 
 function handleScroll() {
   scrolled.value = window.scrollY > 24
 }
 
-function closeMenu() {
+function openOn(key, event) {
+  if (event && event.pointerType && event.pointerType !== 'mouse') return
+  clearTimeout(closeTimer)
+  openMenu.value = key
+}
+
+function closeSoon(event) {
+  if (event && event.pointerType && event.pointerType !== 'mouse') return
+  clearTimeout(closeTimer)
+  closeTimer = setTimeout(() => {
+    openMenu.value = null
+  }, 140)
+}
+
+function toggleMenu(key) {
+  clearTimeout(closeTimer)
+  openMenu.value = openMenu.value === key ? null : key
+}
+
+/* Features / Industries are links to their hub pages; on touch screens the first tap opens the menu instead */
+function onHubClick(key, event) {
+  if (event.pointerType && event.pointerType !== 'mouse') {
+    event.preventDefault()
+    toggleMenu(key)
+    return
+  }
+  closeAll()
+}
+
+function toggleMobile(key) {
+  mobileSection.value = mobileSection.value === key ? null : key
+}
+
+function closeAll() {
+  clearTimeout(closeTimer)
+  openMenu.value = null
   menuOpen.value = false
-}
-
-function closeIndustries() {
-  industriesOpen.value = false
-}
-
-function toggleIndustries() {
-  industriesOpen.value = !industriesOpen.value
+  mobileSection.value = null
 }
 
 function handleDocumentClick(event) {
-  const target = event.target
-
-  if (!target.closest('.industries-wrap')) {
-    industriesOpen.value = false
-  }
+  if (!event.target.closest('.nav-dd')) openMenu.value = null
 }
 
 function handleKeydown(event) {
-  if (event.key === 'Escape') {
-    industriesOpen.value = false
-    menuOpen.value = false
-  }
+  if (event.key === 'Escape') closeAll()
 }
 
 onMounted(() => {
+  handleScroll()
   window.addEventListener('scroll', handleScroll, { passive: true })
   document.addEventListener('click', handleDocumentClick)
   document.addEventListener('keydown', handleKeydown)
 })
 
 onBeforeUnmount(() => {
+  clearTimeout(closeTimer)
   window.removeEventListener('scroll', handleScroll)
   document.removeEventListener('click', handleDocumentClick)
   document.removeEventListener('keydown', handleKeydown)
@@ -90,277 +169,191 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <header
-    class="nav-shell"
-    :class="{
-      scrolled,
-      expanded: menuOpen,
-      'industries-active': industriesOpen
-    }"
-  >
-
-
-
-    <!-- =====================================================
-         NAVBAR
-    ====================================================== -->
+  <header class="nav-shell" :class="{ scrolled, expanded: menuOpen }">
     <nav class="glass-nav" aria-label="Main navigation">
-
       <!-- BRAND -->
-      <RouterLink
-        to="/"
-        class="brand"
-        aria-label="Saptivo home"
-        @click="closeMenu"
-      >
-        <img
-          class="brand-logo"
-          :src="logoSrc"
-          alt="Saptivo"
-        />
-      </RouterLink>
+      <router-link to="/" class="brand" aria-label="Saptivo CRM home" @click="closeAll">
+        <img class="brand-logo" :src="logoSrc" alt="Saptivo CRM" />
+      </router-link>
 
-
-      <!-- ===================================================
-           DESKTOP LINKS
-      ==================================================== -->
+      <!-- =================================================== DESKTOP LINKS -->
       <div class="desktop-links">
-
-        <a
-          :href="featuresHref"
-          class="nav-link"
-        >
-          Features
-        </a>
-
-
-        <!-- INDUSTRIES -->
+        <!-- FEATURES (mega) -->
         <div
-          class="industries-wrap"
-          @mouseenter="industriesOpen = true"
+          class="nav-dd"
+          @pointerenter="openOn('features', $event)"
+          @pointerleave="closeSoon($event)"
         >
+          <router-link
+            to="/features/"
+            class="nav-link"
+            :class="{ active: openMenu === 'features' }"
+            :aria-expanded="openMenu === 'features'"
+            aria-haspopup="true"
+            @focus="openMenu = 'features'"
+            @click="onHubClick('features', $event)"
+          >
+            Features
+            <svg viewBox="0 0 16 16" class="chevron" fill="none" aria-hidden="true" :class="{ rotate: openMenu === 'features' }">
+              <path d="m4 6 4 4 4-4" />
+            </svg>
+          </router-link>
 
-          <button
-            type="button"
-            class="nav-link industries-trigger"
-            :class="{ active: industriesOpen }"
-            :aria-expanded="industriesOpen"
-            @click.stop="toggleIndustries"
+          <Transition name="mega">
+            <div v-if="openMenu === 'features'" class="mega-menu mm mm-narrow mm-wide">
+              <div class="mm-grid mm-grid-2">
+                <!-- all 16 feature pages -->
+                <div class="mm-left mm-left-list mm-two">
+                  <router-link
+                    v-for="item in features"
+                    :key="item.href"
+                    :to="item.href"
+                    class="mm-cat"
+                    @click="closeAll"
+                  >
+                    <span>{{ item.title }}</span>
+                    <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10h12m-5-5 5 5-5 5" /></svg>
+                  </router-link>
+                  <p class="mm-note"><i></i>16 features, one shared customer record</p>
+                </div>
+
+                <!-- help card -->
+                <div class="mm-card">
+                  <img :src="menuPhotos.features" alt="" loading="lazy" decoding="async" @error="$event.target.style.display = 'none'" />
+                  <div class="mm-card-box">
+                    <strong>Can't find the feature you need?</strong>
+                    <router-link to="/demo/" class="mm-cta" @click="closeAll">Book a Demo</router-link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Transition>
+        </div>
+
+        <!-- INDUSTRIES (mega) -->
+        <div
+          class="nav-dd"
+          @pointerenter="openOn('industries', $event)"
+          @pointerleave="closeSoon($event)"
+        >
+          <router-link
+            to="/industries/"
+            class="nav-link"
+            :class="{ active: openMenu === 'industries' }"
+            :aria-expanded="openMenu === 'industries'"
+            aria-haspopup="true"
+            @focus="openMenu = 'industries'"
+            @click="onHubClick('industries', $event)"
           >
             Industries
+            <svg viewBox="0 0 16 16" class="chevron" fill="none" aria-hidden="true" :class="{ rotate: openMenu === 'industries' }">
+              <path d="m4 6 4 4 4-4" />
+            </svg>
+          </router-link>
 
-            <svg
-              viewBox="0 0 16 16"
-              class="chevron"
-              fill="none"
-              aria-hidden="true"
-              :class="{ rotate: industriesOpen }"
-            >
+          <Transition name="mega">
+            <div v-if="openMenu === 'industries'" class="mega-menu mm mm-narrow">
+              <div class="mm-grid mm-grid-2">
+                <!-- the 5 industry pages -->
+                <div class="mm-left mm-left-list">
+                  <router-link
+                    v-for="industry in industries"
+                    :key="industry.href"
+                    :to="industry.href"
+                    class="mm-cat"
+                    @click="closeAll"
+                  >
+                    <span>{{ industry.title }}</span>
+                    <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10h12m-5-5 5 5-5 5" /></svg>
+                  </router-link>
+                  <p class="mm-note"><i></i>5 industries, one platform that adapts to yours</p>
+                </div>
+
+                <!-- help card -->
+                <div class="mm-card">
+                  <img :src="menuPhotos.industries" alt="" loading="lazy" decoding="async" @error="$event.target.style.display = 'none'" />
+                  <div class="mm-card-box">
+                    <strong>Don't see your industry?</strong>
+                    <router-link to="/contact/" class="mm-cta" @click="closeAll">Talk to our team</router-link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Transition>
+        </div>
+
+        <!-- PLAIN LINKS -->
+        <router-link
+          v-for="item in plainLinks"
+          :key="item.href"
+          :to="item.href"
+          class="nav-link"
+          @click="closeAll"
+        >
+          {{ item.label }}
+        </router-link>
+
+        <!-- RESELLER (simple dropdown) -->
+        <div
+          v-for="menu in simpleMenus"
+          :key="menu.key"
+          class="nav-dd nav-dd-simple"
+          @pointerenter="openOn(menu.key, $event)"
+          @pointerleave="closeSoon($event)"
+        >
+          <button
+            type="button"
+            class="nav-link"
+            :class="{ active: openMenu === menu.key }"
+            :aria-expanded="openMenu === menu.key"
+            aria-haspopup="true"
+            @click.stop="toggleMenu(menu.key)"
+          >
+            {{ menu.label }}
+            <svg viewBox="0 0 16 16" class="chevron" fill="none" aria-hidden="true" :class="{ rotate: openMenu === menu.key }">
               <path d="m4 6 4 4 4-4" />
             </svg>
           </button>
 
-
-          <!-- =================================================
-               MEGA MENU
-          ================================================== -->
-          <Transition name="mega">
-
-            <div
-              v-if="industriesOpen"
-              class="mega-menu"
-              @mouseenter="industriesOpen = true"
-              @mouseleave="industriesOpen = false"
-            >
-
-              <div class="mega-inner">
-
-                <!-- LEFT INTRO -->
-                <div class="mega-intro">
-
-                  <div class="mega-number">
-                    02 <span>/</span> SOLUTIONS
-                  </div>
-
-                  <div class="mega-label">
-                    Industry Workflows
-                  </div>
-
-                  <h3>
-                    Tailor-made systems for
-                    <strong>high-volume trade.</strong>
-                  </h3>
-
-                  <p>
-                    Whether operating multi-branch supermarket chains,
-                    bulk distribution hubs, or service fleets, Saptivo
-                    adapts to your daily velocity.
-                  </p>
-
-                  <a
-                    href="#industries"
-                    class="explore-industries"
-                    @click="closeIndustries"
-                  >
-                    <span>Explore All Industries</span>
-
-                    <span class="small-arrow">
-                      <svg viewBox="0 0 20 20" fill="none">
-                        <path d="M4 10h12m-5-5 5 5-5 5" />
-                      </svg>
-                    </span>
-                  </a>
-
-                </div>
-
-
-                <!-- CENTER LIST -->
-                <div class="mega-list">
-
-                  <div class="mega-list-header">
-                    <span>Select Industry</span>
-                    <span>Proven Deployments</span>
-                  </div>
-
-
-                  <div
-                    v-for="industry in industries"
-                    :key="industry.title"
-                    class="industry-item"
-                  >
-
-                    <a
-                      :href="industry.href"
-                      class="industry-link"
-                      @click="closeIndustries"
-                    >
-
-                      <div class="industry-content">
-
-                        <div class="industry-title">
-                          {{ industry.title }}
-                        </div>
-
-                        <div class="industry-description">
-                          {{ industry.description }}
-                        </div>
-
-                      </div>
-
-                      <span class="industry-arrow">
-
-                        <svg
-                          viewBox="0 0 20 20"
-                          fill="none"
-                        >
-                          <path d="M4 10h12m-5-5 5 5-5 5" />
-                        </svg>
-
-                      </span>
-
-                    </a>
-
-                  </div>
-
-                </div>
-
-
-                <!-- RIGHT FEATURED CARD -->
-                <div class="mega-feature">
-
-                  <div class="feature-image">
-
-                    <div class="feature-glow"></div>
-
-                    <div class="feature-shape shape-one"></div>
-                    <div class="feature-shape shape-two"></div>
-                    <div class="feature-shape shape-three"></div>
-
-                    <div class="feature-grid"></div>
-
-                    <div class="feature-content">
-
-                      <span class="feature-badge">
-                        INDUSTRY SOLUTIONS
-                      </span>
-
-                      <h4>
-                        Multi-Branch Retail Chains &
-                        Enterprise Startups
-                      </h4>
-
-                    </div>
-
-                    <a
-                      href="#retail"
-                      class="feature-arrow"
-                      @click="closeIndustries"
-                    >
-                      <svg viewBox="0 0 20 20" fill="none">
-                        <path d="M4 10h12m-5-5 5 5-5 5" />
-                      </svg>
-                    </a>
-
-                  </div>
-
-                </div>
-
-              </div>
-
+          <Transition name="drop">
+            <div v-if="openMenu === menu.key" class="simple-menu">
+              <router-link
+                v-for="item in menu.items"
+                :key="item.href"
+                :to="item.href"
+                class="simple-link"
+                @click="closeAll"
+              >
+                <span>
+                  <strong>{{ item.title }}</strong>
+                  <small>{{ item.description }}</small>
+                </span>
+                <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10h12m-5-5 5 5-5 5" /></svg>
+              </router-link>
             </div>
-
           </Transition>
-
         </div>
 
-
-        <!-- OTHER LINKS -->
-        <a
-          v-for="item in navItems.slice(1)"
-          :key="item.label"
-          :href="item.href"
+        <!-- ABOUT · BLOG · CONTACT -->
+        <router-link
+          v-for="item in trailingLinks"
+          :key="item.href"
+          :to="item.href"
           class="nav-link"
+          @click="closeAll"
         >
           {{ item.label }}
-        </a>
-
+        </router-link>
       </div>
 
-
-      <!-- ===================================================
-           DESKTOP ACTIONS
-      ==================================================== -->
+      <!-- =================================================== DESKTOP ACTIONS -->
       <div class="desktop-actions">
+        <router-link to="/demo/" class="demo-btn" @click="closeAll">Book a Demo</router-link>
 
-        <a
-          href="#demo"
-          class="demo-btn"
-        >
-          Get a Demo
-        </a>
-
-        <a
-          href="#signup"
-          class="start-btn"
-        >
-          Get Started Free
-
-          <svg
-            viewBox="0 0 20 20"
-            fill="none"
-            aria-hidden="true"
-          >
-            <path d="M4 10h12m-5-5 5 5-5 5" />
-          </svg>
-
-        </a>
-
+        <router-link to="/free-trial/" class="start-btn" @click="closeAll">Free Trial</router-link>
       </div>
 
-
-      <!-- ===================================================
-           MOBILE TOGGLE
-      ==================================================== -->
+      <!-- =================================================== MOBILE TOGGLE -->
       <button
         type="button"
         class="menu-toggle"
@@ -373,133 +366,90 @@ onBeforeUnmount(() => {
         <span :class="{ third: menuOpen }"></span>
       </button>
 
-
-      <!-- ===================================================
-           MOBILE MENU
-      ==================================================== -->
+      <!-- =================================================== MOBILE MENU -->
       <Transition name="dropdown">
-
-        <div
-          v-if="menuOpen"
-          class="mobile-menu"
-        >
-
-          <a
-            :href="featuresHref"
-            class="mobile-link"
-            @click="closeMenu"
-          >
-            <span>Features</span>
-
-            <svg viewBox="0 0 20 20" fill="none">
-              <path d="M4 10h12m-5-5 5 5-5 5" />
-            </svg>
-          </a>
-
-
-          <!-- MOBILE INDUSTRIES -->
-          <div class="mobile-industries">
-
-            <button
-              type="button"
-              class="mobile-industries-trigger"
-              @click="industriesOpen = !industriesOpen"
-            >
-
-              <span>Industries</span>
-
-              <svg
-                viewBox="0 0 16 16"
-                fill="none"
-                :class="{ rotate: industriesOpen }"
-              >
-                <path d="m4 6 4 4 4-4" />
-              </svg>
-
+        <div v-if="menuOpen" class="mobile-menu">
+          <!-- Features -->
+          <div class="mobile-group">
+            <button type="button" class="mobile-trigger" :aria-expanded="mobileSection === 'features'" @click="toggleMobile('features')">
+              <span>Features</span>
+              <svg viewBox="0 0 16 16" fill="none" :class="{ rotate: mobileSection === 'features' }"><path d="m4 6 4 4 4-4" /></svg>
             </button>
-
-
             <Transition name="mobile-industry">
+              <div v-if="mobileSection === 'features'" class="mobile-sub">
+                <router-link to="/features/" class="mobile-all" @click="closeAll">All CRM features</router-link>
+                <router-link v-for="item in features" :key="item.href" :to="item.href" @click="closeAll">
+                  <span><strong>{{ item.title }}</strong></span>
+                  <svg viewBox="0 0 20 20" fill="none"><path d="M4 10h12m-5-5 5 5-5 5" /></svg>
+                </router-link>
+              </div>
+            </Transition>
+          </div>
 
-              <div
-                v-if="industriesOpen"
-                class="mobile-industry-list"
-              >
-
-                <a
-                  v-for="industry in industries"
-                  :key="industry.title"
-                  :href="industry.href"
-                  @click="closeMenu"
-                >
+          <!-- Industries -->
+          <div class="mobile-group">
+            <button type="button" class="mobile-trigger" :aria-expanded="mobileSection === 'industries'" @click="toggleMobile('industries')">
+              <span>Industries</span>
+              <svg viewBox="0 0 16 16" fill="none" :class="{ rotate: mobileSection === 'industries' }"><path d="m4 6 4 4 4-4" /></svg>
+            </button>
+            <Transition name="mobile-industry">
+              <div v-if="mobileSection === 'industries'" class="mobile-sub">
+                <router-link to="/industries/" class="mobile-all" @click="closeAll">All industries</router-link>
+                <router-link v-for="industry in industries" :key="industry.href" :to="industry.href" @click="closeAll">
                   <span>
                     <strong>{{ industry.title }}</strong>
                     <small>{{ industry.description }}</small>
                   </span>
-
-                  <svg viewBox="0 0 20 20" fill="none">
-                    <path d="M4 10h12m-5-5 5 5-5 5" />
-                  </svg>
-
-                </a>
-
+                  <svg viewBox="0 0 20 20" fill="none"><path d="M4 10h12m-5-5 5 5-5 5" /></svg>
+                </router-link>
               </div>
-
             </Transition>
-
           </div>
 
-
-          <a
-            v-for="item in navItems.slice(1)"
-            :key="item.label"
-            :href="item.href"
-            class="mobile-link"
-            @click="closeMenu"
-          >
+          <!-- Plain links -->
+          <router-link v-for="item in plainLinks" :key="item.href" :to="item.href" class="mobile-link" @click="closeAll">
             <span>{{ item.label }}</span>
+            <svg viewBox="0 0 20 20" fill="none"><path d="M4 10h12m-5-5 5 5-5 5" /></svg>
+          </router-link>
 
-            <svg viewBox="0 0 20 20" fill="none">
-              <path d="M4 10h12m-5-5 5 5-5 5" />
-            </svg>
-          </a>
-
-
-          <!-- MOBILE ACTIONS -->
-          <div class="mobile-actions">
-
-            <a
-              href="#demo"
-              class="demo-btn"
-              @click="closeMenu"
-            >
-              Get a Demo
-            </a>
-
-            <a
-              href="#signup"
-              class="start-btn"
-              @click="closeMenu"
-            >
-              Get Started Free
-            </a>
-
+          <!-- Reseller -->
+          <div v-for="menu in simpleMenus" :key="menu.key" class="mobile-group">
+            <button type="button" class="mobile-trigger" :aria-expanded="mobileSection === menu.key" @click="toggleMobile(menu.key)">
+              <span>{{ menu.label }}</span>
+              <svg viewBox="0 0 16 16" fill="none" :class="{ rotate: mobileSection === menu.key }"><path d="m4 6 4 4 4-4" /></svg>
+            </button>
+            <Transition name="mobile-industry">
+              <div v-if="mobileSection === menu.key" class="mobile-sub">
+                <router-link v-for="item in menu.items" :key="item.href" :to="item.href" @click="closeAll">
+                  <span>
+                    <strong>{{ item.title }}</strong>
+                    <small>{{ item.description }}</small>
+                  </span>
+                  <svg viewBox="0 0 20 20" fill="none"><path d="M4 10h12m-5-5 5 5-5 5" /></svg>
+                </router-link>
+              </div>
+            </Transition>
           </div>
 
+          <!-- About · Blog · Contact -->
+          <router-link v-for="item in trailingLinks" :key="item.href" :to="item.href" class="mobile-link" @click="closeAll">
+            <span>{{ item.label }}</span>
+            <svg viewBox="0 0 20 20" fill="none"><path d="M4 10h12m-5-5 5 5-5 5" /></svg>
+          </router-link>
+
+          <!-- Actions -->
+          <div class="mobile-actions">
+            <router-link to="/demo/" class="demo-btn" @click="closeAll">Book a Demo</router-link>
+            <router-link to="/free-trial/" class="start-btn" @click="closeAll">Free Trial</router-link>
+          </div>
         </div>
-
       </Transition>
-
     </nav>
-
   </header>
 </template>
 
-
 <style scoped>
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650;700;750;800&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 /* =========================================================
    ROOT
@@ -510,1713 +460,802 @@ onBeforeUnmount(() => {
 }
 
 .nav-shell {
-
   --orange: #ff6818;
   --orange-dark: #ed570b;
-
   --ink: #17243a;
   --muted: #657187;
-
   --white: #ffffff;
 
   position: fixed;
-
   top: 0;
   left: 0;
-
   width: 100%;
-
   z-index: 99999;
-
   padding: 0 24px;
-
   font-family: 'Inter', sans-serif;
-
 }
-
-
-/* =========================================================
-   ANNOUNCEMENT
-========================================================= */
-
-.announcement-bar {
-
-  width: 100%;
-
-  height: 38px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  background:
-    linear-gradient(
-      90deg,
-      #101521,
-      #111827,
-      #101521
-    );
-
-  color: white;
-
-}
-
-.announcement-inner {
-
-  position: relative;
-
-  width: min(1400px, 100%);
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  gap: 10px;
-
-  height: 100%;
-
-  font-size: 11px;
-
-}
-
-.announcement-dot {
-
-  width: 5px;
-  height: 5px;
-
-  border-radius: 50%;
-
-  background: var(--orange);
-
-  box-shadow:
-    0 0 0 4px rgba(255, 104, 24, 0.12);
-
-}
-
-.announcement-text {
-
-  color: rgba(255,255,255,0.78);
-
-}
-
-.announcement-link {
-
-  display: inline-flex;
-
-  align-items: center;
-
-  gap: 4px;
-
-  color: var(--orange);
-
-  font-weight: 650;
-
-  text-decoration: none;
-
-}
-
-.announcement-link svg {
-
-  width: 13px;
-  height: 13px;
-
-  stroke: currentColor;
-
-  stroke-width: 1.7;
-
-  transition: transform .2s ease;
-
-}
-
-.announcement-link:hover svg {
-
-  transform: translateX(3px);
-
-}
-
-.announcement-close {
-
-  position: absolute;
-
-  right: 2px;
-
-  top: 50%;
-
-  transform: translateY(-50%);
-
-  border: 0;
-
-  background: transparent;
-
-  color: rgba(255,255,255,.55);
-
-  font-size: 18px;
-
-  cursor: pointer;
-
-}
-
 
 /* =========================================================
    NAVBAR
 ========================================================= */
 
 .glass-nav {
-
   position: relative;
-
   display: flex;
-
   align-items: center;
-
   justify-content: space-between;
-
   gap: 24px;
-
   width: min(1390px, 100%);
-
   min-height: 72px;
-
-  margin: 0 auto;
-
-  margin-top: 8px;
-
+  margin: 8px auto 0;
   padding: 11px 13px 11px 25px;
-
-  border: 1px solid rgba(255,255,255,.8);
-
+  border: 1px solid rgba(255, 255, 255, 0.8);
   border-radius: 22px;
-
-  background:
-    rgba(255,255,255,.82);
-
-  backdrop-filter:
-    blur(26px)
-    saturate(170%);
-
-  -webkit-backdrop-filter:
-    blur(26px)
-    saturate(170%);
-
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(26px) saturate(170%);
+  -webkit-backdrop-filter: blur(26px) saturate(170%);
   box-shadow:
-    0 2px 5px rgba(27,39,59,.025),
-    0 12px 35px rgba(27,39,59,.065),
-    inset 0 1px 0 rgba(255,255,255,.95);
-
-  transition:
-    background .3s ease,
-    box-shadow .3s ease,
-    border-radius .3s ease,
-    transform .3s ease;
-
+    0 2px 5px rgba(27, 39, 59, 0.025),
+    0 12px 35px rgba(27, 39, 59, 0.065),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  transition: background 0.3s ease, box-shadow 0.3s ease, border-radius 0.3s ease, transform 0.3s ease;
 }
 
 .scrolled .glass-nav {
-
-  background:
-    rgba(255,255,255,.94);
-
-  border-color:
-    rgba(255,255,255,.98);
-
+  background: rgba(255, 255, 255, 0.94);
+  border-color: rgba(255, 255, 255, 0.98);
   box-shadow:
-    0 18px 50px rgba(27,39,59,.13),
+    0 18px 50px rgba(27, 39, 59, 0.13),
     inset 0 1px 0 #fff;
-
 }
-
 
 /* =========================================================
    BRAND
 ========================================================= */
 
 .brand {
-
   display: inline-flex;
-
   align-items: center;
-
   flex-shrink: 0;
-
   padding: 8px 3px;
-
   text-decoration: none;
-
 }
 
 .brand-logo {
-
   display: block;
-
   width: 156px;
-
   max-height: 38px;
-
   object-fit: contain;
-
 }
-
 
 /* =========================================================
    DESKTOP LINKS
 ========================================================= */
 
 .desktop-links {
-
   display: flex;
-
   align-items: center;
-
   justify-content: center;
-
-  gap: clamp(13px, 1.6vw, 26px);
-
+  gap: 2px;
   flex: 1;
-
 }
 
 .nav-link {
-
   position: relative;
-
   display: inline-flex;
-
   align-items: center;
-
   gap: 5px;
-
-  padding: 10px 0;
-
-  color: var(--muted);
-
-  background: transparent;
-
+  padding: 9px 12px;
   border: 0;
-
+  border-radius: 10px;
+  color: #2b374c;
+  background: transparent;
   text-decoration: none;
-
   white-space: nowrap;
-
   font-family: inherit;
-
-  font-size: 12.5px;
-
-  font-weight: 550;
-
-  letter-spacing: -.15px;
-
+  font-size: 13px;
+  font-weight: 560;
+  letter-spacing: -0.15px;
   cursor: pointer;
-
-  transition:
-    color .22s ease;
-
-}
-
-.nav-link::after {
-
-  position: absolute;
-
-  bottom: 3px;
-  left: 0;
-
-  width: 0;
-  height: 2px;
-
-  border-radius: 20px;
-
-  background: var(--orange);
-
-  content: '';
-
-  transition:
-    width .25s ease;
-
+  transition: color 0.2s ease, background 0.2s ease;
 }
 
 .nav-link:hover,
 .nav-link.active {
-
   color: var(--orange-dark);
-
+  background: rgba(255, 104, 24, 0.08);
 }
 
-.nav-link:hover::after,
-.nav-link.active::after {
+.nav-link.router-link-active {
+  color: var(--orange-dark);
+}
 
-  width: 100%;
-
+.nav-link:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 1px;
 }
 
 .chevron {
-
   width: 13px;
   height: 13px;
-
   stroke: currentColor;
-
   stroke-width: 1.5;
-
-  transition:
-    transform .25s ease;
-
+  transition: transform 0.25s ease;
 }
 
 .chevron.rotate {
-
   transform: rotate(180deg);
-
 }
 
-
 /* =========================================================
-   INDUSTRIES WRAPPER
+   DROPDOWN WRAPPERS
 ========================================================= */
 
-.industries-wrap {
-
-  position: static;
-
+.nav-dd {
+  position: static; /* mega menus are positioned against the nav bar */
 }
 
+.nav-dd-simple {
+  position: relative; /* simple menus hang under their own trigger */
+}
 
 /* =========================================================
-   MEGA MENU
+   MEGA MENU  (categories | links | help card)
 ========================================================= */
 
 .mega-menu {
-
   position: absolute;
-
   top: calc(100% + 12px);
-
   left: 50%;
-
   transform: translateX(-50%);
-
-  width: min(1075px, calc(100vw - 48px));
-
+  width: min(900px, calc(100vw - 48px));
   padding: 10px;
-
-  border: 1px solid rgba(255,255,255,.92);
-
-  border-radius: 17px;
-
-  background:
-    rgba(247,248,250,.96);
-
-  backdrop-filter:
-    blur(30px)
-    saturate(170%);
-
-  -webkit-backdrop-filter:
-    blur(30px)
-    saturate(170%);
-
+  border: 1px solid rgba(255, 255, 255, 0.92);
+  border-radius: 26px;
+  background: rgba(250, 250, 249, 0.97);
+  backdrop-filter: blur(30px) saturate(170%);
+  -webkit-backdrop-filter: blur(30px) saturate(170%);
   box-shadow:
-    0 30px 80px rgba(16,28,46,.16),
-    0 8px 25px rgba(16,28,46,.07),
-    inset 0 1px 0 rgba(255,255,255,.95);
-
+    0 30px 80px rgba(16, 28, 46, 0.16),
+    0 8px 25px rgba(16, 28, 46, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
 }
 
-.mega-inner {
-
-  display: grid;
-
-  grid-template-columns:
-    1.05fr
-    1.12fr
-    .82fr;
-
-  gap: 10px;
-
-}
-
-
-/* =========================================================
-   MEGA INTRO
-========================================================= */
-
-.mega-intro {
-
-  min-height: 382px;
-
-  display: flex;
-
-  flex-direction: column;
-
-  padding: 27px 22px 18px;
-
-  border-radius: 8px;
-
-  background:
-    rgba(255,255,255,.94);
-
-  border: 1px solid rgba(22,36,58,.04);
-
-}
-
-.mega-number {
-
-  color: #9aa8bd;
-
-  font-size: 10px;
-
-  font-weight: 750;
-
-  letter-spacing: .6px;
-
-}
-
-.mega-number span {
-
-  color: #c2c9d3;
-
-  margin: 0 3px;
-
-}
-
-.mega-label {
-
-  margin-top: 18px;
-
-  color: var(--orange);
-
-  font-size: 11px;
-
-  font-weight: 700;
-
-}
-
-.mega-intro h3 {
-
-  margin: 9px 0 10px;
-
-  color: #18253a;
-
-  font-size: 21px;
-
-  line-height: 1.22;
-
-  letter-spacing: -.7px;
-
-  font-weight: 650;
-
-}
-
-.mega-intro h3 strong {
-
-  display: block;
-
-  font-weight: 800;
-
-}
-
-.mega-intro p {
-
-  max-width: 285px;
-
-  margin: 0;
-
-  color: #718097;
-
-  font-size: 11.5px;
-
-  line-height: 1.6;
-
-}
-
-.explore-industries {
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: space-between;
-
-  margin-top: auto;
-
-  min-height: 50px;
-
-  padding: 0 10px 0 14px;
-
-  border: 1px solid #e1e4e8;
-
-  border-radius: 7px;
-
-  background: #f7f7f6;
-
-  color: #17243a;
-
-  text-decoration: none;
-
-  font-size: 11px;
-
-  font-weight: 700;
-
-  transition:
-    background .25s ease,
-    transform .25s ease,
-    border-color .25s ease;
-
-}
-
-.explore-industries:hover {
-
-  background: #fff;
-
-  border-color: #d5dae1;
-
-  transform: translateY(-2px);
-
-}
-
-.small-arrow {
-
-  width: 31px;
-  height: 31px;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 7px;
-
-  background: white;
-
-  border: 1px solid #e1e5ea;
-
-}
-
-.small-arrow svg {
-
-  width: 15px;
-  height: 15px;
-
-  stroke: currentColor;
-
-  stroke-width: 1.7;
-
-}
-
-
-/* =========================================================
-   MEGA LIST
-========================================================= */
-
-.mega-list {
-
-  padding: 22px 16px;
-
-  border-radius: 8px;
-
-  background: rgba(255,255,255,.94);
-
-  border: 1px solid rgba(22,36,58,.04);
-
-}
-
-.mega-list-header {
-
-  display: flex;
-
-  justify-content: space-between;
-
-  padding: 0 3px 12px;
-
-  border-bottom: 1px solid #edf0f3;
-
-  color: #9aa8bd;
-
-  text-transform: uppercase;
-
-  font-size: 9px;
-
-  font-weight: 750;
-
-  letter-spacing: .7px;
-
-}
-
-.mega-list-header span:last-child {
-
-  color: #46546b;
-
-  text-transform: none;
-
-  letter-spacing: 0;
-
-  font-size: 10px;
-
-}
-
-.industry-item {
-
-  border-bottom: 1px solid #f0f2f4;
-
-}
-
-.industry-item:last-child {
-
-  border-bottom: 0;
-
-}
-
-.industry-link {
-
-  min-height: 79px;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: space-between;
-
-  gap: 10px;
-
-  padding: 11px 3px;
-
-  color: inherit;
-
-  text-decoration: none;
-
-}
-
-.industry-content {
-
-  min-width: 0;
-
-}
-
-.industry-title {
-
-  color: #1a273c;
-
-  font-size: 12.5px;
-
-  font-weight: 700;
-
-  transition: color .2s ease;
-
-}
-
-.industry-description {
-
-  max-width: 240px;
-
-  margin-top: 4px;
-
-  color: #7a879a;
-
-  font-size: 10.5px;
-
-  line-height: 1.45;
-
-}
-
-.industry-arrow {
-
-  width: 27px;
-  height: 27px;
-
-  display: flex;
-
-  flex-shrink: 0;
-
-  align-items: center;
-  justify-content: center;
-
-  border: 1px solid #e0e5eb;
-
-  border-radius: 7px;
-
-  background: #f7f8f9;
-
-  transition:
-    background .2s ease,
-    color .2s ease,
-    transform .2s ease,
-    border-color .2s ease;
-
-}
-
-.industry-arrow svg {
-
-  width: 13px;
-  height: 13px;
-
-  stroke: currentColor;
-
-  stroke-width: 1.6;
-
-}
-
-.industry-link:hover .industry-title {
-
-  color: var(--orange);
-
-}
-
-.industry-link:hover .industry-arrow {
-
-  color: white;
-
-  background: var(--orange);
-
-  border-color: var(--orange);
-
-  transform: translateX(3px);
-
-}
-
-
-/* =========================================================
-   FEATURED CARD
-========================================================= */
-
-.mega-feature {
-
-  min-height: 382px;
-
-  overflow: hidden;
-
-  border-radius: 8px;
-
-}
-
-.feature-image {
-
-  position: relative;
-
-  height: 100%;
-
-  min-height: 382px;
-
-  overflow: hidden;
-
-  background:
-    radial-gradient(
-      circle at 70% 20%,
-      rgba(255,104,24,.45),
-      transparent 35%
-    ),
-    linear-gradient(
-      145deg,
-      #131b1c,
-      #080b10 70%,
-      #121827
-    );
-
-}
-
-
-/* fake futuristic image */
-
-.feature-grid {
-
+/* invisible bridge so the menu stays open while the pointer crosses the gap */
+.mega-menu::before {
   position: absolute;
-
-  inset: 0;
-
-  opacity: .18;
-
-  background-image:
-    linear-gradient(
-      rgba(255,255,255,.08) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      rgba(255,255,255,.08) 1px,
-      transparent 1px
-    );
-
-  background-size: 30px 30px;
-
-  mask-image:
-    linear-gradient(
-      to bottom,
-      transparent,
-      black 35%,
-      black 80%,
-      transparent
-    );
-
-}
-
-.feature-glow {
-
-  position: absolute;
-
-  width: 220px;
-  height: 220px;
-
-  top: -70px;
-  right: -30px;
-
-  border-radius: 50%;
-
-  background:
-    rgba(255,104,24,.28);
-
-  filter: blur(55px);
-
-}
-
-.feature-shape {
-
-  position: absolute;
-
-  border-radius: 4px;
-
-  transform:
-    rotate(-7deg)
-    skewY(2deg);
-
-  box-shadow:
-    0 25px 50px rgba(0,0,0,.4);
-
-}
-
-.shape-one {
-
-  width: 155px;
-  height: 48px;
-
-  top: 78px;
-  left: 48px;
-
-  background:
-    linear-gradient(
-      90deg,
-      #6e280f,
-      #ff6818,
-      #a83b14
-    );
-
-  filter: blur(.2px);
-
-}
-
-.shape-two {
-
-  width: 125px;
-  height: 42px;
-
-  top: 154px;
-  left: 72px;
-
-  background:
-    linear-gradient(
-      90deg,
-      #4c1d12,
-      #d34d17,
-      #713017
-    );
-
-}
-
-.shape-three {
-
-  width: 100px;
-  height: 33px;
-
-  top: 218px;
-  left: 98px;
-
-  background:
-    linear-gradient(
-      90deg,
-      #2a1a17,
-      #843514,
-      #4d2218
-    );
-
-}
-
-.feature-content {
-
-  position: absolute;
-
-  left: 20px;
-  right: 20px;
-  bottom: 20px;
-
-  z-index: 3;
-
-}
-
-.feature-badge {
-
-  display: inline-flex;
-
-  padding: 5px 8px;
-
-  border: 1px solid rgba(255,255,255,.3);
-
-  border-radius: 4px;
-
-  background:
-    rgba(255,104,24,.55);
-
-  color: white;
-
-  font-size: 8px;
-
-  font-weight: 800;
-
-  letter-spacing: .4px;
-
-}
-
-.feature-content h4 {
-
-  max-width: 205px;
-
-  margin: 9px 0 0;
-
-  color: white;
-
-  font-size: 14px;
-
-  line-height: 1.35;
-
-  letter-spacing: -.3px;
-
-}
-
-.feature-arrow {
-
-  position: absolute;
-
-  right: 20px;
-  bottom: 20px;
-
-  width: 34px;
-  height: 34px;
-
-  z-index: 4;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 8px;
-
-  background: white;
-
-  color: #17243a;
-
-  text-decoration: none;
-
-  transition:
-    transform .25s ease,
-    background .25s ease;
-
-}
-
-.feature-arrow svg {
-
-  width: 16px;
+  top: -16px;
+  left: 0;
+  right: 0;
   height: 16px;
+  content: '';
+}
 
+.mm-grid {
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr) 270px;
+  gap: 10px;
+  min-height: 330px;
+}
+
+/* ---------- 1 · categories ---------- */
+
+.mm-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px;
+  border-radius: 18px;
+  background: transparent;
+}
+
+.mm-cat {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  padding: 13px 14px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: #1a273c;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 700;
+  line-height: 1.3;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.mm-cat svg {
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
   stroke: currentColor;
-
   stroke-width: 1.7;
-
 }
 
-.feature-arrow:hover {
+.mm-cat svg {
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
 
-  transform: translateX(3px);
+.mm-cat:hover,
+.mm-cat.on {
+  background: #fff1e8;
+  color: var(--orange-dark);
+}
 
+.mm-cat.on {
+  color: var(--orange-dark);
+  box-shadow: 0 4px 12px rgba(255, 104, 24, 0.1);
+}
+
+.mm-cat.on svg,
+.mm-cat:hover svg {
+  opacity: 1;
+  transform: none;
+}
+
+.mm-cat:focus-visible,
+.mm-cta:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 2px;
+}
+
+/* ---------- 2 · layout variants ---------- */
+
+.mm-narrow {
+  width: min(660px, calc(100vw - 48px));
+}
+
+.mm-grid-2 {
+  grid-template-columns: minmax(0, 1fr) 260px;
+}
+
+.mm-wide {
+  width: min(820px, calc(100vw - 48px));
+}
+
+.mm-left-list {
+  min-height: 330px;
+}
+
+/* all 16 features: two columns, the footer note spans both */
+.mm-two {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-content: start;
+  gap: 2px 6px;
+}
+
+.mm-two .mm-note {
+  grid-column: 1 / -1;
+}
+
+/* quiet one-line footer inside the left panel */
+.mm-note {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: auto 0 0;
+  padding: 12px 14px 4px;
+  border-top: 1px solid #eceef2;
+  color: #657187;
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+.mm-note i {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
   background: var(--orange);
-
-  color: white;
-
+  box-shadow: 0 0 0 4px rgba(255, 104, 24, 0.16);
 }
 
+/* ---------- 3 · help card ---------- */
+
+.mm-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+  background: linear-gradient(160deg, #2a3550, #131b2e);
+}
+
+.mm-card img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mm-card-box {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px 14px 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.96);
+  text-align: center;
+}
+
+.mm-card-box strong {
+  color: #17243a;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.3px;
+}
+
+.mm-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #ff7a45, #f2531f);
+  color: #fff;
+  text-decoration: none;
+  font-size: 12.5px;
+  font-weight: 650;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35), 0 10px 24px rgba(240, 75, 35, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mm-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.4), 0 16px 32px rgba(240, 75, 35, 0.4);
+}
 
 /* =========================================================
-   MEGA ANIMATION
+   SIMPLE DROPDOWN (Reseller)
+========================================================= */
+
+.simple-menu {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 286px;
+  padding: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.92);
+  border-radius: 15px;
+  background: rgba(250, 251, 252, 0.97);
+  backdrop-filter: blur(30px) saturate(170%);
+  -webkit-backdrop-filter: blur(30px) saturate(170%);
+  box-shadow:
+    0 26px 60px rgba(16, 28, 46, 0.16),
+    0 6px 20px rgba(16, 28, 46, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+.simple-menu::before {
+  position: absolute;
+  top: -16px;
+  left: 0;
+  right: 0;
+  height: 16px;
+  content: '';
+}
+
+.simple-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 12px;
+  border-radius: 9px;
+  color: #1a273c;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.simple-link strong {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 700;
+  transition: color 0.2s ease;
+}
+
+.simple-link small {
+  display: block;
+  margin-top: 3px;
+  color: #7a879a;
+  font-size: 10.5px;
+  line-height: 1.4;
+}
+
+.simple-link svg {
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.simple-link:hover {
+  background: #fff;
+}
+
+.simple-link:hover strong {
+  color: var(--orange);
+}
+
+.simple-link:hover svg {
+  opacity: 1;
+  transform: none;
+  color: var(--orange);
+}
+
+/* =========================================================
+   MENU ANIMATION
 ========================================================= */
 
 .mega-enter-active,
-.mega-leave-active {
-
-  transition:
-    opacity .22s ease,
-    transform .28s cubic-bezier(.22,1,.36,1);
-
+.mega-leave-active,
+.drop-enter-active,
+.drop-leave-active {
+  transition: opacity 0.22s ease, transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .mega-enter-from,
-.mega-leave-to {
-
+.mega-leave-to,
+.drop-enter-from,
+.drop-leave-to {
   opacity: 0;
-
-  transform:
-    translateX(-50%)
-    translateY(-10px)
-    scale(.98);
-
+  transform: translateX(-50%) translateY(-10px) scale(0.98);
 }
-
 
 /* =========================================================
    DESKTOP ACTIONS
 ========================================================= */
 
 .desktop-actions {
-
   display: flex;
-
   align-items: center;
-
   gap: 9px;
-
   flex-shrink: 0;
-
 }
 
 .demo-btn,
 .start-btn {
-
   display: inline-flex;
-
   align-items: center;
   justify-content: center;
-
   gap: 9px;
-
   min-height: 43px;
-
   padding: 0 19px;
-
   border-radius: 999px;
-
   text-decoration: none;
-
   white-space: nowrap;
-
   font-size: 12px;
-
   font-weight: 650;
-
-  transition:
-    transform .25s ease,
-    box-shadow .25s ease,
-    background .25s ease;
-
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+/* same two buttons as the hero: black "Book a Demo", orange "Free Trial" */
 .demo-btn {
-
-  color: var(--ink);
-
-  border: 1px solid rgba(28,41,61,.07);
-
-  background: rgba(255,255,255,.9);
-
-  box-shadow:
-    0 3px 10px rgba(28,41,61,.045);
-
+  color: #fff;
+  background: #0b0c0e;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14), 0 10px 24px rgba(0, 0, 0, 0.18);
 }
 
 .start-btn {
-
-  color: white;
-
-  border: 1px solid rgba(255,255,255,.28);
-
-  background:
-    linear-gradient(
-      115deg,
-      #ff7b2a,
-      #ff5c0a
-    );
-
-  box-shadow:
-    0 5px 13px rgba(255,104,24,.22),
-    inset 0 1px 0 rgba(255,255,255,.3);
-
-}
-
-.start-btn svg {
-
-  width: 15px;
-  height: 15px;
-
-  stroke: currentColor;
-
-  stroke-width: 1.8;
-
-  transition:
-    transform .25s ease;
-
+  color: #fff;
+  background: linear-gradient(180deg, #ff7a45, #f2531f);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35), 0 10px 24px rgba(240, 75, 35, 0.3);
 }
 
 .demo-btn:hover,
 .start-btn:hover {
-
   transform: translateY(-2px);
-
 }
 
 .demo-btn:hover {
-
-  box-shadow:
-    0 8px 20px rgba(28,41,61,.1);
-
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.28), 0 16px 32px rgba(0, 0, 0, 0.28);
 }
 
 .start-btn:hover {
-
-  background:
-    linear-gradient(
-      115deg,
-      #ff8a40,
-      #ed570b
-    );
-
-  box-shadow:
-    0 9px 24px rgba(255,104,24,.32);
-
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.4), 0 16px 32px rgba(240, 75, 35, 0.4);
 }
-
-.start-btn:hover svg {
-
-  transform: translateX(3px);
-
-}
-
 
 /* =========================================================
    MOBILE BUTTON
 ========================================================= */
 
 .menu-toggle {
-
   display: none;
-
   width: 43px;
   height: 43px;
-
   flex-shrink: 0;
-
   align-items: center;
   justify-content: center;
-
   flex-direction: column;
-
   gap: 5px;
-
-  border: 1px solid rgba(23,36,58,.08);
-
+  border: 1px solid rgba(23, 36, 58, 0.08);
   border-radius: 14px;
-
-  background:
-    rgba(255,255,255,.8);
-
+  background: rgba(255, 255, 255, 0.8);
   cursor: pointer;
-
 }
 
 .menu-toggle span {
-
   width: 18px;
   height: 2px;
-
   border-radius: 5px;
-
   background: var(--ink);
-
-  transition:
-    transform .25s ease,
-    opacity .2s ease;
-
+  transition: transform 0.25s ease, opacity 0.2s ease;
 }
 
 .menu-toggle .first {
-
-  transform:
-    translateY(7px)
-    rotate(45deg);
-
+  transform: translateY(7px) rotate(45deg);
 }
 
 .menu-toggle .second {
-
   opacity: 0;
-
 }
 
 .menu-toggle .third {
-
-  transform:
-    translateY(-7px)
-    rotate(-45deg);
-
+  transform: translateY(-7px) rotate(-45deg);
 }
-
 
 /* =========================================================
    MOBILE MENU
 ========================================================= */
 
 .mobile-menu {
-
   position: absolute;
-
   top: calc(100% + 10px);
-
   left: 0;
   right: 0;
-
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
   padding: 13px 20px 20px;
-
-  border: 1px solid rgba(255,255,255,.9);
-
+  border: 1px solid rgba(255, 255, 255, 0.9);
   border-radius: 22px;
-
-  background:
-    rgba(255,255,255,.96);
-
-  backdrop-filter:
-    blur(25px);
-
-  -webkit-backdrop-filter:
-    blur(25px);
-
-  box-shadow:
-    0 25px 65px rgba(27,39,59,.15);
-
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  box-shadow: 0 25px 65px rgba(27, 39, 59, 0.15);
 }
 
-.mobile-link {
-
+.mobile-link,
+.mobile-trigger {
+  width: 100%;
   display: flex;
-
   align-items: center;
   justify-content: space-between;
-
   padding: 14px 3px;
-
-  border-bottom:
-    1px solid rgba(23,36,58,.07);
-
+  border: 0;
+  border-bottom: 1px solid rgba(23, 36, 58, 0.07);
+  background: transparent;
   color: var(--ink);
-
   text-decoration: none;
-
+  font-family: inherit;
   font-size: 13px;
-
   font-weight: 550;
-
+  cursor: pointer;
 }
 
-.mobile-link:hover {
-
+.mobile-link:hover,
+.mobile-trigger:hover {
   color: var(--orange-dark);
-
 }
 
 .mobile-link svg {
-
   width: 17px;
   height: 17px;
-
   stroke: currentColor;
-
   stroke-width: 1.6;
-
 }
 
-
-/* MOBILE INDUSTRIES */
-
-.mobile-industries-trigger {
-
-  width: 100%;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: space-between;
-
-  padding: 14px 3px;
-
-  border: 0;
-
-  border-bottom:
-    1px solid rgba(23,36,58,.07);
-
-  background: transparent;
-
-  color: var(--ink);
-
-  font-family: inherit;
-
-  font-size: 13px;
-
-  font-weight: 550;
-
-  cursor: pointer;
-
-}
-
-.mobile-industries-trigger svg {
-
+.mobile-trigger svg {
   width: 15px;
   height: 15px;
-
   stroke: currentColor;
-
   stroke-width: 1.6;
-
-  transition:
-    transform .25s ease;
-
+  transition: transform 0.25s ease;
 }
 
-.mobile-industries-trigger svg.rotate {
-
+.mobile-trigger svg.rotate {
   transform: rotate(180deg);
-
 }
 
-.mobile-industry-list {
-
+.mobile-sub {
   padding: 5px 0 8px;
-
 }
 
-.mobile-industry-list a {
-
+.mobile-sub a {
   display: flex;
-
   align-items: center;
   justify-content: space-between;
-
   gap: 10px;
-
   padding: 12px 5px 12px 13px;
-
-  border-bottom:
-    1px solid #f0f1f3;
-
+  border-bottom: 1px solid #f0f1f3;
   color: var(--ink);
-
   text-decoration: none;
-
 }
 
-.mobile-industry-list strong {
-
-  display: block;
-
+.mobile-sub a.mobile-all {
+  color: var(--orange-dark);
   font-size: 11.5px;
-
+  font-weight: 700;
 }
 
-.mobile-industry-list small {
-
+.mobile-sub strong {
   display: block;
-
-  max-width: 260px;
-
-  margin-top: 3px;
-
-  color: #7d899b;
-
-  font-size: 9.5px;
-
-  line-height: 1.4;
-
+  font-size: 11.5px;
 }
 
-.mobile-industry-list svg {
+.mobile-sub small {
+  display: block;
+  max-width: 260px;
+  margin-top: 3px;
+  color: #7d899b;
+  font-size: 9.5px;
+  line-height: 1.4;
+}
 
+.mobile-sub svg {
   width: 15px;
   height: 15px;
-
   flex-shrink: 0;
-
   stroke: currentColor;
-
   stroke-width: 1.5;
+}
 
+.mobile-sub-title {
+  padding: 14px 13px 4px;
+  color: #9aa8bd;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
 }
 
 .mobile-industry-enter-active,
 .mobile-industry-leave-active {
-
-  transition:
-    opacity .2s ease,
-    transform .2s ease;
-
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .mobile-industry-enter-from,
 .mobile-industry-leave-to {
-
   opacity: 0;
-
   transform: translateY(-5px);
-
 }
 
-
-/* =========================================================
-   MOBILE ACTIONS
-========================================================= */
-
 .mobile-actions {
-
   display: grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
+  grid-template-columns: 1fr 1fr;
   gap: 9px;
-
   padding-top: 17px;
-
 }
 
 .mobile-actions .demo-btn,
 .mobile-actions .start-btn {
-
   min-width: 0;
-
   padding: 0 10px;
-
   font-size: 11px;
-
 }
-
-
-/* =========================================================
-   DROPDOWN ANIMATION
-========================================================= */
 
 .dropdown-enter-active,
 .dropdown-leave-active {
-
-  transition:
-    opacity .2s ease,
-    transform .2s ease;
-
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .dropdown-enter-from,
 .dropdown-leave-to {
-
   opacity: 0;
-
-  transform:
-    translateY(-7px);
-
+  transform: translateY(-7px);
 }
 
-
 /* =========================================================
-   TABLET
+   RESPONSIVE
 ========================================================= */
 
 @media (max-width: 1180px) {
-
   .glass-nav {
-
     gap: 18px;
-
     padding-left: 20px;
-
   }
 
   .desktop-links {
-
-    gap: 13px;
-
+    gap: 0;
   }
 
   .nav-link {
-
-    font-size: 11.5px;
-
+    padding-inline: 9px;
+    font-size: 12px;
   }
 
   .demo-btn,
   .start-btn {
-
     padding-inline: 14px;
-
     font-size: 11px;
-
   }
 
   .mega-menu {
-
-    width:
-      min(1000px, calc(100vw - 30px));
-
+    width: min(860px, calc(100vw - 30px));
   }
 
+  .mm-grid-2 {
+    grid-template-columns: minmax(0, 1fr) 230px;
+  }
 }
 
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media (max-width: 980px) {
-
+@media (max-width: 1040px) {
   .nav-shell {
-
     padding-inline: 16px;
-
-  }
-
-  .announcement-bar {
-
-    height: 34px;
-
-  }
-
-  .announcement-inner {
-
-    font-size: 9px;
-
-    gap: 6px;
-
-  }
-
-  .announcement-close {
-
-    display: none;
-
   }
 
   .glass-nav {
-
     min-height: 66px;
-
     margin-top: 7px;
-
-    padding:
-      10px
-      14px
-      10px
-      20px;
-
+    padding: 10px 14px 10px 20px;
     border-radius: 19px;
-
   }
 
   .desktop-links,
   .desktop-actions {
-
     display: none;
-
   }
 
   .menu-toggle {
-
     display: flex;
-
   }
-
 }
 
-
-/* =========================================================
-   SMALL MOBILE
-========================================================= */
-
 @media (max-width: 480px) {
-
   .nav-shell {
-
     padding-inline: 10px;
-
-  }
-
-  .announcement-text {
-
-    display: none;
-
-  }
-
-  .announcement-inner {
-
-    justify-content: center;
-
   }
 
   .glass-nav {
-
     min-height: 61px;
-
-    padding:
-      8px
-      10px
-      8px
-      17px;
-
+    padding: 8px 10px 8px 17px;
     border-radius: 17px;
-
   }
 
   .brand-logo {
-
     width: 135px;
-
   }
 
   .mobile-menu {
-
     border-radius: 18px;
-
     padding-inline: 16px;
-
   }
 
   .mobile-actions {
-
     grid-template-columns: 1fr;
-
   }
 
   .mobile-actions .demo-btn,
   .mobile-actions .start-btn {
-
     min-height: 43px;
-
     font-size: 12px;
-
   }
-
 }
 
-
-/* =========================================================
-   REDUCED MOTION
-========================================================= */
-
 @media (prefers-reduced-motion: reduce) {
-
   .nav-shell *,
   .nav-shell *::before,
   .nav-shell *::after {
-
     transition: none !important;
-
     animation: none !important;
-
   }
-
 }
-
 </style>

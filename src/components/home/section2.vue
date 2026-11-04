@@ -217,7 +217,7 @@ onMounted(() => {
   io = new IntersectionObserver(([en]) => {
     inView.value = en.isIntersecting
     if (en.isIntersecting) revealed.value = true
-  }, { threshold: 0.3 })
+  }, { threshold: 0.05 })
   io.observe(rootEl.value)
   const reduce = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches
   if (reduce) { tick.value = CYCLE; return }
