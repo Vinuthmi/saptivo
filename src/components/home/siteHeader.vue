@@ -8,9 +8,10 @@ const industriesOpen = ref(false)
 const scrolled = ref(false)
 
 const logoSrc = `${import.meta.env.BASE_URL}saptivo-logo.png`
+const featuresHref = `${import.meta.env.BASE_URL}features`
 
 const navItems = [
-  { label: 'Features', href: '#features' },
+  { label: 'Features', href: featuresHref },
   { label: 'Pricing', href: '#pricing' },
   { label: 'Reseller', href: '#reseller' },
   { label: 'Reseller Signup', href: '#signup' },
@@ -106,8 +107,8 @@ onBeforeUnmount(() => {
     <nav class="glass-nav" aria-label="Main navigation">
 
       <!-- BRAND -->
-      <a
-        href="#top"
+      <RouterLink
+        to="/"
         class="brand"
         aria-label="Saptivo home"
         @click="closeMenu"
@@ -117,7 +118,7 @@ onBeforeUnmount(() => {
           :src="logoSrc"
           alt="Saptivo"
         />
-      </a>
+      </RouterLink>
 
 
       <!-- ===================================================
@@ -126,7 +127,7 @@ onBeforeUnmount(() => {
       <div class="desktop-links">
 
         <a
-          href="#features"
+          :href="featuresHref"
           class="nav-link"
         >
           Features
@@ -384,7 +385,7 @@ onBeforeUnmount(() => {
         >
 
           <a
-            href="#features"
+            :href="featuresHref"
             class="mobile-link"
             @click="closeMenu"
           >

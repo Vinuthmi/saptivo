@@ -12,8 +12,10 @@ import Section6 from '../components/home/section6.vue'
 import Section9 from '../components/home/section9.vue'
 import Section11 from '../components/home/section11.vue'
 import TrustedBusinesses from '../components/home/trustedBusinesses.vue'
-
-
+import Sectionwhy from '../components/home/Sectionwhy.vue'
+import FAQ from '../components/home/faq.vue'
+import SiteHeader from '../components/home/siteHeader.vue'
+import SiteFooter from '../components/home/siteFooter.vue'
 
 const route = useRoute()
 const isSection2Preview = computed(() => route.query.preview === 'section2')
@@ -24,17 +26,21 @@ const isSection6Preview = computed(() => route.query.preview === 'section6')
   <main>
     <Section6 v-if="isSection6Preview" preview />
     <template v-else>
+      <SiteHeader />
       <HeroSection />
-      <Section1 v-if="!isSection2Preview" />
       <Section2 :preview="isSection2Preview" />
+      <Section1 v-if="!isSection2Preview" />
       <Section3 />
       <Section4 />
       <Section5 />
       <Section10 />
-      <Section6 preview />
+      <Section6 />
       <TrustedBusinesses />
+      <Sectionwhy />
       <Section9 />
+      <FAQ />
       <Section11 />
+      <SiteFooter />
     </template>
   </main>
 </template>

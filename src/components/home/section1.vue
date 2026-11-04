@@ -1,5 +1,5 @@
 <template>
-  <section ref="rootEl" class="fs" :class="{ 'fs-in': revealed }" aria-labelledby="fs-title">
+  <section id="features" ref="rootEl" class="fs" :class="{ 'fs-in': revealed }" aria-labelledby="fs-title">
     <div class="fs-wrap">
       <header class="fs-head">
         <h2 id="fs-title" class="fs-title">
@@ -406,6 +406,7 @@ onBeforeUnmount(() => {
   --bg: #fff;
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
   position: relative;
+  scroll-margin-top: 96px;
   width: calc(100% - 2 * clamp(8px, 1.6vw, 24px));
   max-width: 1680px;
   margin: clamp(32px, 5vw, 64px) auto clamp(48px, 7vw, 96px);
