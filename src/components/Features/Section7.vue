@@ -218,8 +218,8 @@ onBeforeUnmount(() => {
 .title .soft { color: var(--muted); }
 
 .grid {
-  width: min(1180px, calc(100% - 40px)); margin: 64px auto 0;
-  display: grid; grid-template-columns: 1.1fr 1fr; gap: 72px; align-items: center;
+  width: min(1080px, calc(100% - 40px)); margin: 64px auto 0;
+  display: grid; grid-template-columns: 1.1fr 1fr; gap: 56px; align-items: center;
 }
 .panel { order: -1; }
 

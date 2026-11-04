@@ -13,6 +13,11 @@ const routes = [
         component: () => import('../views/homeView.vue')
       },
       {
+        path: 'features/',
+        name: 'features',
+        component: () => import('../views/featuresView.vue')
+      },
+      {
         path: '/industries/',
         name: 'industries',
         component: () => import('../views/IndustriesView.vue')
@@ -23,13 +28,10 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: () => import('../views/homeView.vue'),
-    },
-  ],
+  routes,
+  scrollBehavior() {
+    return { top: 0 }
+  },
 })
 
 export default router

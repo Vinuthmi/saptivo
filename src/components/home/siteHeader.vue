@@ -16,7 +16,6 @@ const mobileSection = ref(null) // open accordion in the mobile menu
 const scrolled = ref(false)
 
 const logoSrc = `${import.meta.env.BASE_URL}saptivo-logo.png`
-const featuresHref = `${import.meta.env.BASE_URL}features`
 
 /* ---------------- FEATURES (all 16 pages, in the order of the doc's sitemap) ---------------- */
 const features = [

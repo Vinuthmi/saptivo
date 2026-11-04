@@ -1,6 +1,5 @@
 <template>
-  <main>
-    <SiteHeader />
+  <main class="features-page">
     <HeroSection />
     <Section1 />
     <Section2 />
@@ -10,13 +9,10 @@
     <Section6 />
     <Section7 />
     <Section8 />
-    <SiteFooter />
   </main>
 </template>
 
 <script setup>
-import SiteHeader from '../components/home/siteHeader.vue'
-import SiteFooter from '../components/home/siteFooter.vue'
 import HeroSection from '../components/Features/HeroSection.vue'
 import Section1 from '../components/Features/Section1.vue'
 import Section2 from '../components/Features/Section2.vue';
