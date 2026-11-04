@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <section ref="rootEl" class="ms" :class="{ 'ms-in': revealed }" aria-labelledby="ms-title">
     <div class="ms-wrap">
       <h2 id="ms-title" class="ms-title">

@@ -230,7 +230,9 @@ onBeforeUnmount(() => io?.disconnect());
   margin: 0 auto;
   overflow: hidden;
 
-  background: rgba(255, 255, 255, 0.93);
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.78)),
+    url('/images/features/threecolleagues-.jpg') center 42% / cover;
   border: 1px solid rgba(255, 99, 56, 0.12);
   border-bottom: 0;
   border-radius: clamp(24px, 2.5vw, 42px)

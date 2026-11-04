@@ -1,5 +1,5 @@
 <template>
-  <section id="features" class="trusted-brands" aria-labelledby="trusted-brands-title">
+  <section class="trusted-brands" aria-labelledby="trusted-brands-title">
     <h2 id="trusted-brands-title" class="trusted-brands-title">
       Trusted by Businesses That <span>Move Forward</span>
     </h2>
