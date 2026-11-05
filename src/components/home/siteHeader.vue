@@ -226,7 +226,7 @@ onBeforeUnmount(() => {
 <template>
   <header class="nav-shell" :class="{ scrolled, expanded: menuOpen }">
     <nav class="glass-nav" aria-label="Main navigation">
-      <!-- BRAND (original logo, painted through a mask: dark blue letters, orange circular end, so any transparent PNG works) -->
+      <!-- BRAND (original logo, painted with a black to orange gradient through a mask, so any transparent PNG works) -->
       <router-link to="/" class="brand" aria-label="Saptivo CRM home" @click="closeAll">
         <span class="brand-logo" role="img" aria-label="Saptivo CRM" :style="{ '--logo': `url(${logoSrc})` }"></span>
       </router-link>
@@ -513,12 +513,10 @@ onBeforeUnmount(() => {
 .nav-shell {
   --orange: #ff6818;
   --orange-dark: #ed570b;
-  --ink: #1b263b;
-  --navy: #1b263b;
-  --blue: #0a2a66;
-  --ash: #e4e7ec;
-  --logo-blue: #061a4a; /* dark blue used for the logo */
-  --logo-orange: #e2540f; /* dark orange used for the logo */
+  --ink: #0b0c0e;
+  --navy: #0b0c0e;
+  --accent: #ed570b; /* orange used for hovers and highlights */
+  --ash: #e6e6e9;
   --muted: #5d6b82;
   --beige: #d4c4a8;
   --beige-soft: #f4efe4;
@@ -577,7 +575,7 @@ onBeforeUnmount(() => {
   display: block;
   width: 156px;
   height: 38px;
-  background: linear-gradient(90deg, var(--logo-blue) 82%, var(--logo-orange) 82%);
+  background: linear-gradient(90deg, #0b0c0e 0%, #0b0c0e 45%, #f2531f 82%, #ff7a45 100%);
   -webkit-mask: var(--logo) left center / contain no-repeat;
   mask: var(--logo) left center / contain no-repeat;
 }
@@ -617,13 +615,13 @@ onBeforeUnmount(() => {
 .nav-link:hover,
 .nav-link.active,
 .nav-link.router-link-active {
-  color: var(--blue);
+  color: var(--accent);
   background: transparent;
 }
 
 .nav-link:focus-visible {
   outline: none;
-  color: var(--blue);
+  color: var(--accent);
 }
 
 .chevron {
@@ -704,7 +702,7 @@ onBeforeUnmount(() => {
   align-items: flex-start;
   gap: 4px;
   padding: 10px 6px 10px 10px;
-  border-right: 1px solid #efe9dc;
+  border-right: 1px solid #ececef;
 }
 
 .mm-tab {
@@ -731,13 +729,13 @@ onBeforeUnmount(() => {
 
 .mm-tab.on {
   color: var(--navy);
-  border-bottom-color: var(--blue);
+  border-bottom-color: var(--accent);
 }
 
 .mm-all {
   margin-top: auto;
   padding: 10px 0 4px;
-  color: var(--blue);
+  color: var(--accent);
   font-size: 13px;
   font-weight: 600;
   text-decoration: none;
@@ -811,31 +809,31 @@ onBeforeUnmount(() => {
 }
 
 .mm-it:hover {
-  background: #f1f3f7;
+  background: #f3f3f5;
 }
 
 .mm-it:hover .ic {
-  stroke: var(--blue);
+  stroke: var(--accent);
   transform: scale(1.1);
 }
 
 .mm-tab:focus-visible,
 .mm-it:focus-visible,
 .mm-go:focus-visible {
-  outline: 2px solid var(--blue);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 
 /* ---------- 3 · photo card ---------- */
 
-.mm-card { position: relative; overflow: hidden; border-radius: 16px; background: linear-gradient(160deg, #415a77, #0d1b2a); }
+.mm-card { position: relative; overflow: hidden; border-radius: 16px; background: linear-gradient(160deg, #3a3a40, #0b0c0e); }
 .mm-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.mm-card::after { position: absolute; inset: 0; content: ''; background: linear-gradient(to top, rgba(13, 27, 42, 0.88) 8%, rgba(13, 27, 42, 0.1) 62%); }
+.mm-card::after { position: absolute; inset: 0; content: ''; background: linear-gradient(to top, rgba(11, 12, 14, 0.88) 8%, rgba(11, 12, 14, 0.1) 62%); }
 .mm-card-ov { position: absolute; z-index: 1; left: 16px; right: 14px; bottom: 16px; display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
 .mm-card-ov strong { color: #fff; font-size: 17px; font-weight: 500; line-height: 1.25; }
 .mm-go { display: grid; flex: none; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: #fff; color: var(--navy); transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease; }
 .mm-go svg { width: 16px; height: 16px; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-.mm-go:hover { background: var(--blue); color: #fff; transform: translateX(2px); }
+.mm-go:hover { background: var(--accent); color: #fff; transform: translateX(2px); }
 
 /* =========================================================
    MENU ANIMATION
@@ -893,7 +891,7 @@ onBeforeUnmount(() => {
 .start-btn {
   color: #fff;
   background: linear-gradient(180deg, #ff7a45, #f2531f);
-  box-shadow: 0 8px 20px -8px rgba(10, 42, 102, 0.5);
+  box-shadow: 0 8px 20px -8px rgba(242, 83, 31, 0.55);
 }
 
 .demo-btn:hover,
@@ -907,7 +905,7 @@ onBeforeUnmount(() => {
 
 .start-btn:hover {
   background: linear-gradient(180deg, #ff7a45, #f2531f);
-  box-shadow: 0 12px 26px -8px rgba(10, 42, 102, 0.6);
+  box-shadow: 0 12px 26px -8px rgba(242, 83, 31, 0.65);
 }
 
 /* =========================================================
@@ -967,7 +965,7 @@ onBeforeUnmount(() => {
   background: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(25px);
   -webkit-backdrop-filter: blur(25px);
-  box-shadow: 0 25px 65px rgba(27, 39, 59, 0.15);
+  box-shadow: 0 25px 65px rgba(11, 12, 14, 0.15);
 }
 
 .mobile-link,
@@ -978,7 +976,7 @@ onBeforeUnmount(() => {
   justify-content: space-between;
   padding: 14px 3px;
   border: 0;
-  border-bottom: 1px solid rgba(23, 36, 58, 0.07);
+  border-bottom: 1px solid rgba(11, 12, 14, 0.07);
   background: transparent;
   color: var(--ink);
   text-decoration: none;
@@ -990,7 +988,7 @@ onBeforeUnmount(() => {
 
 .mobile-link:hover,
 .mobile-trigger:hover {
-  color: var(--blue);
+  color: var(--accent);
 }
 
 .mobile-link svg {
@@ -1028,7 +1026,7 @@ onBeforeUnmount(() => {
 }
 
 .mobile-sub a.mobile-all {
-  color: var(--blue);
+  color: var(--accent);
   font-size: 11.5px;
   font-weight: 700;
 }
