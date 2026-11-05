@@ -190,7 +190,7 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
 .who {
   --orange: #ff6338;
@@ -200,17 +200,21 @@ onBeforeUnmount(() => {
   --line: #f1e7e2;
   position: relative;
   overflow: clip;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   scroll-margin-top: 100px;
   padding: 112px 0;
   color: var(--ink);
   background: #fff;
-  font-family: "Poppins", system-ui, sans-serif;
+  font-family: "Inter", system-ui, sans-serif;
 }
 .who *, .who *::before, .who *::after { box-sizing: border-box; }
 .who button:focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
 
 .title {
-  margin: 0 auto; width: min(900px, calc(100% - 40px)); text-align: center; text-wrap: balance;
+  display: flex; flex-direction: column; align-items: center;
+  margin: 0 auto; width: min(960px, calc(100% - 40px)); text-align: center; text-wrap: balance;
   font-size: clamp(34px, 3.6vw, 56px); font-weight: 500; line-height: 1.15;
   letter-spacing: -0.03em; color: var(--ink);
 }
@@ -218,12 +222,14 @@ onBeforeUnmount(() => {
 .title .soft { color: var(--muted); }
 
 .grid {
-  width: min(1080px, calc(100% - 40px)); margin: 64px auto 0;
-  display: grid; grid-template-columns: 1.1fr 1fr; gap: 56px; align-items: center;
+  width: min(1000px, calc(100% - 40px)); margin: 64px auto 0;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px; align-items: start;
+  justify-items: center;
 }
-.panel { order: -1; }
+.panel { order: -1; width: 100%; max-width: 460px; }
 
 /* ---------- copy ---------- */
+.copy { width: 100%; max-width: 460px; }
 .copy p { margin: 0 0 18px; font-size: 16px; line-height: 1.75; color: var(--muted); max-width: 56ch; }
 .copy p:nth-of-type(2) { color: var(--ink); font-weight: 500; }
 .roles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 26px; }
@@ -250,7 +256,7 @@ onBeforeUnmount(() => {
 .win-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .badge { padding: 5px 12px; border-radius: 99px; background: var(--orange); color: #fff; font-size: 12px; font-weight: 600; white-space: nowrap; }
 .same { display: inline-flex; align-items: center; gap: 7px; padding: 5px 10px; border-radius: 99px; background: #e6f6ec; color: #15803d; font-size: 11px; font-weight: 600; white-space: nowrap; }
-.pulse { width: 7px; height: 7px; border-radius: 50%; background: #22a55a; animation: blink 1.6s ease-in-out infinite; }
+.pulse { flex: none; width: 8px; height: 8px; border-radius: 50%; background: #22a55a; box-shadow: 0 0 0 3px rgba(34, 165, 90, 0.16); }
 .rows { position: relative; height: 170px; margin-top: 12px; padding-top: 6px; border-top: 1px dashed var(--line); }
 .list { position: absolute; inset: 6px 0 0 0; margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; align-content: start; opacity: 0; transform: translateY(8px); transition: opacity 0.45s ease, transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1); pointer-events: none; }
 .list.show { opacity: 1; transform: none; pointer-events: auto; }
@@ -306,6 +312,7 @@ onBeforeUnmount(() => {
 /* ---------- responsive ---------- */
 @media (max-width: 960px) {
   .grid { grid-template-columns: minmax(0, 1fr); gap: 48px; }
+  .panel, .copy { max-width: 560px; }
   .panel { order: 0; }
   .copy p { max-width: none; }
 }

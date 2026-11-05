@@ -186,7 +186,7 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
 .one {
   --orange: #ff6338;
@@ -200,7 +200,7 @@ onBeforeUnmount(() => {
   padding: 112px 0;
   color: var(--ink);
   background: #fff;
-  font-family: "Poppins", system-ui, sans-serif;
+  font-family: "Inter", system-ui, sans-serif;
 }
 .one *, .one *::before, .one *::after { box-sizing: border-box; }
 .one button:focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }

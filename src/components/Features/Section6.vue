@@ -4,7 +4,7 @@
     <div class="a">
       <h2 class="title">
         Replace your spreadsheets, WhatsApp groups and invoicing tool with
-        <span class="hl">one system</span>
+        <span class="soft">one system</span>
       </h2>
 
       <div class="merge" aria-hidden="true">
@@ -25,7 +25,6 @@
         </div>
 
         <div class="one-card">
-          <span class="ring"></span>
           <div class="oc-head">
             <b>Saptivo</b>
             <span class="oc-badge">One system</span>
@@ -176,7 +175,7 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
 .cm {
   --orange: #ff6338;
@@ -191,7 +190,7 @@ onBeforeUnmount(() => {
   padding: 112px 0;
   color: var(--ink);
   background: #fff;
-  font-family: "Poppins", system-ui, sans-serif;
+  font-family: "Inter", system-ui, sans-serif;
 }
 .cm *, .cm *::before, .cm *::after { box-sizing: border-box; }
 .cm button:focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
@@ -201,7 +200,7 @@ onBeforeUnmount(() => {
   margin: 0 auto; width: min(960px, calc(100% - 40px)); text-align: center; text-wrap: balance;
   font-size: clamp(32px, 3.6vw, 54px); font-weight: 500; line-height: 1.18; letter-spacing: -0.03em; color: var(--ink);
 }
-.hl { color: var(--orange); }
+.title span { display: block; }
 
 .merge { position: relative; width: min(980px, calc(100% - 40px)); height: 340px; margin: 56px auto 0; }
 .tool {
@@ -225,16 +224,14 @@ onBeforeUnmount(() => {
 .one-card {
   position: absolute; left: 50%; top: 50%; z-index: 2; width: min(390px, 92%);
   padding: 20px; border-radius: 22px; background: #fff; border: 1px solid var(--line);
-  transform: translate(-50%, -50%) scale(0.92);
-  opacity: 0.4; filter: grayscale(1);
-  animation: unify 9s ease-in-out infinite;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 22px 50px rgba(255, 99, 56, 0.2), 0 0 0 4px rgba(255, 99, 56, 0.08);
 }
-.ring { position: absolute; inset: -1px; border-radius: 22px; border: 2px solid var(--orange); opacity: 0; pointer-events: none; animation: ringOut 9s ease-out infinite; }
 .oc-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
 .oc-head b { font-size: 18px; font-weight: 600; letter-spacing: -0.02em; }
 .oc-badge { padding: 5px 11px; border-radius: 99px; background: var(--orange); color: #fff; font-size: 11.5px; font-weight: 600; }
 .oc-chips { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 14px; }
-.oc-chips span { padding: 6px 12px; border-radius: 99px; background: #f4efec; color: #9a948d; font-size: 12px; font-weight: 500; animation: chipOn 9s linear calc(var(--i) * 0.25s) infinite; }
+.oc-chips span { padding: 6px 12px; border-radius: 99px; background: var(--orange-soft); color: #c4400f; font-size: 12px; font-weight: 500; }
 .one-card small { display: block; color: var(--muted); font-size: 12px; }
 
 /* ================= Part B ================= */
@@ -292,11 +289,10 @@ onBeforeUnmount(() => {
 
 /* ================= entrance + pause when off screen ================= */
 .cm:not(.in) .a, .cm:not(.in) .b { opacity: 0; }
-.cm.in .title { animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) backwards; }
 .cm.in .merge { animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) 0.2s backwards; }
 .cm.in .b-copy { animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) backwards; }
 .cm.in .picker { animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) 0.15s backwards; }
-.cm:not(.live) .tool, .cm:not(.live) .one-card, .cm:not(.live) .ring, .cm:not(.live) .oc-chips span,
+.cm:not(.live) .tool,
 .cm:not(.live) .lc.new, .cm:not(.live) .lc.new .plus, .cm:not(.live) .lc.new .tk2, .cm:not(.live) .zero,
 .cm:not(.live) .data-bar b::after { animation-play-state: paused; }
 .cm:not(.live) .pfill { animation-play-state: paused; }
@@ -313,17 +309,6 @@ onBeforeUnmount(() => {
   52% { transform: translate(-50%, -50%) rotate(0deg) scale(0.35); opacity: 0; }
   90% { transform: translate(-50%, -50%) rotate(0deg) scale(0.35); opacity: 0; }
   100% { transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) rotate(var(--r)); opacity: 1; }
-}
-@keyframes unify {
-  0%, 38% { opacity: 0.4; transform: translate(-50%, -50%) scale(0.92); filter: grayscale(1); box-shadow: 0 10px 24px rgba(20, 18, 15, 0.08); }
-  54%, 90% { opacity: 1; transform: translate(-50%, -50%) scale(1); filter: grayscale(0); box-shadow: 0 26px 60px rgba(255, 99, 56, 0.3); }
-  100% { opacity: 0.4; transform: translate(-50%, -50%) scale(0.92); filter: grayscale(1); box-shadow: 0 10px 24px rgba(20, 18, 15, 0.08); }
-}
-@keyframes ringOut { 0%, 52% { opacity: 0; transform: scale(1); } 55% { opacity: 0.8; } 68%, 100% { opacity: 0; transform: scale(1.22); } }
-@keyframes chipOn {
-  0%, 54% { background: #f4efec; color: #9a948d; }
-  58%, 92% { background: var(--orange-soft); color: #c4400f; }
-  97%, 100% { background: #f4efec; color: #9a948d; }
 }
 @keyframes later {
   0%, 40% { border-style: dashed; border-color: #c9bfb9; color: #9a948d; background: transparent; transform: scale(1); }

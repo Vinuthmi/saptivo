@@ -18,6 +18,11 @@ const routes = [
         component: () => import('../views/featuresView.vue')
       },
       {
+        path: 'features/lead-management/',
+        name: 'lead-management',
+        component: () => import('../views/LeadManagementView.vue')
+      },
+      {
         path: '/industries/',
         name: 'industries',
         component: () => import('../views/IndustriesView.vue')
