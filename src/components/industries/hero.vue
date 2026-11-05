@@ -25,16 +25,12 @@ defineOptions({ name: 'IndustriesHero' })
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
 .hero {
   --orange: #ff6338;
   --orange-deep: #f04b23;
   --ink: #17191d;
   --paper: #fff;
   --muted: #5d6068;
-  --title: clamp(46px, 4.2vw, 104px);
-
   position: relative;
   isolation: isolate;
   overflow: hidden;
@@ -42,7 +38,7 @@ defineOptions({ name: 'IndustriesHero' })
   text-align: center;
   color: var(--ink);
   background: var(--paper);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: 'Urbanist', system-ui, sans-serif;
 }
 
 .hero *,
@@ -102,11 +98,12 @@ defineOptions({ name: 'IndustriesHero' })
 
 h1 {
   margin: 0;
-  font-weight: 500;
-  line-height: 1.12;
-  letter-spacing: -0.06em;
+  font-family: Urbanist, "Urbanist Placeholder", sans-serif;
+  font-size: clamp(60px, 5vw, 72px);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -1px;
   color: #0f172a;
-  font-size: var(--title);
   animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
 
@@ -137,8 +134,11 @@ h1 {
 
 @media (max-width: 760px) {
   .hero {
-    --title: clamp(38px, 10.5vw, 64px);
     padding-bottom: 40px;
+  }
+
+  h1 {
+    font-size: clamp(40px, 9vw, 58px);
   }
 
   .content {

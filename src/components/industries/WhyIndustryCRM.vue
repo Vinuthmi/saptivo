@@ -510,7 +510,7 @@ onBeforeUnmount(() => {
 
 .wis-heading h2 {
   margin: 0;
-  font-family: 'Inter Display', Inter, sans-serif;
+  font-family: 'Urbanist', sans-serif;
   font-size: clamp(34px, 4.4vw, 60px);
   font-weight: 500;
   line-height: 1.12;
@@ -937,7 +937,7 @@ onBeforeUnmount(() => {
 
 .wis-options-heading h3 {
   margin: 10px 0 0;
-  font-family: 'Inter Display', Inter, sans-serif;
+  font-family: 'Urbanist', sans-serif;
   font-size: clamp(24px, 2.5vw, 32px);
   font-weight: 500;
   letter-spacing: -.04em;

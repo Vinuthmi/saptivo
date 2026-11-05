@@ -194,8 +194,6 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
-
 .hero {
   --orange: #ff6338;
   --orange-deep: #f04b23;
@@ -217,7 +215,7 @@ onBeforeUnmount(() => {
   text-align: center;
   color: var(--ink);
   background: var(--paper);
-  font-family: "Inter", system-ui, sans-serif;
+  font-family: 'Urbanist', system-ui, sans-serif;
 }
 .hero *, .hero *::before, .hero *::after { box-sizing: border-box; }
 .hero a:focus-visible, .hero button:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; }
@@ -279,8 +277,13 @@ onBeforeUnmount(() => {
   padding: 112px 0 28px;
 }
 h1 {
-  margin: 0; font-weight: 500; line-height: 1.12; letter-spacing: -0.06em; color: #0f172a;;
-  font-size: var(--title);
+  margin: 0;
+  font-family: Urbanist, "Urbanist Placeholder", sans-serif;
+  font-size: clamp(60px, 5vw, 72px);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  color: #0a0a0a80;
   animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
 .accent {
@@ -398,6 +401,7 @@ h1 {
 @media (max-width: 760px) {
   .hero { --ring: min(1100px, 230vw); --step: 58px; --crest: 44px; --top0: 120px; --w0: calc(100vw - 24px); --title: clamp(38px, 10.5vw, 64px); padding-bottom: 40px; }
   .content { width: calc(100% - 32px); padding: 76px 0 24px; }
+  h1 { font-size: clamp(40px, 9vw, 58px); }
   .lead { font-size: 15px; margin-top: 22px; }
   .actions { width: 100%; gap: 10px; margin-top: 28px; }
   .btn { min-height: 50px; padding: 0 20px; font-size: 14px; }

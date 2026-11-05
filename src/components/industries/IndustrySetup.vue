@@ -234,7 +234,7 @@ onBeforeUnmount(() => {
 
 .his-heading h2 {
   margin: 0;
-  font-family: 'Inter Display', Inter, sans-serif;
+  font-family: 'Urbanist', sans-serif;
   font-size: clamp(36px, 5vw, 64px);
   font-weight: 500;
   line-height: 1.08;
@@ -252,7 +252,7 @@ onBeforeUnmount(() => {
 .his-heading > p {
   max-width: 720px;
   margin: 14px 0 0;
-  font-family: 'Inter Display', Inter, system-ui, sans-serif;
+  font-family: 'Urbanist', system-ui, sans-serif;
   font-size: clamp(15px, 1.1vw, 18px);
   font-weight: 500;
   line-height: 1.5;
@@ -502,7 +502,7 @@ onBeforeUnmount(() => {
 
 .his-content h3 {
   margin: 0;
-  font-family: 'Inter Display', Inter, sans-serif;
+  font-family: 'Urbanist', sans-serif;
   font-size: clamp(19px, 2vw, 27px);
   font-weight: 500;
   line-height: 1.2;

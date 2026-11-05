@@ -238,8 +238,6 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
-
 .ct {
   --orange: #ff6338;
   --orange-soft: #fff1ec;
@@ -252,7 +250,7 @@ onBeforeUnmount(() => {
   padding: 112px 0;
   color: var(--ink);
   background: #fff;
-  font-family: "Inter", system-ui, sans-serif;
+  font-family: 'Urbanist', system-ui, sans-serif;
 }
 .ct *, .ct *::before, .ct *::after { box-sizing: border-box; }
 

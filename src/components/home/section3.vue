@@ -84,7 +84,7 @@ onBeforeUnmount(() => io?.disconnect())
 .ms-title {
   margin: 0;
   padding-bottom: 0.12em;
-  font-family: 'Inter Display', Inter, system-ui, sans-serif;
+  font-family: 'Urbanist', system-ui, sans-serif;
   font-size: clamp(34px, 3.7vw, 56px);
   font-weight: 500;
   line-height: 1.08;
@@ -128,7 +128,7 @@ onBeforeUnmount(() => io?.disconnect())
 }
 .ms-row:hover .ms-ic { background: #f2540c; color: #fff; }
 
-.ms-tx h3 { margin: 0; font-family: 'Inter Display', Inter, system-ui, sans-serif; font-size: clamp(18px, 1.5vw, 21px); font-weight: 500; letter-spacing: -0.02em; line-height: 1.25; }
+.ms-tx h3 { margin: 0; font-family: 'Urbanist', system-ui, sans-serif; font-size: clamp(18px, 1.5vw, 21px); font-weight: 500; letter-spacing: -0.02em; line-height: 1.25; }
 .ms-tx p { margin: 6px 0 0; font-size: 15px; line-height: 1.6; color: #64748b; }
 
 @media (max-width: 900px) {

@@ -468,7 +468,7 @@ onBeforeUnmount(() => {
 .s4-security-title {
   margin: 18px 0 0;
   padding-bottom: 0.2em;
-  font-family: 'Inter Display', Inter, system-ui, sans-serif;
+  font-family: 'Urbanist', system-ui, sans-serif;
   font-size: clamp(32px, 4.2vw, 62px);
   font-weight: 500;
   line-height: 1.12;
@@ -484,7 +484,7 @@ onBeforeUnmount(() => {
 .s4-security-sub {
   max-width: 820px;
   margin: 14px auto 0;
-  font-family: 'Inter Display', Inter, system-ui, sans-serif;
+  font-family: 'Urbanist', system-ui, sans-serif;
   font-size: clamp(15px, 1vw, 18px);
   font-weight: 500;
   line-height: 1.45;

@@ -97,8 +97,6 @@ const leads = computed(() => leadsBySource.filter((lead) => lead.src === current
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
-
 .cap {
   --orange: #e85b32;
   --ink: #252525;
@@ -109,7 +107,7 @@ const leads = computed(() => leadsBySource.filter((lead) => lead.src === current
   padding: 88px 0;
   color: var(--ink);
   background: #fff;
-  font-family: "Inter", system-ui, sans-serif;
+  font-family: 'Urbanist', system-ui, sans-serif;
 }
 .cap *, .cap *::before, .cap *::after { box-sizing: border-box; }
 

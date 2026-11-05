@@ -173,7 +173,7 @@ onBeforeUnmount(() => {
 .is-copy { display: flex; flex-direction: column; align-items: flex-start; padding: clamp(24px, 3.2vw, 48px); min-height: 0; }
 .is-title {
   margin: 0;
-  font-family: 'Inter Display', Inter, system-ui, sans-serif;
+  font-family: 'Urbanist', system-ui, sans-serif;
   font-size: clamp(30px, 3.4vw, 50px);
   font-weight: 500;
   line-height: 1.08;

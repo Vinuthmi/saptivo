@@ -96,7 +96,7 @@ onBeforeUnmount(() => io && io.disconnect())
 .ic-head { display: grid; grid-template-columns: 1fr; gap: 16px; justify-items: center; margin-bottom: clamp(32px, 4vw, 56px); text-align: center; }
 .ic-title {
   margin: 0;
-  font-family: 'Inter Display', Inter, system-ui, sans-serif;
+  font-family: 'Urbanist', system-ui, sans-serif;
   font-size: clamp(36px, 5vw, 64px);
   font-weight: 500;
   line-height: 1.08;
@@ -106,7 +106,7 @@ onBeforeUnmount(() => io && io.disconnect())
 .ic-lead {
   max-width: 820px;
   margin: 14px auto 0;
-  font-family: 'Inter Display', Inter, system-ui, sans-serif;
+  font-family: 'Urbanist', system-ui, sans-serif;
   font-size: clamp(15px, 1.1vw, 18px);
   font-weight: 500;
   line-height: 1.5;
@@ -139,7 +139,7 @@ onBeforeUnmount(() => io && io.disconnect())
 }
 .in .card { opacity: 1; transform: none; }
 .in .card:hover { transform: translateY(-4px); transition-delay: 0s; box-shadow: 0 24px 40px -24px rgba(15, 23, 42, 0.45); }
-.card h3 { margin: 0; font-family: 'Inter Display', Inter, system-ui, sans-serif; font-size: clamp(20px, 2vw, 28px); font-weight: 500; letter-spacing: -0.035em; line-height: 1.12; }
+.card h3 { margin: 0; font-family: 'Urbanist', system-ui, sans-serif; font-size: clamp(20px, 2vw, 28px); font-weight: 500; letter-spacing: -0.035em; line-height: 1.12; }
 .card p { margin: 8px 0 0; font-size: 14px; line-height: 1.5; opacity: 0.9; }
 .card-tx { position: relative; z-index: 2; }
 

@@ -187,7 +187,7 @@ const plan = [
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
 
 .cm {
   --cm-ink: #14152b;
@@ -245,7 +245,7 @@ const plan = [
 .cm-sub {
   max-width: 720px;
   margin: 14px 0 0;
-  font-family: 'Inter Display', Inter, system-ui, sans-serif;
+  font-family: 'Urbanist', system-ui, sans-serif;
   font-size: clamp(15px, 1.1vw, 18px);
   font-weight: 500;
   line-height: 1.5;
@@ -266,7 +266,7 @@ const plan = [
   margin: 0;
   padding-bottom: 0.1em;
   color: #0f172a;
-  font-family: 'Inter Display', Inter, system-ui, sans-serif;
+  font-family: 'Urbanist', system-ui, sans-serif;
   font-size: clamp(32px, 4.2vw, 62px);
   font-weight: 500;
   line-height: 1.12;

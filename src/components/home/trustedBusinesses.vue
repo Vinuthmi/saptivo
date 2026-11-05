@@ -42,7 +42,7 @@ const clients = [
   max-width: 760px;
   margin: 0 auto;
   padding-bottom: 0.2em;
-  font-family: 'Inter Display', Inter, system-ui, sans-serif;
+  font-family: 'Urbanist', system-ui, sans-serif;
   color: #0f172a;
   font-size: clamp(32px, 4.2vw, 62px);
   font-weight: 500;

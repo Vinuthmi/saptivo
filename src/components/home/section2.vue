@@ -249,7 +249,7 @@ onBeforeUnmount(() => {
   padding-bottom: 0.15em;
   text-align: center;
   text-wrap: balance;
-  font-family: 'Inter Display', Inter, system-ui, sans-serif;
+  font-family: 'Urbanist', system-ui, sans-serif;
   font-size: clamp(32px, 4.2vw, 62px);
   font-weight: 500;
   line-height: 1.12;
@@ -332,7 +332,7 @@ onBeforeUnmount(() => {
 .op-solution .op-tag i { background: rgba(255, 255, 255, 0.25); }
 
 /* caption */
-.op-cap h3 { margin: 0; font-family: 'Inter Display', Inter, system-ui, sans-serif; font-size: clamp(20px, 1.8vw, 26px); font-weight: 500; letter-spacing: -0.03em; line-height: 1.2; transition: font-size 0.5s ease; }
+.op-cap h3 { margin: 0; font-family: 'Urbanist', system-ui, sans-serif; font-size: clamp(20px, 1.8vw, 26px); font-weight: 500; letter-spacing: -0.03em; line-height: 1.2; transition: font-size 0.5s ease; }
 .op-panel.on .op-cap h3 { font-size: clamp(24px, 2.2vw, 32px); }
 .op-cap { max-width: 640px; }
 .op-desc { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.7s cubic-bezier(0.2, 0.8, 0.2, 1); }

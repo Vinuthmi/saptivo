@@ -392,7 +392,7 @@ onBeforeUnmount(() => {
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
 
 .fs {
   --o: #f2540c;
@@ -454,7 +454,7 @@ onBeforeUnmount(() => {
   padding-bottom: 0.1em;
   padding-top: 0.8em;
   color: #0f172a;
-  font-family: 'Inter Display', Inter, system-ui, sans-serif;
+  font-family: 'Urbanist', system-ui, sans-serif;
   font-size: clamp(32px, 4.2vw, 62px);
   font-weight: 500;
   line-height: 1.12;
@@ -473,7 +473,7 @@ onBeforeUnmount(() => {
 .fs-head p {
   margin: clamp(6px, 1.2vh, 12px) auto 0;
   max-width: 600px;
-  font-family: 'Inter Display', Inter, system-ui, sans-serif;
+  font-family: 'Urbanist', system-ui, sans-serif;
   font-size: clamp(15px, 1vw, 18px);
   font-weight: 500;
   line-height: 1.45;
@@ -1211,7 +1211,7 @@ onBeforeUnmount(() => {
 .cp1 h3 {
   margin: 0;
   max-width: 560px;
-  font-family: 'Inter Display', Inter, system-ui, sans-serif;
+  font-family: 'Urbanist', system-ui, sans-serif;
   font-size: clamp(18px, min(1.9vw, 3.2vh), 26px);
   font-weight: 600;
   line-height: 1.25;
@@ -1220,7 +1220,7 @@ onBeforeUnmount(() => {
 .cp1 p {
   margin: 4px 0 0;
   max-width: 580px;
-  font-family: 'Inter Display', Inter, system-ui, sans-serif;
+  font-family: 'Urbanist', system-ui, sans-serif;
   font-size: clamp(13px, 1.1vw, 15px);
   font-weight: 500;
   line-height: 1.5;

@@ -145,7 +145,6 @@ const partnerLinks = [
 </template>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 </style>
 
 <style scoped>
@@ -156,7 +155,7 @@ const partnerLinks = [
   padding: 0;
   background: #fff;
   color: #17191d;
-  font-family: 'Inter', 'Poppins', Arial, sans-serif;
+  font-family: 'Urbanist', 'Poppins', Arial, sans-serif;
   overflow: hidden;
 }
 .site-footer::before {
@@ -199,7 +198,7 @@ const partnerLinks = [
   max-width: 560px;
   margin: 22px auto 32px;
   color: #475569;
-  font-family: 'Inter Display', Inter, system-ui, sans-serif;
+  font-family: 'Urbanist', system-ui, sans-serif;
   font-size: clamp(15px, 1vw, 18px);
   font-weight: 500;
   line-height: 1.45;

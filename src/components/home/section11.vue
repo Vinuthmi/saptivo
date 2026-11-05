@@ -114,8 +114,6 @@ onBeforeUnmount(() => io?.disconnect());
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
-
 .cta {
   --orange: #ff6338;
   --ink: #171717;
@@ -128,7 +126,7 @@ onBeforeUnmount(() => io?.disconnect());
   padding-top: clamp(55px, 8vw, 130px);
   background: #fff;
   color: var(--ink);
-  font-family: "Inter", sans-serif;
+  font-family: 'Urbanist', sans-serif;
 }
 
 .cta *,
@@ -364,7 +362,7 @@ onBeforeUnmount(() => io?.disconnect());
   margin: 0;
 
   color: #0f172a;
-  font-family: "Inter Display", Inter, system-ui, sans-serif;
+  font-family: 'Urbanist', system-ui, sans-serif;
   font-size: clamp(46px, 4vw, 76px);
   font-weight: 500;
   line-height: 1.12;
@@ -386,7 +384,7 @@ onBeforeUnmount(() => io?.disconnect());
   margin: 20px 0 0;
 
   color: #475569;
-  font-family: 'Inter Display', Inter, system-ui, sans-serif;
+  font-family: 'Urbanist', system-ui, sans-serif;
   font-size: clamp(15px, 1vw, 18px);
   font-weight: 500;
   line-height: 1.45;
