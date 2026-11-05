@@ -109,7 +109,7 @@ onBeforeUnmount(() => io && io.disconnect())
 @keyframes chipin { to { opacity: 1; transform: none; } }
 @keyframes bob { 50% { translate: 0 -5px; } }
 
-@media (max-width: 860px) {2
+@media (max-width: 860px) {
   .ico-card { grid-template-columns: 1fr; border-radius: 26px; }
   .ico-chips { justify-content: flex-start; }
 }
