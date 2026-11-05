@@ -10,13 +10,13 @@ defineOptions({ name: 'IpsovaNavbar' })
  *   CTAs: Book a Demo (/demo/) and Free Trial (/free-trial/)
  */
 
+const logoSrc = `${import.meta.env.BASE_URL}saptivo-logo.png`
+
 const menuOpen = ref(false)
 const openMenu = ref(null) // 'features' | 'industries' | 'reseller' | null (desktop dropdowns)
 const mobileSection = ref(null) // open accordion in the mobile menu
 const activeGroup = ref(0) // active tab in the Features mega menu
 const scrolled = ref(false)
-
-const logoSrc = `${import.meta.env.BASE_URL}saptivo-logo.png`
 
 /* ---------------- ICONS (24px outline set, drawn inline so no icon package is needed) ---------------- */
 const c = (x, y, r) => `M${x - r} ${y}a${r} ${r} 0 1 0 ${2 * r} 0a${r} ${r} 0 1 0 ${-2 * r} 0`
@@ -226,7 +226,7 @@ onBeforeUnmount(() => {
 <template>
   <header class="nav-shell" :class="{ scrolled, expanded: menuOpen }">
     <nav class="glass-nav" aria-label="Main navigation">
-      <!-- BRAND (logo is painted dark blue through a mask, so any transparent PNG works) -->
+      <!-- BRAND (original logo, painted through a mask: dark blue letters, orange circular end, so any transparent PNG works) -->
       <router-link to="/" class="brand" aria-label="Saptivo CRM home" @click="closeAll">
         <span class="brand-logo" role="img" aria-label="Saptivo CRM" :style="{ '--logo': `url(${logoSrc})` }"></span>
       </router-link>
@@ -517,7 +517,8 @@ onBeforeUnmount(() => {
   --navy: #1b263b;
   --blue: #0a2a66;
   --ash: #e4e7ec;
-  --logo-blue: #0a2a66; /* dark blue used for the logo */
+  --logo-blue: #061a4a; /* dark blue used for the logo */
+  --logo-orange: #e2540f; /* dark orange used for the logo */
   --muted: #5d6b82;
   --beige: #d4c4a8;
   --beige-soft: #f4efe4;
@@ -576,7 +577,7 @@ onBeforeUnmount(() => {
   display: block;
   width: 156px;
   height: 38px;
-  background: var(--logo-blue);
+  background: linear-gradient(90deg, var(--logo-blue) 82%, var(--logo-orange) 82%);
   -webkit-mask: var(--logo) left center / contain no-repeat;
   mask: var(--logo) left center / contain no-repeat;
 }
@@ -882,16 +883,16 @@ onBeforeUnmount(() => {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* "Book a Demo" in ash, "Free Trial" in the logo dark blue */
+/* Match the hero buttons: black for the demo and orange for the trial. */
 .demo-btn {
-  color: #1b263b;
-  background: var(--ash);
+  color: #fff;
+  background: #0b0c0e;
   box-shadow: none;
 }
 
 .start-btn {
   color: #fff;
-  background: var(--logo-blue);
+  background: linear-gradient(180deg, #ff7a45, #f2531f);
   box-shadow: 0 8px 20px -8px rgba(10, 42, 102, 0.5);
 }
 
@@ -901,11 +902,11 @@ onBeforeUnmount(() => {
 }
 
 .demo-btn:hover {
-  background: #d8dce3;
+  background: #202124;
 }
 
 .start-btn:hover {
-  background: #0d3680;
+  background: linear-gradient(180deg, #ff7a45, #f2531f);
   box-shadow: 0 12px 26px -8px rgba(10, 42, 102, 0.6);
 }
 

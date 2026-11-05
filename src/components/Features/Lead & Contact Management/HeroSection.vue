@@ -32,6 +32,8 @@ defineOptions({ name: "FeaturesHero" });
   --orange: #ff6338;
   --ink: #17191d;
   --paper: #fff;
+  --title: clamp(46px, 4.2vw, 104px);
+
   position: relative;
   isolation: isolate;
   overflow: clip;
@@ -83,13 +85,8 @@ defineOptions({ name: "FeaturesHero" });
   padding: 112px 0 28px;
 }
 h1 {
-  margin: 0;
-  font-family: Urbanist, "Urbanist Placeholder", sans-serif;
-  font-size: clamp(60px, 5vw, 72px);
-  font-weight: 600;
-  line-height: 1.1;
-  letter-spacing: -1px;
-  color: #0f172a;
+  margin: 0; font-weight: 500; line-height: 1.12; letter-spacing: -0.06em; color: #0f172a;
+  font-size: var(--title);
   animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
 .accent {
@@ -128,9 +125,8 @@ h1 {
   .content { padding-top: 96px; }
 }
 @media (max-width: 760px) {
-  .hero { padding-bottom: 64px; }
+  .hero { --title: clamp(38px, 10.5vw, 64px); padding-bottom: 64px; }
   .content { width: calc(100% - 32px); padding: 76px 0 24px; }
-  h1 { font-size: clamp(40px, 9vw, 58px); }
   .lead { font-size: 15px; margin-top: 22px; }
   .actions { width: 100%; gap: 10px; margin-top: 28px; }
   .btn { min-height: 50px; padding: 0 20px; font-size: 14px; }
