@@ -13,60 +13,115 @@ defineOptions({ name: 'IpsovaNavbar' })
 const menuOpen = ref(false)
 const openMenu = ref(null) // 'features' | 'industries' | 'reseller' | null (desktop dropdowns)
 const mobileSection = ref(null) // open accordion in the mobile menu
+const activeGroup = ref(0) // active tab in the Features mega menu
 const scrolled = ref(false)
 
 const logoSrc = `${import.meta.env.BASE_URL}saptivo-logo.png`
 
-/* ---------------- FEATURES (all 16 pages, in the order of the doc's sitemap) ---------------- */
-const features = [
-  { title: 'Lead & Contact Management', href: '/features/lead-management/' },
-  { title: 'Sales Pipeline & Deals', href: '/features/sales-pipeline/' },
-  { title: 'Quotations & Invoicing', href: '/features/quotations-invoicing/' },
-  { title: 'WhatsApp CRM', href: '/features/whatsapp-crm/' },
-  { title: '3CX Call Integration', href: '/features/3cx-crm-integration/' },
-  { title: 'Vodia Integration & AI Calls', href: '/features/vodia-integration/' },
-  { title: 'Workflow Automation', href: '/features/workflow-automation/' },
-  { title: 'Multi-Branch Management', href: '/features/multi-branch-management/' },
-  { title: 'Inventory & Multi-Warehouse', href: '/features/inventory-management/' },
-  { title: 'Service & AMC Management', href: '/features/service-maintenance-management/' },
-  { title: 'Help Desk & Ticketing', href: '/features/help-desk/' },
-  { title: 'Marketing Campaigns', href: '/features/marketing-campaigns/' },
-  { title: 'Reports & Analytics', href: '/features/reports-analytics/' },
-  { title: 'AI CRM', href: '/features/ai-crm/' },
-  { title: 'Customer Portal', href: '/features/customer-portal/' },
-  { title: 'Mobile CRM', href: '/features/mobile-crm/' }
+/* ---------------- ICONS (24px outline set, drawn inline so no icon package is needed) ---------------- */
+const c = (x, y, r) => `M${x - r} ${y}a${r} ${r} 0 1 0 ${2 * r} 0a${r} ${r} 0 1 0 ${-2 * r} 0`
+const ICONS = {
+  users: ['M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2', c(9, 7, 4), 'M22 21v-2a4 4 0 0 0-3-3.87', 'M16 3.13a4 4 0 0 1 0 7.75'],
+  userPlus: ['M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2', c(9, 7, 4), 'M19 8v6', 'M22 11h-6'],
+  pipeline: ['M3 3v18h18', 'm19 9-5 5-4-4-3 3'],
+  file: ['M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z', 'M14 2v6h6', 'M16 13H8', 'M16 17H8', 'M10 9H8'],
+  chat: ['M7.9 20A9 9 0 1 0 4 16.1L2 22z'],
+  phone: ['M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z'],
+  sparkles: ['M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z', 'M19 17v4', 'M17 19h4'],
+  zap: ['M13 2 3 14h9l-1 8 10-12h-9z'],
+  store: ['M3 9l1-5h16l1 5', 'M4 9v11h16V9', 'M9 20v-6h6v6', 'M3 9a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0'],
+  box: ['M21 8l-9-5-9 5v8l9 5 9-5z', 'M3.3 7 12 12l8.7-5', 'M12 22V12'],
+  wrench: ['M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z'],
+  lifebuoy: [c(12, 12, 10), c(12, 12, 4), 'm4.93 4.93 4.24 4.24', 'm14.83 9.17 4.24-4.24', 'm14.83 14.83 4.24 4.24', 'm9.17 14.83-4.24 4.24'],
+  megaphone: ['m3 11 18-5v12L3 14v-3z', 'M11.6 16.8a3 3 0 1 1-5.8-1.6'],
+  chart: ['M12 20V10', 'M18 20V4', 'M6 20v-4'],
+  globe: [c(12, 12, 10), 'M2 12h20', 'M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z'],
+  mobile: ['M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z', 'M12 18h.01'],
+  cart: ['M3 3h2l2.7 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 7H6', c(10, 20.5, 1), c(18, 20.5, 1)],
+  truck: ['M1 3h15v13H1z', 'M16 8h4l3 3v5h-7z', c(5.5, 18.5, 2.5), c(18.5, 18.5, 2.5)],
+  clipboard: ['M9 2h6v4H9z', 'M7 4H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2', 'm9 14 2 2 4-4'],
+  rocket: ['M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z', 'M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z'],
+  arrow: ['M5 12h14', 'm13 6 6 6-6 6']
+}
+
+/* ---------------- FEATURES (all 16 pages, grouped like the /features/ hub) ---------------- */
+const featureGroups = [
+  {
+    title: 'Win more customers',
+    items: [
+      { title: 'Lead & Contact Management', href: '/features/lead-management/', icon: 'users' },
+      { title: 'Sales Pipeline & Deals', href: '/features/sales-pipeline/', icon: 'pipeline' },
+      { title: 'Quotations & Invoicing', href: '/features/quotations-invoicing/', icon: 'file' },
+      { title: 'Marketing Campaigns', href: '/features/marketing-campaigns/', icon: 'megaphone' }
+    ]
+  },
+  {
+    title: 'Talk to customers on every channel',
+    items: [
+      { title: 'WhatsApp CRM', href: '/features/whatsapp-crm/', icon: 'chat' },
+      { title: '3CX Call Integration', href: '/features/3cx-crm-integration/', icon: 'phone' },
+      { title: 'Vodia Integration & AI Calls', href: '/features/vodia-integration/', icon: 'sparkles' },
+      { title: 'Customer Portal', href: '/features/customer-portal/', icon: 'globe' },
+      { title: 'Mobile CRM', href: '/features/mobile-crm/', icon: 'mobile' }
+    ]
+  },
+  {
+    title: 'Run operations and after-sales service',
+    items: [
+      { title: 'Service & AMC Management', href: '/features/service-maintenance-management/', icon: 'wrench' },
+      { title: 'Help Desk & Ticketing', href: '/features/help-desk/', icon: 'lifebuoy' },
+      { title: 'Inventory & Multi-Warehouse', href: '/features/inventory-management/', icon: 'box' },
+      { title: 'Multi-Branch Management', href: '/features/multi-branch-management/', icon: 'store' }
+    ]
+  },
+  {
+    title: 'Work smarter',
+    items: [
+      { title: 'Workflow Automation', href: '/features/workflow-automation/', icon: 'zap' },
+      { title: 'Reports & Analytics', href: '/features/reports-analytics/', icon: 'chart' },
+      { title: 'AI CRM', href: '/features/ai-crm/', icon: 'sparkles' }
+    ]
+  }
 ]
+
+/* flat list for the mobile menu */
+const features = featureGroups.flatMap((g) => g.items)
 
 /* ---------------- INDUSTRIES (names, URLs and copy from the /industries/ hub) ---------------- */
 const industries = [
   {
     title: 'Retail & Supermarkets',
     description: 'Multi-counter checkouts, instant inventory audits, VIP loyalty tiers and WhatsApp receipts',
-    href: '/industries/retail/'
+    href: '/industries/retail/',
+    icon: 'cart'
   },
   {
     title: 'Wholesale & Distribution',
     description: 'Bulk tier pricing, dealer credit limits and repayment tracking',
-    href: '/industries/wholesale-distribution/'
+    href: '/industries/wholesale-distribution/',
+    icon: 'truck'
   },
   {
     title: 'Contractors & Services',
     description: 'Job tracking from enquiry to final payment, milestone deposits and mobile receipts',
-    href: '/industries/contractors-services/'
+    href: '/industries/contractors-services/',
+    icon: 'clipboard'
   },
   {
     title: 'Field Service & Maintenance',
     description: 'Installed asset registers, annual maintenance contracts and technician apps',
-    href: '/industries/field-service/'
+    href: '/industries/field-service/',
+    icon: 'wrench'
   },
   {
     title: 'Startups & SMEs',
     description: 'Zero-friction quotations and a clear client pipeline, with no setup fee',
-    href: '/industries/startups/'
+    href: '/industries/startups/',
+    icon: 'rocket'
   }
 ]
 
-/* photos on the right-hand help card of each mega menu (swap freely) */
+/* photos on the right-hand card of each mega menu (swap freely) */
 const menuPhotos = {
   features: 'https://images.unsplash.com/photo-1742836531271-98fd8151d257?w=900&q=80&auto=format&fit=crop',
   industries: 'https://images.unsplash.com/photo-1753354868616-544973e405c9?w=900&q=80&auto=format&fit=crop'
@@ -78,8 +133,8 @@ const simpleMenus = [
     key: 'reseller',
     label: 'Reseller',
     items: [
-      { title: 'Reseller Program', description: 'Partner with Saptivo and grow with us', href: '/reseller/' },
-      { title: 'Become a Reseller', description: 'Apply to join the program', href: '/reseller/signup/' }
+      { title: 'Reseller Program', description: 'Partner with Saptivo and grow with us', href: '/reseller/', icon: 'users' },
+      { title: 'Become a Reseller', description: 'Apply to join the program', href: '/reseller/signup/', icon: 'userPlus' }
     ]
   }
 ]
@@ -139,6 +194,7 @@ function toggleMobile(key) {
 
 function closeAll() {
   clearTimeout(closeTimer)
+  activeGroup.value = 0
   openMenu.value = null
   menuOpen.value = false
   mobileSection.value = null
@@ -170,19 +226,15 @@ onBeforeUnmount(() => {
 <template>
   <header class="nav-shell" :class="{ scrolled, expanded: menuOpen }">
     <nav class="glass-nav" aria-label="Main navigation">
-      <!-- BRAND -->
+      <!-- BRAND (logo is painted dark blue through a mask, so any transparent PNG works) -->
       <router-link to="/" class="brand" aria-label="Saptivo CRM home" @click="closeAll">
-        <img class="brand-logo" :src="logoSrc" alt="Saptivo CRM" />
+        <span class="brand-logo" role="img" aria-label="Saptivo CRM" :style="{ '--logo': `url(${logoSrc})` }"></span>
       </router-link>
 
       <!-- =================================================== DESKTOP LINKS -->
       <div class="desktop-links">
         <!-- FEATURES (mega) -->
-        <div
-          class="nav-dd"
-          @pointerenter="openOn('features', $event)"
-          @pointerleave="closeSoon($event)"
-        >
+        <div class="nav-dd" @pointerenter="openOn('features', $event)" @pointerleave="closeSoon($event)">
           <router-link
             to="/features/"
             class="nav-link"
@@ -193,35 +245,45 @@ onBeforeUnmount(() => {
             @click="onHubClick('features', $event)"
           >
             Features
-            <svg viewBox="0 0 16 16" class="chevron" fill="none" aria-hidden="true" :class="{ rotate: openMenu === 'features' }">
-              <path d="m4 6 4 4 4-4" />
-            </svg>
+            <svg viewBox="0 0 16 16" class="chevron" fill="none" aria-hidden="true" :class="{ rotate: openMenu === 'features' }"><path d="m4 6 4 4 4-4" /></svg>
           </router-link>
 
           <Transition name="mega">
-            <div v-if="openMenu === 'features'" class="mega-menu mm mm-narrow mm-wide">
-              <div class="mm-grid mm-grid-2">
-                <!-- all 16 feature pages -->
-                <div class="mm-left mm-left-list mm-two">
-                  <router-link
-                    v-for="item in features"
-                    :key="item.href"
-                    :to="item.href"
-                    class="mm-cat"
-                    @click="closeAll"
+            <div v-if="openMenu === 'features'" class="mega-menu mm mm-wide">
+              <div class="mm-grid mm-grid-3">
+                <!-- 1 · groups -->
+                <div class="mm-tabs">
+                  <button
+                    v-for="(group, gi) in featureGroups"
+                    :key="group.title"
+                    type="button"
+                    class="mm-tab"
+                    :class="{ on: activeGroup === gi }"
+                    @pointerenter="activeGroup = gi"
+                    @focus="activeGroup = gi"
+                    @click="activeGroup = gi"
                   >
-                    <span>{{ item.title }}</span>
-                    <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10h12m-5-5 5 5-5 5" /></svg>
-                  </router-link>
-                  <p class="mm-note"><i></i>16 features, one shared customer record</p>
+                    {{ group.title }}
+                  </button>
+                  <router-link to="/features/" class="mm-all" @click="closeAll">All CRM features</router-link>
                 </div>
 
-                <!-- help card -->
+                <!-- 2 · pages of the active group -->
+                <div class="mm-body">
+                  <p class="mm-h">{{ featureGroups[activeGroup].title }}</p>
+                  <div class="mm-items mm-items-2">
+                    <router-link v-for="item in featureGroups[activeGroup].items" :key="item.href" :to="item.href" class="mm-it" @click="closeAll">
+                      <svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path v-for="(d, i) in ICONS[item.icon]" :key="i" :d="d" /></svg>
+                      <span class="mm-it-t"><strong>{{ item.title }}</strong></span>
+                    </router-link>
+                  </div>
+                </div>
+
                 <div class="mm-card">
                   <img :src="menuPhotos.features" alt="" loading="lazy" decoding="async" @error="$event.target.style.display = 'none'" />
-                  <div class="mm-card-box">
+                  <div class="mm-card-ov">
                     <strong>Can't find the feature you need?</strong>
-                    <router-link to="/demo/" class="mm-cta" @click="closeAll">Book a Demo</router-link>
+                    <router-link to="/demo/" class="mm-go" aria-label="Book a Demo" @click="closeAll"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></svg></router-link>
                   </div>
                 </div>
               </div>
@@ -230,11 +292,7 @@ onBeforeUnmount(() => {
         </div>
 
         <!-- INDUSTRIES (mega) -->
-        <div
-          class="nav-dd"
-          @pointerenter="openOn('industries', $event)"
-          @pointerleave="closeSoon($event)"
-        >
+        <div class="nav-dd" @pointerenter="openOn('industries', $event)" @pointerleave="closeSoon($event)">
           <router-link
             to="/industries/"
             class="nav-link"
@@ -245,35 +303,32 @@ onBeforeUnmount(() => {
             @click="onHubClick('industries', $event)"
           >
             Industries
-            <svg viewBox="0 0 16 16" class="chevron" fill="none" aria-hidden="true" :class="{ rotate: openMenu === 'industries' }">
-              <path d="m4 6 4 4 4-4" />
-            </svg>
+            <svg viewBox="0 0 16 16" class="chevron" fill="none" aria-hidden="true" :class="{ rotate: openMenu === 'industries' }"><path d="m4 6 4 4 4-4" /></svg>
           </router-link>
 
           <Transition name="mega">
-            <div v-if="openMenu === 'industries'" class="mega-menu mm mm-narrow">
-              <div class="mm-grid mm-grid-2">
-                <!-- the 5 industry pages -->
-                <div class="mm-left mm-left-list">
-                  <router-link
-                    v-for="industry in industries"
-                    :key="industry.href"
-                    :to="industry.href"
-                    class="mm-cat"
-                    @click="closeAll"
-                  >
-                    <span>{{ industry.title }}</span>
-                    <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10h12m-5-5 5 5-5 5" /></svg>
-                  </router-link>
-                  <p class="mm-note"><i></i>5 industries, one platform that adapts to yours</p>
+            <div v-if="openMenu === 'industries'" class="mega-menu mm mm-mid">
+              <div class="mm-grid mm-grid-3 mm-grid-sm">
+                <div class="mm-tabs">
+                  <router-link to="/industries/" class="mm-tab on" @click="closeAll">All industries</router-link>
                 </div>
-
-                <!-- help card -->
+                <div class="mm-body">
+                  <p class="mm-h">Industries</p>
+                  <div class="mm-items">
+                    <router-link v-for="industry in industries" :key="industry.href" :to="industry.href" class="mm-it" @click="closeAll">
+                      <svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path v-for="(d, i) in ICONS[industry.icon]" :key="i" :d="d" /></svg>
+                      <span class="mm-it-t">
+                        <strong>{{ industry.title }}</strong>
+                        <small>{{ industry.description }}</small>
+                      </span>
+                    </router-link>
+                  </div>
+                </div>
                 <div class="mm-card">
                   <img :src="menuPhotos.industries" alt="" loading="lazy" decoding="async" @error="$event.target.style.display = 'none'" />
-                  <div class="mm-card-box">
+                  <div class="mm-card-ov">
                     <strong>Don't see your industry?</strong>
-                    <router-link to="/contact/" class="mm-cta" @click="closeAll">Talk to our team</router-link>
+                    <router-link to="/contact/" class="mm-go" aria-label="Contact us" @click="closeAll"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></svg></router-link>
                   </div>
                 </div>
               </div>
@@ -282,13 +337,7 @@ onBeforeUnmount(() => {
         </div>
 
         <!-- PLAIN LINKS -->
-        <router-link
-          v-for="item in plainLinks"
-          :key="item.href"
-          :to="item.href"
-          class="nav-link"
-          @click="closeAll"
-        >
+        <router-link v-for="item in plainLinks" :key="item.href" :to="item.href" class="nav-link" @click="closeAll">
           {{ item.label }}
         </router-link>
 
@@ -309,30 +358,32 @@ onBeforeUnmount(() => {
             @click.stop="toggleMenu(menu.key)"
           >
             {{ menu.label }}
-            <svg viewBox="0 0 16 16" class="chevron" fill="none" aria-hidden="true" :class="{ rotate: openMenu === menu.key }">
-              <path d="m4 6 4 4 4-4" />
-            </svg>
+            <svg viewBox="0 0 16 16" class="chevron" fill="none" aria-hidden="true" :class="{ rotate: openMenu === menu.key }"><path d="m4 6 4 4 4-4" /></svg>
           </button>
 
           <Transition name="mega">
-            <div v-if="openMenu === menu.key" class="mega-menu mm mm-narrow">
-              <div class="mm-grid mm-grid-2">
-                <div class="mm-left mm-left-list">
-                  <router-link v-for="item in menu.items" :key="item.href" :to="item.href" class="mm-cat mm-cat-desc" @click="closeAll">
-                    <span>
-                      <strong>{{ item.title }}</strong>
-                      <small>{{ item.description }}</small>
-                    </span>
-                    <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10h12m-5-5 5 5-5 5" /></svg>
-                  </router-link>
-                  <p class="mm-note"><i></i>Earn recurring income reselling Saptivo CRM</p>
+            <div v-if="openMenu === menu.key" class="mega-menu mm mm-mid">
+              <div class="mm-grid mm-grid-3 mm-grid-sm">
+                <div class="mm-tabs">
+                  <span class="mm-tab on">{{ menu.label }}</span>
                 </div>
-
+                <div class="mm-body">
+                  <p class="mm-h">Earn recurring income reselling Saptivo CRM</p>
+                  <div class="mm-items">
+                    <router-link v-for="item in menu.items" :key="item.href" :to="item.href" class="mm-it" @click="closeAll">
+                      <svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path v-for="(d, i) in ICONS[item.icon]" :key="i" :d="d" /></svg>
+                      <span class="mm-it-t">
+                        <strong>{{ item.title }}</strong>
+                        <small>{{ item.description }}</small>
+                      </span>
+                    </router-link>
+                  </div>
+                </div>
                 <div class="mm-card">
                   <img :src="menuPhotos.features" alt="" loading="lazy" decoding="async" @error="$event.target.style.display = 'none'" />
-                  <div class="mm-card-box">
+                  <div class="mm-card-ov">
                     <strong>Ready to grow with Saptivo?</strong>
-                    <router-link to="/reseller/signup/" class="mm-cta" @click="closeAll">Become a Reseller</router-link>
+                    <router-link to="/reseller/signup/" class="mm-go" aria-label="Become a Reseller" @click="closeAll"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></svg></router-link>
                   </div>
                 </div>
               </div>
@@ -341,13 +392,7 @@ onBeforeUnmount(() => {
         </div>
 
         <!-- ABOUT · BLOG · CONTACT -->
-        <router-link
-          v-for="item in trailingLinks"
-          :key="item.href"
-          :to="item.href"
-          class="nav-link"
-          @click="closeAll"
-        >
+        <router-link v-for="item in trailingLinks" :key="item.href" :to="item.href" class="nav-link" @click="closeAll">
           {{ item.label }}
         </router-link>
       </div>
@@ -455,7 +500,7 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
 /* =========================================================
    ROOT
@@ -468,8 +513,14 @@ onBeforeUnmount(() => {
 .nav-shell {
   --orange: #ff6818;
   --orange-dark: #ed570b;
-  --ink: #17243a;
-  --muted: #657187;
+  --ink: #1b263b;
+  --navy: #1b263b;
+  --blue: #0a2a66;
+  --ash: #e4e7ec;
+  --logo-blue: #0a2a66; /* dark blue used for the logo */
+  --muted: #5d6b82;
+  --beige: #d4c4a8;
+  --beige-soft: #f4efe4;
   --white: #ffffff;
 
   position: fixed;
@@ -478,11 +529,11 @@ onBeforeUnmount(() => {
   width: 100%;
   z-index: 99999;
   padding: 0 24px;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Outfit', system-ui, sans-serif;
 }
 
 /* =========================================================
-   NAVBAR
+   NAVBAR  (no border, soft shadow around)
 ========================================================= */
 
 .glass-nav {
@@ -495,24 +546,18 @@ onBeforeUnmount(() => {
   min-height: 72px;
   margin: 8px auto 0;
   padding: 11px 13px 11px 25px;
-  border: 1px solid rgba(255, 255, 255, 0.8);
+  border: 0;
   border-radius: 22px;
-  background: rgba(255, 255, 255, 0.82);
+  background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(26px) saturate(170%);
   -webkit-backdrop-filter: blur(26px) saturate(170%);
-  box-shadow:
-    0 2px 5px rgba(27, 39, 59, 0.025),
-    0 12px 35px rgba(27, 39, 59, 0.065),
-    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.04), 0 10px 34px -4px rgba(15, 23, 42, 0.16), 0 2px 8px rgba(15, 23, 42, 0.06);
   transition: background 0.3s ease, box-shadow 0.3s ease, border-radius 0.3s ease, transform 0.3s ease;
 }
 
 .scrolled .glass-nav {
-  background: rgba(255, 255, 255, 0.94);
-  border-color: rgba(255, 255, 255, 0.98);
-  box-shadow:
-    0 18px 50px rgba(27, 39, 59, 0.13),
-    inset 0 1px 0 #fff;
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.05), 0 16px 44px -4px rgba(15, 23, 42, 0.22), 0 3px 10px rgba(15, 23, 42, 0.08);
 }
 
 /* =========================================================
@@ -530,8 +575,10 @@ onBeforeUnmount(() => {
 .brand-logo {
   display: block;
   width: 156px;
-  max-height: 38px;
-  object-fit: contain;
+  height: 38px;
+  background: var(--logo-blue);
+  -webkit-mask: var(--logo) left center / contain no-repeat;
+  mask: var(--logo) left center / contain no-repeat;
 }
 
 /* =========================================================
@@ -554,31 +601,28 @@ onBeforeUnmount(() => {
   padding: 9px 12px;
   border: 0;
   border-radius: 10px;
-  color: #2b374c;
+  color: var(--navy);
   background: transparent;
   text-decoration: none;
   white-space: nowrap;
   font-family: inherit;
-  font-size: 13px;
-  font-weight: 560;
-  letter-spacing: -0.15px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0;
   cursor: pointer;
   transition: color 0.2s ease, background 0.2s ease;
 }
 
 .nav-link:hover,
-.nav-link.active {
-  color: var(--orange-dark);
-  background: rgba(255, 104, 24, 0.08);
-}
-
+.nav-link.active,
 .nav-link.router-link-active {
-  color: var(--orange-dark);
+  color: var(--blue);
+  background: transparent;
 }
 
 .nav-link:focus-visible {
-  outline: 2px solid var(--orange);
-  outline-offset: 1px;
+  outline: none;
+  color: var(--blue);
 }
 
 .chevron {
@@ -601,331 +645,196 @@ onBeforeUnmount(() => {
   position: static; /* mega menus are positioned against the nav bar */
 }
 
-.nav-dd-simple {
-  position: relative; /* simple menus hang under their own trigger */
-}
-
 /* =========================================================
-   MEGA MENU  (categories | links | help card)
+   MEGA MENU  (groups | links with icons)
 ========================================================= */
 
 .mega-menu {
   position: absolute;
-  top: calc(100% + 12px);
+  top: calc(100% + 10px);
   left: 50%;
   transform: translateX(-50%);
   width: min(900px, calc(100vw - 48px));
-  padding: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.92);
-  border-radius: 26px;
-  background: rgba(250, 250, 249, 0.97);
-  backdrop-filter: blur(30px) saturate(170%);
-  -webkit-backdrop-filter: blur(30px) saturate(170%);
-  box-shadow:
-    0 30px 80px rgba(16, 28, 46, 0.16),
-    0 8px 25px rgba(16, 28, 46, 0.07),
-    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  padding: 14px;
+  border: 0;
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 24px 60px -12px rgba(15, 23, 42, 0.18), 0 4px 14px rgba(15, 23, 42, 0.06);
+}
+
+.mm-wide {
+  width: min(1020px, calc(100vw - 48px));
+}
+
+.mm-mid {
+  width: min(780px, calc(100vw - 48px));
 }
 
 /* invisible bridge so the menu stays open while the pointer crosses the gap */
 .mega-menu::before {
   position: absolute;
-  top: -16px;
+  top: -18px;
   left: 0;
   right: 0;
-  height: 16px;
+  height: 18px;
   content: '';
 }
 
 .mm-grid {
   display: grid;
-  grid-template-columns: 250px minmax(0, 1fr) 270px;
-  gap: 10px;
-  min-height: 330px;
+  gap: 14px;
+  min-height: 300px;
 }
 
-/* ---------- 1 · categories ---------- */
+.mm-grid-3 {
+  grid-template-columns: 210px minmax(0, 1fr) 270px;
+}
 
-.mm-left {
+.mm-grid-sm {
+  grid-template-columns: 150px minmax(0, 1fr) 240px;
+  min-height: 280px;
+}
+
+/* ---------- 1 · groups ---------- */
+
+.mm-tabs {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 4px;
-  padding: 12px;
-  border-radius: 18px;
-  background: transparent;
+  padding: 10px 6px 10px 10px;
+  border-right: 1px solid #efe9dc;
 }
 
-.mm-cat {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
+.mm-tab {
+  position: relative;
   width: 100%;
-  padding: 13px 14px;
+  padding: 10px 0 11px;
   border: 0;
-  border-radius: 12px;
-  background: transparent;
-  color: #1a273c;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: #7b879b;
   font-family: inherit;
-  font-size: 12.5px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 500;
   line-height: 1.3;
   text-align: left;
   text-decoration: none;
   cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.mm-tab:hover {
+  color: var(--navy);
+}
+
+.mm-tab.on {
+  color: var(--navy);
+  border-bottom-color: var(--blue);
+}
+
+.mm-all {
+  margin-top: auto;
+  padding: 10px 0 4px;
+  color: var(--blue);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.mm-all:hover {
+  text-decoration: underline;
+}
+
+/* ---------- 2 · links ---------- */
+
+.mm-body {
+  padding: 10px 6px 8px 8px;
+}
+
+.mm-h {
+  margin: 0 0 10px;
+  padding: 0 12px;
+  color: #98a2b3;
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+.mm-items {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2px;
+}
+
+.mm-items-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.mm-it {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 11px 12px;
+  border-radius: 12px;
+  color: var(--navy);
+  text-decoration: none;
   transition: background 0.2s ease, color 0.2s ease;
 }
 
-.mm-cat svg {
-  flex-shrink: 0;
-  width: 14px;
-  height: 14px;
-  stroke: currentColor;
+.mm-it .ic {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+  stroke: #7b879b;
   stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke 0.2s ease, transform 0.2s ease;
 }
 
-.mm-cat svg {
-  opacity: 0;
-  transform: translateX(-4px);
-  transition: opacity 0.2s ease, transform 0.2s ease;
-}
-
-.mm-cat:hover,
-.mm-cat.on {
-  background: #fff1e8;
-  color: var(--orange-dark);
-}
-
-.mm-cat.on {
-  color: var(--orange-dark);
-  box-shadow: 0 4px 12px rgba(255, 104, 24, 0.1);
-}
-
-.mm-cat.on svg,
-.mm-cat:hover svg {
-  opacity: 1;
-  transform: none;
-}
-
-.mm-cat:focus-visible,
-.mm-cta:focus-visible {
-  outline: 2px solid var(--orange);
-  outline-offset: 2px;
-}
-
-/* ---------- 2 · layout variants ---------- */
-
-.mm-narrow {
-  width: min(660px, calc(100vw - 48px));
-}
-
-.mm-grid-2 {
-  grid-template-columns: minmax(0, 1fr) 260px;
-}
-
-.mm-wide {
-  width: min(820px, calc(100vw - 48px));
-}
-
-.mm-left-list {
-  min-height: 330px;
-}
-
-/* all 16 features: two columns, the footer note spans both */
-.mm-two {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  align-content: start;
-  gap: 2px 6px;
-}
-
-.mm-cat-desc strong {
+.mm-it-t strong {
   display: block;
-  font-size: 12.5px;
-  font-weight: 700;
-}
-
-.mm-cat-desc small {
-  display: block;
-  margin-top: 4px;
-  color: #7a879a;
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 500;
+  line-height: 1.3;
+}
+
+.mm-it-t small {
+  display: block;
+  margin-top: 3px;
+  color: #8a96a8;
+  font-size: 12px;
+  font-weight: 400;
   line-height: 1.45;
 }
 
-.mm-cat-desc:hover small,
-.mm-cat-desc.on small {
-  color: #a0613f;
+.mm-it:hover {
+  background: #f1f3f7;
 }
 
-.mm-two .mm-note {
-  grid-column: 1 / -1;
+.mm-it:hover .ic {
+  stroke: var(--blue);
+  transform: scale(1.1);
 }
 
-/* quiet one-line footer inside the left panel */
-.mm-note {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  margin: auto 0 0;
-  padding: 12px 14px 4px;
-  border-top: 1px solid #eceef2;
-  color: #657187;
-  font-size: 11.5px;
-  font-weight: 600;
+.mm-tab:focus-visible,
+.mm-it:focus-visible,
+.mm-go:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
 }
 
-.mm-note i {
-  flex: none;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--orange);
-  box-shadow: 0 0 0 4px rgba(255, 104, 24, 0.16);
-}
+/* ---------- 3 · photo card ---------- */
 
-/* ---------- 3 · help card ---------- */
-
-.mm-card {
-  position: relative;
-  overflow: hidden;
-  border-radius: 18px;
-  background: linear-gradient(160deg, #2a3550, #131b2e);
-}
-
-.mm-card img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.mm-card-box {
-  position: absolute;
-  left: 10px;
-  right: 10px;
-  bottom: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 16px 14px 14px;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.96);
-  text-align: center;
-}
-
-.mm-card-box strong {
-  color: #17243a;
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 1.25;
-  letter-spacing: -0.3px;
-}
-
-.mm-cta {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 42px;
-  border-radius: 10px;
-  background: linear-gradient(180deg, #ff7a45, #f2531f);
-  color: #fff;
-  text-decoration: none;
-  font-size: 12.5px;
-  font-weight: 650;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35), 0 10px 24px rgba(240, 75, 35, 0.3);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.mm-cta:hover {
-  transform: translateY(-2px);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.4), 0 16px 32px rgba(240, 75, 35, 0.4);
-}
-
-/* =========================================================
-   SIMPLE DROPDOWN (Reseller)
-========================================================= */
-
-.simple-menu {
-  position: absolute;
-  top: calc(100% + 12px);
-  left: 50%;
-  transform: translateX(-50%);
-  width: 286px;
-  padding: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.92);
-  border-radius: 15px;
-  background: rgba(250, 251, 252, 0.97);
-  backdrop-filter: blur(30px) saturate(170%);
-  -webkit-backdrop-filter: blur(30px) saturate(170%);
-  box-shadow:
-    0 26px 60px rgba(16, 28, 46, 0.16),
-    0 6px 20px rgba(16, 28, 46, 0.07),
-    inset 0 1px 0 rgba(255, 255, 255, 0.95);
-}
-
-.simple-menu::before {
-  position: absolute;
-  top: -16px;
-  left: 0;
-  right: 0;
-  height: 16px;
-  content: '';
-}
-
-.simple-link {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 11px 12px;
-  border-radius: 9px;
-  color: #1a273c;
-  text-decoration: none;
-  transition: background 0.2s ease;
-}
-
-.simple-link strong {
-  display: block;
-  font-size: 12.5px;
-  font-weight: 700;
-  transition: color 0.2s ease;
-}
-
-.simple-link small {
-  display: block;
-  margin-top: 3px;
-  color: #7a879a;
-  font-size: 10.5px;
-  line-height: 1.4;
-}
-
-.simple-link svg {
-  flex-shrink: 0;
-  width: 14px;
-  height: 14px;
-  stroke: currentColor;
-  stroke-width: 1.6;
-  opacity: 0;
-  transform: translateX(-4px);
-  transition: opacity 0.2s ease, transform 0.2s ease;
-}
-
-.simple-link:hover {
-  background: #fff;
-}
-
-.simple-link:hover strong {
-  color: var(--orange);
-}
-
-.simple-link:hover svg {
-  opacity: 1;
-  transform: none;
-  color: var(--orange);
-}
+.mm-card { position: relative; overflow: hidden; border-radius: 16px; background: linear-gradient(160deg, #415a77, #0d1b2a); }
+.mm-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.mm-card::after { position: absolute; inset: 0; content: ''; background: linear-gradient(to top, rgba(13, 27, 42, 0.88) 8%, rgba(13, 27, 42, 0.1) 62%); }
+.mm-card-ov { position: absolute; z-index: 1; left: 16px; right: 14px; bottom: 16px; display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
+.mm-card-ov strong { color: #fff; font-size: 17px; font-weight: 500; line-height: 1.25; }
+.mm-go { display: grid; flex: none; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: #fff; color: var(--navy); transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease; }
+.mm-go svg { width: 16px; height: 16px; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.mm-go:hover { background: var(--blue); color: #fff; transform: translateX(2px); }
 
 /* =========================================================
    MENU ANIMATION
@@ -968,22 +877,22 @@ onBeforeUnmount(() => {
   border-radius: 999px;
   text-decoration: none;
   white-space: nowrap;
-  font-size: 12px;
-  font-weight: 650;
+  font-size: 13.5px;
+  font-weight: 500;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* same two buttons as the hero: black "Book a Demo", orange "Free Trial" */
+/* "Book a Demo" in ash, "Free Trial" in the logo dark blue */
 .demo-btn {
-  color: #fff;
-  background: #0b0c0e;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14), 0 10px 24px rgba(0, 0, 0, 0.18);
+  color: #1b263b;
+  background: var(--ash);
+  box-shadow: none;
 }
 
 .start-btn {
   color: #fff;
-  background: linear-gradient(180deg, #ff7a45, #f2531f);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35), 0 10px 24px rgba(240, 75, 35, 0.3);
+  background: var(--logo-blue);
+  box-shadow: 0 8px 20px -8px rgba(10, 42, 102, 0.5);
 }
 
 .demo-btn:hover,
@@ -992,11 +901,12 @@ onBeforeUnmount(() => {
 }
 
 .demo-btn:hover {
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.28), 0 16px 32px rgba(0, 0, 0, 0.28);
+  background: #d8dce3;
 }
 
 .start-btn:hover {
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.4), 0 16px 32px rgba(240, 75, 35, 0.4);
+  background: #0d3680;
+  box-shadow: 0 12px 26px -8px rgba(10, 42, 102, 0.6);
 }
 
 /* =========================================================
@@ -1051,9 +961,9 @@ onBeforeUnmount(() => {
   overflow-y: auto;
   overscroll-behavior: contain;
   padding: 13px 20px 20px;
-  border: 1px solid rgba(255, 255, 255, 0.9);
+  border: 0;
   border-radius: 22px;
-  background: rgba(255, 255, 255, 0.97);
+  background: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(25px);
   -webkit-backdrop-filter: blur(25px);
   box-shadow: 0 25px 65px rgba(27, 39, 59, 0.15);
@@ -1072,14 +982,14 @@ onBeforeUnmount(() => {
   color: var(--ink);
   text-decoration: none;
   font-family: inherit;
-  font-size: 13px;
-  font-weight: 550;
+  font-size: 14.5px;
+  font-weight: 500;
   cursor: pointer;
 }
 
 .mobile-link:hover,
 .mobile-trigger:hover {
-  color: var(--orange-dark);
+  color: var(--blue);
 }
 
 .mobile-link svg {
@@ -1117,7 +1027,7 @@ onBeforeUnmount(() => {
 }
 
 .mobile-sub a.mobile-all {
-  color: var(--orange-dark);
+  color: var(--blue);
   font-size: 11.5px;
   font-weight: 700;
 }
@@ -1142,15 +1052,6 @@ onBeforeUnmount(() => {
   flex-shrink: 0;
   stroke: currentColor;
   stroke-width: 1.5;
-}
-
-.mobile-sub-title {
-  padding: 14px 13px 4px;
-  color: #9aa8bd;
-  font-size: 9.5px;
-  font-weight: 700;
-  letter-spacing: 0.4px;
-  text-transform: uppercase;
 }
 
 .mobile-industry-enter-active,
@@ -1205,7 +1106,7 @@ onBeforeUnmount(() => {
 
   .nav-link {
     padding-inline: 9px;
-    font-size: 12px;
+    font-size: 13px;
   }
 
   .demo-btn,
@@ -1214,13 +1115,16 @@ onBeforeUnmount(() => {
     font-size: 11px;
   }
 
-  .mega-menu {
-    width: min(860px, calc(100vw - 30px));
+  .mm-grid-3 {
+    grid-template-columns: 180px minmax(0, 1fr) 230px;
   }
 
-  .mm-grid-2 {
-    grid-template-columns: minmax(0, 1fr) 230px;
+  .mm-grid-sm {
+    grid-template-columns: 140px minmax(0, 1fr) 210px;
   }
+
+  .mm-wide { width: min(940px, calc(100vw - 30px)); }
+  .mm-mid { width: min(740px, calc(100vw - 30px)); }
 }
 
 @media (max-width: 1040px) {
