@@ -23,6 +23,11 @@ const routes = [
         component: () => import('../views/LeadManagementView.vue')
       },
       {
+        path: 'features/sales-pipeline/',
+        name: 'sales-pipeline',
+        component: () => import('../views/SalesPipelineView.vue')
+      },
+      {
         path: '/industries/',
         name: 'industries',
         component: () => import('../views/IndustriesView.vue')

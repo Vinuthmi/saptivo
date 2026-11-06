@@ -117,9 +117,9 @@ onBeforeUnmount(() => io?.disconnect());
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
 
 .cta {
-  --orange: #ff6338;
-  --ink: #171717;
-  --muted: #777982;
+  --orange: #33485d;
+  --ink: #17191d;
+  --muted: #5d6068;
   --gutter: clamp(16px, 8vw, 150px);
 
   position: relative;
@@ -142,7 +142,7 @@ onBeforeUnmount(() => io?.disconnect());
   outline-offset: 4px;
 }
 
-/* Smooth orange-to-white background */
+/* Keep the CTA section on the hero's clean white background. */
 
 .bg {
   position: absolute;
@@ -151,19 +151,7 @@ onBeforeUnmount(() => io?.disconnect());
   overflow: hidden;
   pointer-events: none;
 
-  background:
-    radial-gradient(
-      ellipse 85% 55% at 50% 0%,
-      rgba(255, 99, 56, 0.95) 0%,
-      rgba(255, 120, 75, 0.65) 28%,
-      rgba(255, 165, 130, 0.28) 58%,
-      rgba(255, 255, 255, 0) 100%
-    ),
-    linear-gradient(
-      180deg,
-      #fff8f5 0%,
-      #ffffff 100%
-    );
+  background: #fff;
 }
 
 /* Gradual white fluted-glass lines */
@@ -233,12 +221,12 @@ onBeforeUnmount(() => io?.disconnect());
   background:
     linear-gradient(rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.78)),
     url('/images/features/threecolleagues-.jpg') center 42% / cover;
-  border: 1px solid rgba(255, 99, 56, 0.12);
+  border: 1px solid rgba(51, 72, 93, 0.12);
   border-bottom: 0;
   border-radius: clamp(24px, 2.5vw, 42px)
     clamp(24px, 2.5vw, 42px) 0 0;
 
-  box-shadow: 0 -10px 45px rgba(255, 99, 56, 0.05);
+  box-shadow: 0 -10px 45px rgba(23, 25, 29, 0.05);
 
   opacity: 0;
   transform: translateY(35px);
@@ -299,8 +287,8 @@ onBeforeUnmount(() => io?.disconnect());
 
 .store:hover {
   transform: translateY(-3px);
-  border-color: rgba(255, 99, 56, 0.25);
-  box-shadow: 0 12px 30px rgba(255, 99, 56, 0.08);
+  border-color: rgba(51, 72, 93, 0.25);
+  box-shadow: 0 12px 30px rgba(23, 25, 29, 0.08);
 }
 
 .qr {
@@ -356,7 +344,7 @@ onBeforeUnmount(() => io?.disconnect());
   height: 8px;
   border-radius: 50%;
   background: var(--orange);
-  box-shadow: 0 0 0 5px rgba(255, 99, 56, 0.10);
+  box-shadow: 0 0 0 5px rgba(51, 72, 93, 0.10);
 }
 
 .copy h2 {
@@ -375,10 +363,11 @@ onBeforeUnmount(() => io?.disconnect());
   /* negative letter-spacing shrinks the last glyph's box, so the clipped gradient cut off the "?" */
   padding: 0 0.12em 0.1em 0;
   margin-right: -0.12em;
-  background: linear-gradient(100deg, #ff9a3d 0%, #ff6a1a 45%, #f2540c 100%);
+  background: none;
   background-clip: text;
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #33485d;
+  -webkit-text-fill-color: #33485d;
 }
 
 .copy p {
@@ -406,15 +395,15 @@ onBeforeUnmount(() => io?.disconnect());
   padding: 0 24px;
 
   color: #fff;
-  background: linear-gradient(180deg, #ff7a45, #f2531f);
-  border: 0;
+  background: #17191d;
+  border: 1px solid #17191d;
   border-radius: 12px;
 
   font-size: 15px;
   font-weight: 600;
   text-decoration: none;
 
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35), 0 10px 24px rgba(240, 75, 35, 0.3);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
 
   transition: transform 0.2s, box-shadow 0.2s;
 }
@@ -426,7 +415,22 @@ onBeforeUnmount(() => io?.disconnect());
 
 .btn:hover {
   transform: translateY(-2px);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.4), 0 16px 32px rgba(240, 75, 35, 0.4);
+  background: #000;
+  border-color: #000;
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.24);
+}
+
+.cta .btn,
+.cta .btn:hover {
+  background: #17191d !important;
+  border-color: #17191d !important;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18) !important;
+}
+
+.cta .btn:hover {
+  background: #000 !important;
+  border-color: #000 !important;
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.24) !important;
 }
 
 .btn:hover .arrow {
@@ -476,7 +480,7 @@ onBeforeUnmount(() => io?.disconnect());
   height: 60%;
 
   border-radius: 50%;
-  background: rgba(255, 99, 56, 0.12);
+  background: rgba(51, 72, 93, 0.12);
   filter: blur(75px);
   pointer-events: none;
 }
@@ -532,7 +536,7 @@ onBeforeUnmount(() => io?.disconnect());
   .card {
     grid-template-columns: 1fr;
     min-height: auto;
-    border-bottom: 1px solid rgba(255, 99, 56, 0.12);
+    border-bottom: 1px solid rgba(51, 72, 93, 0.12);
     border-radius: 26px;
   }
 

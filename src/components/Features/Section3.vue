@@ -56,9 +56,9 @@
             <div class="dispatch">
               <div class="route" aria-hidden="true">
                 <svg viewBox="0 0 240 92" preserveAspectRatio="none">
-                  <path d="M18 70 C 60 70, 70 24, 118 28 S 190 66, 222 22" fill="none" stroke="#ff6338" stroke-width="2.5" stroke-dasharray="5 5" stroke-linecap="round" />
-                  <circle cx="18" cy="70" r="6" fill="#ff6338" />
-                  <circle cx="222" cy="22" r="6" fill="#fff" stroke="#ff6338" stroke-width="3" />
+                  <path d="M18 70 C 60 70, 70 24, 118 28 S 190 66, 222 22" fill="none" stroke="#33485d" stroke-width="2.5" stroke-dasharray="5 5" stroke-linecap="round" />
+                  <circle cx="18" cy="70" r="6" fill="#33485d" />
+                  <circle cx="222" cy="22" r="6" fill="#fff" stroke="#33485d" stroke-width="3" />
                 </svg>
               </div>
               <div class="row">
@@ -276,13 +276,13 @@ const toggle = (row, i) => {
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
 .ops {
-  --orange: #ff6338;
-  --orange-hover: #f0501f;
-  --orange-soft: #fff1ec;
-  --tint: #fff8f5;
+  --orange: #33485d;
+  --orange-hover: #273a4b;
+  --orange-soft: #edf1f4;
+  --tint: #f5f7f8;
   --ink: #14120f;
   --muted: #6a6560;
-  --line: #f1e7e2;
+  --line: #e4e9ed;
   --ok: #15803d;
   --ok-soft: #e6f6ec;
   --warn: #b45309;
@@ -316,31 +316,31 @@ const toggle = (row, i) => {
   position: relative; overflow: hidden; isolation: isolate; min-width: 0;
   display: flex; flex-direction: column; gap: 28px; padding: 32px;
   background: #fff; border: 1px solid var(--line); border-radius: 28px;
-  box-shadow: 0 1px 2px rgba(80, 40, 20, 0.04), 0 16px 36px -16px rgba(255, 99, 56, 0.18);
+  box-shadow: 0 1px 2px rgba(23, 25, 29, 0.04), 0 16px 36px -16px rgba(51, 72, 93, 0.18);
   transition: transform 0.25s ease, border-color 0.25s ease;
 }
 .card::before {
   content: ""; position: absolute; z-index: -1; right: -180px; top: -260px;
   width: 520px; height: 520px; border-radius: 50%;
-  background: radial-gradient(closest-side, var(--orange-soft), transparent 72%);
+  background: none;
 }
-.card:hover { transform: translateY(-3px); border-color: rgba(255, 99, 56, 0.4); }
+.card:hover { transform: translateY(-3px); border-color: rgba(51, 72, 93, 0.4); }
 .card.wide { grid-column: 1 / -1; }
 
 .head { display: flex; flex-direction: column; gap: 14px; max-width: 560px; }
 .card.wide .head { flex-direction: row; align-items: flex-start; gap: 18px; max-width: 720px; }
 .head h3 { margin: 0 0 6px; font-size: 1.4rem; font-weight: 500; letter-spacing: -0.02em; line-height: 1.2; text-wrap: balance; }
 .head p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.7; max-width: 56ch; }
-.icon { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 12px; color: var(--orange); background: var(--orange-soft); }
+.icon { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid var(--line); border-radius: 12px; color: var(--orange); background: transparent; }
 .icon svg { width: 22px; height: 22px; }
 
 /* shared mockup parts */
-.panel { min-width: 0; background: var(--tint); border: 1px solid var(--line); border-radius: 18px; padding: 16px; }
+.panel { min-width: 0; background: transparent; border: 1px solid var(--line); border-radius: 18px; padding: 16px; }
 .panel-title { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 12px; font-size: 12px; font-weight: 500; color: var(--muted); }
 .panel-title b { color: var(--ink); font-size: 13px; font-weight: 600; }
 .mono { font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
 .list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
-.item { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; }
+.item { background: transparent; border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; }
 .row { display: flex; align-items: center; gap: 10px; min-width: 0; }
 .grow { flex: 1; min-width: 0; }
 .t1 { font-size: 13px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -354,6 +354,7 @@ const toggle = (row, i) => {
 .pill.crit { background: var(--crit-soft); color: var(--crit); }
 .pill.mute { background: #fff; color: var(--muted); border: 1px solid var(--line); }
 .pill.push { margin-left: auto; }
+.pill:not(.ok):not(.warn):not(.crit) { background: transparent; border: 1px solid var(--line); }
 
 .bar { position: relative; height: 6px; border-radius: 99px; background: var(--line); overflow: hidden; }
 .bar i { position: absolute; inset: 0 auto 0 0; border-radius: 99px; background: var(--orange); }
@@ -362,21 +363,21 @@ const toggle = (row, i) => {
 .bar.warn i { background: #f59e0b; }
 .bar.crit i { background: var(--crit); }
 
-.avatar { flex: none; width: 30px; height: 30px; display: grid; place-items: center; border-radius: 50%; font-size: 11px; font-weight: 600; background: var(--orange-soft); color: var(--orange-hover); }
+.avatar { flex: none; width: 30px; height: 30px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%; font-size: 11px; font-weight: 600; background: transparent; color: var(--orange-hover); }
 .btn { font: 600 13px "Inter", sans-serif; padding: 10px 14px; border: 0; border-radius: 12px; background: var(--orange); color: #fff; cursor: pointer; transition: background 0.2s ease; }
 .btn:hover { background: var(--orange-hover); }
 
 /* 1. service */
 .svc { display: grid; grid-template-columns: 1.15fr 1.25fr 1fr; gap: 14px; }
 .week { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; margin-bottom: 10px; }
-.week div { text-align: center; font-size: 11px; color: var(--muted); padding: 6px 0; border-radius: 10px; background: #fff; border: 1px solid var(--line); }
+.week div { text-align: center; font-size: 11px; color: var(--muted); padding: 6px 0; border-radius: 10px; background: transparent; border: 1px solid var(--line); }
 .week div b { display: block; font-size: 14px; font-weight: 600; color: var(--ink); }
-.week div.on { background: var(--orange); border-color: var(--orange); color: #fff; }
-.week div.on b { color: #fff; }
+.week div.on { background: transparent; border-color: var(--orange); color: var(--orange); }
+.week div.on b { color: var(--orange); }
 .visit { display: grid; grid-template-columns: 48px 1fr auto; gap: 10px; align-items: center; }
 .visit time { font-size: 12px; color: var(--muted); }
 .dispatch { display: flex; flex-direction: column; gap: 12px; }
-.route { position: relative; height: 92px; border-radius: 12px; background: #fff; border: 1px solid var(--line); overflow: hidden; }
+.route { position: relative; height: 92px; border-radius: 12px; background: transparent; border: 1px solid var(--line); overflow: hidden; }
 .route svg { position: absolute; inset: 0; width: 100%; height: 100%; }
 
 /* 2. tickets */
@@ -386,7 +387,7 @@ const toggle = (row, i) => {
 .sla.crit { color: var(--crit); }
 .sla.warn { color: var(--warn); }
 .sla.ok { color: var(--ok); }
-.csat { display: flex; align-items: center; gap: 14px; margin-top: 10px; padding: 10px 12px; background: #fff; border: 1px solid var(--line); border-radius: 12px; }
+.csat { display: flex; align-items: center; gap: 14px; margin-top: 10px; padding: 10px 12px; background: transparent; border: 1px solid var(--line); border-radius: 12px; }
 .score { font-size: 28px; font-weight: 700; letter-spacing: -0.03em; line-height: 1; }
 .stars { display: flex; gap: 2px; color: var(--orange); }
 .stars svg { width: 14px; height: 14px; }
@@ -396,7 +397,7 @@ const toggle = (row, i) => {
 .wh { display: grid; grid-template-columns: 76px 1fr auto; gap: 10px; align-items: center; }
 .bar.marked { overflow: visible; }
 .bar.marked::after { content: ""; position: absolute; left: 28%; top: -3px; bottom: -3px; width: 2px; border-radius: 2px; background: var(--ink); opacity: 0.4; }
-.alert { display: flex; gap: 10px; align-items: flex-start; margin-top: 14px; padding: 10px 12px; border-radius: 12px; background: var(--warn-soft); color: var(--warn); }
+.alert { display: flex; gap: 10px; align-items: flex-start; margin-top: 14px; padding: 10px 12px; border: 1px solid rgba(180, 83, 9, 0.3); border-radius: 12px; background: transparent; color: var(--warn); }
 .alert svg { flex: none; width: 18px; height: 18px; margin-top: 1px; }
 .alert .t1, .alert .t2 { color: inherit; white-space: normal; }
 .alert .t2 { opacity: 0.85; }
@@ -406,7 +407,7 @@ const toggle = (row, i) => {
 /* 4. multi-branch */
 .hq { display: grid; grid-template-columns: 1.3fr 1fr; gap: 14px; }
 .kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }
-.kpi { padding: 10px 12px; background: #fff; border: 1px solid var(--line); border-radius: 12px; }
+.kpi { padding: 10px 12px; background: transparent; border: 1px solid var(--line); border-radius: 12px; }
 .kpi small { display: block; font-size: 11px; color: var(--muted); }
 .kpi b { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
 .tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(34px, 1fr)); gap: 6px; }

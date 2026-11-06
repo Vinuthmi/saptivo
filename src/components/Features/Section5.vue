@@ -189,11 +189,11 @@ onBeforeUnmount(() => {
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
 .one {
-  --orange: #ff6338;
-  --orange-soft: #fff1ec;
+  --orange: #33485d;
+  --orange-soft: #edf1f4;
   --ink: #14120f;
   --muted: #6a6560;
-  --line: #f1e7e2;
+  --line: #e4e9ed;
   position: relative;
   overflow: clip;
   scroll-margin-top: 100px;
@@ -228,7 +228,7 @@ onBeforeUnmount(() => {
   font: 500 13.5px "Poppins", system-ui, sans-serif; color: #8a857f; text-align: left; cursor: pointer;
   transition: border-color 0.3s, background 0.3s, color 0.3s;
 }
-.mod.on { color: var(--ink); border-color: rgba(255, 99, 56, 0.35); background: #fff8f5; }
+.mod.on { color: var(--ink); border-color: rgba(51, 72, 93, 0.35); background: #f5f7f8; }
 .sw { position: relative; flex: none; width: 34px; height: 20px; border-radius: 99px; background: #e6dcd7; transition: background 0.3s; }
 .sw::after { content: ""; position: absolute; top: 3px; left: 3px; width: 14px; height: 14px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25); transition: left 0.3s cubic-bezier(0.3, 1.4, 0.5, 1); }
 .mod.on .sw { background: var(--orange); }
@@ -244,7 +244,7 @@ onBeforeUnmount(() => {
 /* ---------- animated panel ---------- */
 .panel {
   position: relative; display: flex; flex-direction: column; gap: 0; padding: 26px;
-  border-radius: 28px; background-color: #ffd9c2; background-size: cover; background-position: center;
+  border-radius: 28px; background-color: #dce5eb; background-size: cover; background-position: center;
   overflow: hidden; min-width: 0;
 }
 .rec { padding: 14px 16px 16px; border-radius: 18px; background: #fff; box-shadow: 0 18px 40px rgba(120, 50, 20, 0.2); }
@@ -298,7 +298,7 @@ onBeforeUnmount(() => {
 .one:not(.live) .node.on .ic, .one:not(.live) .vl.on b, .one:not(.live) .db::after, .one:not(.live) .ripple { animation-play-state: paused; }
 
 @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
-@keyframes ping { 0% { box-shadow: 0 0 0 0 rgba(255, 99, 56, 0.5), 0 6px 16px rgba(120, 50, 20, 0.15); } 100% { box-shadow: 0 0 0 14px rgba(255, 99, 56, 0), 0 6px 16px rgba(120, 50, 20, 0.15); } }
+@keyframes ping { 0% { box-shadow: 0 0 0 0 rgba(51, 72, 93, 0.5), 0 6px 16px rgba(23, 25, 29, 0.15); } 100% { box-shadow: 0 0 0 14px rgba(51, 72, 93, 0), 0 6px 16px rgba(23, 25, 29, 0.15); } }
 @keyframes drop { from { top: -45%; } to { top: 100%; } }
 @keyframes sheen { 0%, 40% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
 @keyframes ripple { from { opacity: 0.9; transform: translate(-50%, -50%) scale(1); } to { opacity: 0; transform: translate(-50%, -50%) scale(14); } }

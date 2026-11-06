@@ -178,11 +178,11 @@ onBeforeUnmount(() => {
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
 .cm {
-  --orange: #ff6338;
-  --orange-soft: #fff1ec;
+  --orange: #33485d;
+  --orange-soft: #edf1f4;
   --ink: #14120f;
   --muted: #6a6560;
-  --line: #f1e7e2;
+  --line: #e4e9ed;
   --dur: 5s;
   position: relative;
   overflow: clip;
@@ -225,7 +225,7 @@ onBeforeUnmount(() => {
   position: absolute; left: 50%; top: 50%; z-index: 2; width: min(390px, 92%);
   padding: 20px; border-radius: 22px; background: #fff; border: 1px solid var(--line);
   transform: translate(-50%, -50%);
-  box-shadow: 0 22px 50px rgba(255, 99, 56, 0.2), 0 0 0 4px rgba(255, 99, 56, 0.08);
+  box-shadow: 0 22px 50px rgba(51, 72, 93, 0.2), 0 0 0 4px rgba(51, 72, 93, 0.08);
 }
 .oc-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
 .oc-head b { font-size: 18px; font-weight: 600; letter-spacing: -0.02em; }
@@ -242,9 +242,9 @@ onBeforeUnmount(() => {
 .h2b { margin: 0 0 20px; font-size: clamp(30px, 3vw, 44px); font-weight: 500; line-height: 1.15; letter-spacing: -0.03em; text-wrap: balance; }
 .b-copy p { margin: 0; max-width: 56ch; font-size: 16px; line-height: 1.75; color: var(--muted); }
 
-.later { margin-top: 28px; padding: 18px; border: 1px solid var(--line); border-radius: 18px; background: #fff8f5; }
+.later { margin-top: 28px; padding: 18px; border: 1px solid var(--line); border-radius: 18px; background: #f5f7f8; }
 .later-row { display: flex; flex-wrap: wrap; gap: 8px; }
-.lc { display: inline-flex; align-items: center; gap: 7px; padding: 8px 14px; border-radius: 99px; background: #fff; border: 1px solid rgba(255, 99, 56, 0.35); font-size: 12.5px; font-weight: 500; }
+.lc { display: inline-flex; align-items: center; gap: 7px; padding: 8px 14px; border-radius: 99px; background: #fff; border: 1px solid rgba(51, 72, 93, 0.35); font-size: 12.5px; font-weight: 500; }
 .lc .tk { color: #15803d; font-weight: 700; }
 .lc.new { position: relative; border: 1px dashed #c9bfb9; color: #9a948d; background: transparent; animation: later 7s ease-in-out infinite; }
 .lc.new .plus, .lc.new .tk2 { display: inline-block; width: 10px; text-align: center; font-weight: 700; }
@@ -257,7 +257,7 @@ onBeforeUnmount(() => {
 .zero { padding: 4px 9px; border-radius: 99px; background: #e6f6ec; color: #15803d; font-size: 11px; font-style: normal; font-weight: 600; white-space: nowrap; opacity: 0; animation: zeroIn 7s ease-in-out infinite; }
 
 /* picker */
-.picker { padding: 24px; border: 1px solid var(--line); border-radius: 26px; background: #fff; box-shadow: 0 1px 2px rgba(80, 40, 20, 0.04), 0 24px 50px -22px rgba(255, 99, 56, 0.28); min-width: 0; }
+.picker { padding: 24px; border: 1px solid var(--line); border-radius: 26px; background: #fff; box-shadow: 0 1px 2px rgba(23, 25, 29, 0.04), 0 24px 50px -22px rgba(51, 72, 93, 0.22); min-width: 0; }
 .plabel { margin-bottom: 6px; font-size: 12.5px; font-weight: 500; color: var(--muted); }
 .plist { list-style: none; margin: 0; padding: 0; }
 .ptab { position: relative; display: flex; align-items: center; gap: 14px; width: 100%; padding: 16px 0 18px; background: none; border: 0; text-align: left; font: inherit; color: inherit; cursor: pointer; }
@@ -269,7 +269,7 @@ onBeforeUnmount(() => {
 .pfill { position: absolute; inset: 0; width: 0; background: var(--orange); }
 .ptab.on .pfill { animation: fill var(--dur) linear forwards; }
 
-.result { margin-top: 14px; padding: 18px; border-radius: 18px; background: #fff8f5; border: 1px solid var(--line); animation: rise 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.result { margin-top: 14px; padding: 18px; border-radius: 18px; background: #f5f7f8; border: 1px solid var(--line); animation: rise 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
 .r-top small, .stat small { display: block; font-size: 11.5px; color: var(--muted); }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
 .chip { padding: 7px 13px; border-radius: 99px; background: var(--orange); color: #fff; font-size: 12.5px; font-weight: 600; animation: pop 0.5s cubic-bezier(0.3, 1.6, 0.5, 1) calc(0.15s + var(--i) * 0.12s) both; }
@@ -313,7 +313,7 @@ onBeforeUnmount(() => {
 @keyframes later {
   0%, 40% { border-style: dashed; border-color: #c9bfb9; color: #9a948d; background: transparent; transform: scale(1); }
   46% { transform: scale(1.08); }
-  50%, 92% { border-style: solid; border-color: rgba(255, 99, 56, 0.5); color: var(--ink); background: #fff; transform: scale(1); }
+  50%, 92% { border-style: solid; border-color: rgba(51, 72, 93, 0.5); color: var(--ink); background: #fff; transform: scale(1); }
   100% { border-style: dashed; border-color: #c9bfb9; color: #9a948d; background: transparent; transform: scale(1); }
 }
 @keyframes plusOut { 0%, 44% { opacity: 1; } 50%, 92% { opacity: 0; } 100% { opacity: 1; } }
@@ -343,9 +343,9 @@ onBeforeUnmount(() => {
   .cm *, .cm *::before, .cm *::after { animation: none !important; transition: none !important; }
   .cm:not(.in) .a, .cm:not(.in) .b { opacity: 1; }
   .tool { display: none; }
-  .one-card { opacity: 1; filter: none; transform: translate(-50%, -50%); box-shadow: 0 26px 60px rgba(255, 99, 56, 0.3); }
+  .one-card { opacity: 1; filter: none; transform: translate(-50%, -50%); box-shadow: 0 26px 60px rgba(51, 72, 93, 0.24); }
   .oc-chips span { background: var(--orange-soft); color: #c4400f; }
-  .lc.new { border-style: solid; border-color: rgba(255, 99, 56, 0.5); color: var(--ink); background: #fff; }
+  .lc.new { border-style: solid; border-color: rgba(51, 72, 93, 0.5); color: var(--ink); background: #fff; }
   .lc.new .plus { opacity: 0; }
   .lc.new .tk2, .zero { opacity: 1; }
   .ptab.on .pfill { width: 100%; }

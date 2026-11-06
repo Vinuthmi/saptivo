@@ -127,7 +127,7 @@ const tabs = [
   },
 ];
 
-const tints = ["#ffd9c2", "#ffe0c9", "#ffd3bd", "#fbdcc8"];
+const tints = ["#dce5eb", "#e7edf1", "#d4e0e8", "#e1e9ee"];
 const slideStyle = (t, i) => {
   const bg = t.bg ?? bgImage;
   return {
@@ -174,11 +174,11 @@ onBeforeUnmount(() => {
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
 .wmc {
-  --orange: #ff6338;
-  --orange-soft: #fff1ec;
+  --orange: #33485d;
+  --orange-soft: #edf1f4;
   --ink: #14120f;
   --muted: #6a6560;
-  --line: #f1e7e2;
+  --line: #e4e9ed;
   --dur: 6s;
   position: relative;
   overflow: clip;
@@ -205,7 +205,7 @@ onBeforeUnmount(() => {
 }
 
 /* ---------- visual: sliding panels ---------- */
-.visual { position: relative; aspect-ratio: 4 / 3.4; overflow: hidden; border-radius: 28px; min-width: 0; background: #ffd9c2; }
+.visual { position: relative; aspect-ratio: 4 / 3.4; overflow: hidden; border-radius: 28px; min-width: 0; background: #dce5eb; }
 .track { display: flex; height: 100%; transition: transform 0.7s cubic-bezier(0.65, 0, 0.35, 1); will-change: transform; }
 .slide { position: relative; flex: none; width: 100%; height: 100%; background-size: cover; background-position: center; }
 
@@ -220,7 +220,7 @@ onBeforeUnmount(() => {
 .mock { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 8px; font-size: 11px; line-height: 1.35; text-align: left; }
 .mock :deep(.m-top) { display: flex; justify-content: space-between; align-items: center; }
 .mock :deep(.m-top b) { font-size: 13px; font-weight: 600; }
-.mock :deep(.pill) { display: inline-flex; align-items: center; padding: 3px 9px; border-radius: 99px; background: var(--orange-soft); color: #f2531f; font-weight: 600; font-size: 11px; }
+.mock :deep(.pill) { display: inline-flex; align-items: center; padding: 3px 9px; border-radius: 99px; background: var(--orange-soft); color: #33485d; font-weight: 600; font-size: 11px; }
 .mock :deep(.pill.live::before) { content: ""; width: 6px; height: 6px; margin-right: 6px; border-radius: 50%; background: currentColor; animation: blink 1.4s ease-in-out infinite; }
 .mock :deep(.m-row) { display: flex; align-items: center; gap: 8px; padding: 7px 8px; border-radius: 10px; background: #faf8f6; }
 .mock :deep(.m-row.hot) { animation: flash 2.8s ease-in-out 1.6s infinite; }
@@ -232,14 +232,14 @@ onBeforeUnmount(() => {
 .mock :deep(.wa) { background: #e6f9ee; color: #128a47; }
 .mock :deep(.fb) { background: #e7f0ff; color: #0b57d0; }
 .mock :deep(.web) { background: #fff0e8; color: #c4400f; }
-.mock :deep(.sc) { width: 26px; text-align: center; font-weight: 700; color: #f2531f; }
+.mock :deep(.sc) { width: 26px; text-align: center; font-weight: 700; color: #33485d; }
 .mock :deep(.m-cols) { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 .mock :deep(.m-col) { background: #faf8f6; border-radius: 10px; padding: 8px; display: flex; flex-direction: column; gap: 6px; }
 .mock :deep(.m-col h5) { margin: 0; font-size: 11px; color: #5d6068; font-weight: 600; }
 .mock :deep(.m-card) { background: #fff; border-radius: 8px; padding: 7px; box-shadow: 0 1px 4px rgba(23, 25, 29, 0.08); display: grid; gap: 2px; }
 .mock :deep(.m-card.drag) { position: relative; z-index: 2; animation: drag 3.2s ease-in-out 1.4s infinite; }
 .mock :deep(.m-card b) { font-size: 11.5px; font-weight: 500; }
-.mock :deep(.m-card small) { color: #f2531f; font-weight: 600; }
+.mock :deep(.m-card small) { color: #33485d; font-weight: 600; }
 .mock :deep(.won .m-card) { border-left: 3px solid #25b865; }
 .mock :deep(.m-line) { display: flex; justify-content: space-between; gap: 8px; padding: 7px 0; border-bottom: 1px solid rgba(23, 25, 29, 0.08); }
 .mock :deep(.m-total) { display: flex; justify-content: space-between; font-weight: 700; font-size: 13px; margin-top: auto; }
@@ -295,8 +295,8 @@ onBeforeUnmount(() => {
   background: #fff; border: 1px solid var(--line); border-radius: 20px; cursor: pointer;
   transition: border-color 0.3s, background 0.3s, box-shadow 0.4s;
 }
-.tab:hover { border-color: rgba(255, 99, 56, 0.25); }
-.tab.on { border-color: rgba(255, 99, 56, 0.35); background: #fff8f5; box-shadow: 0 16px 36px rgba(255, 99, 56, 0.1); }
+.tab:hover { border-color: rgba(51, 72, 93, 0.25); }
+.tab.on { border-color: rgba(51, 72, 93, 0.35); background: #f5f7f8; box-shadow: 0 16px 36px rgba(51, 72, 93, 0.1); }
 .head { display: flex; align-items: center; gap: 14px; }
 .icon {
   flex: none; display: grid; place-items: center; width: 42px; height: 42px;
@@ -314,7 +314,7 @@ onBeforeUnmount(() => {
 .desc-text { display: block; padding: 12px 0 0 56px; font-size: 14.5px; line-height: 1.7; color: var(--muted); }
 .tab.on .desc { grid-template-rows: 1fr; }
 
-.line { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: rgba(255, 99, 56, 0.12); overflow: hidden; opacity: 0; transition: opacity 0.3s; }
+.line { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: rgba(51, 72, 93, 0.12); overflow: hidden; opacity: 0; transition: opacity 0.3s; }
 .tab.on .line { opacity: 1; }
 .fill { position: absolute; inset: 0; width: 0; background: var(--orange); border-radius: 0 3px 3px 0; }
 .tab.on .fill { animation: fill var(--dur) linear forwards; }
@@ -335,12 +335,12 @@ onBeforeUnmount(() => {
 @keyframes fill { from { width: 0; } to { width: 100%; } }
 @keyframes bob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -7px; } }
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-@keyframes flash { 0%, 100% { background: #faf8f6; } 45% { background: #fff1ec; } }
+@keyframes flash { 0%, 100% { background: #faf8f6; } 45% { background: #edf1f4; } }
 @keyframes drag {
   0%, 18%, 100% { translate: 0 0; rotate: 0deg; box-shadow: 0 1px 4px rgba(23, 25, 29, 0.08); }
-  50%, 68% { translate: 14px -6px; rotate: 2.5deg; box-shadow: 0 12px 22px rgba(255, 99, 56, 0.32); }
+  50%, 68% { translate: 14px -6px; rotate: 2.5deg; box-shadow: 0 12px 22px rgba(51, 72, 93, 0.22); }
 }
-@keyframes ring { 0% { box-shadow: 0 0 0 0 rgba(255, 99, 56, 0.5); } 70%, 100% { box-shadow: 0 0 0 10px rgba(255, 99, 56, 0); } }
+@keyframes ring { 0% { box-shadow: 0 0 0 0 rgba(51, 72, 93, 0.5); } 70%, 100% { box-shadow: 0 0 0 10px rgba(51, 72, 93, 0); } }
 
 /* ---------- responsive ---------- */
 @media (max-width: 960px) {

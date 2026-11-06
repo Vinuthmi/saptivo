@@ -193,11 +193,11 @@ onBeforeUnmount(() => {
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
 .who {
-  --orange: #ff6338;
-  --orange-soft: #fff1ec;
+  --orange: #33485d;
+  --orange-soft: #edf1f4;
   --ink: #14120f;
   --muted: #6a6560;
-  --line: #f1e7e2;
+  --line: #e4e9ed;
   position: relative;
   overflow: clip;
   display: flex;
@@ -239,7 +239,7 @@ onBeforeUnmount(() => {
   font-family: "Poppins", system-ui, sans-serif; color: #8a857f; text-align: left; cursor: pointer;
   transition: border-color 0.3s, background 0.3s, color 0.3s;
 }
-.role.on { color: var(--ink); border-color: rgba(255, 99, 56, 0.35); background: #fff8f5; }
+.role.on { color: var(--ink); border-color: rgba(51, 72, 93, 0.35); background: #f5f7f8; }
 .rico { flex: none; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: #f4efec; color: #9a948d; transition: background 0.3s, color 0.3s; }
 .role.on .rico { background: var(--orange); color: #fff; }
 .rtxt { min-width: 0; }
@@ -249,7 +249,7 @@ onBeforeUnmount(() => {
 /* ---------- animated panel ---------- */
 .panel {
   position: relative; display: flex; flex-direction: column; padding: 26px;
-  border-radius: 28px; background-color: #ffd9c2; background-size: cover; background-position: center;
+  border-radius: 28px; background-color: #dce5eb; background-size: cover; background-position: center;
   overflow: hidden; min-width: 0;
 }
 .win { padding: 14px 16px 16px; border-radius: 18px; background: #fff; box-shadow: 0 18px 40px rgba(120, 50, 20, 0.2); }
@@ -260,7 +260,7 @@ onBeforeUnmount(() => {
 .rows { position: relative; height: 170px; margin-top: 12px; padding-top: 6px; border-top: 1px dashed var(--line); }
 .list { position: absolute; inset: 6px 0 0 0; margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; align-content: start; opacity: 0; transform: translateY(8px); transition: opacity 0.45s ease, transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1); pointer-events: none; }
 .list.show { opacity: 1; transform: none; pointer-events: auto; }
-.list li { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 12px; background: #fff8f5; }
+.list li { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 12px; background: #f5f7f8; }
 .dotk { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--orange); }
 .list b { display: block; font-size: 13px; font-weight: 500; }
 .list small { display: block; color: var(--muted); font-size: 11.5px; }
@@ -304,7 +304,7 @@ onBeforeUnmount(() => {
 .who:not(.live) .node.on .ic, .who:not(.live) .db::after, .who:not(.live) .pulse { animation-play-state: paused; }
 
 @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
-@keyframes ping { 0% { box-shadow: 0 0 0 0 rgba(255, 99, 56, 0.5), 0 6px 16px rgba(120, 50, 20, 0.15); } 100% { box-shadow: 0 0 0 14px rgba(255, 99, 56, 0), 0 6px 16px rgba(120, 50, 20, 0.15); } }
+@keyframes ping { 0% { box-shadow: 0 0 0 0 rgba(51, 72, 93, 0.5), 0 6px 16px rgba(23, 25, 29, 0.15); } 100% { box-shadow: 0 0 0 14px rgba(51, 72, 93, 0), 0 6px 16px rgba(23, 25, 29, 0.15); } }
 @keyframes sheen { 0%, 40% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
 @keyframes press { 0% { opacity: 0; transform: translateY(10px) scale(0.94); } 60% { opacity: 1; transform: scale(1.04); } 100% { opacity: 1; transform: none; } }
