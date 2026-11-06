@@ -1,4 +1,6 @@
 
+@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800&display=swap');
+
 /* ========================================
    SAPTIVO — GLOBAL STYLES
 ======================================== */
@@ -39,6 +41,9 @@ body {
   --color-border: #e5e7eb;
 
   --font-body: Arial, Helvetica, sans-serif;
+  --font-heading: 'Urbanist', Arial, Helvetica, sans-serif;
+  --color-heading: #0a0a0a;
+  --color-heading-accent: #808080;
 
   --container-width: 1200px;
   --page-padding: 24px;
@@ -336,9 +341,22 @@ button {
 h1,
 h2,
 h3,
-h4 {
+h4,
+h5,
+h6,
+[role='heading'] {
+  font-family: var(--font-heading) !important;
+  color: var(--color-heading) !important;
   line-height: 1.2;
   font-weight: 600;
+}
+
+:is(h1, h2, h3, h4, h5, h6, [role='heading']) :is(em, span, strong) {
+  background: none !important;
+  -webkit-background-clip: border-box !important;
+  background-clip: border-box !important;
+  color: var(--color-heading-accent) !important;
+  -webkit-text-fill-color: var(--color-heading-accent) !important;
 }
 
 h1 {
@@ -347,6 +365,10 @@ h1 {
 
 h2 {
   font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+  font-family: var(--font-heading) !important;
+  font-weight: 600 !important;
+  line-height: 1.2 !important;
+  letter-spacing: -1px !important;
 }
 
 p {

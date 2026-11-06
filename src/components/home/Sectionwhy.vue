@@ -260,7 +260,7 @@ onMounted(() => {
 .wx-title {
   margin: 0;
   padding-bottom: 0.2em;
-  font-family: 'Inter Display', Inter, system-ui, sans-serif;
+  font-family: 'Urbanist', system-ui, sans-serif;
   font-size: clamp(42px, 3.5vw, 104px);
   font-weight: 500;
   line-height: 1.1;

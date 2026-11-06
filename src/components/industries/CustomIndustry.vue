@@ -73,7 +73,7 @@ onBeforeUnmount(() => io && io.disconnect())
 
 .ico-title {
   margin: 0;
-  font-family: 'Inter Display', Inter, system-ui, sans-serif;
+  font-family: 'Urbanist', system-ui, sans-serif;
   font-size: clamp(32px, 4.2vw, 58px);
   font-weight: 500; line-height: 1.06; letter-spacing: -0.06em;
 }

@@ -171,8 +171,6 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
-
 .wmc {
   --orange: #33485d;
   --orange-soft: #edf1f4;
@@ -186,7 +184,7 @@ onBeforeUnmount(() => {
   padding: 112px 0;
   color: var(--ink);
   background: #fff;
-  font-family: "Inter", system-ui, sans-serif;
+  font-family: 'Urbanist', system-ui, sans-serif;
 }
 .wmc *, .wmc *::before, .wmc *::after { box-sizing: border-box; }
 .wmc button:focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }

@@ -28,8 +28,6 @@ defineOptions({ name: "FeaturesHero" });
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
-
 .hero {
   --ink: #17191d;
   --paper: #fff;
@@ -42,7 +40,7 @@ defineOptions({ name: "FeaturesHero" });
   text-align: center;
   color: var(--ink);
   background: var(--paper);
-  font-family: "Inter", system-ui, sans-serif;
+  font-family: 'Urbanist', system-ui, sans-serif;
 }
 .hero *, .hero *::before, .hero *::after { box-sizing: border-box; }
 .hero a:focus-visible { outline: 2px solid #33485d; outline-offset: 4px; }

@@ -57,7 +57,7 @@ onBeforeUnmount(() => io && io.disconnect())
   max-width: 900px;
   margin: 0 auto;
   padding-bottom: 0.2em;
-  font-family: 'Inter Display', Inter, system-ui, sans-serif;
+  font-family: 'Urbanist', system-ui, sans-serif;
   color: #0f172a;
   font-size: clamp(32px, 4.2vw, 62px);
   font-weight: 500;
@@ -79,7 +79,7 @@ onBeforeUnmount(() => io && io.disconnect())
 .trusted-brands-lead {
   max-width: 760px;
   margin: 10px auto 0;
-  font-family: 'Inter Display', Inter, system-ui, sans-serif;
+  font-family: 'Urbanist', system-ui, sans-serif;
   font-size: clamp(15px, 1.15vw, 18px);
   font-weight: 500;
   line-height: 1.6;

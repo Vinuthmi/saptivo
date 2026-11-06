@@ -690,7 +690,7 @@ onBeforeUnmount(() => {
   padding-bottom: 0.2em;
   max-width: 760px;
   text-wrap: balance;
-  font-family: 'Inter Display', Inter, system-ui, sans-serif;
+  font-family: 'Urbanist', system-ui, sans-serif;
   font-size: clamp(32px, 4.2vw, 62px);
   color: #0f172a;
   line-height: 1.12;
@@ -699,7 +699,7 @@ onBeforeUnmount(() => {
 }
 .ig-title em { font-style: normal; background: linear-gradient(100deg, #ff9a3d 0%, #ff6a1a 45%, #f2540c 100%); -webkit-background-clip: text; background-clip: text; color: transparent; white-space: nowrap; }
 .ig-nav:focus-visible, .ig-tab:focus-visible { outline: 2px solid var(--o); outline-offset: 3px; }
-.ig-sub { margin: 10px auto 0; max-width: 640px; text-align: center; font-family: 'Inter Display', Inter, system-ui, sans-serif; font-size: clamp(15px, 1vw, 18px); font-weight: 500; line-height: 1.45; letter-spacing: -0.02em; color: #475569; }
+.ig-sub { margin: 10px auto 0; max-width: 640px; text-align: center; font-family: 'Urbanist', system-ui, sans-serif; font-size: clamp(15px, 1vw, 18px); font-weight: 500; line-height: 1.45; letter-spacing: -0.02em; color: #475569; }
 
 
 /* ============ active-tab description ============ */

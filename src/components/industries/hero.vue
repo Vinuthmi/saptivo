@@ -25,8 +25,6 @@ defineOptions({ name: 'IndustriesHero' })
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
 .hero {
   --orange: #ff6338;
   --orange-deep: #f04b23;
@@ -42,7 +40,7 @@ defineOptions({ name: 'IndustriesHero' })
   text-align: center;
   color: var(--ink);
   background: var(--paper);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: 'Urbanist', system-ui, sans-serif;
 }
 
 .hero *,

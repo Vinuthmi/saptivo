@@ -1,199 +1,151 @@
 <template>
-  <section id="features" ref="rootEl" class="fs" :class="{ 'fs-in': revealed }" aria-labelledby="fs-title">
-    <div class="fs-wrap">
-      <header class="fs-head">
-        <h2 id="fs-title" class="fs-title">
+  <section id="features" ref="rootEl" class="fx" :class="{ 'fx-in': revealed }" aria-labelledby="fx-title">
+    <div class="fx-wrap">
+      <header class="fx-head">
+        <h2 id="fx-title" class="fx-title">
           Everything you need to
           <span>grow &amp; scale.</span>
         </h2>
-        
       </header>
 
-      <div class="fs-tabs" role="tablist" aria-label="Product features">
-        <button
-          v-for="(f, i) in features"
-          :id="`fs-tab-${f.id}`"
-          :key="f.id"
-          type="button"
-          role="tab"
-          class="fs-tab"
-          :class="{ on: active === i }"
-          :aria-selected="active === i"
-          aria-controls="fs-panel"
-          :tabindex="active === i ? 0 : -1"
-          @click="goTo(i)"
-          @keydown.right.prevent="step(1)"
-          @keydown.left.prevent="step(-1)"
-        >
-          <span class="ti"><svg viewBox="0 0 24 24" aria-hidden="true"><path v-for="d in f.icon" :key="d" :d="d" /></svg></span>
-          {{ f.tab }}
-        </button>
-      </div>
+      <div class="fx-grid">
+        <!-- ============ left: stays in view while you scroll ============ -->
+        <aside class="fx-aside">
+          <div class="fx-aside-in">
+            <div class="fx-copy-box">
+              <Transition name="fx-swap" mode="out-in">
+                <div :key="cur.id" class="fx-copy">
+                  <h3>{{ cur.title }}</h3>
+                  <p>{{ cur.description }}</p>
+                  <a class="fx-btn" href="#">
+                    Explore {{ cur.tab }}
+                    <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" /></svg>
+                  </a>
+                </div>
+              </Transition>
+            </div>
 
-      <div
-        id="fs-panel"
-        class="fs-show"
-        :style="{ '--k': scale }"
-        role="tabpanel"
-        :aria-labelledby="`fs-tab-${cur.id}`"
-        @pointerenter="paused = true"
-        @pointerleave="paused = false"
-        @focusin="paused = true"
-        @focusout="paused = false"
-      >
-        <!-- stacked frames + window -->
-        <div ref="stageEl" class="fs-stage" aria-hidden="true">
-          <div ref="fitEl" class="fs-fit" :style="fitH ? { height: fitH + 'px' } : undefined">
-            <div class="fs-scene" :style="{ transform: `translateX(-50%) scale(${scale})` }">
-              <div class="fs-stack">
-                <!-- ================= 1 · Leads ================= -->
-                <div class="fs-card" :class="{ front: active === 0, out: prev === 0 && active !== 0 }" :style="{ '--d': depth(0) }">
-                  <div class="sc" :class="{ on: active === 0 }">
-                  <div class="bar"><b>Lead inbox</b><span class="srch">⌕ Search leads…</span><span class="flt">All sources</span><span class="avs"><i>AS</i><i>NP</i><i>RK</i></span></div>
-                  <div class="body">
-                    <div class="pills"><i v-for="(p, n) in leadPills" :key="p" :class="{ on: n === 0 }">{{ p }}</i></div>
-                    <div class="tbl ld">
-                      <div class="th"><span>LEAD</span><span>SOURCE</span><span>SCORE</span><span>ASSIGNED TO</span></div>
-                      <div v-for="(r, n) in leadRows" :key="r[1]" class="tr" :class="{ fresh: n === 0 }" :style="{ '--n': n }">
-                        <span class="who"><i class="av dk">{{ r[0] }}</i><span class="nm"><b>{{ r[1] }}</b><small>{{ r[2] }}</small></span><em v-if="r[7]" class="ld-mrg">{{ r[7] }}</em></span>
-                        <span><i class="ld-src" :class="r[3]">{{ r[3] }}</i></span>
-                        <span class="rv"><b>{{ r[4] }}</b><i><u :style="{ width: r[4] + '%' }"></u></i></span>
-                        <span class="ld-asg"><i>{{ r[5] }}</i>{{ r[6] }}</span>
-                      </div>
+            <ul class="fx-list" aria-label="Product features">
+              <li v-for="(f, i) in features" :key="f.id">
+                <button type="button" :class="{ on: active === i }" :aria-current="active === i ? 'true' : undefined" @click="goTo(i)">
+                  {{ f.tab }}
+                </button>
+              </li>
+            </ul>
+          </div>
+        </aside>
+
+        <!-- ============ right: one card per feature ============ -->
+        <div class="fx-cards">
+          <article v-for="(f, i) in features" :key="f.id" :ref="(el) => (items[i] = el)" class="fx-item">
+            <!-- phones: the text sits above each card instead of pinned on the left -->
+            <div class="fx-mcopy">
+              <h3>{{ f.title }}</h3>
+              <p>{{ f.description }}</p>
+              <a class="fx-btn" href="#">
+                Explore {{ f.tab }}
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" /></svg>
+              </a>
+            </div>
+
+            <div class="fx-card" :style="{ background: f.bg }" aria-hidden="true">
+              <span class="fx-blob b1" :style="{ background: f.glow[0] }"></span>
+              <span class="fx-blob b2" :style="{ background: f.glow[1] }"></span>
+
+              <div class="fx-win">
+                <!-- 1 · Leads -->
+                <template v-if="f.id === 'leads'">
+                  <div class="w-bar"><b>Lead inbox</b><span class="w-chip">All sources</span><span class="w-avs"><i>AS</i><i>NP</i><i>RK</i></span></div>
+                  <div class="w-body">
+                    <div class="w-pills"><i v-for="(p, n) in leadPills" :key="p" :class="{ on: n === 0 }">{{ p }}</i></div>
+                    <div v-for="(r, n) in leadRows" :key="r[1]" class="w-row w-lead" :class="{ fresh: n === 0 }">
+                      <i class="w-av">{{ r[0] }}</i>
+                      <span class="w-nm"><b>{{ r[1] }}</b><small>{{ r[2] }}</small></span>
+                      <i class="w-src" :class="r[3]">{{ r[3] }}</i>
+                      <span class="w-sc"><b>{{ r[4] }}</b><i><u :style="{ width: r[4] + '%' }"></u></i></span>
                     </div>
                   </div>
-                </div>
-                </div>
+                </template>
 
-                <!-- ================= 2 · Pipeline ================= -->
-                <div class="fs-card" :class="{ front: active === 1, out: prev === 1 && active !== 1 }" :style="{ '--d': depth(1) }">
-                  <div class="sc" :class="{ on: active === 1 }">
-                  <div class="bar"><b>Sales pipeline</b><span class="srch">⌕ Search deals…</span><span class="flt">Filter</span><span class="rev">Weighted forecast $86,900 <em>live</em></span></div>
-                  <div class="body">
-                    <div class="kan">
-                      <div v-for="(col, c) in kanban" :key="col.t" class="col" :style="{ '--c': c }">
-                        <div class="ch"><i :style="{ background: col.c }"></i>{{ col.t }}<em>{{ col.n }}</em></div>
-                        <div v-for="(d, n) in col.cards" :key="d[0]" class="dl" :style="{ '--n': n + c }">
+                <!-- 2 · Pipeline -->
+                <template v-else-if="f.id === 'pipeline'">
+                  <div class="w-bar"><b>Sales pipeline</b><span class="w-rev">Weighted forecast $86,900 <em>live</em></span></div>
+                  <div class="w-body">
+                    <div class="w-kan">
+                      <div v-for="col in kanban" :key="col.t" class="w-col">
+                        <div class="w-ch"><i :style="{ background: col.c }"></i>{{ col.t }}</div>
+                        <div v-for="d in col.cards" :key="d[0]" class="w-dl">
                           <b>{{ d[0] }}</b><small>{{ d[1] }}</small>
-                          <div class="ft"><span class="pr" :class="d[3]">{{ d[3] }}</span><strong>{{ d[2] }}</strong></div>
+                          <div class="w-ft"><span class="w-pr" :class="d[3]">{{ d[3] }}</span><strong>{{ d[2] }}</strong></div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                </div>
+                </template>
 
-                <!-- ================= 3 · Quotations ================= -->
-                <div class="fs-card" :class="{ front: active === 2, out: prev === 2 && active !== 2 }" :style="{ '--d': depth(2) }">
-                  <div class="sc" :class="{ on: active === 2 }">
-                  <div class="bar"><b>New quotation</b><span class="srch">⌕ QT-2048</span><span class="flt">Preview PDF</span><span class="avs"><i>AS</i></span></div>
-                  <div class="body qt">
-                    <div class="steps">
-                      <div v-for="(s, n) in steps" :key="s[0]" class="stp" :class="{ cur: n === 1, done: n === 0 }" :style="{ '--n': n }"><small>Step {{ n + 1 }}</small><b>{{ s[0] }}</b></div>
-                      <div class="bill"><small>BILL TO</small><b>Apex Motors Ltd</b><span>amal@apexmotors.lk</span></div>
-                    </div>
-                    <div class="doc">
-                      <div class="dh"><span class="nm"><b>Line items</b><small>8% VAT · 5% discount · multicurrency</small></span><span class="stt">APPROVED</span></div>
-                      <div v-for="(l, n) in lines" :key="l[0]" class="ln" :style="{ '--n': n }"><span>{{ l[0] }}</span><span>{{ l[1] }}</span><b>{{ l[2] }}</b></div>
-                      <div class="tot"><span>Total</span><b>$7,420.00</b></div>
-                      <div class="acts"><span class="btn o">Convert to invoice →</span><span class="btn">Send on WhatsApp</span><span class="btn">Email</span></div>
-                      <div class="flow"><span v-for="(s, n) in ['Sent', 'Viewed', 'Approved']" :key="s" :style="{ '--n': n }"><i>✓</i>{{ s }}</span></div>
+                <!-- 3 · Quotations -->
+                <template v-else-if="f.id === 'quotes'">
+                  <div class="w-bar"><b>New quotation</b><span class="w-chip">Preview PDF</span><span class="w-avs"><i>AS</i></span></div>
+                  <div class="w-body">
+                    <div class="w-bill"><small>BILL TO</small><b>Apex Motors Ltd</b><span>amal@apexmotors.lk</span></div>
+                    <div class="w-doc">
+                      <div class="w-dh"><span class="w-nm"><b>Line items</b><small>8% VAT · 5% discount · multicurrency</small></span><span class="w-stt">APPROVED</span></div>
+                      <div v-for="l in lines" :key="l[0]" class="w-ln"><span>{{ l[0] }}</span><span>{{ l[1] }}</span><b>{{ l[2] }}</b></div>
+                      <div class="w-tot"><span>Total</span><b>$7,420.00</b></div>
+                      <div class="w-acts"><span class="w-btn o">Convert to invoice →</span><span class="w-btn">Send on WhatsApp</span></div>
+                      <div class="w-flow"><span v-for="s in ['Sent', 'Viewed', 'Approved']" :key="s"><i>✓</i>{{ s }}</span></div>
                     </div>
                   </div>
-                </div>
-                </div>
+                </template>
 
-                <!-- ================= 4 · WhatsApp CRM ================= -->
-                <div class="fs-card" :class="{ front: active === 3, out: prev === 3 && active !== 3 }" :style="{ '--d': depth(3) }">
-                  <div class="sc" :class="{ on: active === 3 }">
-                  <div class="bar"><b>WhatsApp inbox</b><span class="srch">⌕ Search chats…</span><span class="flt">All agents</span><span class="avs"><i>AS</i><i>NP</i><i>RK</i></span></div>
-                  <div class="body wa">
-                    <div class="wa-list">
-                      <div v-for="(c, n) in chats" :key="c[1]" class="wa-chat" :class="{ sel: n === 0 }" :style="{ '--n': n }">
-                        <i class="av" :style="{ background: c[4] }">{{ c[0] }}</i>
-                        <span class="nm"><b>{{ c[1] }}</b><small>{{ c[2] }}</small></span>
-                        <span class="wa-meta"><small>{{ c[3] }}</small><em v-if="c[5]">{{ c[5] }}</em></span>
-                      </div>
+                <!-- 4 · WhatsApp -->
+                <template v-else-if="f.id === 'whatsapp'">
+                  <div class="w-bar"><b>WhatsApp inbox</b><span class="w-chip">All agents</span><span class="w-avs"><i>AS</i><i>NP</i><i>RK</i></span></div>
+                  <div class="w-body">
+                    <div class="w-chat-head"><i class="w-av dk">NR</i><span class="w-nm"><b>Nuwan Rathnayake</b><small>+94 77 412 8890 · Official WhatsApp API</small></span><span class="w-asg">Assigned · Amal S.</span></div>
+                    <div class="w-msgs">
+                      <div v-for="m in msgs" :key="m[1]" class="w-msg" :class="m[0]"><span>{{ m[1] }}</span><small v-if="m[2]">{{ m[2] }}</small></div>
                     </div>
-                    <div class="wa-conv">
-                      <div class="wa-head"><i class="av dk">NR</i><span class="nm"><b>Nuwan Rathnayake</b><small>+94 77 412 8890 · Official WhatsApp API</small></span><span class="wa-asg">Assigned · Amal S.</span></div>
-                      <div class="wa-msgs">
-                        <div v-for="(m, n) in msgs" :key="m[1]" class="wa-msg" :class="m[0]" :style="{ '--n': n + 2 }"><span>{{ m[1] }}</span><small v-if="m[2]">{{ m[2] }}</small></div>
-                      </div>
-                      <div class="wa-tools"><span>/ Saved replies</span><span>Templates</span><span>Assign ▾</span></div>
+                    <div class="w-tools"><span>/ Saved replies</span><span>Templates</span><span>Assign ▾</span></div>
+                  </div>
+                </template>
+
+                <!-- 5 · Calls -->
+                <template v-else-if="f.id === 'calls'">
+                  <div class="w-bar"><b>Call journal</b><span class="w-chip">Today</span><span class="w-avs"><i>1001</i></span></div>
+                  <div class="w-body">
+                    <div class="w-pills"><i class="on">All</i><i>Missed</i><i>Answered</i><i>Outbound</i><i>Vodia AI</i></div>
+                    <div v-for="(c, n) in calls" :key="c[1]" class="w-row w-call" :class="{ fresh: n === 0 }">
+                      <i class="w-av dk">{{ c[0] }}</i>
+                      <span class="w-nm"><b>{{ c[1] }}</b><small>{{ c[2] }}</small></span>
+                      <i class="w-cp" :class="c[3]">{{ c[3] }}</i>
+                      <span class="w-mu">{{ c[4] }}</span>
+                    </div>
+                    <div class="w-pop">
+                      <small class="w-cap">INCOMING · EXT 1001</small>
+                      <div class="w-who"><i class="w-av">DP</i><span class="w-nm"><b>Daniel Perera</b><small>Matched in &lt;1 s</small></span></div>
+                      <div class="w-hist"><span>Last quote <b>QT-2031</b></span><span>Open tasks <b>2</b></span></div>
                     </div>
                   </div>
-                </div>
-                </div>
+                </template>
 
-                <!-- ================= 5 · Calls (3CX + Vodia) ================= -->
-                <div class="fs-card" :class="{ front: active === 4, out: prev === 4 && active !== 4 }" :style="{ '--d': depth(4) }">
-                  <div class="sc" :class="{ on: active === 4 }">
-                  <div class="bar"><b>Call journal</b><span class="srch">⌕ Search calls…</span><span class="flt">Today</span><span class="avs"><i>1001</i></span></div>
-                  <div class="body">
-                    <div class="pills"><i class="on">All</i><i>Missed</i><i>Answered</i><i>Outbound</i><i>Vodia AI</i></div>
-                    <div class="tbl calls">
-                      <div class="th"><span>CUSTOMER</span><span>TYPE</span><span>EXT</span><span>DURATION</span><span>DATE / TIME</span></div>
-                      <div v-for="(c, n) in calls" :key="c[1]" class="tr" :class="{ fresh: n === 0 }" :style="{ '--n': n }">
-                        <span class="who"><i class="av dk">{{ c[0] }}</i><span class="nm"><b>{{ c[1] }}</b><small>{{ c[2] }}</small></span></span>
-                        <span><i class="cp" :class="c[3]">{{ c[3] }}</i></span>
-                        <span class="mu">{{ c[4] }}</span><span class="mu">{{ c[5] }}</span><span class="mu">{{ c[6] }}</span>
-                      </div>
+                <!-- 6 · Service & AMC -->
+                <template v-else>
+                  <div class="w-bar"><b>Service &amp; AMC</b><span class="w-chip">This month</span><span class="w-avs"><i>NP</i><i>RK</i><i>TM</i></span></div>
+                  <div class="w-body">
+                    <div class="w-tiles">
+                      <div v-for="t in amTiles" :key="t[0]" class="w-tile"><small>{{ t[0] }}</small><b>{{ t[1] }}</b><em :class="t[3]">{{ t[2] }}</em></div>
                     </div>
-                    <div class="pop">
-                      <small class="cap">INCOMING · EXT 1001</small>
-                      <div class="who"><i class="av">DP</i><span class="nm"><b>Daniel Perera</b><small>Matched in &lt;1 s</small></span></div>
-                      <div class="hist"><span>Last quote <b>QT-2031</b></span><span>Open tasks <b>2</b></span></div>
+                    <div v-for="r in amRows" :key="r[0]" class="w-row w-am">
+                      <span class="w-nm"><b>{{ r[0] }}</b><small>{{ r[1] }}</small></span>
+                      <span class="w-nm"><b>{{ r[2] }}</b><small>{{ r[3] }}</small></span>
+                      <i class="w-st" :class="r[4]">{{ r[5] }}</i>
                     </div>
                   </div>
-                </div>
-                </div>
-
-                <!-- ================= 6 · Service & AMC ================= -->
-                <div class="fs-card" :class="{ front: active === 5, out: prev === 5 && active !== 5 }" :style="{ '--d': depth(5) }">
-                  <div class="sc" :class="{ on: active === 5 }">
-                  <div class="bar"><b>Service &amp; AMC</b><span class="srch">⌕ Search contracts…</span><span class="flt">This month</span><span class="avs"><i>NP</i><i>RK</i><i>TM</i></span></div>
-                  <div class="body">
-                    <div class="tiles">
-                      <div v-for="(t, n) in amTiles" :key="t[0]" class="tile" :style="{ '--n': n }"><small>{{ t[0] }}</small><b>{{ t[1] }}</b><em :class="t[3]">{{ t[2] }}</em></div>
-                    </div>
-                    <div class="tbl am">
-                      <div class="th"><span>CONTRACT</span><span>SERVICE</span><span>TECHNICIAN</span><span>STATUS</span></div>
-                      <div v-for="(r, n) in amRows" :key="r[0]" class="tr" :style="{ '--n': n }">
-                        <span class="nm"><b>{{ r[0] }}</b><small>{{ r[1] }}</small></span>
-                        <span class="nm"><b>{{ r[2] }}</b><small>{{ r[3] }}</small></span>
-                        <span class="ld-asg"><i>{{ r[4] }}</i>{{ r[5] }}</span>
-                        <span><i class="am-st" :class="r[6]">{{ r[7] }}</i></span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                </div>
+                </template>
               </div>
             </div>
-          </div>
-        </div>
-
-        <!-- caption -->
-        <div class="fs-cap" :style="capW ? { maxWidth: capW + 'px' } : undefined">
-          <div class="fs-cap-in">
-          <Transition name="fs-swap">
-          <div :key="cur.id" class="fs-cap-swap">
-            <div class="cp1">
-              <h3>{{ cur.title }}</h3>
-              <p>{{ cur.description }}</p>
-            </div>
-            <ul class="cp2">
-              <li v-for="pt in cur.points" :key="pt">
-                <i><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 8 2.500 2.500L12 5" /></svg></i>{{ pt }}
-              </li>
-            </ul>
-            <div class="cp3">
-              <div v-for="m in cur.metrics" :key="m.label"><strong>{{ m.value }}</strong><span>{{ m.label }}</span></div>
-            </div>
-          </div>
-          </Transition>
-          </div>
+          </article>
         </div>
       </div>
     </div>
@@ -201,91 +153,99 @@
 </template>
 
 <script setup>
-defineOptions({ name: 'HomeSection1' })
+defineOptions({ name: 'FeatureScroll' })
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 
+/* Same six features as your tabbed section.
+   `bg` is the colour behind each card and `glow` the two soft blobs on it.
+   To use a photo instead, set  bg: "center / cover url('https://…')"  */
 const features = [
   {
     id: 'leads',
-    icon: ['M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z', 'M2 21v-2a7 7 0 0 1 14 0v2', 'M19 8a4 4 0 0 1 0 8M22 21v-2a5 5 0 0 0-3-4.58'],
     tab: 'Leads & Contacts',
-    label: 'Lead capture',
     title: 'Lead and contact management',
-    description: 'Enquiries from your website, Facebook Lead Ads and WhatsApp arrive in Saptivo automatically, tagged with their source. Duplicates are merged, leads are scored and each one is assigned to the right salesperson within seconds.',
-    points: ['Website, Facebook Lead Ads and WhatsApp enquiries captured automatically', 'Every lead tagged with its source, duplicates merged', 'Leads scored and assigned to the right salesperson in seconds'],
-    metrics: [{ value: '3 sources', label: 'Auto-Captured' }, { value: 'Auto', label: 'Duplicate Merge' }, { value: 'Seconds', label: 'To Assign' }],
+    description:
+      'Enquiries from your website, Facebook Lead Ads and WhatsApp arrive in Saptivo automatically, tagged with their source. Duplicates are merged, leads are scored and each one is assigned to the right salesperson within seconds.',
+    bg: 'linear-gradient(145deg, #ffe3d0, #ffb98a 60%, #ff9456)',
+    glow: ['#fff3ea', '#f2540c'],
   },
   {
     id: 'pipeline',
-    icon: ['M3 4h18l-7 8v6l-4 2v-8L3 4Z'],
     tab: 'Sales Pipeline',
-    label: 'Pipeline',
     title: 'Sales pipeline',
-    description: 'Drag deals across stages you define, set follow-up reminders and see weighted revenue forecasts in real time. Overdue deals are flagged before they go cold.',
-    points: ['Drag deals across stages you define', 'Follow-up reminders on every deal', 'Overdue deals flagged before they go cold'],
-    metrics: [{ value: 'Real-time', label: 'Weighted Forecast' }, { value: 'Custom', label: 'Pipeline Stages' }, { value: 'Early', label: 'Overdue Alerts' }],
+    description:
+      'Drag deals across stages you define, set follow-up reminders and see weighted revenue forecasts in real time. Overdue deals are flagged before they go cold.',
+    bg: 'linear-gradient(180deg, #2a8fb0 0%, #7ea4b8 38%, #e3a894 66%, #ff9a52 100%)',
+    glow: ['#1b7fa6', '#ff7a12'],
   },
   {
     id: 'quotes',
-    icon: ['M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z', 'M14 2v6h6M8 13h8M8 17h8'],
     tab: 'Quotes & Invoicing',
-    label: 'Billing',
     title: 'Quotations and invoicing',
-    description: 'Create branded PDF quotations from your product catalog in seconds, send them on WhatsApp or email, and convert approved quotes into tax invoices in one click. VAT, discounts and multicurrency are built in.',
-    points: ['Branded PDF quotations from your product catalog', 'Send on WhatsApp or email', 'VAT, discounts and multicurrency built in'],
-    metrics: [{ value: '1-Click', label: 'Quote to Invoice' }, { value: 'PDF', label: 'Branded Quotes' }, { value: 'Multi', label: 'Currency & VAT' }],
+    description:
+      'Create branded PDF quotations from your product catalog in seconds, send them on WhatsApp or email, and convert approved quotes into tax invoices in one click. VAT, discounts and multicurrency are built in.',
+    bg: 'linear-gradient(145deg, #ff8a2a, #f2540c 70%, #d9420a)',
+    glow: ['#ffb36b', '#9a2f06'],
   },
   {
     id: 'whatsapp',
-    icon: ['M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z'],
     tab: 'WhatsApp CRM',
-    label: 'Messaging',
     title: 'WhatsApp CRM',
-    description: "Give your whole team one shared WhatsApp Business inbox on the official API. Assign chats, use saved replies and approved templates, and keep every conversation on the customer's timeline.",
-    points: ['One shared WhatsApp Business inbox for the whole team', 'Assign chats, with saved replies and approved templates', "Every conversation kept on the customer's timeline"],
-    metrics: [{ value: '1 inbox', label: 'Team Inbox' }, { value: 'Official', label: 'Business API' }, { value: 'Full', label: 'Timeline' }],
+    description:
+      "Give your whole team one shared WhatsApp Business inbox on the official API. Assign chats, use saved replies and approved templates, and keep every conversation on the customer's timeline.",
+    bg: 'linear-gradient(160deg, #ffe9da, #ffc9a3 55%, #8fb9d6)',
+    glow: ['#ffffff', '#3e86b5'],
   },
   {
     id: 'calls',
-    icon: ['M22 16.92v3a2 2 0 0 1-2.18 2A19.8 19.8 0 0 1 11.2 18.8a19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.09 3.2 2 2 0 0 1 4.08 1h3a2 2 0 0 1 2 1.72c.12.96.35 1.9.69 2.8a2 2 0 0 1-.45 2.11L8.05 8.9a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.84.57 2.8.69a2 2 0 0 1 1.77 2.05Z'],
     tab: '3CX & Vodia Calls',
-    label: 'Telephony',
     title: '3CX and Vodia call integration',
-    description: "See who is calling before you answer. Saptivo connects to your 3CX or Vodia phone system, pops up the caller's profile and logs every inbound, outbound and missed call automatically. With Vodia, AI voice agents can also make reminder and follow-up calls using your CRM data.",
-    points: ["Caller's profile pops up before you answer", 'Every inbound, outbound and missed call logged automatically', 'Vodia AI voice agents make reminder and follow-up calls'],
-    metrics: [{ value: '3CX/Vodia', label: 'Phone Systems' }, { value: 'Auto', label: 'Calls Logged' }, { value: 'AI', label: 'Voice Agents' }],
+    description:
+      "See who is calling before you answer. Saptivo connects to your 3CX or Vodia phone system, pops up the caller's profile and logs every inbound, outbound and missed call automatically. With Vodia, AI voice agents can also make reminder and follow-up calls using your CRM data.",
+    bg: 'linear-gradient(135deg, #f5821f 0%, #c9531c 38%, #1d5a8a 78%, #0f3358 100%)',
+    glow: ['#ffa24d', '#2f7fc0'],
   },
   {
     id: 'service',
-    icon: ['M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z'],
     tab: 'Service & AMC',
-    label: 'Field service',
     title: 'Service and AMC management',
-    description: 'For businesses that install and maintain equipment, Saptivo manages annual maintenance contracts, preventive service schedules, technician dispatch, spare parts and warranty billing.',
-    points: ['Annual maintenance contracts and preventive service schedules', 'Technician dispatch and spare parts', 'Warranty billing in the same place'],
-    metrics: [{ value: 'AMC', label: 'Contracts' }, { value: 'Preventive', label: 'Service Schedules' }, { value: 'Warranty', label: 'Billing Built In' }],
+    description:
+      'For businesses that install and maintain equipment, Saptivo manages annual maintenance contracts, preventive service schedules, technician dispatch, spare parts and warranty billing.',
+    bg: 'linear-gradient(180deg, #1e8cab 0%, #8f9fb3 34%, #e0a595 62%, #ffa670 82%, #ff8f1f 100%)',
+    glow: ['#2fb6ec', '#ff7a12'],
   },
 ]
 
-/* demo data for the artwork */
-const leadPills = ['All 48', 'Website 21', 'Facebook Lead Ads 14', 'WhatsApp 13']
+/* demo data for the artwork inside the cards */
+const leadPills = ['All 48', 'Website 21', 'Facebook 14', 'WhatsApp 13']
 const leadRows = [
-  ['NR', 'Nuwan Rathnayake', 'Website form · 12 s ago', 'Website', 92, 'AS', 'Amal S.', ''],
-  ['FR', 'Fathima Rizwan', 'Facebook Lead Ad · 1 min ago', 'Facebook', 84, 'NP', 'Nadeesha P.', ''],
-  ['PG', 'Pradeep Gunasekara', 'WhatsApp · 3 min ago', 'WhatsApp', 76, 'AS', 'Amal S.', 'Merged ×2'],
-  ['SD', 'Sachini Dias', 'Website form · 6 min ago', 'Website', 58, 'RK', 'Ruwan K.', ''],
+  ['NR', 'Nuwan Rathnayake', 'Website form · 12 s ago', 'Website', 92],
+  ['FR', 'Fathima Rizwan', 'Facebook Lead Ad · 1 min ago', 'Facebook', 84],
+  ['PG', 'Pradeep Gunasekara', 'WhatsApp · 3 min ago', 'WhatsApp', 76],
+  ['SD', 'Sachini Dias', 'Website form · 6 min ago', 'Website', 58],
+  ['KP', 'Kasun Perera', 'WhatsApp · 9 min ago', 'WhatsApp', 51],
+  ['TM', 'Thilina Mendis', 'Facebook Lead Ad · 12 min ago', 'Facebook', 47],
 ]
-const chats = [
-  ['NR', 'Nuwan Rathnayake', 'Do you have the POS bundle in stock?', '10:42', '#0f172a', '2'],
-  ['FR', 'Fathima Rizwan', 'Thanks! Payment sent ✓', '10:31', '#f2540c', ''],
-  ['PG', 'Pradeep Gunasekara', 'Can we reschedule the demo?', '09:58', '#6366f1', '1'],
-  ['SD', 'Sachini Dias', 'Template · Order confirmation', '09:20', '#0ea5a4', ''],
+const kanban = [
+  { t: 'Leads', c: '#94a3b8', cards: [['Lanka Traders', 'Inquiry via website', '$6,400', 'Medium'], ['Blue Wave Hotel', 'Facebook lead ad', '$12,900', 'High'], ['Ceylon Auto', 'WhatsApp inquiry', '$3,200', 'Low']] },
+  { t: 'Quoted', c: '#f59e0b', cards: [['Metro Pharmacy', 'QT-2051 · viewed', '$8,750', 'High'], ['Green Leaf Café', 'Follow-up overdue', '$2,980', 'Overdue'], ['Pearl Retail', 'QT-2047 · viewed', '$5,300', 'Medium']] },
+  { t: 'Approved', c: '#f2540c', cards: [['Apex Motors', 'QT-2048 · approved', '$7,420', 'High'], ['Sunrise Mart', 'QT-2044 · approved', '$4,100', 'Medium'], ['Silver Coast', 'QT-2042 · approved', '$6,050', 'Low']] },
+]
+const lines = [
+  ['Premium service plan', '×1', '$4,200'],
+  ['POS terminal bundle', '×2', '$2,600'],
+  ['Onboarding & training', '×1', '$620'],
 ]
 const msgs = [
   ['in', 'Hi! Do you have the POS bundle in stock?', '10:42'],
   ['out', 'Hi Nuwan, yes. Sending your quotation now.', '10:43 ✓✓'],
   ['tpl', 'Quotation QT-2048 is ready to view and approve', 'Delivered ✓✓'],
   ['note', "✓ Saved to Nuwan's customer timeline", ''],
+]
+const calls = [
+  ['DP', 'Daniel Perera', '755 322 689', 'Missed', '0:56'],
+  ['KP', 'Kasun Perera', '770 629 341', 'Answered', '1:40'],
+  ['AI', 'Reminder call', 'Vodia AI voice agent', 'Vodia', '1:12'],
 ]
 const amTiles = [
   ['Active AMC contracts', '126', '▲ 8 this month', 'up'],
@@ -294,107 +254,87 @@ const amTiles = [
   ['Warranty claims', '7', 'Billing ready', 'up'],
 ]
 const amRows = [
-  ['Apex Motors', 'Lift L-204 · AMC-0192', 'Preventive service', 'Next visit · 02 Nov', 'NP', 'Nadeesha P.', 'sch', 'Scheduled'],
-  ['Metro Pharmacy', 'Cold room CR-12 · AMC-0188', 'Compressor replacement', 'Spare part issued', 'RK', 'Ruwan K.', 'prog', 'On site'],
-  ['Blue Wave Hotel', 'Generator G-3', 'Warranty repair', 'Warranty billing ready', 'TM', 'Thilina M.', 'war', 'Warranty'],
-  ['Island Books', 'Printer fleet · AMC-0175', 'Quarterly service', 'Overdue · 2 days', 'AS', 'Amal S.', 'ovr', 'Overdue'],
-]
-const steps = [['Client details'], ['Line items'], ['Taxes & terms'], ['Send & track']]
-const lines = [
-  ['Premium service plan', '×1', '$4,200'],
-  ['POS terminal bundle', '×2', '$2,600'],
-  ['Onboarding & training', '×1', '$620'],
-]
-const kanban = [
-  { t: 'Leads', n: 24, c: '#94a3b8', cards: [['Lanka Traders', 'Inquiry via website', '$6,400', 'Medium'], ['Blue Wave Hotel', 'Facebook lead ad', '$12,900', 'High'], ['Ceylon Auto', 'WhatsApp inquiry', '$3,200', 'Low']] },
-  { t: 'Quoted', n: 18, c: '#f59e0b', cards: [['Metro Pharmacy', 'QT-2051 · viewed', '$8,750', 'High'], ['Green Leaf Café', 'Follow-up overdue · 3 d', '$2,980', 'Overdue'], ['Pearl Retail', 'QT-2047 · viewed', '$5,300', 'Medium']] },
-  { t: 'Approved', n: 11, c: '#f2540c', cards: [['Apex Motors', 'QT-2048 · approved', '$7,420', 'High'], ['Sunrise Mart', 'QT-2044 · approved', '$4,100', 'Medium'], ['Silver Coast', 'QT-2042 · approved', '$6,050', 'Low']] },
-  { t: 'Paid', n: 9, c: '#10b981', cards: [['Island Books', 'INV-3380 · paid', '$3,640', 'Low'], ['Coral Dental', 'INV-3377 · paid', '$9,210', 'High'], ['Zen Studio', 'INV-3370 · paid', '$2,480', 'Low']] },
-]
-const calls = [
-  ['DP', 'Daniel Perera', '755 322 689', 'Missed', '8001', '0:56', '2026-10-21 08:49'],
-  ['KP', 'Kasun Perera', '770 629 341', 'Answered', '1032', '1:40', '2026-10-21 08:12'],
-  ['YA', 'Yasasi Alwis', '947 039 708', 'Outbound', '1001', '4:05', '2026-10-20 16:39'],
-  ['NF', 'Nimali Fernando', '771 880 214', 'Answered', '1008', '2:31', '2026-10-20 15:02'],
-  ['AI', 'Reminder call', 'Vodia AI voice agent', 'Vodia', '1001', '1:12', '2026-10-20 11:27'],
+  ['Apex Motors', 'Lift L-204 · AMC-0192', 'Preventive service', 'Next visit · 02 Nov', 'sch', 'Scheduled'],
+  ['Metro Pharmacy', 'Cold room CR-12', 'Compressor replacement', 'Spare part issued', 'prog', 'On site'],
+  ['Blue Wave Hotel', 'Generator G-3', 'Warranty repair', 'Warranty billing ready', 'war', 'Warranty'],
+  ['Island Books', 'Printer fleet · AMC-0175', 'Quarterly service', 'Overdue · 2 days', 'ovr', 'Overdue'],
 ]
 
-/* Preview geometry. The scene is authored at SW × SH (the 4 strips of the cards behind + one 480px window)
-   and scaled uniformly, so proportions never change. */
-const SW = 960 + 56 // window + beige frame
-const STACK = 100 // 5 strips × 20px of the cards behind the front one
-const SH = STACK + 380
-
+/* ---------- scroll logic ---------- */
 const rootEl = ref(null)
-const stageEl = ref(null)
-const capW = ref(0) // caption is exactly as wide as the stacked window above it
-const fitEl = ref(null)
 const active = ref(0)
-const prev = ref(-1)
-const order = ref([0, 1, 2, 3, 4, 5]) // front → back
-const paused = ref(false)
 const revealed = ref(false)
-const scale = ref(1)
-const fitH = ref(0)
-const motion = ref(true)
 const cur = computed(() => features[active.value])
 
-let ro, io, raf
+const items = [] // the six <article> elements
+let cards = [] // their .fx-card children
+let raf = 0
+let io = null
+let rootIo = null
 
+/* the card closest to the middle of the screen is the active one;
+   --p (-1 … 1) is how far a card is from the middle, used for a gentle parallax */
+function update() {
+  raf = 0
+  const vh = window.innerHeight
+  const mid = vh * 0.5
+  let best = 0
+  let bestD = Infinity
+  cards.forEach((el, i) => {
+    if (!el) return
+    const r = el.getBoundingClientRect()
+    const c = r.top + r.height / 2
+    const d = Math.abs(c - mid)
+    if (d < bestD) {
+      bestD = d
+      best = i
+    }
+    el.style.setProperty('--p', Math.max(-1, Math.min(1, (c - mid) / vh)).toFixed(3))
+  })
+  if (best !== active.value) active.value = best
+}
+function queue() {
+  if (!raf) raf = requestAnimationFrame(update)
+}
 function goTo(i) {
-  const n = (i + features.length) % features.length
-  if (n === active.value) return
-  prev.value = active.value
-  active.value = n
-  // the chosen screen moves to the front, everything else keeps its relative order behind it
-  order.value = [n, ...order.value.filter((x) => x !== n)]
-}
-const depth = (i) => order.value.indexOf(i)
-const step = (d) => goTo(active.value + d)
-/* Scale the full preview to its available width; let the page scroll to show its full height. */
-function fit() {
-  const stage = stageEl.value
-  const box = fitEl.value
-  if (!stage || !box) return
-  const k = Math.min(0.86, stage.clientWidth / SW) || 1
-  scale.value = +k.toFixed(3)
-  capW.value = Math.round(SW * k)
-  fitH.value = Math.round(SH * k)
-}
-function queueFit() {
-  cancelAnimationFrame(raf)
-  raf = requestAnimationFrame(fit)
+  cards[i]?.scrollIntoView({ behavior: 'smooth', block: 'center' })
 }
 
 onMounted(() => {
-  motion.value = !(typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches)
-  fit()
-  ro = new ResizeObserver(queueFit) // width changes and caption height changes (each tab has different copy)
-  ro.observe(rootEl.value)
-  window.addEventListener('resize', queueFit) // viewport height changes do not resize the section itself
-  window.visualViewport?.addEventListener('resize', queueFit)
+  cards = items.map((el) => el?.querySelector('.fx-card'))
+  update()
+  window.addEventListener('scroll', queue, { passive: true })
+  window.addEventListener('resize', queue)
+
   io = new IntersectionObserver(
-    ([en]) => {
-      if (en.isIntersecting) revealed.value = true
-      paused.value = !en.isIntersecting
-    },
-    { threshold: 0.2 },
+    (entries) =>
+      entries.forEach((en) => {
+        if (en.isIntersecting) {
+          en.target.classList.add('in')
+          io.unobserve(en.target)
+        }
+      }),
+    { threshold: 0.12 },
   )
-  io.observe(rootEl.value)
+  items.forEach((el) => el && io.observe(el))
+
+  rootIo = new IntersectionObserver(([en]) => en.isIntersecting && (revealed.value = true), { threshold: 0.1 })
+  rootIo.observe(rootEl.value)
 })
 onBeforeUnmount(() => {
   cancelAnimationFrame(raf)
-  window.removeEventListener('resize', queueFit)
-  window.visualViewport?.removeEventListener('resize', queueFit)
-  ro?.disconnect()
+  window.removeEventListener('scroll', queue)
+  window.removeEventListener('resize', queue)
   io?.disconnect()
+  rootIo?.disconnect()
 })
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Urbanist:wght@500;600&display=swap');
 
-.fs {
+/* NOTE: no `overflow: hidden` on .fx or its parents, it would stop the left column from staying pinned. */
+.fx {
   --o: #f2540c;
   --og: linear-gradient(145deg, #ff7a1a, #f2540c);
   --o-soft: #fff1e8;
@@ -402,939 +342,843 @@ onBeforeUnmount(() => {
   --ink: #475569;
   --mute: #94a3b8;
   --line: #f1ece8;
-  --frame: #fbe3d3;
-  --bg: #fff;
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
   position: relative;
-  scroll-margin-top: 96px;
   width: calc(100% - 2 * clamp(8px, 1.6vw, 24px));
   max-width: 1680px;
-  margin: clamp(32px, 5vw, 64px) auto clamp(48px, 7vw, 96px);
-  padding: clamp(18px, 3vh, 40px) clamp(14px, 4vw, 64px) clamp(64px, 6vw, 84px);
-  overflow: hidden;
-  isolation: isolate;
+  margin: clamp(32px, 5vw, 64px) auto;
+  padding: clamp(36px, 5vw, 72px) clamp(16px, 4vw, 64px) clamp(48px, 6vw, 88px);
   border: 1px solid rgba(15, 23, 42, 0.06);
   border-radius: clamp(22px, 2.6vw, 36px);
-  box-shadow: 0 18px 36px rgba(15, 23, 42, 0.16), 0 1px 0 #fff inset;
+  background: #fff;
   font-family: 'Poppins', system-ui, sans-serif;
   color: var(--navy);
-  background: #fff;
 }
-.fs,
-.fs *,
-.fs *::before,
-.fs *::after {
+.fx,
+.fx *,
+.fx *::before,
+.fx *::after {
   box-sizing: border-box;
 }
-.fs svg {
+.fx svg {
   display: block;
 }
-.fs::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background-image: radial-gradient(rgba(190, 120, 90, 0.13) 1px, transparent 1.2px);
-  background-size: 26px 26px;
-  mask-image: radial-gradient(ellipse 70% 60% at 50% 45%, #000 30%, transparent 85%);
-  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 45%, #000 30%, transparent 85%);
-}
-.fs-wrap {
+.fx-wrap {
   max-width: 1120px;
   margin: 0 auto;
 }
 
-/* heading — two-tone like the reference */
-.fs-head {
+/* ---------- heading ---------- */
+.fx-head {
   text-align: center;
+  margin-bottom: clamp(36px, 6vw, 80px);
 }
-.fs-title {
+.fx-title {
   max-width: 900px;
   margin: 0 auto;
   padding-bottom: 0.1em;
-  padding-top: 0.8em;
-  color: #0f172a;
-  font-family: 'Inter Display', Inter, system-ui, sans-serif;
+  font-family: 'Urbanist', system-ui, sans-serif;
   font-size: clamp(32px, 4.2vw, 62px);
   font-weight: 500;
   line-height: 1.12;
   letter-spacing: -0.05em;
+  color: var(--navy);
 }
-.fs-title span {
+.fx-title span {
   display: block;
-  width: fit-content; /* gradient spans the text itself */
+  width: fit-content;
   margin: 0 auto -0.14em;
-  padding-bottom: 0.14em; /* keeps the "g" descender inside the clipped background */
+  padding-bottom: 0.14em;
   background: linear-gradient(100deg, #ff9a3d 0%, #ff6a1a 45%, #f2540c 100%);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-.fs-head p {
-  margin: clamp(6px, 1.2vh, 12px) auto 0;
-  max-width: 600px;
-  font-family: 'Inter Display', Inter, system-ui, sans-serif;
-  font-size: clamp(15px, 1vw, 18px);
-  font-weight: 500;
-  line-height: 1.45;
-  letter-spacing: -0.02em;
-  color: var(--ink);
+.fx-head,
+.fx-aside {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.7s ease, transform 0.8s var(--ease);
+}
+.fx-in .fx-head,
+.fx-in .fx-aside {
+  opacity: 1;
+  transform: none;
+}
+.fx-in .fx-aside {
+  transition-delay: 0.12s;
 }
 
-/* pills */
-.fs-tabs {
-  display: flex;
-  flex-wrap: wrap;
+/* ---------- two columns ---------- */
+.fx-grid {
+  display: grid;
+  grid-template-columns: minmax(300px, 480px) minmax(0, 560px);
   justify-content: center;
-  gap: 8px;
-  margin: clamp(12px, 2.2vh, 20px) auto 0;
+  gap: clamp(32px, 4.5vw, 64px);
+  align-items: start;
 }
-.fs-tab {
-  position: relative;
+
+/* ---------- left: pinned text ---------- */
+.fx-aside {
+  position: sticky;
+  top: clamp(24px, calc(50vh - 354px), 110px);
+}
+.fx-copy-box {
+  min-height: 430px;
+}
+.fx-copy h3,
+.fx-mcopy h3 {
+  margin: 0 0 18px;
+  font-family: Urbanist, 'Urbanist Placeholder', sans-serif;
+  font-size: 50px;
+  font-weight: 600;
+  line-height: 65px;
+  letter-spacing: -1px;
+  color: #0a0a0a;
+}
+.fx-copy p,
+.fx-mcopy p {
+  margin: 0 0 26px;
+  font-family: 'Urbanist', system-ui, sans-serif;
+  font-size: 15.5px;
+  font-weight: 500;
+  line-height: 1.65;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.fx-btn {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 9px 13px;
-  border: 1px solid #f0e3d8;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.85);
-  color: #1f2937;
-  font: 600 13.5px/1.2 'Poppins', system-ui, sans-serif;
-  white-space: nowrap;
-  cursor: pointer;
-  overflow: hidden;
-  transition: background 0.3s, border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+  gap: 10px;
+  padding: 14px 24px;
+  border-radius: 999px;
+  background: var(--navy);
+  color: #fff;
+  font: 500 14px/1 'Poppins', system-ui, sans-serif;
+  text-decoration: none;
+  transition: background 0.3s, gap 0.3s, transform 0.3s;
 }
-.fs-tab .ti {
-  display: grid;
-  place-items: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 7px;
-  background: #fde6d8;
-  transition: background 0.3s;
-}
-.fs-tab .ti svg {
-  width: 15px;
-  height: 15px;
+.fx-btn svg {
+  width: 16px;
+  height: 16px;
   fill: none;
-  stroke: var(--o);
-  stroke-width: 1.9;
+  stroke: currentColor;
+  stroke-width: 1.8;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-.fs-tab:hover {
-  background: #fff;
-  transform: translateY(-1px);
+.fx-btn:hover {
+  background: var(--o);
+  gap: 14px;
+  transform: translateY(-2px);
 }
-.fs-tab.on {
-  background: #ffe7da;
-  border-color: #ffd0b6;
-  box-shadow: 0 10px 20px -12px rgba(242, 84, 12, 0.55);
-}
-.fs-tab.on .ti {
-  background: #fff;
-}
-.fs-tab:focus-visible {
+.fx-btn:focus-visible {
   outline: 2px solid var(--o);
   outline-offset: 3px;
 }
 
-/* ================= stage ================= */
-.fs-show {
-  margin-top: clamp(8px, 1.4vh, 14px);
+/* swap animation when the active feature changes */
+.fx-swap-enter-active {
+  transition: opacity 0.5s ease 0.05s, transform 0.65s var(--ease), filter 0.5s ease;
 }
-.fs-stage {
-  position: relative;
-  max-width: 1040px;
-  margin: 0 auto;
-  overflow: hidden;
-  isolation: isolate;
+.fx-swap-leave-active {
+  transition: opacity 0.22s ease, transform 0.3s ease, filter 0.25s ease;
 }
-.fs-fit {
-  position: relative;
-  overflow: hidden;
-  height: 580px;
+.fx-swap-enter-from {
+  opacity: 0;
+  transform: translateY(16px);
+  filter: blur(3px);
 }
-.fs-scene {
-  position: absolute;
-  left: 50%;
-  top: 0;
-  width: 1016px; /* 960 + frame */
-  max-width: none;
-  flex: none;
-  height: 580px; /* = STACK + window, see the script */
-  transform-origin: 50% 0;
+.fx-swap-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+  filter: blur(4px);
 }
-.fs .fs-stack {
-  position: absolute;
-  inset: 0;
-  width: auto;
-  max-width: none;
-  margin: 0;
-  padding: 0;
-  display: block;
-}
-/* every screen is its own beige frame + white window; --d is its place in the stack (0 = front) */
-.fs .fs-card {
-  --d: 0;
-  position: absolute;
-  width: auto;
-  max-width: none;
-  min-width: 0;
-  margin: 0;
-  display: block;
-  top: 100px;
-  left: 0;
-  right: 0;
-  height: 480px;
-  padding: 10px 10px 0;
-  border-radius: 26px 26px 0 0;
-  background: linear-gradient(180deg, #fde8da, var(--frame));
-  border-top: 1px solid rgba(255, 255, 255, 0.8);
-  box-shadow: 0 -10px 24px -16px rgba(150, 70, 30, 0.35);
-  z-index: calc(10 - var(--d));
-  transform-origin: 50% 0;
-  transform: translateY(calc(var(--d) * -20px)) scale(calc(1 - var(--d) * 0.03));
-  transition: transform 0.95s cubic-bezier(0.16, 0.84, 0.3, 1), filter 0.7s ease;
-  filter: saturate(calc(1 - var(--d) * 0.12));
-}
-.fs .fs-card.front {
-  box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.8) inset, 0 40px 60px -30px rgba(150, 70, 30, 0.35);
-}
-/* the window that just left the front dips a little before it slides back */
-.fs .fs-card.out {
-  transition-duration: 0.8s, 0.7s;
-}
-.sc {
-  position: absolute;
-  inset: 10px 10px 0;
-  border-radius: 14px 14px 0 0;
-  background: #fff;
-  overflow: hidden;
-  /* behind the front: only a faded header strip shows */
-  opacity: calc(0.62 - var(--d) * 0.12);
-  filter: blur(1.6px);
-  transition: opacity 0.7s ease, filter 0.8s ease;
-}
-.fs .fs-card.front .sc {
-  opacity: 1;
-  filter: none;
-  transition: opacity 0.7s ease 0.15s, filter 0.85s ease 0.1s;
-}
-.fs .fs-card.out .sc {
-  filter: blur(6px);
-  transition: opacity 0.5s ease, filter 0.5s ease;
-}
-.sc small {
-  font-size: 11px;
-  color: var(--mute);
-}
-.sc .nm {
+
+/* feature list */
+.fx-list {
+  margin: 28px 0 0;
+  padding: 22px 0 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
   display: grid;
+  gap: 2px;
+}
+.fx-list button {
+  display: block;
+  width: 100%;
+  padding: 5px 0;
+  border: 0;
+  background: none;
+  font-family: Urbanist, 'Urbanist Placeholder', sans-serif;
+  font-size: 20px;
+  font-weight: 500;
   line-height: 1.3;
-  min-width: 0;
+  letter-spacing: -0.02em;
+  color: #b9b2ac;
+  text-align: left;
+  cursor: pointer;
+  transition: color 0.3s, transform 0.3s var(--ease);
 }
-.sc .nm b {
-  font-size: 13.5px;
-  font-weight: 500;
-}
-.sc .bar {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  height: 58px;
-  padding: 0 22px;
-  border-bottom: 1px solid var(--line);
-}
-.bar > b {
-  flex: 1;
-  font-size: 17px;
-  font-weight: 500;
-}
-.srch {
-  width: 220px;
-  padding: 7px 12px;
-  border: 1px solid #ebe5e0;
-  border-radius: 9px;
-  font-size: 12px;
-  color: var(--mute);
-}
-.flt {
-  padding: 7px 14px;
-  border: 1px solid #ebe5e0;
-  border-radius: 9px;
-  font-size: 12px;
+.fx-list button:hover {
   color: var(--ink);
 }
-.avs {
+.fx-list button.on {
+  color: #0a0a0a;
+  font-weight: 600;
+  transform: translateX(6px);
+}
+.fx-list button:focus-visible {
+  outline: 2px solid var(--o);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* ---------- right: cards ---------- */
+.fx-item {
+  padding-bottom: clamp(56px, 12vh, 120px);
+}
+.fx-item:last-child {
+  padding-bottom: 130px; /* keeps the left text pinned while the last card is in view */
+}
+.fx-mcopy {
+  display: none;
+}
+.fx-card {
+  --p: 0;
+  position: relative;
+  height: 480px;
+  border-radius: 36px;
+  overflow: hidden;
+  isolation: isolate;
+  opacity: 0;
+  transform: translateY(44px) scale(0.97);
+  transition: opacity 0.8s ease, transform 1s var(--ease), box-shadow 0.4s;
+}
+.fx-item.in .fx-card {
+  opacity: 1;
+  transform: none;
+}
+.fx-blob {
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.6;
+  z-index: -1;
+  transform: translateY(calc(var(--p) * 40px));
+}
+.fx-blob.b1 {
+  top: -120px;
+  left: -90px;
+}
+.fx-blob.b2 {
+  right: -110px;
+  bottom: -120px;
+  opacity: 0.55;
+  transform: translateY(calc(var(--p) * -40px));
+}
+
+/* the product window, cropped by the card edge like a screenshot */
+.fx-win {
+  position: absolute;
+  left: 34px;
+  right: 34px;
+  top: 52px;
+  bottom: -70px;
+  border-radius: 18px 18px 0 0;
+  background: #fff;
+  box-shadow: 0 30px 60px -20px rgba(15, 23, 42, 0.38);
+  overflow: hidden;
+  transform: translateY(calc(var(--p) * -26px));
+  will-change: transform;
+}
+
+/* ---------- artwork inside the window ---------- */
+.fx .w-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 50px;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--line);
+}
+.fx .w-bar > b {
+  flex: 1;
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.fx .w-chip {
+  padding: 5px 11px;
+  border: 1px solid #ebe5e0;
+  border-radius: 8px;
+  font-size: 11px;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.fx .w-avs {
   display: flex;
 }
-.avs i {
+.fx .w-avs i {
   display: grid;
   place-items: center;
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   margin-left: -6px;
   border-radius: 50%;
   border: 2px solid #fff;
   background: var(--navy);
   color: #fff;
-  font: 600 9px/1 'Poppins', sans-serif;
+  font: 600 8.5px/1 'Poppins', sans-serif;
   font-style: normal;
 }
-.avs i:nth-child(2) { background: var(--og); }
-.avs i:nth-child(3) { background: #6366f1; }
-.rev {
-  font-size: 15px;
+.fx .w-avs i:nth-child(2) { background: var(--og); }
+.fx .w-avs i:nth-child(3) { background: #6366f1; }
+.fx .w-rev {
+  font-size: 12px;
   font-weight: 600;
+  white-space: nowrap;
 }
-.rev em {
+.fx .w-rev em {
   margin-left: 4px;
-  padding: 3px 8px;
+  padding: 2px 8px;
   border-radius: 999px;
   background: #e8f8ee;
   color: #15803d;
-  font-size: 11px;
+  font-size: 10px;
   font-style: normal;
 }
-.sc .body {
+.fx .w-body {
   position: relative;
-  padding: 18px 22px;
+  padding: 14px 16px;
 }
-.sc .av {
+.fx .w-body small {
+  font-size: 10.5px;
+  color: var(--mute);
+}
+.fx .w-nm {
+  display: grid;
+  min-width: 0;
+  line-height: 1.3;
+}
+.fx .w-nm b {
+  font-size: 12.5px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.fx .w-nm small {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.fx .w-av {
   display: grid;
   place-items: center;
   flex: none;
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   background: var(--og);
   color: #fff;
-  font: 600 11.5px/1 'Poppins', sans-serif;
+  font: 600 10.5px/1 'Poppins', sans-serif;
   font-style: normal;
 }
-.sc .av.lg {
-  width: 54px;
-  height: 54px;
-  font-size: 16px;
-  background: var(--navy);
-  box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--o);
-}
-.sc .av.dk {
+.fx .w-av.dk {
   background: var(--navy);
   box-shadow: 0 0 0 2px #fff, 0 0 0 3.5px var(--o);
 }
-/* staggered row entrance */
-.sc .wa-chat, .sc .wa-msg, .sc .tile, .sc .tr, .sc .stp, .sc .ln, .sc .dl, .sc .flow span {
-  opacity: 0;
-  translate: 0 10px;
+.fx .w-pills {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
 }
-.sc.on .wa-chat, .sc.on .wa-msg, .sc.on .tile, .sc.on .tr, .sc.on .stp, .sc.on .ln, .sc.on .dl, .sc.on .flow span {
-  opacity: 1;
-  translate: 0 0;
-  transition: opacity 0.4s ease, translate 0.55s var(--ease);
-  transition-delay: calc(0.35s + var(--n, 0) * 0.08s);
+.fx .w-pills i {
+  padding: 5px 11px;
+  border: 1px solid #ebe5e0;
+  border-radius: 8px;
+  font-size: 11px;
+  font-style: normal;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.fx .w-pills i.on {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: #fff;
+}
+.fx .w-row {
+  display: grid;
+  align-items: center;
+  gap: 10px;
+  height: 52px;
+  border-top: 1px solid var(--line);
+  font-size: 11.5px;
+}
+.fx .w-row.fresh {
+  background: linear-gradient(90deg, #fff6f0, #fff);
 }
 
-/* shared tiles + table */
-.tiles {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
+/* leads */
+.fx .w-lead {
+  grid-template-columns: 32px 1.5fr 0.8fr 0.8fr;
 }
-.tiles .tile {
-  display: grid;
-  place-items: stretch;
-  gap: 3px;
-  height: auto;
-  padding: 12px 14px;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  background: #fff;
-}
-.tiles .tile b {
-  font-size: 22px;
-  font-weight: 500;
-  line-height: 1.15;
-}
-.tiles .tile em {
-  position: static;
-  width: auto;
-  height: auto;
-  border: 0;
-  border-radius: 0;
-  background: none;
-  transform: none;
-  animation: none;
-  display: block;
+.fx .w-src,
+.fx .w-cp,
+.fx .w-st {
+  display: inline-block;
+  justify-self: start;
+  padding: 3px 9px;
+  border-radius: 7px;
+  font-size: 10.5px;
   font-style: normal;
-  font-size: 11.5px;
-  color: var(--mute);
+  font-weight: 600;
+  white-space: nowrap;
 }
-.tiles .tile em.up {
-  color: #15803d;
-}
-.tbl {
-  margin-top: 14px;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  overflow: hidden;
-}
-.th,
-.tr {
+.fx .w-src.Website { background: #e3edff; color: #1d4ed8; }
+.fx .w-src.Facebook { background: #e7ecfb; color: #3b5bdb; }
+.fx .w-src.WhatsApp { background: #e8f8ee; color: #15803d; }
+.fx .w-sc {
   display: grid;
-  grid-template-columns: 1.3fr 1.2fr 1.3fr 0.7fr;
-  align-items: center;
-  gap: 12px;
-  padding: 0 16px;
+  gap: 4px;
 }
-.th {
-  height: 34px;
-  background: #faf7f4;
-  font-size: 10px;
-  letter-spacing: 0.07em;
-  color: var(--mute);
-}
-.tr {
-  height: 54px;
-  border-top: 1px solid var(--line);
-  font-size: 12px;
-}
-.rv {
-  display: grid;
-  gap: 6px;
-}
-.rv b {
-  font-size: 14px;
+.fx .w-sc b {
+  font-size: 12.5px;
   font-weight: 500;
 }
-.rv i {
-  height: 6px;
-  border-radius: 6px;
+.fx .w-sc i {
+  height: 5px;
+  border-radius: 5px;
   background: #ffe9dd;
   overflow: hidden;
 }
-.rv u {
+.fx .w-sc u {
   display: block;
   height: 100%;
-  border-radius: 6px;
+  border-radius: 5px;
   background: linear-gradient(90deg, #ff9a3d, #f2540c);
 }
-/* 3 · quotes */
-.qt {
+
+/* pipeline */
+.fx .w-kan {
   display: grid;
-  grid-template-columns: 230px 1fr;
-  gap: 24px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
 }
-.steps {
-  display: grid;
-  gap: 14px;
-  align-content: start;
-  padding-top: 6px;
+.fx .w-ch {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  height: 32px;
+  padding: 0 10px;
+  margin-bottom: 8px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  font-size: 12px;
+  font-weight: 500;
 }
-.bill {
+.fx .w-ch i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.fx .w-dl {
   display: grid;
   gap: 1px;
+  margin-bottom: 8px;
+  padding: 10px 11px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: #fff;
+  box-shadow: 0 10px 18px -16px rgba(150, 70, 30, 0.5);
+}
+.fx .w-dl b {
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.fx .w-dl small {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.fx .w-ft {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-top: 6px;
-  padding: 10px 12px;
+}
+.fx .w-ft strong {
+  font-size: 12px;
+  font-weight: 600;
+}
+.fx .w-pr {
+  padding: 2px 7px;
+  border-radius: 6px;
+  font-size: 9.5px;
+  font-weight: 500;
+}
+.fx .w-pr.High, .fx .w-pr.Overdue { background: #fee4e2; color: #b42318; }
+.fx .w-pr.Medium { background: #fff3d6; color: #b45309; }
+.fx .w-pr.Low { background: #e8f8ee; color: #15803d; }
+
+/* quotation */
+.fx .w-bill {
+  display: grid;
+  gap: 1px;
+  margin-bottom: 10px;
+  padding: 9px 12px;
   border: 1px solid #ffe0cf;
-  border-radius: 12px;
+  border-radius: 11px;
   background: #fff7f2;
   font-size: 10.5px;
   color: var(--ink);
 }
-.qt .bill small {
+.fx .w-bill small {
   font-size: 8.5px;
   font-weight: 600;
   letter-spacing: 0.08em;
   color: var(--o);
 }
-.qt .bill b {
+.fx .w-bill b {
   font-size: 12px;
   font-weight: 500;
   color: var(--navy);
 }
-.qt .stp b {
-  display: block;
-  font-size: 13px;
-  font-weight: 500;
-}
-.qt .stp.cur b {
-  color: var(--o);
-}
-.stp.done b::after {
-  content: ' ✓';
-  color: #15803d;
-}
-.doc {
-  padding: 16px;
+.fx .w-doc {
+  padding: 12px;
   border: 1px solid var(--line);
-  border-radius: 16px;
+  border-radius: 14px;
   background: #fff;
-  box-shadow: 0 16px 30px -22px rgba(150, 70, 30, 0.4);
 }
-.dh {
+.fx .w-dh {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 8px;
 }
-.qt .dh .nm b {
-  font-size: 14px;
-}
-.stt {
-  padding: 3px 10px;
+.fx .w-stt {
+  padding: 3px 9px;
   border-radius: 999px;
   background: #e8f8ee;
   color: #15803d;
-  font-size: 9.5px;
+  font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.05em;
 }
-.ln {
+.fx .w-ln {
   display: grid;
-  grid-template-columns: 1fr auto 70px;
-  gap: 12px;
-  margin-top: 8px;
-  padding: 9px 12px;
-  border-radius: 10px;
+  grid-template-columns: 1fr auto 60px;
+  gap: 10px;
+  margin-top: 7px;
+  padding: 8px 10px;
+  border-radius: 9px;
   background: #faf7f4;
+  font-size: 11px;
+  color: var(--ink);
+}
+.fx .w-ln b {
+  text-align: right;
+  font-weight: 600;
+  color: var(--navy);
+}
+.fx .w-tot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px 4px 8px;
   font-size: 11.5px;
   color: var(--ink);
 }
-.qt .ln b {
-  text-align: right;
-  font-size: 12px;
-  color: var(--navy);
-  font-weight: 600;
-}
-.tot {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 12px 4px 10px;
-  font-size: 12px;
-  color: var(--ink);
-}
-.qt .tot b {
-  font-size: 20px;
+.fx .w-tot b {
+  font-size: 18px;
   font-weight: 600;
   color: var(--navy);
 }
-.acts {
+.fx .w-acts {
   display: flex;
-  gap: 10px;
+  gap: 8px;
 }
-.btn {
+.fx .w-btn {
   display: inline-flex;
   align-items: center;
-  height: 34px;
-  padding: 0 16px;
-  border-radius: 10px;
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 9px;
   background: var(--navy);
   color: #fff;
-  font-size: 11.5px;
+  font-size: 10.5px;
   font-weight: 500;
+  white-space: nowrap;
 }
-.btn.o {
+.fx .w-btn.o {
   background: var(--og);
 }
-.sc.on .btn.o {
-  animation: fs-ring 2.6s ease-out 1.6s infinite;
-}
-.flow {
+.fx .w-flow {
   display: flex;
-  gap: 16px;
-  margin-top: 14px;
+  gap: 14px;
+  margin-top: 11px;
 }
-.flow span {
+.fx .w-flow span {
   display: flex;
   align-items: center;
-  gap: 7px;
-  font-size: 11px;
-  font-weight: 500;
-}
-.flow i {
-  display: grid;
-  place-items: center;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: var(--og);
-  color: #fff;
-  font-size: 10px;
-  font-style: normal;
-}
-
-/* 4 · kanban */
-.kan {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-}
-.ch {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  height: 36px;
-  padding: 0 12px;
-  margin-bottom: 10px;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  font-size: 13px;
-  font-weight: 500;
-}
-.ch i {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-}
-.ch em {
-  margin-left: auto;
-  padding: 1px 8px;
-  border-radius: 999px;
-  background: #f1ece8;
-  font-size: 11px;
-  font-style: normal;
-}
-.dl {
-  display: grid;
-  gap: 2px;
-  margin-bottom: 10px;
-  padding: 12px 13px;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  background: #fff;
-  box-shadow: 0 10px 18px -16px rgba(150, 70, 30, 0.5);
-}
-.dl b {
-  font-size: 13.5px;
-  font-weight: 500;
-}
-.ft {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 8px;
-}
-.ft strong {
-  font-size: 14px;
-  font-weight: 600;
-}
-.pr {
-  padding: 2px 9px;
-  border-radius: 6px;
+  gap: 6px;
   font-size: 10.5px;
   font-weight: 500;
 }
-.pr.High, .pr.Overdue { background: #fee4e2; color: #b42318; }
-.pr.Medium { background: #fff3d6; color: #b45309; }
-.pr.Low { background: #e8f8ee; color: #15803d; }
-
-/* 5 · calls */
-.pills {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-.pills i {
-  padding: 6px 14px;
-  border: 1px solid #ebe5e0;
-  border-radius: 9px;
-  font-style: normal;
-  font-size: 12px;
-  color: var(--ink);
-}
-.pills .on {
-  background: var(--navy);
-  border-color: var(--navy);
+.fx .w-flow i {
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--og);
   color: #fff;
+  font-size: 9px;
+  font-style: normal;
 }
-.calls {
-  margin-top: 0;
-  margin-right: 292px;
-}
-.calls .th,
-.calls .tr {
-  grid-template-columns: 1.7fr 0.9fr 0.5fr 0.6fr;
-}
-.calls .th span:nth-child(5),
-.calls .tr > span:nth-child(5) {
-  display: none;
-}
-.calls .tr.fresh {
-  background: linear-gradient(90deg, #fff6f0, #fff);
-}
-.who {
+
+/* whatsapp */
+.fx .w-chat-head {
   display: flex;
   align-items: center;
   gap: 10px;
-  min-width: 0;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
 }
-.mu {
+.fx .w-chat-head .w-nm {
+  flex: 1;
+}
+.fx .w-asg {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #fff1e8;
+  color: #c2410c;
+  font-size: 10.5px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.fx .w-msgs {
+  display: grid;
+  gap: 9px;
+  margin: 14px 0;
+}
+.fx .w-msg {
+  max-width: 80%;
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  line-height: 1.4;
+}
+.fx .w-msg small {
+  display: block;
+  margin-top: 2px;
+  font-size: 9.5px;
+  color: var(--mute);
+  text-align: right;
+}
+.fx .w-msg.in { justify-self: start; border: 1px solid var(--line); border-top-left-radius: 4px; background: #fff; }
+.fx .w-msg.out { justify-self: end; border-top-right-radius: 4px; background: #e1f7d5; color: #14532d; }
+.fx .w-msg.tpl { justify-self: end; display: grid; gap: 2px; border: 1px dashed #ffc9a8; background: #fff7f2; }
+.fx .w-msg.tpl::before { content: 'APPROVED TEMPLATE'; font-size: 8.5px; font-weight: 600; letter-spacing: 0.08em; color: var(--o); }
+.fx .w-msg.note { justify-self: center; max-width: none; padding: 4px 12px; border-radius: 999px; background: #f1f5f9; color: var(--ink); font-size: 10.5px; }
+.fx .w-tools {
+  display: flex;
+  gap: 8px;
+}
+.fx .w-tools span {
+  padding: 5px 10px;
+  border: 1px solid #ebe5e0;
+  border-radius: 8px;
+  font-size: 10.5px;
   color: var(--ink);
 }
-.cp {
-  padding: 3px 10px;
+
+/* calls */
+.fx .w-call {
+  grid-template-columns: 32px 1.6fr 0.9fr 0.4fr;
+}
+.fx .w-cp {
+  display: inline-block;
+  justify-self: start;
+  padding: 3px 9px;
   border-radius: 7px;
-  font-size: 11px;
+  font-size: 10.5px;
   font-style: normal;
   font-weight: 600;
 }
-.cp.Missed { background: #fee4e2; color: #b42318; }
-.cp.Answered { background: #e8f8ee; color: #15803d; }
-.cp.Outbound { background: #e3edff; color: #1d4ed8; }
-.cp.Vodia { background: #efe9ff; color: #6d28d9; }
-.pop {
-  position: absolute;
-  right: 22px;
-  top: 70px;
-  width: 270px;
+.fx .w-cp.Missed { background: #fee4e2; color: #b42318; }
+.fx .w-cp.Answered { background: #e8f8ee; color: #15803d; }
+.fx .w-cp.Outbound { background: #e3edff; color: #1d4ed8; }
+.fx .w-cp.Vodia { background: #efe9ff; color: #6d28d9; }
+.fx .w-mu {
+  color: var(--ink);
+}
+.fx .w-pop {
+  position: relative;
+  width: 260px;
+  max-width: 100%;
+  margin: 14px 0 0 auto;
   display: grid;
-  gap: 10px;
-  padding: 14px;
+  gap: 9px;
+  padding: 13px;
   border: 1px solid #ffd2b8;
   border-radius: 16px;
   background: #fff;
-  box-shadow: 0 26px 40px -20px rgba(150, 70, 30, 0.5);
-  opacity: 0;
-  translate: 0 16px;
+  box-shadow: 0 26px 40px -20px rgba(150, 70, 30, 0.55);
+  animation: fx-bob 4s ease-in-out infinite;
 }
-.sc.on .pop {
-  opacity: 1;
-  translate: 0 0;
-  transition: opacity 0.5s ease 0.9s, translate 0.7s var(--ease) 0.9s;
-  animation: fs-bob 4s ease-in-out 1.8s infinite;
-}
-.cap {
-  color: var(--o) !important;
-  font-size: 10px !important;
+.fx .w-cap {
+  font-size: 9.5px !important;
   font-weight: 600;
   letter-spacing: 0.08em;
+  color: var(--o) !important;
 }
-.hist {
+.fx .w-who {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.fx .w-hist {
   display: flex;
   gap: 8px;
 }
-.hist span {
+.fx .w-hist span {
   flex: 1;
-  padding: 8px 10px;
-  border-radius: 10px;
+  padding: 7px 9px;
+  border-radius: 9px;
   background: #faf7f4;
-  font-size: 11.5px;
+  font-size: 10.5px;
   color: var(--ink);
 }
-.hist b {
+.fx .w-hist b {
   display: block;
-  font-size: 14px;
+  font-size: 13px;
   color: var(--navy);
 }
 
-/* 1 · lead inbox */
-.tbl.ld .th, .tbl.ld .tr { grid-template-columns: 1.8fr 0.9fr 0.9fr 1.1fr; }
-.tbl.ld .tr.fresh { background: linear-gradient(90deg, #fff6f0, #fff); }
-.ld-src { display: inline-block; padding: 3px 10px; border-radius: 7px; font-size: 11px; font-style: normal; font-weight: 600; }
-.ld-src.Website { background: #e3edff; color: #1d4ed8; }
-.ld-src.Facebook { background: #e7ecfb; color: #3b5bdb; }
-.ld-src.WhatsApp { background: #e8f8ee; color: #15803d; }
-.ld-mrg { margin-left: 6px; padding: 2px 8px; border-radius: 999px; background: #fff1e8; color: #c2410c; font-size: 10px; font-style: normal; font-weight: 600; white-space: nowrap; }
-.ld-asg { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--navy); }
-.ld-asg i { display: grid; place-items: center; flex: none; width: 24px; height: 24px; border-radius: 50%; background: var(--og); color: #fff; font: 600 9px/1 'Poppins', sans-serif; font-style: normal; }
-
-/* 4 · WhatsApp inbox */
-.wa { display: grid; grid-template-columns: 290px 1fr; gap: 20px; }
-.wa-list { display: grid; gap: 4px; align-content: start; }
-.wa-chat { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid transparent; border-radius: 12px; }
-.wa-chat.sel { border-color: #ffd2b8; background: linear-gradient(90deg, #fff6f0, #fff); }
-.wa-chat .nm { flex: 1; }
-.wa-chat .nm small { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; max-width: 150px; }
-.wa-meta { display: grid; justify-items: end; gap: 4px; }
-.wa-meta em { min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: #16a34a; color: #fff; font: 600 10px/18px 'Poppins', sans-serif; font-style: normal; text-align: center; }
-.wa-conv { display: grid; gap: 10px; align-content: start; padding: 12px; border: 1px solid var(--line); border-radius: 14px; background: #fcfaf8; }
-.wa-head { display: flex; align-items: center; gap: 10px; }
-.wa-head .nm { flex: 1; }
-.wa-asg { padding: 4px 10px; border-radius: 999px; background: #fff1e8; color: #c2410c; font-size: 11px; font-weight: 600; }
-.wa-msgs { display: grid; gap: 8px; }
-.wa-msg { max-width: 78%; padding: 8px 12px; border-radius: 12px; font-size: 12px; line-height: 1.4; }
-.wa-msg small { display: block; margin-top: 2px; font-size: 10px; color: var(--mute); text-align: right; }
-.wa-msg.in { justify-self: start; border: 1px solid var(--line); border-top-left-radius: 4px; background: #fff; }
-.wa-msg.out { justify-self: end; border-top-right-radius: 4px; background: #e1f7d5; color: #14532d; }
-.wa-msg.tpl { justify-self: end; display: grid; gap: 2px; border: 1px dashed #ffc9a8; background: #fff7f2; }
-.wa-msg.tpl::before { content: 'APPROVED TEMPLATE'; font-size: 9px; font-weight: 600; letter-spacing: 0.08em; color: var(--o); }
-.wa-msg.note { justify-self: center; max-width: none; padding: 4px 12px; border-radius: 999px; background: #f1f5f9; color: var(--ink); font-size: 11px; }
-.wa-tools { display: flex; gap: 8px; }
-.wa-tools span { padding: 5px 10px; border: 1px solid #ebe5e0; border-radius: 8px; background: #fff; font-size: 11px; color: var(--ink); }
-
-/* 6 · service & AMC */
-.tbl.am .th, .tbl.am .tr { grid-template-columns: 1.5fr 1.4fr 1.1fr 0.9fr; }
-.am-st { display: inline-block; padding: 3px 10px; border-radius: 7px; font-size: 11px; font-style: normal; font-weight: 600; }
-.am-st.sch { background: #e3edff; color: #1d4ed8; }
-.am-st.prog { background: #fff3d6; color: #b45309; }
-.am-st.war { background: #e8f8ee; color: #15803d; }
-.am-st.ovr { background: #fee4e2; color: #b42318; }
-
-/* ================= caption ================= */
-/* description: plain text under the window, exactly as wide as the window above it */
-.fs-cap {
-  position: relative;
-  z-index: 2;
-  max-width: 1040px; /* replaced at runtime by the width of the stacked window */
-  margin: 0 auto;
-  padding: clamp(16px, 2.4vh, 26px) 0 0;
-}
-.fs-cap-in {
-  position: relative;
-}
-.fs-cap-swap {
+/* service & AMC */
+.fx .w-tiles {
   display: grid;
-  grid-template-columns: 1.1fr 1fr;
-  grid-template-areas: 'a b' 'a c';
-  gap: clamp(6px, 1.1vh, 12px) clamp(20px, 3vw, 40px);
-}
-/* same easing and timing as the screen that comes to the front, so text and window change together */
-.fs-swap-enter-active {
-  transition: opacity 0.7s ease 0.12s, transform 0.95s cubic-bezier(0.16, 0.84, 0.3, 1), filter 0.8s ease 0.06s;
-}
-.fs-swap-leave-active {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.16, 0.84, 0.3, 1), filter 0.45s ease;
-}
-.fs-swap-enter-from { opacity: 0; transform: translateY(16px); filter: blur(3px); }
-.fs-swap-leave-to { opacity: 0; transform: translateY(-8px); filter: blur(5px); }
-.cp1 { grid-area: a; }
-.cp2 { grid-area: b; align-self: end; }
-.cp3 { grid-area: c; align-self: start; }
-.cp1 h3 {
-  margin: 0;
-  max-width: 560px;
-  font-family: 'Inter Display', Inter, system-ui, sans-serif;
-  font-size: clamp(18px, min(1.9vw, 3.2vh), 26px);
-  font-weight: 600;
-  line-height: 1.25;
-  letter-spacing: -0.05em;
-}
-.cp1 p {
-  margin: 4px 0 0;
-  max-width: 580px;
-  font-family: 'Inter Display', Inter, system-ui, sans-serif;
-  font-size: clamp(13px, 1.1vw, 15px);
-  font-weight: 500;
-  line-height: 1.5;
-  letter-spacing: -0.01em;
-  color: var(--ink);
-}
-.cp2 {
-  display: grid;
-  gap: 7px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.cp2 li {
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-  font-size: 12.5px;
-  line-height: 1.45;
-  color: #334155;
-}
-.cp2 i {
-  display: grid;
-  place-items: center;
-  flex: none;
-  width: 16px;
-  height: 16px;
-  margin-top: 1px;
-  border-radius: 50%;
-  background: var(--og);
-}
-.cp2 svg {
-  width: 12px;
-  height: 12px;
-  fill: none;
-  stroke: #fff;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.cp3 {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 8px;
+  margin-bottom: 8px;
 }
-.cp3 div {
-  padding: 7px 10px;
-  border: 1px solid #f3e6dc;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.8);
+.fx .w-tile {
+  display: grid;
+  gap: 2px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
 }
-.cp3 strong {
-  display: block;
-  color: var(--o);
-  font-size: clamp(14px, 1.2vw, 17px);
+.fx .w-tile b {
+  font-size: 20px;
   font-weight: 500;
-  line-height: 1.25;
-  overflow-wrap: anywhere;
+  line-height: 1.1;
 }
-.cp3 span {
-  font-size: 11px;
-  color: var(--ink);
+.fx .w-tile em {
+  font-size: 10.5px;
+  font-style: normal;
+  color: var(--mute);
+}
+.fx .w-tile em.up {
+  color: #15803d;
+}
+.fx .w-am {
+  grid-template-columns: 1.2fr 1.3fr 0.8fr;
+  height: 50px;
+}
+.fx .w-st.sch { background: #e3edff; color: #1d4ed8; }
+.fx .w-st.prog { background: #fff3d6; color: #b45309; }
+.fx .w-st.war { background: #e8f8ee; color: #15803d; }
+.fx .w-st.ovr { background: #fee4e2; color: #b42318; }
+
+@keyframes fx-bob {
+  50% { transform: translateY(-6px); }
 }
 
-/* motion */
-@keyframes fs-in {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: none; }
-}
-@keyframes fs-ring {
-  0% { box-shadow: 0 0 0 0 rgba(242, 84, 12, 0.45); }
-  70%, 100% { box-shadow: 0 0 0 10px rgba(242, 84, 12, 0); }
-}
-@keyframes fs-bob {
-  50% { translate: 0 -6px; }
-}
-.fs-head,
-.fs-tabs,
-.fs-show {
-  opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 0.7s ease, transform 0.8s var(--ease);
-}
-.fs-tabs { transition-delay: 0.08s; }
-.fs-show { transition-delay: 0.16s; }
-.fs-in .fs-head,
-.fs-in .fs-tabs,
-.fs-in .fs-show {
-  opacity: 1;
-  transform: none;
-}
-
-/* responsive */
-@media (max-width: 760px) {
-  .fs-cap-swap {
+/* ---------- tablets / phones: text moves above each card ---------- */
+@media (max-width: 900px) {
+  .fx-grid {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-areas: 'a' 'b' 'c';
+    max-width: 560px;
+    margin: 0 auto;
+    gap: 0;
   }
-  .cp2 { align-self: start; }
-  .fs-tab {
-    font-size: 12.5px;
-    padding-right: 11px;
+  .fx-aside {
+    display: none;
+  }
+  .fx-mcopy {
+    display: block;
+    margin-bottom: 22px;
+  }
+  .fx-mcopy h3 {
+    font-size: clamp(32px, 8vw, 44px);
+    line-height: 1.2;
+  }
+  .fx-item,
+  .fx-item:last-child {
+    padding-bottom: 64px;
+  }
+  .fx-item:last-child {
+    padding-bottom: 0;
+  }
+  .fx-card {
+    height: 440px;
+    border-radius: 28px;
+  }
+  .fx-win {
+    left: 20px;
+    right: 20px;
+    top: 40px;
   }
 }
-@media (max-width: 520px) {
-  .cp3 { gap: 6px; }
-  .cp3 div { padding: 10px; }
-  .cp3 strong { font-size: 16px; }
+@media (max-width: 480px) {
+  .fx-copy h3,
+  .fx-mcopy h3 {
+    font-size: 34px;
+    line-height: 44px;
+    letter-spacing: -0.7px;
+  }
+  .fx .w-pills i:nth-child(n + 4) {
+    display: none;
+  }
+  .fx .w-kan {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .fx .w-col:nth-child(3) {
+    display: none;
+  }
+  .fx .w-rev {
+    font-size: 10.5px;
+  }
+  .fx .w-rev em {
+    display: none;
+  }
+  .fx .w-chip {
+    display: none;
+  }
 }
+
 @media (prefers-reduced-motion: reduce) {
-  .fs *,
-  .fs *::before { animation: none !important; }
-  .fs *,
-  .fs *::before,
-  .fs *::after { transition-duration: 0.01s !important; transition-delay: 0s !important; }
+  .fx *,
+  .fx *::before {
+    animation: none !important;
+  }
+  .fx-card,
+  .fx-head,
+  .fx-aside {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .fx-win,
+  .fx-blob {
+    transform: none !important;
+  }
 }
 </style>

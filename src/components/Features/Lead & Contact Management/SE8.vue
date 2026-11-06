@@ -148,7 +148,7 @@ onBeforeUnmount(() => {
   padding: 112px 0;
   color: var(--ink);
   background: #fff;
-  font-family: "Inter", system-ui, sans-serif;
+  font-family: 'Urbanist', system-ui, sans-serif;
 }
 .hw *, .hw *::before, .hw *::after { box-sizing: border-box; }
 .hw button:focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
