@@ -102,6 +102,26 @@ button {
   font-family: "Urbanist", sans-serif !important;
 }
 
+.sales-pipeline-page h2.title {
+  font-family: "Urbanist", sans-serif !important;
+  font-size: clamp(34px, 3.6vw, 56px) !important;
+  font-weight: 500 !important;
+  line-height: 1.15 !important;
+  letter-spacing: -0.03em !important;
+  color: var(--ink, #14120f) !important;
+}
+
+.sales-pipeline-page h2.title > span {
+  background: none !important;
+  color: inherit !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+
+.sales-pipeline-page h2.title > .soft {
+  color: var(--muted, #6a6560) !important;
+  -webkit-text-fill-color: var(--muted, #6a6560) !important;
+}
+
 .lead-management-page,
 .lead-management-page * {
   font-family: "Urbanist", sans-serif !important;
@@ -357,6 +377,24 @@ h6,
   background-clip: border-box !important;
   color: var(--color-heading-accent) !important;
   -webkit-text-fill-color: var(--color-heading-accent) !important;
+}
+
+.faq h2.title,
+.fq-title {
+  color: #14120f !important;
+}
+
+.features-page .faq .cta h3,
+.sales-pipeline-page .faq .cta h3,
+.lead-management-page .faq .cta h3 {
+  color: #fff !important;
+}
+
+.faq h2.title > span,
+.fq-title > span {
+  background: none !important;
+  color: #14120f !important;
+  -webkit-text-fill-color: #14120f !important;
 }
 
 h1 {

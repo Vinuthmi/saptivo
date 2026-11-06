@@ -65,7 +65,7 @@ defineOptions({ name: "FeaturesSection8" });
 
 // Background photo for the CTA card. Keep the asset in public/images/features/.
 // Make sure this file name matches the real file exactly (it is case sensitive).
-const bgImage = "/saptivo/images/features/threecolleagues-.jpg";
+const bgImage = `${import.meta.env.BASE_URL}images/features/threecolleagues-.jpg`;
 // Dark gradient on top keeps the text readable: strongest on the left where the text sits,
 // lighter on the right so the photo still shows through.
 const ctaStyle = bgImage
@@ -125,7 +125,7 @@ onBeforeUnmount(() => {
 .faq {
   --orange: #33485d;
   --orange-soft: #edf1f4;
-  --ink: #14120f;
+  --ink: #000000;
   --muted: #6a6560;
   --line: #e4e9ed;
   position: relative;

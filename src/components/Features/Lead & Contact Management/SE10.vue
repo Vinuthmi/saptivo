@@ -69,7 +69,7 @@ import { ref, onMounted, onBeforeUnmount } from "vue";
 defineOptions({ name: "FaqSection" });
 
 // Background photo for the CTA card
-const bgImage = "/saptivo/images/features/threecolleagues-.jpg";
+const bgImage = `${import.meta.env.BASE_URL}images/features/threecolleagues-.jpg`;
 
 // Gradient matching Saptivo Ink
 const ctaStyle = bgImage

@@ -1,32 +1,41 @@
 <template>
   <section class="fq" aria-labelledby="fq-title">
     <div class="fq-wrap">
-      <h2 id="fq-title" class="fq-title">
-        <span>Frequently</span>
-        <span class="fq-g">asked questions.</span>
-      </h2>
+      <img
+        class="fq-image"
+        :src="faqImage"
+        alt="Colleagues working together around a laptop"
+        loading="lazy"
+      />
 
-      <ul class="fq-list">
-        <li v-for="(it, i) in items" :key="it.q" :class="{ on: open === i }">
-          <h3 class="fq-h">
-            <button
-              :id="`fq-b${i}`"
-              type="button"
-              :aria-expanded="open === i"
-              :aria-controls="`fq-p${i}`"
-              @click="open = open === i ? -1 : i"
-            >
-              <span class="fq-q">{{ it.q }}</span>
-              <span class="fq-pm" aria-hidden="true"></span>
-            </button>
-          </h3>
-          <div :id="`fq-p${i}`" class="fq-a" role="region" :aria-labelledby="`fq-b${i}`">
-            <div>
-              <p>{{ it.a }}</p>
+      <div class="fq-content">
+        <h2 id="fq-title" class="fq-title">
+          <span>Frequently</span>
+          <span class="fq-g">asked questions.</span>
+        </h2>
+
+        <ul class="fq-list">
+          <li v-for="(it, i) in items" :key="it.q" :class="{ on: open === i }">
+            <h3 class="fq-h">
+              <button
+                :id="`fq-b${i}`"
+                type="button"
+                :aria-expanded="open === i"
+                :aria-controls="`fq-p${i}`"
+                @click="open = open === i ? -1 : i"
+              >
+                <span class="fq-q">{{ it.q }}</span>
+                <span class="fq-pm" aria-hidden="true"></span>
+              </button>
+            </h3>
+            <div :id="`fq-p${i}`" class="fq-a" role="region" :aria-labelledby="`fq-b${i}`">
+              <div>
+                <p>{{ it.a }}</p>
+              </div>
             </div>
-          </div>
-        </li>
-      </ul>
+          </li>
+        </ul>
+      </div>
     </div>
   </section>
 </template>
@@ -40,6 +49,7 @@ defineOptions({ name: 'HomeFaqSection' })
 import { ref } from 'vue'
 
 const open = ref(0)
+const faqImage = `${import.meta.env.BASE_URL}images/features/threecolleagues-.jpg`
 
 const items = [
   {
@@ -72,8 +82,9 @@ const items = [
   --ink: #14152b;
   --mute: #6c7084;
   --line: rgba(20, 21, 43, 0.12);
-  --o2: #f2540c;
+  --accent: #33485d;
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  padding: 112px 0;
   font-family: 'Poppins', system-ui, sans-serif;
   color: var(--ink);
   background: #fff;
@@ -86,43 +97,64 @@ const items = [
 .fq-wrap {
   max-width: 1240px;
   margin: 0 auto;
-  padding: clamp(56px, 7vw, 110px) clamp(20px, 4vw, 40px) clamp(48px, 6vw, 96px);
+  padding: 0 clamp(20px, 4vw, 40px);
   display: grid;
-  grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
-  gap: clamp(28px, 6vw, 96px);
-  align-items: start;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  align-items: center;
+  gap: clamp(32px, 5vw, 72px);
+}
+.fq-image {
+  grid-column: 2;
+  grid-row: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 500px;
+  max-height: 680px;
+  border-radius: 24px;
+  object-fit: cover;
+  object-position: 64% center;
+}
+.fq-content {
+  grid-column: 1;
+  grid-row: 1;
+  min-width: 0;
 }
 .fq-title {
-  position: sticky;
-  top: calc(var(--fq-header, 72px) + 40px); /* pins below your site header; set --fq-header to its height */
-  margin: 0;
-  padding-bottom: 0.2em;
+  margin: 0 0 36px;
+  text-align: left;
+  text-wrap: balance;
   font-family: 'Urbanist', system-ui, sans-serif;
-  font-size: clamp(40px, 3.5vw, 104px);
+  font-size: clamp(34px, 3.6vw, 56px);
   font-weight: 500;
-  line-height: 1.1;
-  letter-spacing: -0.06em;
-  color: #0f172a;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  color: var(--ink);
 }
 .fq-title span {
   display: block;
 }
 .fq-g {
-  background: linear-gradient(100deg, #ff9a3d 0%, #ff6a1a 45%, #f2540c 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  padding-bottom: 0.08em;
+  color: var(--mute);
 }
 .fq-list {
   list-style: none;
   margin: 0;
   padding: 0;
-  border-top: 1.5px solid var(--ink);
+  display: grid;
+  gap: 14px;
 }
 .fq-list li {
-  border-bottom: 1px solid var(--line);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: #fff;
+  transition: border-color 0.3s, background 0.3s, box-shadow 0.4s;
+}
+.fq-list li.on {
+  border-color: rgba(51, 72, 93, 0.35);
+  background: #f5f7f8;
+  box-shadow: 0 16px 36px rgba(51, 72, 93, 0.1);
 }
 .fq-h {
   margin: 0;
@@ -131,10 +163,10 @@ const items = [
 .fq-h button {
   display: flex;
   width: 100%;
-  gap: 24px;
+  gap: 16px;
   justify-content: space-between;
-  align-items: flex-start;
-  padding: 22px 0;
+  align-items: center;
+  padding: 22px 24px;
   border: 0;
   background: none;
   font: inherit;
@@ -143,47 +175,54 @@ const items = [
   color: var(--ink);
 }
 .fq-h button:focus-visible {
-  outline: 2px solid var(--o2);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 .fq-q {
-  font-size: clamp(17px, 1.4vw, 20px);
+  flex: 1;
+  min-width: 0;
+  font-size: 17px;
   font-weight: 500;
   line-height: 1.4;
   letter-spacing: -0.01em;
   transition: color 0.3s;
 }
 .fq-list li:not(.on) button:hover .fq-q {
-  color: var(--o2);
+  color: var(--accent);
 }
 .fq-pm {
   position: relative;
   flex: none;
-  width: 18px;
-  height: 18px;
-  margin-top: 6px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #f4efec;
+  transition: background 0.3s, transform 0.5s cubic-bezier(0.3, 1.4, 0.5, 1);
 }
 .fq-pm::before,
 .fq-pm::after {
   content: '';
   position: absolute;
-  left: 0;
-  right: 0;
-  top: 8px;
+  left: 50%;
+  top: 50%;
+  width: 12px;
   height: 2px;
   border-radius: 2px;
   background: var(--ink);
-  transition: transform 0.45s var(--ease), background 0.3s;
+  transform: translate(-50%, -50%);
+  transition: transform 0.4s, background 0.3s;
 }
 .fq-pm::after {
-  transform: rotate(90deg);
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+.fq-list li.on .fq-pm {
+  background: var(--accent);
+  transform: rotate(180deg);
 }
 .fq-list li.on .fq-pm::before,
+.fq-list li.on .fq-pm::after { background: #fff; }
 .fq-list li.on .fq-pm::after {
-  background: var(--o2);
-}
-.fq-list li.on .fq-pm::after {
-  transform: rotate(0);
+  transform: translate(-50%, -50%) rotate(0);
 }
 .fq-a {
   display: grid;
@@ -195,8 +234,8 @@ const items = [
 }
 .fq-a p {
   margin: 0;
-  padding: 0 42px 24px 0;
-  max-width: 62ch;
+  padding: 0 24px 24px;
+  max-width: 72ch;
   font-size: 15.5px;
   line-height: 1.7;
   color: var(--mute);
@@ -211,13 +250,28 @@ const items = [
   transition-delay: 0.12s;
 }
 
-@media (max-width: 860px) {
+@media (max-width: 760px) {
+  .fq { padding: 72px 0; }
   .fq-wrap {
     grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
   }
-  .fq-title {
-    position: static;
+  .fq-image,
+  .fq-content {
+    grid-column: 1;
+    grid-row: auto;
   }
+  .fq-image {
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    aspect-ratio: 16 / 10;
+    object-position: center 48%;
+  }
+  .fq-title { margin-bottom: 32px; }
+  .fq-h button { padding: 18px 16px; }
+  .fq-q { font-size: 15.5px; }
+  .fq-a p { padding: 0 16px 20px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .fq-a,

@@ -43,11 +43,7 @@ defineOptions({ name: "FeaturesHero" });
   text-align: center;
   color: var(--ink);
   background: var(--paper);
-<<<<<<< HEAD
   font-family: "Urbanist", sans-serif;
-=======
-  font-family: 'Urbanist', system-ui, sans-serif;
->>>>>>> origin/main
 }
 .hero *, .hero *::before, .hero *::after { box-sizing: border-box; }
 .hero a:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; }

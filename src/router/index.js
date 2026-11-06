@@ -28,6 +28,11 @@ const routes = [
         component: () => import('../views/SalesPipelineView.vue')
       },
       {
+        path: 'features/quotations-invoicing/',
+        name: 'quotations-invoicing',
+        component: () => import('../views/Quotations&Invoicing.vue')
+      },
+      {
         path: '/industries/',
         name: 'industries',
         component: () => import('../views/IndustriesView.vue')
