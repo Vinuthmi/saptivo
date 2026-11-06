@@ -277,7 +277,7 @@ let rootIo = null
 function update() {
   raf = 0
   const vh = window.innerHeight
-  const mid = vh * 0.5
+  const mid = midLine()
   let best = 0
   let bestD = Infinity
   cards.forEach((el, i) => {
@@ -296,8 +296,18 @@ function update() {
 function queue() {
   if (!raf) raf = requestAnimationFrame(update)
 }
+/* centre of the visible area under the fixed header; the pinned column is centred on the same line */
+function midLine() {
+  const vh = window.innerHeight
+  const aside = rootEl.value?.querySelector('.fx-aside')
+  const top = aside ? parseFloat(getComputedStyle(aside).top) || 0 : 0
+  return top + (vh - top) / 2
+}
 function goTo(i) {
-  cards[i]?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  const el = cards[i]
+  if (!el) return
+  const r = el.getBoundingClientRect()
+  window.scrollTo({ top: window.scrollY + r.top + r.height / 2 - midLine(), behavior: 'smooth' })
 }
 
 onMounted(() => {
@@ -339,8 +349,10 @@ onBeforeUnmount(() => {
   --og: linear-gradient(145deg, #ff7a1a, #f2540c);
   --o-soft: #fff1e8;
   --navy: #0f172a;
-  --ink: #475569;
+  --ink: #3b4659;
   --mute: #94a3b8;
+  --nav-dim: #667085; /* inactive navigation labels: readable, but clearly secondary */
+  --fx-top: var(--fx-header, 104px); /* distance below the fixed site header; set --fx-header on a parent if your header is taller */
   --line: #f1ece8;
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
   position: relative;
@@ -348,9 +360,9 @@ onBeforeUnmount(() => {
   max-width: 1680px;
   margin: clamp(32px, 5vw, 64px) auto;
   padding: clamp(36px, 5vw, 72px) clamp(16px, 4vw, 64px) clamp(48px, 6vw, 88px);
-  border: 1px solid rgba(15, 23, 42, 0.06);
-  border-radius: clamp(22px, 2.6vw, 36px);
-  background: #fff;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
   font-family: 'Poppins', system-ui, sans-serif;
   color: var(--navy);
 }
@@ -421,28 +433,45 @@ onBeforeUnmount(() => {
 /* ---------- left: pinned text ---------- */
 .fx-aside {
   position: sticky;
-  top: clamp(24px, calc(50vh - 354px), 110px);
+  top: var(--fx-top);
+  /* a frame the same distance from the top and the bottom of the screen: its content is centred
+     in the viewport, level with the card that is in the middle of the screen */
+  display: flex;
+  height: calc(100vh - 2 * var(--fx-top));
+  height: calc(100svh - 2 * var(--fx-top));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  padding: 4px 6px 4px 0;
+}
+.fx-aside::-webkit-scrollbar {
+  display: none;
+}
+.fx-aside-in {
+  width: 100%;
+  margin: auto 0; /* safe vertical centring: never cuts off the top if the content is taller */
 }
 .fx-copy-box {
-  min-height: 430px;
+  /* reserves room for the longest description so the list below never jumps */
+  min-height: clamp(250px, 37svh, 312px);
 }
 .fx-copy h3,
 .fx-mcopy h3 {
-  margin: 0 0 18px;
+  margin: 0 0 14px;
   font-family: Urbanist, 'Urbanist Placeholder', sans-serif;
-  font-size: 50px;
+  font-size: clamp(30px, 3.1vw, 42px);
   font-weight: 600;
-  line-height: 65px;
-  letter-spacing: -1px;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
   color: #0a0a0a;
 }
 .fx-copy p,
 .fx-mcopy p {
-  margin: 0 0 26px;
+  margin: 0 0 24px;
   font-family: 'Urbanist', system-ui, sans-serif;
-  font-size: 15.5px;
+  font-size: 16px;
   font-weight: 500;
-  line-height: 1.65;
+  line-height: 1.6;
   letter-spacing: -0.01em;
   color: var(--ink);
 }
@@ -497,36 +526,51 @@ onBeforeUnmount(() => {
 
 /* feature list */
 .fx-list {
-  margin: 28px 0 0;
-  padding: 22px 0 0;
+  margin: 20px 0 0;
+  padding: 18px 0 0;
   list-style: none;
-  border-top: 1px solid var(--line);
+  border-top: 1px solid #e6dfd8;
   display: grid;
-  gap: 2px;
+  gap: 1px;
 }
 .fx-list button {
-  display: block;
+  display: flex;
+  align-items: center;
   width: 100%;
-  padding: 5px 0;
+  padding: 4px 0;
   border: 0;
   background: none;
   font-family: Urbanist, 'Urbanist Placeholder', sans-serif;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 500;
   line-height: 1.3;
   letter-spacing: -0.02em;
-  color: #b9b2ac;
+  color: var(--nav-dim);
   text-align: left;
   cursor: pointer;
-  transition: color 0.3s, transform 0.3s var(--ease);
+  transition: color 0.3s;
+}
+/* orange dot that opens up in front of the active item */
+.fx-list button::before {
+  content: '';
+  flex: none;
+  width: 0;
+  height: 7px;
+  margin-right: 0;
+  border-radius: 50%;
+  background: var(--og);
+  transition: width 0.3s var(--ease), margin-right 0.3s var(--ease);
 }
 .fx-list button:hover {
-  color: var(--ink);
+  color: #0a0a0a;
 }
 .fx-list button.on {
   color: #0a0a0a;
   font-weight: 600;
-  transform: translateX(6px);
+}
+.fx-list button.on::before {
+  width: 7px;
+  margin-right: 10px;
 }
 .fx-list button:focus-visible {
   outline: 2px solid var(--o);
@@ -1101,6 +1145,29 @@ onBeforeUnmount(() => {
   50% { transform: translateY(-6px); }
 }
 
+/* short laptop screens: tighten the pinned column so everything still fits under the header */
+@media (min-width: 901px) and (max-height: 760px) {
+  .fx-copy h3 {
+    font-size: 34px;
+    margin-bottom: 10px;
+  }
+  .fx-copy p {
+    font-size: 14.5px;
+    margin-bottom: 18px;
+  }
+  .fx-copy-box {
+    min-height: 250px;
+  }
+  .fx-list {
+    margin-top: 14px;
+    padding-top: 12px;
+  }
+  .fx-list button {
+    font-size: 17px;
+    padding: 3px 0;
+  }
+}
+
 /* ---------- tablets / phones: text moves above each card ---------- */
 @media (max-width: 900px) {
   .fx-grid {
@@ -1161,6 +1228,9 @@ onBeforeUnmount(() => {
   }
   .fx .w-chip {
     display: none;
+  }
+  .fx .w-acts {
+    flex-wrap: wrap;
   }
 }
 

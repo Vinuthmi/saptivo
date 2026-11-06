@@ -1,7 +1,4 @@
-
 <script setup>
-import { ref } from 'vue'
-
 defineOptions({ name: 'SiteFooter' })
 
 const year = new Date().getFullYear()
@@ -65,14 +62,13 @@ const clients = [
     displayWidth: 75,
     href: 'https://lankagrills.com/',
   },
-]
-
-const orbitIcons = [
-  { name: 'Instagram', src: `${baseUrl}orbit/instagram.svg`, size: 40 },
-  { name: 'Facebook', src: `${baseUrl}orbit/facebook.svg`, size: 40 },
-  { name: 'WordPress', src: `${baseUrl}orbit/wordpress.svg`, size: 40 },
-  { name: '3CX', src: `${baseUrl}orbit/3cx.svg`, size: 56 },
-  { name: 'Google Calendar', src: `${baseUrl}orbit/google-calendar.svg`, size: 38 },
+  {
+    name: 'STC',
+    src: `${baseUrl}images/clients/stc1.png`,
+    width: 978,
+    height: 1127,
+    displayWidth: 48,
+  },
 ]
 
 const trust = [
@@ -148,61 +144,10 @@ const footerGroups = [
   { title: 'Company & Trust', links: companyLinks },
   { title: 'Conversion', links: conversionLinks },
 ]
-
-const orbitRadius = ref(340)
 </script>
 
 <template>
-  <footer id="contact" class="site-footer">
-    <!-- CTA -->
-    <section class="cta">
-      <h2 class="cta-title">
-        Ready to run
-        <span class="grad">every store as one?</span>
-      </h2>
-
-      <p class="cta-sub">
-        One connected workspace for customers, sales, and every store you run.
-        Work smarter, move faster and make every opportunity count.
-      </p>
-
-      <div class="cta-actions">
-        <router-link to="/free-trial/" class="btn btn-primary">
-          Start your free trial
-        </router-link>
-
-        <router-link to="/demo/" class="btn btn-light">
-          Book a Demo
-        </router-link>
-      </div>
-
-      <!-- Rotating integration orbit -->
-      <div class="orbit-wrap" aria-hidden="true">
-        <div class="orbit">
-          <div
-            v-for="(icon, i) in orbitIcons"
-            :key="icon.name"
-            class="orbit-item"
-            :style="{ '--a': `${(360 / orbitIcons.length) * i}deg` }"
-          >
-            <span class="orbit-badge">
-              <img
-                :src="icon.src"
-                :alt="icon.name"
-                :style="{ width: `${icon.size}px`, height: `${icon.size}px` }"
-                draggable="false"
-              />
-            </span>
-          </div>
-        </div>
-
-        <div class="orbit-inner">
-          <i class="orbit-dot"></i>
-        </div>
-      </div>
-    </section>
-
-    <!-- Footer navigation -->
+  <footer class="site-footer">
     <div class="footer-card">
       <div class="footer-dots" aria-hidden="true"></div>
 
@@ -278,11 +223,12 @@ const orbitRadius = ref(340)
       <section class="trusted-brands" aria-label="Trusted businesses">
         <ul class="trusted-logos">
           <li v-for="client in clients" :key="client.name">
-            <a
+            <component
+              :is="client.href ? 'a' : 'span'"
               :href="client.href"
-              :aria-label="`Visit ${client.name} website`"
-              target="_blank"
-              rel="noopener noreferrer"
+              :aria-label="client.href ? `Visit ${client.name} website` : client.name"
+              :target="client.href ? '_blank' : null"
+              :rel="client.href ? 'noopener noreferrer' : null"
             >
               <img
                 :src="client.src"
@@ -293,7 +239,7 @@ const orbitRadius = ref(340)
                 loading="lazy"
                 draggable="false"
               />
-            </a>
+            </component>
           </li>
         </ul>
       </section>
@@ -314,285 +260,22 @@ const orbitRadius = ref(340)
 <style scoped>
 .site-footer {
   --orange: #ff6818;
-  --ink: #17191d;
-  --muted: #9a9ba3;
-  --radius: 340px;
 
   position: relative;
+  z-index: 2;
   width: 100%;
-  padding: 0;
-  overflow: hidden;
+  /* white behind the rounded top corners of the dark card */
   background: #fff;
-  color: #17191d;
+  color: #fff;
   font-family: 'Urbanist', 'Poppins', Arial, sans-serif;
-}
-
-.site-footer::before {
-  position: absolute;
-  top: 40px;
-  left: 50%;
-  width: 1000px;
-  height: 560px;
-  transform: translateX(-50%);
-  background: radial-gradient(
-    closest-side,
-    rgba(240, 100, 43, 0.14),
-    rgba(240, 100, 43, 0.05) 60%,
-    transparent
-  );
-  content: '';
-  pointer-events: none;
-}
-
-/* Trusted businesses */
-
-.trusted-brands {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  margin: 0 auto;
-  padding: 0 0 28px;
-}
-
-.trusted-logos {
-  display: flex;
-  flex-wrap: nowrap;
-  justify-content: center;
-  align-items: center;
-  gap: 0;
-  margin: 0;
-  padding: 0;
-  overflow-x: auto;
-  scrollbar-width: none;
-  list-style: none;
-}
-
-.trusted-logos::-webkit-scrollbar {
-  display: none;
-}
-
-.trusted-logos li {
-  display: grid;
-  flex: 1 0 0;
-  min-width: 120px;
-  height: 76px;
-  place-items: center;
-}
-
-.trusted-logos a {
-  display: grid;
-  width: 100%;
-  height: 100%;
-  padding: 10px 14px;
-  place-items: center;
-}
-
-.trusted-logos img {
-  display: block;
-  width: var(--dw);
-  max-width: 100%;
-  height: auto;
-  object-fit: contain;
-  user-select: none;
-  transition: transform 0.3s ease;
-}
-
-.trusted-logos a:hover img {
-  transform: scale(1.04);
-}
-
-.trusted-logos a:focus-visible {
-  outline: 2px solid var(--orange);
-  outline-offset: 5px;
-  border-radius: 5px;
-}
-
-/* CTA */
-
-.cta {
-  position: relative;
-  box-sizing: border-box;
-  max-width: 1476px;
-  margin: 0 auto;
-  padding: clamp(65px, 8vw, 110px) 24px 0;
-  text-align: center;
-}
-
-.cta-title {
-  margin: 0;
-  color: #0f172a;
-  font-size: clamp(32px, 4.2vw, 62px);
-  font-weight: 500;
-  line-height: 1.12;
-  letter-spacing: -0.05em;
-}
-
-.grad {
-  display: block;
-  background: linear-gradient(100deg, #ff9a3d 0%, #ff6a1a 45%, #f2540c 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-}
-
-.cta-sub {
-  max-width: 560px;
-  margin: 22px auto 32px;
-  color: #475569;
-  font-size: clamp(15px, 1vw, 18px);
-  font-weight: 500;
-  line-height: 1.6;
-  letter-spacing: -0.02em;
-}
-
-.cta-actions {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 14px;
-}
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 54px;
-  padding: 0 24px;
-  border-radius: 12px;
-  font-size: 15px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.btn:hover {
-  transform: translateY(-2px);
-}
-
-.btn-primary {
-  color: #fff;
-  background: linear-gradient(180deg, #ff7a45, #f2531f);
-  box-shadow: 0 10px 24px rgba(240, 75, 35, 0.3);
-}
-
-.btn-primary:hover {
-  box-shadow: 0 16px 32px rgba(240, 75, 35, 0.4);
-}
-
-.btn-light {
-  color: #fff;
-  background: #0b0c0e;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
-}
-
-.btn-light:hover {
-  background: #292b30;
-}
-
-/* Orbit animation */
-
-.orbit-wrap {
-  position: relative;
-  height: 300px;
-  margin-top: 46px;
-  overflow: hidden;
-}
-
-.orbit,
-.orbit-inner {
-  position: absolute;
-  left: 50%;
-  border-radius: 50%;
-}
-
-.orbit {
-  top: 50px;
-  width: calc(var(--radius) * 2);
-  height: calc(var(--radius) * 2);
-  margin-left: calc(var(--radius) * -1);
-  border: 1px solid rgba(23, 25, 29, 0.14);
-  animation: spin 60s linear infinite;
-}
-
-.orbit-item {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 76px;
-  height: 76px;
-  margin: -38px 0 0 -38px;
-  transform: rotate(var(--a)) translateY(calc(var(--radius) * -1));
-}
-
-.orbit-badge {
-  display: grid;
-  width: 100%;
-  height: 100%;
-  place-items: center;
-  border: 1px solid rgba(23, 25, 29, 0.08);
-  border-radius: 20px;
-  background: #fff;
-  box-shadow: 0 12px 28px rgba(23, 25, 29, 0.14);
-  transform: rotate(calc(var(--a) * -1));
-  animation: upright 60s linear infinite;
-}
-
-.orbit-badge img {
-  display: block;
-  object-fit: contain;
-  user-select: none;
-}
-
-.orbit-inner {
-  --r2: calc(var(--radius) - 95px);
-  top: 145px;
-  width: calc(var(--r2) * 2);
-  height: calc(var(--r2) * 2);
-  margin-left: calc(var(--r2) * -1);
-  border: 1px dashed rgba(23, 25, 29, 0.24);
-  animation: spin-rev 90s linear infinite;
-}
-
-.orbit-dot {
-  position: absolute;
-  top: -7px;
-  left: 50%;
-  width: 14px;
-  height: 14px;
-  margin-left: -7px;
-  border: 2px solid #f0642b;
-  border-radius: 50%;
-  background: #fff;
-  box-shadow: 0 0 12px rgba(240, 100, 43, 0.7);
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes spin-rev {
-  to {
-    transform: rotate(-360deg);
-  }
-}
-
-@keyframes upright {
-  to {
-    transform: rotate(calc(var(--a) * -1 - 360deg));
-  }
 }
 
 /* Footer card */
 
 .footer-card {
   position: relative;
-  z-index: 2;
-  width: 100%;
   box-sizing: border-box;
-  margin: -70px 0 0;
+  width: 100%;
   padding: 44px max(clamp(20px, 4vw, 56px), calc((100% - 1440px) / 2 + 56px)) 26px;
   overflow: hidden;
   border-radius: 50px 50px 0 0;
@@ -786,6 +469,69 @@ const orbitRadius = ref(340)
   color: #ff7a3a;
 }
 
+/* Trusted businesses */
+
+.trusted-brands {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 0 44px;
+}
+
+.trusted-logos {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  list-style: none;
+}
+
+.trusted-logos::-webkit-scrollbar {
+  display: none;
+}
+
+.trusted-logos li {
+  display: grid;
+  flex: 1 0 0;
+  min-width: 120px;
+  height: 76px;
+  place-items: center;
+}
+
+.trusted-logos li > :is(a, span) {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  padding: 10px 14px;
+  place-items: center;
+}
+
+.trusted-logos img {
+  display: block;
+  width: var(--dw);
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  user-select: none;
+  transition: transform 0.3s ease;
+}
+
+.trusted-logos li > :is(a, span):hover img {
+  transform: scale(1.04);
+}
+
+.trusted-logos a:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 5px;
+  border-radius: 5px;
+}
+
 /* Bottom bar */
 
 .footer-bottom {
@@ -856,8 +602,9 @@ const orbitRadius = ref(340)
 }
 
 @media (max-width: 640px) {
-  .site-footer {
-    --radius: 200px;
+  .footer-card {
+    padding: 32px 20px 22px;
+    border-radius: 22px 22px 0 0;
   }
 
   .trusted-logos li {
@@ -866,34 +613,6 @@ const orbitRadius = ref(340)
 
   .trusted-logos img {
     width: calc(var(--dw) * 0.78);
-  }
-
-  .cta {
-    padding-top: 55px;
-  }
-
-  .orbit-wrap {
-    height: 230px;
-  }
-
-  .orbit-item {
-    width: 56px;
-    height: 56px;
-    margin: -28px 0 0 -28px;
-  }
-
-  .orbit-badge {
-    border-radius: 15px;
-  }
-
-  .orbit-badge img {
-    transform: scale(0.7);
-  }
-
-  .footer-card {
-    margin-top: -50px;
-    padding: 32px 20px 22px;
-    border-radius: 22px 22px 0 0;
   }
 
   .trust {
@@ -924,15 +643,11 @@ const orbitRadius = ref(340)
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .orbit,
-  .orbit-inner,
-  .orbit-badge,
   .status i {
     animation: none;
   }
 
   .trusted-logos img,
-  .btn,
   .trust-icon {
     transition: none;
   }

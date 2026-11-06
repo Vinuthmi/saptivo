@@ -38,14 +38,6 @@
         </button>
       </div>
 
-      <!-- ============ description for the active tab ============ -->
-      <ul :key="active" class="ig-desc" aria-live="polite">
-        <li v-for="(pt, i) in activePoints" :key="i" :style="{ '--i': i }">
-          <i class="ck"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 12.5 4 4 8-9" /></svg></i>
-          <span><b>{{ pt.b }}</b>{{ pt.t }}</span>
-        </li>
-      </ul>
-
       <!-- ============ stage ============ -->
       <div
         ref="stageEl"
@@ -105,11 +97,6 @@
                 </div>
               </div>
 
-              <svg class="link" viewBox="0 0 44 40" aria-hidden="true">
-                <path id="lk0" d="M2 20 H42" />
-                <circle v-if="motion" r="4"><animateMotion dur="2.2s" repeatCount="indefinite" begin="0s"><mpath href="#lk0" /></animateMotion></circle>
-                <circle v-if="motion" r="4"><animateMotion dur="2.2s" repeatCount="indefinite" begin="1.1s"><mpath href="#lk0" /></animateMotion></circle>
-              </svg>
 
               <div class="win" style="--d: 1">
                 <div class="hero">
@@ -170,11 +157,6 @@
                 </div>
               </div>
 
-              <svg class="link" viewBox="0 0 44 40" aria-hidden="true">
-                <path id="lk1" d="M2 20 H42" />
-                <circle v-if="motion" r="4"><animateMotion dur="2.2s" repeatCount="indefinite" begin="0s"><mpath href="#lk1" /></animateMotion></circle>
-                <circle v-if="motion" r="4"><animateMotion dur="2.2s" repeatCount="indefinite" begin="1.1s"><mpath href="#lk1" /></animateMotion></circle>
-              </svg>
 
               <div class="win" style="--d: 1">
                 <div class="hero">
@@ -240,11 +222,6 @@
                 </div>
               </div>
 
-              <svg class="link" viewBox="0 0 44 40" aria-hidden="true">
-                <path id="lk2" d="M2 20 H42" />
-                <circle v-if="motion" r="4"><animateMotion dur="2.2s" repeatCount="indefinite" begin="0s"><mpath href="#lk2" /></animateMotion></circle>
-                <circle v-if="motion" r="4"><animateMotion dur="2.2s" repeatCount="indefinite" begin="1.1s"><mpath href="#lk2" /></animateMotion></circle>
-              </svg>
 
               <div class="win" style="--d: 1">
                 <div class="hero slim">
@@ -303,11 +280,6 @@
                 </div>
               </div>
 
-              <svg class="link" viewBox="0 0 44 40" aria-hidden="true">
-                <path id="lk3" d="M2 20 H42" />
-                <circle v-if="motion" r="4"><animateMotion dur="2.2s" repeatCount="indefinite" begin="0s"><mpath href="#lk3" /></animateMotion></circle>
-                <circle v-if="motion" r="4"><animateMotion dur="2.2s" repeatCount="indefinite" begin="1.1s" keyPoints="1;0" keyTimes="0;1" calcMode="linear"><mpath href="#lk3" /></animateMotion></circle>
-              </svg>
 
               <div class="win" style="--d: 1">
                 <div class="cal-bar">
@@ -371,11 +343,6 @@
                 </div>
               </div>
 
-              <svg class="link" viewBox="0 0 44 40" aria-hidden="true">
-                <path id="lk4" d="M2 20 H42" />
-                <circle v-if="motion" r="4"><animateMotion dur="2.2s" repeatCount="indefinite" begin="0s"><mpath href="#lk4" /></animateMotion></circle>
-                <circle v-if="motion" r="4"><animateMotion dur="2.2s" repeatCount="indefinite" begin="1.1s" keyPoints="1;0" keyTimes="0;1" calcMode="linear"><mpath href="#lk4" /></animateMotion></circle>
-              </svg>
 
               <div class="win" style="--d: 1">
                 <div class="hero">
@@ -405,6 +372,14 @@
           </div>
         </div>
 
+        <!-- ============ description for the active tab (sits under the preview) ============ -->
+        <p :key="active" class="ig-desc" aria-live="polite">
+          <template v-for="(pt, i) in activePoints" :key="i">
+            <span v-if="i" class="sep" aria-hidden="true">·</span>
+            <span class="pt" :style="{ '--i': i }"><b>{{ pt.b }}</b>{{ pt.t }}</span>
+          </template>
+        </p>
+
         <div class="ig-dots" role="group" aria-label="Choose integration">
           <button
             v-for="(s, i) in slides"
@@ -430,14 +405,14 @@ defineOptions({ name: 'HomeIntegrationsSection' })
  * Each slide pairs an integration + a live-stats card (left) with the Saptivo CRM screen it feeds (right),
  * drawn from the real product UI: Inquiries, Lead pipeline, 3CX call journal and the Tasks calendar.
  * • Tabs, arrows, ← → keys, swipe and autoplay (7s; pauses on hover/focus/off-screen).
- * • Pure HTML/CSS/SVG — no image files. Scene is authored at 1160×490 and scaled to fit.
+ * • Pure HTML/CSS/SVG — no image files. Scene is authored at 1270×490 and scaled to fit.
  * • prefers-reduced-motion: no autoplay, no looping animation.
  *
  * Browser APIs are only used in onMounted / handlers (SSR / Nuxt safe).
  */
 import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
 
-const SCENE_W = 1160
+const SCENE_W = 1270
 const SCENE_H = 490
 const COMPACT_W = 700
 const PHONE_W = 400
@@ -595,10 +570,11 @@ function fit() {
   if (!stageEl.value) return
   const cs = getComputedStyle(stageEl.value)
   const w = stageEl.value.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight)
-  compact.value = w < 900 // tablets + phones: CRM window only, so text stays readable
+  compact.value = w < 960 // tablets + phones: CRM window only, so text stays readable
   phone.value = w < 560 // phones: a narrower, simplified window
   const base = phone.value ? PHONE_W : compact.value ? COMPACT_W : SCENE_W
-  scale.value = Math.min(1, +(w / base).toFixed(3)) || 1
+  // the full two-card scene never renders larger than 90%, so the cards keep their size while the section gets wider
+  scale.value = Math.min(compact.value ? 1 : 0.9, +(w / base).toFixed(3)) || 1
 }
 
 onMounted(() => {
@@ -633,38 +609,25 @@ onBeforeUnmount(() => {
   --mute: #94a3b8;
   --line: #f1f5f9;
   position: relative;
-  /* boxed: a rounded card inset from the page edges */
-  width: calc(100% - 2 * clamp(12px, 3vw, 40px));
-  max-width: 1680px;
-  margin: clamp(16px, 3vw, 40px) auto clamp(48px, 6vw, 88px);
-  border: 1px solid rgba(15, 23, 42, 0.06);
-  border-radius: clamp(22px, 2.6vw, 36px);
-  box-shadow: 0 30px 60px -36px rgba(150, 70, 30, 0.35), 0 1px 0 #fff inset;
-  overflow: hidden;
+  /* full-bleed band: the grey runs edge to edge, the content stays centred inside .ig-wrap */
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  border: 0;
+  border-radius: clamp(24px, 3vw, 40px);
+  box-shadow: none;
+  overflow: hidden; /* rounds the corners and clips the 1160px scene on narrow screens, so the band never adds a horizontal scrollbar */
   isolation: isolate;
   font-family: 'Poppins', system-ui, sans-serif;
   color: var(--navy);
-  padding: clamp(24px, 3vw, 40px) 0 clamp(40px, 4vw, 56px);
-  background:
-    radial-gradient(900px 420px at 100% 0%, #fde3d9 0%, transparent 70%),
-    radial-gradient(800px 500px at 0% 0%, #fce7e0 0%, transparent 65%),
-    linear-gradient(180deg, #fdeee8 0%, #fbf3ef 55%, #fdf7f3 100%);
-}
-.ig::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(rgba(190, 120, 90, 0.13) 1px, transparent 1.2px);
-  background-size: 26px 26px;
-  mask-image: radial-gradient(ellipse 70% 60% at 50% 60%, #000 30%, transparent 85%);
-  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 60%, #000 30%, transparent 85%);
-  pointer-events: none;
+  padding: clamp(56px, 6vw, 96px) 0 clamp(56px, 6vw, 96px);
+  background: #f4f5f7;
 }
 .ig-wrap {
   position: relative;
-  max-width: 1620px;
+  max-width: 1680px;
   margin: 0 auto;
-  padding: 0 clamp(16px, 4vw, 64px);
+  padding: 0 clamp(16px, 2.4vw, 40px);
 }
 
 /* ============ header ============ */
@@ -688,10 +651,10 @@ onBeforeUnmount(() => {
 .ig-title {
   margin: 0 auto;
   padding-bottom: 0.2em;
-  max-width: 760px;
-  text-wrap: balance;
+  max-width: none;
+  white-space: nowrap;
   font-family: 'Urbanist', system-ui, sans-serif;
-  font-size: clamp(32px, 4.2vw, 62px);
+  font-size: clamp(16px, 4.2vw, 62px);
   color: #0f172a;
   line-height: 1.12;
   font-weight: 500;
@@ -699,17 +662,17 @@ onBeforeUnmount(() => {
 }
 .ig-title em { font-style: normal; background: linear-gradient(100deg, #ff9a3d 0%, #ff6a1a 45%, #f2540c 100%); -webkit-background-clip: text; background-clip: text; color: transparent; white-space: nowrap; }
 .ig-nav:focus-visible, .ig-tab:focus-visible { outline: 2px solid var(--o); outline-offset: 3px; }
-.ig-sub { margin: 10px auto 0; max-width: 640px; text-align: center; font-family: 'Urbanist', system-ui, sans-serif; font-size: clamp(15px, 1vw, 18px); font-weight: 500; line-height: 1.45; letter-spacing: -0.02em; color: #475569; }
+.ig-sub { margin: 20px auto 0; max-width: 640px; text-align: center; font-family: 'Urbanist', system-ui, sans-serif; font-size: clamp(15px, 1vw, 18px); font-weight: 500; line-height: 1.45; letter-spacing: -0.02em; color: #475569; }
 
 
 /* ============ active-tab description ============ */
-.ig-desc { list-style: none; margin: 16px auto 0; padding: 0 clamp(16px, 4vw, 64px); max-width: 1240px; min-height: 52px; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: center; align-items: flex-start; gap: 10px 28px; }
-.ig-desc li { display: flex; align-items: flex-start; gap: 10px; flex: 1 1 0; min-width: 0; max-width: 400px; font-size: 14px; line-height: 1.4; color: var(--ink); animation: ig-descin 0.45s ease both; animation-delay: calc(var(--i, 0) * 0.08s); }
+/* wider than the preview frame so the three statements fit on one line on desktop; wraps naturally below that */
+.ig-desc { position: relative; left: 50%; width: min(1440px, calc(100vw - 2 * clamp(16px, 2.4vw, 40px))); transform: translateX(-50%); margin: 28px 0 0; padding: 0; min-height: 52px; text-align: center; font-size: 14px; line-height: 1.8; color: var(--ink); text-wrap: pretty; }
+.ig-desc .pt { display: inline; animation: ig-descin 0.45s ease both; animation-delay: calc(var(--i, 0) * 0.08s); }
 .ig-desc b { font-weight: 600; color: var(--navy); }
-.ig-desc .ck { flex: none; display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: linear-gradient(160deg, #ff8a4c, #f2540c); }
-.ig-desc .ck svg { width: 12px; height: 12px; fill: none; stroke: #fff; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.ig-desc .sep { display: inline-block; width: 1px; height: 14px; margin: 0 11px; vertical-align: middle; background: #c5ccd6; font-size: 0; }
 @keyframes ig-descin { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-@media (max-width: 860px) { .ig-desc { flex-direction: column; align-items: flex-start; min-height: 64px; max-width: 560px; } .ig-desc li { flex: none; max-width: none; font-size: 13px; } }
+@media (max-width: 860px) { .ig-desc { font-size: 14px; line-height: 1.7; margin-top: 22px; } .ig-desc .sep { margin: 0 10px; } }
 
 /* ============ tabs ============ */
 .ig-tabs {
@@ -717,7 +680,7 @@ onBeforeUnmount(() => {
   flex-wrap: wrap;
   justify-content: center;
   gap: 8px;
-  margin: 22px auto 0;
+  margin: 36px auto 0;
 }
 .ig-tab {
   display: inline-flex;
@@ -726,7 +689,7 @@ onBeforeUnmount(() => {
   padding: 10px 18px;
   border: 1px solid rgba(15, 23, 42, 0.1);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.85);
   color: var(--ink);
   font: 500 13.5px/1 'Poppins', system-ui, sans-serif;
   cursor: pointer;
@@ -737,14 +700,14 @@ onBeforeUnmount(() => {
 .ig-tab.on { background: var(--navy); border-color: var(--navy); color: #fff; box-shadow: 0 10px 22px -8px rgba(15, 23, 42, 0.5); }
 
 /* ============ stage ============ */
-.ig-stage { position: relative; margin: 14px auto 0; max-width: 1160px; padding: 0 60px; /* room for the arrows */ outline: none; }
+.ig-stage { position: relative; margin: 40px auto 0; max-width: 1560px; padding: 0 56px; /* room for the arrows */ outline: none; }
 .ig-view { position: relative; }
 .ig-view:has(.compact) { margin-bottom: 4px; }
 .ig-scene {
   position: absolute;
   left: 50%;
   top: 0;
-  width: 1160px;
+  width: 1270px;
   height: 490px;
   transform-origin: 50% 0;
 }
@@ -762,7 +725,7 @@ onBeforeUnmount(() => {
   content: '';
   position: absolute;
   left: 4%; right: 4%; bottom: 22px; height: 40px;
-  background: radial-gradient(closest-side, rgba(190, 90, 50, 0.2), transparent);
+  background: radial-gradient(closest-side, rgba(15, 23, 42, 0.14), transparent);
   filter: blur(10px);
 }
 
@@ -864,17 +827,12 @@ onBeforeUnmount(() => {
 .sd-stats b { font-size: 14px; font-weight: 600; letter-spacing: -0.01em; white-space: nowrap; }
 .sd-stats small { font-size: 8.5px; color: var(--mute); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-/* connector */
-.link { position: absolute; left: 304px; top: 120px; width: 44px; height: 40px; overflow: visible; }
-.link path { fill: none; stroke: #ffb48c; stroke-width: 2; stroke-dasharray: 3 6; stroke-linecap: round; }
-.link circle { fill: var(--o); filter: drop-shadow(0 0 5px rgba(255, 87, 34, 0.8)); }
-
 /* CRM window */
 .win {
   position: absolute;
-  left: 348px;
+  left: 410px;
   top: 0;
-  width: 812px;
+  width: 860px;
   height: 458px;
   padding: 14px;
   overflow: hidden;
@@ -1013,14 +971,14 @@ onBeforeUnmount(() => {
 .evt small { display: block; margin-top: 1px; font-size: 9.5px; line-height: 1.3; color: #9a5b3c; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .e4 { top: 28px; height: 46px; width: 270px; transition-delay: 0.55s; }
 .e2 { top: 92px; height: 46px; width: 290px; transition-delay: 0.65s; }
-.e5 { left: 390px; top: 160px; height: 46px; width: 270px; background: #e8f0fe; border-left-color: #4285f4; transition-delay: 0.75s; }
+.e5 { left: 420px; top: 160px; height: 46px; width: 270px; background: #e8f0fe; border-left-color: #4285f4; transition-delay: 0.75s; }
 .e5 b { color: #1a3f8a; }
 .e5 small { color: #4a6aa8; }
 .e1 { top: 248px; height: 58px; width: 340px; background: #e8f0fe; border-left-color: #4285f4; transition-delay: 0.85s; }
 .e1 b { color: #1a3f8a; }
 .e1 small { color: #4a6aa8; }
 .e3 { top: 314px; height: 44px; width: 270px; transition-delay: 0.95s; }
-.e6 { left: 430px; top: 272px; height: 46px; width: 270px; background: #e8f0fe; border-left-color: #4285f4; transition-delay: 1.05s; }
+.e6 { left: 470px; top: 272px; height: 46px; width: 270px; background: #e8f0fe; border-left-color: #4285f4; transition-delay: 1.05s; }
 .e6 b { color: #1a3f8a; }
 .e6 small { color: #4a6aa8; }
 .mini-cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px 0; margin-top: 8px; padding: 7px 8px; border-radius: 12px; background: #f8fafc; font-size: 10px; text-align: center; color: var(--ink); }
@@ -1041,15 +999,15 @@ onBeforeUnmount(() => {
 .tic.g svg { stroke: #15803d; }
 .tic.wa { background: #e6f9ee; }
 .tic.wa svg { stroke: #16a34a; }
-.t1 { left: 830px; top: 424px; width: 310px; }
-.t2 { left: 880px; top: 428px; }
-.t3 { left: 830px; top: 424px; width: 310px; }
-.t4 { left: 880px; top: 430px; }
-.t5 { left: 880px; top: 430px; }
+.t1 { left: 940px; top: 424px; width: 310px; }
+.t2 { left: 990px; top: 428px; }
+.t3 { left: 940px; top: 424px; width: 310px; }
+.t4 { left: 990px; top: 430px; }
+.t5 { left: 990px; top: 430px; }
 
 /* compact (phone) scene: CRM window only */
 .compact { width: 700px; }
-.compact .col, .compact .link { display: none; }
+.compact .col { display: none; }
 .compact .win { left: 0; width: 700px; }
 .compact .rc { display: none; }
 .compact .thead.web, .compact .trow.web { grid-template-columns: 1.3fr 1.4fr 1.15fr 0.7fr; }
@@ -1115,9 +1073,9 @@ onBeforeUnmount(() => {
 }
 .ig-nav svg { width: 18px; height: 18px; fill: none; stroke: var(--navy); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 .ig-nav:hover { transform: scale(1.08); box-shadow: 0 10px 22px rgba(15, 23, 42, 0.18); }
-.ig-prev { left: -58px; }
-.ig-next { right: -58px; }
-.ig-dots { display: flex; justify-content: center; gap: 6px; margin-top: 18px; }
+.ig-prev { left: -52px; }
+.ig-next { right: -52px; }
+.ig-dots { display: flex; justify-content: center; gap: 6px; margin-top: 26px; }
 .ig-dot { position: relative; width: 8px; height: 8px; padding: 0; border: 0; border-radius: 8px; background: #cfcbd0; cursor: pointer; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s; }
 .ig-dot::after { content: ''; position: absolute; inset: -10px -4px; } /* bigger tap target */
 .ig-dot:hover { background: #f5a07f; }
@@ -1132,7 +1090,7 @@ onBeforeUnmount(() => {
 
 /* ============ responsive ============ */
 @media (max-width: 860px) {
-  .ig-tabs { justify-content: flex-start; flex-wrap: nowrap; overflow-x: auto; margin-inline: calc(clamp(16px, 4vw, 64px) * -1); padding: 0 clamp(16px, 4vw, 64px) 4px; scrollbar-width: none; }
+  .ig-tabs { justify-content: flex-start; flex-wrap: nowrap; overflow-x: auto; margin-inline: calc(clamp(16px, 2.4vw, 40px) * -1); padding: 0 clamp(16px, 2.4vw, 40px) 4px; scrollbar-width: none; }
   .ig-tabs::-webkit-scrollbar { display: none; }
   .ig-tab { flex: none; }
   .ig-nav { display: none; }

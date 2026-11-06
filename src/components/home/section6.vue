@@ -522,13 +522,11 @@ onBeforeUnmount(() => {
   gap: clamp(26px, 4vw, 56px);
   align-items: start;
   margin-top: clamp(26px, 3.4vw, 40px);
-  padding: 24px;
-  border-radius: 24px;
-  background: #fff;
-  border: 1px solid var(--line);
-  box-shadow:
-    0 1px 0 #fff inset,
-    0 40px 80px -50px rgba(20, 21, 43, 0.45);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
 }
 
 /* ---------- stage (left) ---------- */
@@ -824,8 +822,8 @@ onBeforeUnmount(() => {
   border-radius: 10px;
   display: grid;
   place-items: center;
-  background: var(--peach);
-  border: 1px solid var(--peach-2);
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
   transition:
     background 0.4s,
     box-shadow 0.4s,
@@ -835,20 +833,20 @@ onBeforeUnmount(() => {
   width: 17px;
   height: 17px;
   fill: none;
-  stroke: var(--o2);
+  stroke: #1f2937;
   stroke-width: 1.9;
   stroke-linecap: round;
   stroke-linejoin: round;
   transition: stroke 0.4s;
 }
 .s4a-item.on .s4a-ico {
-  background: linear-gradient(145deg, var(--o1), var(--o2));
-  border-color: transparent;
-  box-shadow: 0 10px 18px -8px rgba(242, 84, 12, 0.7);
-  transform: scale(1.06);
+  background: #e5e7eb;
+  border-color: #d1d5db;
+  box-shadow: none;
+  transform: scale(1.04);
 }
 .s4a-item.on .s4a-ico svg {
-  stroke: #fff;
+  stroke: #111827;
 }
 .s4a-it {
   flex: 1;
@@ -1213,7 +1211,7 @@ onBeforeUnmount(() => {
 }
 @media (max-width: 760px) {
   .s4a-grid {
-    padding: 16px;
+    padding: 0;
   }
   .s4a-stage {
     height: 480px;
@@ -1351,6 +1349,14 @@ onBeforeUnmount(() => {
   }
 }
 
+/* no outline around the gradient card either */
+.s4a-stage {
+  border: 0;
+}
+.s4a-stage::after {
+  display: none;
+}
+
 /* cards (stage) on the RIGHT, list on the LEFT */
 .s4a-grid {
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.04fr);
@@ -1379,7 +1385,7 @@ onBeforeUnmount(() => {
   padding: 2px 8px;
   border-radius: 999px;
   background: var(--peach);
-  color: #b84a0a;
+  color: #000000;
   font-style: normal;
   font-size: 9.5px;
   font-weight: 700;

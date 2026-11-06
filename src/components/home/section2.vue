@@ -258,10 +258,7 @@ onBeforeUnmount(() => {
 }
 .op-title em {
   font-style: normal;
-  background: linear-gradient(100deg, #ff9a3d 0%, #ff6a1a 45%, #f2540c 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: inherit;
 }
 
 /* ---------- cards ---------- */
@@ -304,7 +301,7 @@ onBeforeUnmount(() => {
   background: linear-gradient(180deg, rgba(14, 10, 8, 0.1) 0%, rgba(14, 10, 8, 0.1) 30%, rgba(14, 10, 8, 0.62) 62%, rgba(14, 10, 8, 0.92) 100%);
 }
 .op-solution::after {
-  background: linear-gradient(180deg, rgba(14, 10, 8, 0.05) 0%, rgba(14, 10, 8, 0.1) 28%, rgba(150, 50, 6, 0.5) 62%, rgba(24, 10, 6, 0.93) 100%);
+  background: linear-gradient(180deg, rgba(14, 10, 8, 0.1) 0%, rgba(14, 10, 8, 0.1) 30%, rgba(14, 10, 8, 0.62) 62%, rgba(14, 10, 8, 0.92) 100%);
 }
 
 /* label at the top of each card (no numbers) */
@@ -332,14 +329,14 @@ onBeforeUnmount(() => {
 .op-solution .op-tag i { background: rgba(255, 255, 255, 0.25); }
 
 /* caption */
-.op-cap h3 { margin: 0; font-family: 'Urbanist', system-ui, sans-serif; font-size: clamp(20px, 1.8vw, 26px); font-weight: 500; letter-spacing: -0.03em; line-height: 1.2; transition: font-size 0.5s ease; }
+.op-cap h3 { margin: 0; color: #fff !important; text-shadow: 0 1px 12px rgba(0, 0, 0, 0.35); font-family: 'Urbanist', system-ui, sans-serif; font-size: clamp(20px, 1.8vw, 26px); font-weight: 500; letter-spacing: -0.03em; line-height: 1.2; transition: font-size 0.5s ease; }
 .op-panel.on .op-cap h3 { font-size: clamp(24px, 2.2vw, 32px); }
 .op-cap { max-width: 640px; }
 .op-desc { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.7s cubic-bezier(0.2, 0.8, 0.2, 1); }
 .op-desc-in { min-height: 0; overflow: hidden; opacity: 0; transform: translateY(10px); transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); }
 .op-panel.on .op-desc { grid-template-rows: 1fr; }
 .op-panel.on .op-desc-in { opacity: 1; transform: none; transition-delay: 0.3s; }
-.op-desc p { margin: 12px 0 0; font-size: clamp(13.5px, 1vw, 15px); line-height: 1.6; color: rgba(255, 255, 255, 0.88); }
+.op-desc p { margin: 12px 0 0; font-size: clamp(13.5px, 1vw, 15px); line-height: 1.6; color: #fff; text-shadow: 0 1px 10px rgba(0, 0, 0, 0.4); }
 .op-desc p + p { margin-top: 8px; }
 
 /* autoplay progress */
