@@ -299,6 +299,14 @@ button {
   box-shadow: 0 16px 34px rgba(51, 72, 93, 0.32);
 }
 
+.whatsapp-crm-page > section:nth-child(even) {
+  background: linear-gradient(180deg, #e7edf1 0%, #f7f9fa 100%) !important;
+}
+
+.whatsapp-crm-page > section:nth-child(odd):not(:first-child) {
+  background: linear-gradient(180deg, #f7f9fa 0%, #e7edf1 100%) !important;
+}
+
 /* Use a consistent blue-gray accent for highlighted headings on the home page. */
 .home-page :is(
   .accent,
@@ -369,14 +377,6 @@ h6,
   color: var(--color-heading) !important;
   line-height: 1.2;
   font-weight: 600;
-}
-
-:is(h1, h2, h3, h4, h5, h6, [role='heading']) :is(em, span, strong) {
-  background: none !important;
-  -webkit-background-clip: border-box !important;
-  background-clip: border-box !important;
-  color: var(--color-heading-accent) !important;
-  -webkit-text-fill-color: var(--color-heading-accent) !important;
 }
 
 .faq h2.title,
