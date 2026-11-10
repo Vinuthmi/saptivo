@@ -19,24 +19,27 @@
       </header>
 
       <!-- ============ tabs ============ -->
-      <div class="ig-tabs" role="tablist" aria-label="Integrations">
-        <button
-          v-for="(s, i) in slides"
-          :id="`ig-tab-${i}`"
-          :key="s.id"
-          type="button"
-          role="tab"
-          class="ig-tab"
-          :class="{ on: active === i }"
-          :aria-selected="active === i"
-          :aria-controls="`ig-panel-${i}`"
-          :tabindex="active === i ? 0 : -1"
-          @click="goTo(i)"
-        >
-          <svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true" v-html="icon[s.icon]"></svg>
-          {{ s.tab }}
-        </button>
-      </div>
+        <div class="ig-tabs" role="tablist" aria-label="Integrations">
+          <button
+            v-for="(s, i) in slides"
+            :id="`ig-tab-${i}`"
+            :key="s.id"
+            type="button"
+            role="tab"
+            class="ig-tab"
+            :class="{ on: active === i }"
+            :aria-selected="active === i"
+            :aria-controls="`ig-panel-${i}`"
+            :tabindex="active === i ? 0 : -1"
+            @click="goTo(i)"
+          >
+            {{ s.tab }}
+          </button>
+        </div>
+    </div>
+
+    <div class="ig-bottom">
+    <div class="ig-wrap ig-wrap2">
 
       <!-- ============ stage ============ -->
       <div
@@ -394,6 +397,7 @@
         </div>
       </div>
     </div>
+    </div>
   </section>
 </template>
 
@@ -405,14 +409,14 @@ defineOptions({ name: 'HomeIntegrationsSection' })
  * Each slide pairs an integration + a live-stats card (left) with the Saptivo CRM screen it feeds (right),
  * drawn from the real product UI: Inquiries, Lead pipeline, 3CX call journal and the Tasks calendar.
  * • Tabs, arrows, ← → keys, swipe and autoplay (7s; pauses on hover/focus/off-screen).
- * • Pure HTML/CSS/SVG — no image files. Scene is authored at 1270×490 and scaled to fit.
+ * • Pure HTML/CSS/SVG — no image files. Scene is authored at 1160×490 and scaled to fit.
  * • prefers-reduced-motion: no autoplay, no looping animation.
  *
  * Browser APIs are only used in onMounted / handlers (SSR / Nuxt safe).
  */
 import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
 
-const SCENE_W = 1270
+const SCENE_W = 1200
 const SCENE_H = 490
 const COMPACT_W = 700
 const PHONE_W = 400
@@ -570,16 +574,24 @@ function fit() {
   if (!stageEl.value) return
   const cs = getComputedStyle(stageEl.value)
   const w = stageEl.value.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight)
-  compact.value = w < 960 // tablets + phones: CRM window only, so text stays readable
+  compact.value = w < 900 // tablets + phones: CRM window only, so text stays readable
   phone.value = w < 560 // phones: a narrower, simplified window
   const base = phone.value ? PHONE_W : compact.value ? COMPACT_W : SCENE_W
-  // the full two-card scene never renders larger than 90%, so the cards keep their size while the section gets wider
-  scale.value = Math.min(compact.value ? 1 : 0.9, +(w / base).toFixed(3)) || 1
+  let sc = Math.min(1, w / base)
+  // desktop: also shrink the preview so the whole section (heading, tabs, preview, text, dots) fits the visible screen
+  if (!compact.value && rootEl.value) {
+    const view = rootEl.value.querySelector('.ig-view')
+    const other = rootEl.value.offsetHeight - (view ? view.offsetHeight : 0)
+    const hs = (window.innerHeight - other) / SCENE_H
+    sc = Math.min(sc, Math.max(hs, 0.42))
+  }
+  scale.value = +sc.toFixed(3) || 1
 }
 
 onMounted(() => {
   motion.value = !(typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches)
   fit()
+  window.addEventListener('resize', fit)
   ro = new ResizeObserver(fit)
   ro.observe(stageEl.value)
   io = new IntersectionObserver(([en]) => {
@@ -591,6 +603,7 @@ onMounted(() => {
 })
 onBeforeUnmount(() => {
   stopTimer()
+  window.removeEventListener('resize', fit)
   ro?.disconnect()
   io?.disconnect()
 })
@@ -625,9 +638,9 @@ onBeforeUnmount(() => {
 }
 .ig-wrap {
   position: relative;
-  max-width: 1680px;
+  max-width: 1620px;
   margin: 0 auto;
-  padding: 0 clamp(16px, 2.4vw, 40px);
+  padding: 0 clamp(16px, 4vw, 64px);
 }
 
 /* ============ header ============ */
@@ -651,10 +664,10 @@ onBeforeUnmount(() => {
 .ig-title {
   margin: 0 auto;
   padding-bottom: 0.2em;
-  max-width: none;
-  white-space: nowrap;
+  max-width: 760px;
+  text-wrap: balance;
   font-family: 'Urbanist', system-ui, sans-serif;
-  font-size: clamp(16px, 4.2vw, 62px);
+  font-size: clamp(32px, 4.2vw, 62px);
   color: #0f172a;
   line-height: 1.12;
   font-weight: 500;
@@ -700,14 +713,14 @@ onBeforeUnmount(() => {
 .ig-tab.on { background: var(--navy); border-color: var(--navy); color: #fff; box-shadow: 0 10px 22px -8px rgba(15, 23, 42, 0.5); }
 
 /* ============ stage ============ */
-.ig-stage { position: relative; margin: 40px auto 0; max-width: 1560px; padding: 0 56px; /* room for the arrows */ outline: none; }
+.ig-stage { position: relative; margin: 40px auto 0; max-width: 1160px; padding: 0 60px; /* room for the arrows */ outline: none; }
 .ig-view { position: relative; }
 .ig-view:has(.compact) { margin-bottom: 4px; }
 .ig-scene {
   position: absolute;
   left: 50%;
   top: 0;
-  width: 1270px;
+  width: 1200px;
   height: 490px;
   transform-origin: 50% 0;
 }
@@ -827,12 +840,18 @@ onBeforeUnmount(() => {
 .sd-stats b { font-size: 14px; font-weight: 600; letter-spacing: -0.01em; white-space: nowrap; }
 .sd-stats small { font-size: 8.5px; color: var(--mute); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
+/* connector */
+.link { position: absolute; left: 310px; top: 120px; width: 78px; height: 40px; overflow: visible; }
+.link path { fill: none; stroke: #ff9a66; stroke-width: 2; stroke-dasharray: 2 7; stroke-linecap: round; }
+.link circle.end { fill: #fff; stroke: #ff9a66; stroke-width: 2; filter: none; }
+.link circle { fill: var(--o); filter: drop-shadow(0 0 5px rgba(255, 87, 34, 0.8)); }
+
 /* CRM window */
 .win {
   position: absolute;
-  left: 410px;
+  left: 388px;
   top: 0;
-  width: 860px;
+  width: 812px;
   height: 458px;
   padding: 14px;
   overflow: hidden;
@@ -971,14 +990,14 @@ onBeforeUnmount(() => {
 .evt small { display: block; margin-top: 1px; font-size: 9.5px; line-height: 1.3; color: #9a5b3c; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .e4 { top: 28px; height: 46px; width: 270px; transition-delay: 0.55s; }
 .e2 { top: 92px; height: 46px; width: 290px; transition-delay: 0.65s; }
-.e5 { left: 420px; top: 160px; height: 46px; width: 270px; background: #e8f0fe; border-left-color: #4285f4; transition-delay: 0.75s; }
+.e5 { left: 390px; top: 160px; height: 46px; width: 270px; background: #e8f0fe; border-left-color: #4285f4; transition-delay: 0.75s; }
 .e5 b { color: #1a3f8a; }
 .e5 small { color: #4a6aa8; }
 .e1 { top: 248px; height: 58px; width: 340px; background: #e8f0fe; border-left-color: #4285f4; transition-delay: 0.85s; }
 .e1 b { color: #1a3f8a; }
 .e1 small { color: #4a6aa8; }
 .e3 { top: 314px; height: 44px; width: 270px; transition-delay: 0.95s; }
-.e6 { left: 470px; top: 272px; height: 46px; width: 270px; background: #e8f0fe; border-left-color: #4285f4; transition-delay: 1.05s; }
+.e6 { left: 430px; top: 272px; height: 46px; width: 270px; background: #e8f0fe; border-left-color: #4285f4; transition-delay: 1.05s; }
 .e6 b { color: #1a3f8a; }
 .e6 small { color: #4a6aa8; }
 .mini-cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px 0; margin-top: 8px; padding: 7px 8px; border-radius: 12px; background: #f8fafc; font-size: 10px; text-align: center; color: var(--ink); }
@@ -999,15 +1018,15 @@ onBeforeUnmount(() => {
 .tic.g svg { stroke: #15803d; }
 .tic.wa { background: #e6f9ee; }
 .tic.wa svg { stroke: #16a34a; }
-.t1 { left: 940px; top: 424px; width: 310px; }
-.t2 { left: 990px; top: 428px; }
-.t3 { left: 940px; top: 424px; width: 310px; }
-.t4 { left: 990px; top: 430px; }
-.t5 { left: 990px; top: 430px; }
+.t1 { left: 870px; top: 424px; width: 310px; }
+.t2 { left: 920px; top: 428px; }
+.t3 { left: 870px; top: 424px; width: 310px; }
+.t4 { left: 920px; top: 430px; }
+.t5 { left: 920px; top: 430px; }
 
 /* compact (phone) scene: CRM window only */
 .compact { width: 700px; }
-.compact .col { display: none; }
+.compact .col, .compact .link { display: none; }
 .compact .win { left: 0; width: 700px; }
 .compact .rc { display: none; }
 .compact .thead.web, .compact .trow.web { grid-template-columns: 1.3fr 1.4fr 1.15fr 0.7fr; }
@@ -1073,14 +1092,112 @@ onBeforeUnmount(() => {
 }
 .ig-nav svg { width: 18px; height: 18px; fill: none; stroke: var(--navy); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 .ig-nav:hover { transform: scale(1.08); box-shadow: 0 10px 22px rgba(15, 23, 42, 0.18); }
-.ig-prev { left: -52px; }
-.ig-next { right: -52px; }
+.ig-prev { left: -58px; }
+.ig-next { right: -58px; }
 .ig-dots { display: flex; justify-content: center; gap: 6px; margin-top: 26px; }
 .ig-dot { position: relative; width: 8px; height: 8px; padding: 0; border: 0; border-radius: 8px; background: #cfcbd0; cursor: pointer; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s; }
 .ig-dot::after { content: ''; position: absolute; inset: -10px -4px; } /* bigger tap target */
 .ig-dot:hover { background: #f5a07f; }
 .ig-dot:focus-visible { outline: 2px solid var(--o); outline-offset: 3px; }
 .ig-dot.on { width: 28px; background: var(--o); cursor: default; }
+
+
+/* ============ tabs: text-only underline bar + gray notched panel (video reference) ============ */
+.ig-tabs { flex-wrap: nowrap; justify-content: center; gap: clamp(20px, 3vw, 44px); margin: 40px auto 0; padding: 0 0 2px; overflow-x: auto; scrollbar-width: none; }
+.ig-tabs::-webkit-scrollbar { display: none; }
+.ig-tab { position: relative; flex: none; gap: 0; padding: 10px 2px; border: 0; border-radius: 0; background: transparent; box-shadow: none; color: #8b929d; font: 500 14px/1.2 'Poppins', system-ui, sans-serif; letter-spacing: 0; text-transform: none; white-space: nowrap; transition: color 0.25s; }
+.ig-tab::after { content: ''; position: absolute; left: 2px; right: 2px; bottom: 0; height: 2px; border-radius: 2px; background: #2d3138; transform: scaleX(0); transform-origin: left; transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
+.ig-tab:hover { background: transparent; color: #4b525d; }
+.ig-tab.on { background: transparent; border: 0; box-shadow: none; color: #1f2328; }
+.ig-tab.on::after { transform: scaleX(1); }
+
+.ig-stage { max-width: 1360px; margin-top: 28px; padding: 38px 88px 30px; border-radius: 30px; background: #1f2227; box-shadow: 0 30px 60px -30px rgba(15, 23, 42, 0.45); }
+.ig-stage::before { content: ''; position: absolute; inset: 12px; z-index: 0; border-radius: 22px; background: linear-gradient(160deg, #3a3f47, #2c3037); clip-path: polygon(0 0, 100% 0, 100% calc(100% - 64px), calc(100% - 64px) 100%, 0 100%); pointer-events: none; }
+.ig-stage > * { position: relative; z-index: 1; }
+.ig-prev { left: -72px; }
+.ig-next { right: -72px; }
+.ig-desc { left: 0; width: 100%; transform: none; margin-top: 22px; color: #c9ced6; font-size: 13.5px; }
+.ig-desc b { color: #fff; }
+.ig-desc .sep { background: rgba(255, 255, 255, 0.28); }
+.ig-dots { margin-top: 20px; }
+.ig-dot { background: rgba(255, 255, 255, 0.28); }
+.ig-dot:hover { background: rgba(255, 255, 255, 0.6); }
+.ig-dot.on { background: #fff; }
+.ig-dot:focus-visible { outline-color: #fff; }
+@media (max-width: 860px) {
+  .ig-tabs { justify-content: flex-start; gap: 24px; }
+  .ig-stage { padding: 22px 14px 20px; border-radius: 24px; }
+  .ig-stage::before { inset: 8px; border-radius: 18px; clip-path: polygon(0 0, 100% 0, 100% calc(100% - 40px), calc(100% - 40px) 100%, 0 100%); }
+}
+
+
+/* ============ full-width dark-grey section ============ */
+.ig { border-radius: 0; background: #fff; padding: clamp(56px, 6vw, 96px) 0 0; }
+.ig-wrap { max-width: none; padding: 0 clamp(12px, 3vw, 48px); }
+.ig-tabs { margin: 32px auto 0; padding-bottom: 0; border-bottom: 1px solid #e7e9ed; }
+.ig-bottom { background: #23262c; margin-top: 0; padding: clamp(32px, 4vw, 56px) 0 clamp(40px, 5vw, 72px); }
+.ig-stage { max-width: none; width: 100%; margin: 0 auto; padding: 44px 88px 34px; border-radius: 0; background: transparent; box-shadow: none; }
+.ig-stage::before { inset: 0; border-radius: 26px 26px 0 26px; background: linear-gradient(160deg, #3a3f47, #30343b); clip-path: polygon(0 0, 100% 0, 100% calc(100% - 72px), calc(100% - 72px) 100%, 0 100%); }
+@media (max-width: 860px) {
+  .ig-wrap { padding-left: 12px; padding-right: 12px; }
+  .ig-stage { padding: 22px 12px 22px; }
+  .ig-stage::before { inset: 0; border-radius: 20px 20px 0 20px; clip-path: polygon(0 0, 100% 0, 100% calc(100% - 44px), calc(100% - 44px) 100%, 0 100%); }
+}
+
+/* ============ light-grey lower part ============ */
+.ig-bottom { background: #f4f5f7; }
+.ig-stage::before { background: linear-gradient(160deg, #eceef2, #e3e6eb); }
+.ig-desc { color: #475569; }
+.ig-desc b { color: #0f172a; }
+.ig-desc .sep { background: #c5ccd6; }
+.ig-dot { background: #c3c9d2; }
+.ig-dot:hover { background: #8b929d; }
+.ig-dot.on { background: #0f172a; }
+.ig-dot:focus-visible { outline-color: #0f172a; }
+
+/* ============ tab-change animation (reference video): old content clears, then the new content builds in step by step ============ */
+.sl { transition: opacity 0.25s ease, visibility 0s linear 0.25s; }
+.sl.on { transition: opacity 0.45s ease 0.28s, visibility 0s linear 0.28s; }
+.card, .win, .toast, .link { translate: 0 24px; scale: 0.97; transition: opacity 0.6s ease, translate 0.85s cubic-bezier(0.2, 0.7, 0.2, 1), scale 0.85s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.card { translate: -24px 0; scale: 1; }
+.sl.on .card, .sl.on .win, .sl.on .toast, .sl.on .link { scale: 1; translate: 0 0; transition-delay: calc(var(--d, 0) * 0.16s + 0.36s); }
+.sl.on .link { transition-delay: 0.85s; }
+.ig-desc .pt { animation: ig-descin2 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both; animation-delay: calc(0.45s + var(--i, 0) * 0.14s); }
+@keyframes ig-descin2 { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+/* no inner box: scene sits directly on the light-grey band */
+.ig-stage::before, .ig-stage::after { display: none !important; content: none !important; }
+.ig-stage { background: transparent !important; box-shadow: none !important; border: 0 !important; border-radius: 0 !important; clip-path: none !important; }
+
+/* ---- sequence refined to the reference video: text first, then the visual, then the overlay cards last ---- */
+.ig-desc .pt { animation-delay: calc(0.12s + var(--i, 0) * 0.12s); }
+.sl { transition: opacity 0.25s ease, visibility 0s linear 0.25s; }
+.win { filter: blur(6px); transition: opacity 0.7s ease, translate 0.95s cubic-bezier(0.2, 0.7, 0.2, 1), scale 0.95s cubic-bezier(0.2, 0.7, 0.2, 1), filter 0.7s ease; }
+.sl.on .win { filter: blur(0); transition-delay: 0.55s; }
+.sl.on .card { transition-delay: calc(var(--d, 0) * 0.16s + 0.4s); }
+.sl.on .link { transition-delay: 1s; }
+.sl.on .toast { transition-delay: 1.5s; }
+.sl.on .kpis span { transition-delay: calc(0.95s + var(--k, 0) * 0.1s); }
+.sl.on .trow { transition-delay: calc(1.05s + var(--k, 0) * 0.12s); }
+.sl.on .stage { transition-delay: calc(0.95s + var(--k) * 0.1s); }
+.ig-tab { transition: color 0.3s ease; }
+@media (prefers-reduced-motion: reduce) { .win { filter: none; } }
+
+/* ---- fit the whole section inside the visible screen (desktop) ---- */
+@media (min-width: 861px) {
+  .ig { padding-top: clamp(14px, 3svh, 36px); }
+  .ig-wrap { padding-top: clamp(8px, 2svh, 24px); }
+  .ig-title { font-size: clamp(28px, min(4.4vw, 6.2svh), 64px); line-height: 1.05; }
+  .ig-sub { margin-top: clamp(8px, 1.6svh, 18px); font-size: clamp(13px, 1.9svh, 17px); }
+  .ig-bar .ig-tabs, .ig-tabs { margin-top: clamp(10px, 2.2svh, 26px); }
+  .ig-tab { padding-top: clamp(6px, 1.3svh, 12px); padding-bottom: clamp(6px, 1.3svh, 12px); }
+  .ig-bottom { padding-top: clamp(8px, 2svh, 28px); padding-bottom: clamp(12px, 2.6svh, 36px); }
+  .ig-stage { padding-top: 6px; padding-bottom: 4px; }
+  .ig-desc { margin-top: clamp(6px, 1.4svh, 16px); min-height: 0; }
+  .ig-dots { margin-top: clamp(6px, 1.4svh, 14px); }
+}
+
+.link { display: none !important; }
 
 /* reveal */
 .ig-head, .ig-tabs, .ig-stage { opacity: 0; transform: translateY(16px); transition: opacity 0.7s ease, transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
@@ -1090,11 +1207,10 @@ onBeforeUnmount(() => {
 
 /* ============ responsive ============ */
 @media (max-width: 860px) {
-  .ig-tabs { justify-content: flex-start; flex-wrap: nowrap; overflow-x: auto; margin-inline: calc(clamp(16px, 2.4vw, 40px) * -1); padding: 0 clamp(16px, 2.4vw, 40px) 4px; scrollbar-width: none; }
+  .ig-tabs { justify-content: flex-start; flex-wrap: nowrap; overflow-x: auto; margin-inline: calc(clamp(16px, 4vw, 64px) * -1); padding: 0 clamp(16px, 4vw, 64px) 4px; scrollbar-width: none; }
   .ig-tabs::-webkit-scrollbar { display: none; }
   .ig-tab { flex: none; }
   .ig-nav { display: none; }
-  .ig-stage { padding: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   .ig *, .ig *::before { animation: none !important; }

@@ -71,29 +71,6 @@ const clients = [
   },
 ]
 
-const trust = [
-  {
-    title: '99.99% Uptime SLA',
-    sub: 'Enterprise cloud reliability',
-    svg: '<path d="M12 3 4.5 6v5.5c0 4.6 3.1 8.4 7.5 9.5 4.4-1.1 7.5-4.9 7.5-9.5V6z"/><path d="m8.8 12 2.4 2.4 4.2-4.6"/>',
-  },
-  {
-    title: 'Bank-Grade Security',
-    sub: '256-bit encryption & RBAC',
-    svg: '<rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/>',
-  },
-  {
-    title: 'Live Multi-Store Sync',
-    sub: 'Sub-60s ledger updates',
-    svg: '<path d="M20 11a8 8 0 0 0-14-4.5L4 9"/><path d="M4 4v5h5"/><path d="M4 13a8 8 0 0 0 14 4.5L20 15"/><path d="M20 20v-5h-5"/>',
-  },
-  {
-    title: 'Dedicated Support',
-    sub: '24/7 technical onboarding',
-    svg: '<path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3.5" y="14" width="4" height="6" rx="2"/><rect x="16.5" y="14" width="4" height="6" rx="2"/><path d="M20 19.5c0 1.4-1.6 2-4 2h-2"/>',
-  },
-]
-
 const featureLinks = [
   { label: 'Lead & Contact Management', href: '/features/lead-management/' },
   { label: 'Sales Pipeline & Deals', href: '/features/sales-pipeline/' },
@@ -151,30 +128,6 @@ const footerGroups = [
     <div class="footer-card">
       <div class="footer-dots" aria-hidden="true"></div>
 
-      <!-- Trust bar -->
-      <ul class="trust">
-        <li v-for="item in trust" :key="item.title" class="trust-item">
-          <span class="trust-icon">
-            <svg
-              viewBox="0 0 24 24"
-              width="26"
-              height="26"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              v-html="item.svg"
-            ></svg>
-          </span>
-
-          <span class="trust-text">
-            <b>{{ item.title }}</b>
-            <small>{{ item.sub }}</small>
-          </span>
-        </li>
-      </ul>
-
       <div class="footer-main">
         <!-- Brand -->
         <div class="footer-brand-block">
@@ -185,11 +138,6 @@ const footerGroups = [
           <p>
             One connected workspace for customers, sales, and every store you run.
           </p>
-
-          <span class="status">
-            <i></i>
-            All systems operational
-          </span>
         </div>
 
         <!-- Sitemap columns -->
@@ -318,62 +266,6 @@ const footerGroups = [
   content: '';
 }
 
-/* Trust bar */
-
-.trust {
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 24px;
-  margin: 0 0 24px;
-  padding: 0 0 36px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  list-style: none;
-}
-
-.trust-item {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.trust-icon {
-  display: grid;
-  flex: none;
-  width: 52px;
-  height: 52px;
-  place-items: center;
-  border: 1px solid rgba(240, 100, 43, 0.3);
-  border-radius: 15px;
-  background: rgba(240, 100, 43, 0.12);
-  color: #ff6a2c;
-  transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease;
-}
-
-.trust-item:hover .trust-icon {
-  transform: translateY(-3px);
-  background: #f0642b;
-  color: #fff;
-}
-
-.trust-text {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-.trust-text b {
-  color: #fff;
-  font-size: 15px;
-  font-weight: 600;
-}
-
-.trust-text small {
-  color: #9a9ba3;
-  font-size: 13px;
-  line-height: 1.4;
-}
-
 /* Main footer sitemap */
 
 .footer-main {
@@ -403,37 +295,6 @@ const footerGroups = [
   color: #9a9ba3;
   font-size: 13px;
   line-height: 1.8;
-}
-
-.status {
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  padding: 7px 14px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 99px;
-  background: rgba(255, 255, 255, 0.06);
-  color: #c9cad0;
-  font-size: 12px;
-  font-weight: 500;
-}
-
-.status i {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #2ecc71;
-  box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.6);
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  70% {
-    box-shadow: 0 0 0 8px rgba(46, 204, 113, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(46, 204, 113, 0);
-  }
 }
 
 .footer-links {
@@ -476,7 +337,8 @@ const footerGroups = [
   z-index: 1;
   width: 100%;
   margin: 0 auto;
-  padding: 0 0 44px;
+  padding: 28px 0 44px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .trusted-logos {
@@ -588,10 +450,6 @@ const footerGroups = [
     width: calc(var(--dw) * 0.85);
   }
 
-  .trust {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
   .footer-main {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -613,12 +471,6 @@ const footerGroups = [
 
   .trusted-logos img {
     width: calc(var(--dw) * 0.78);
-  }
-
-  .trust {
-    grid-template-columns: 1fr;
-    gap: 18px;
-    padding-bottom: 28px;
   }
 
   .footer-main {
@@ -643,12 +495,7 @@ const footerGroups = [
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .status i {
-    animation: none;
-  }
-
-  .trusted-logos img,
-  .trust-icon {
+  .trusted-logos img {
     transition: none;
   }
 }

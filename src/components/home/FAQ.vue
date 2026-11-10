@@ -2,8 +2,8 @@
   <section class="fq" aria-labelledby="fq-title">
     <div class="fq-wrap">
       <h2 id="fq-title" class="fq-title">
-        <span>Frequently</span>
-        <span class="fq-g">asked questions.</span>
+        Frequently
+        asked questions.
       </h2>
 
       <ul class="fq-list">
@@ -102,17 +102,15 @@ const items = [
   font-weight: 500;
   line-height: 1.1;
   letter-spacing: -0.06em;
-  color: #0f172a;
+  color: #000 !important;
 }
 .fq-title span {
   display: block;
 }
 .fq-g {
-  background: linear-gradient(100deg, #ff9a3d 0%, #ff6a1a 45%, #f2540c 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
+  background: none !important;
+  color: #000 !important;
+  -webkit-text-fill-color: #000 !important;
   padding-bottom: 0.08em;
 }
 .fq-list {

@@ -226,7 +226,7 @@ onBeforeUnmount(() => {
 <template>
   <header class="nav-shell" :class="{ scrolled, expanded: menuOpen }">
     <nav class="glass-nav" aria-label="Main navigation">
-      <!-- BRAND (original logo, painted through a mask: S A P dark orange, T I V rich dark blue, O split orange / blue, so any transparent PNG works) -->
+      <!-- BRAND (original logo, painted with a black to orange gradient through a mask, so any transparent PNG works) -->
       <router-link to="/" class="brand" aria-label="Saptivo CRM home" @click="closeAll">
         <span class="brand-logo" role="img" aria-label="Saptivo CRM" :style="{ '--logo': `url(${logoSrc})` }"></span>
       </router-link>
@@ -575,10 +575,7 @@ onBeforeUnmount(() => {
   display: block;
   width: 156px;
   height: 38px;
-  /* S A P orange · T I V blue · the O is orange on top, blue underneath */
-  background:
-    linear-gradient(180deg, #e2540f 0 50%, #0b2a6b 50% 100%) right center / 19% 100% no-repeat,
-    linear-gradient(90deg, #e2540f 0 44%, #0b2a6b 44% 100%);
+  background: linear-gradient(90deg, #0b0c0e 0%, #0b0c0e 45%, #f2531f 82%, #ff7a45 100%);
   -webkit-mask: var(--logo) left center / contain no-repeat;
   mask: var(--logo) left center / contain no-repeat;
 }

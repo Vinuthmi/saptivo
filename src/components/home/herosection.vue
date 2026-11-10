@@ -1,6 +1,21 @@
 <template>
   <section id="top" ref="hero" class="hero" aria-labelledby="hero-title">
-    <div class="bg" aria-hidden="true"></div>
+    <div class="bg" aria-hidden="true">
+      <video
+        ref="bgVideo"
+        class="bg-video"
+        :src="heroVideo"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="auto"
+      ></video>
+    </div>
+    <!-- dotted pattern on the top left / right sides -->
+    <span class="dots dots-l" aria-hidden="true"></span>
+    <span class="dots dots-r" aria-hidden="true"></span>
+
     <div class="top">
     <div class="content">
       <h1 id="hero-title">
@@ -28,137 +43,79 @@
     </div>
     </div>
 
-    <div ref="stage" class="stage">
-      <!-- orbit lives BELOW the text, behind the dashboard image -->
-      <div class="orbit" aria-hidden="true">
-        <div class="ring ring-c" :style="{ '--rot': rotC + 'deg' }">
-          <i v-for="(d, i) in dotsC" :key="'c' + i" class="dot" :style="{ '--a': d.a + 'deg', '--s': d.s + 'px' }"></i>
-        </div>
+    <!-- 5 feature cards -->
+    <div class="cards">
+      <article class="hc hc-dark">
+        <h3>Capture every lead.</h3>
+        <svg class="hc-path" viewBox="0 0 120 150" aria-hidden="true">
+          <path d="M20 4 C 20 40, 100 40, 100 76 S 20 100, 20 146" />
+        </svg>
+        <span class="hc-dot d1"></span><span class="hc-dot d2"></span>
+      </article>
 
-        <div class="ring ring-b" :style="{ '--rot': rotB + 'deg' }">
-          <i v-for="(d, i) in dotsB" :key="'b' + i" class="dot" :style="{ '--a': d.a + 'deg', '--s': d.s + 'px' }"></i>
-        </div>
+      <article class="hc hc-photo p1">
+        <img :src="cardImg1" alt="" loading="lazy" decoding="async" />
+        <p class="hc-cap"><span class="hc-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z" /></svg></span>Log every phone call.</p>
+      </article>
 
-        <div class="ring ring-a" :style="{ '--rot': rot + 'deg' }">
-          <span
-            v-for="(s, i) in ringIcons"
-            :key="s.name + i"
-            class="node"
-            :style="{ '--a': i * (360 / ringIcons.length) + 'deg' }"
-          >
-            <img :src="s.img" alt="" width="32" height="32" draggable="false" />
-          </span>
-        </div>
-      </div>
+      <article class="hc hc-mint">
+        <span class="hc-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.7 7L4 20l1.1-4.6A8 8 0 1 1 21 12z" /></svg></span>
+        <p>Answer every WhatsApp message.</p>
+      </article>
 
-      <!-- dashboard image: scrolls up with the page, eases from full size to ~83% and fades out at the bottom -->
-      <div ref="card" class="hero-card" :style="{ '--p': progress, '--pull': pull + 'px' }">
-        <img class="hero-image" :src="heroDashboardImage" alt="Saptivo CRM dashboard" />
-      </div>
+      <article class="hc hc-light">
+        <h3>Turn quotations into invoices in one click.</h3>
+        <div class="hc-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      </article>
+
+      <article class="hc hc-photo p2">
+        <img :src="cardImg2" alt="" loading="lazy" decoding="async" />
+        <p class="hc-cap">Built by a Colombo software house with more than 25 years of experience.</p>
+      </article>
     </div>
 
   </section>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 defineOptions({ name: "HeroSection" });
 
-const heroDashboardImage = `${import.meta.env.BASE_URL}images/hero-dashboard.png`;
+// Put your files in public/videos/ (or change these paths)
+const heroVideo = `${import.meta.env.BASE_URL}videos/hero-bg.mp4`; // full-width background video
+const heroDemoVideo = `${import.meta.env.BASE_URL}videos/hero-demo.mp4`; // video that replaces the dashboard photo
+const heroDemoPoster = `${import.meta.env.BASE_URL}images/hero-demo-poster.jpg`; // optional still shown until the video starts
+
+const cardImg1 = "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=900&auto=format&fit=crop";
+const cardImg2 = "https://images.unsplash.com/photo-1789724920013-b88079687da2?q=80&w=900&auto=format&fit=crop";
+
+const bgVideo = ref(null);
+const demoVideo = ref(null);
 const hero = ref(null);
 const stage = ref(null);
 const card = ref(null);
 const pull = ref(0);
-const rot = ref(0);
 const progress = ref(0);
+const playing = ref(true);
+const videoOk = ref(true);
 
-const rotB = computed(() => -rot.value * 0.7);
-const rotC = computed(() => rot.value * 0.45);
-
-// Real brand logos (simple-icons paths + brand colours) rendered as <img>.
-// To use your own files instead, set `img: "/images/social/instagram.png"`.
-const brands = [
-  {
-    "name": "Instagram",
-    "hex": "E4405F",
-    "path": "M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"
-  },
-  {
-    "name": "YouTube",
-    "hex": "FF0000",
-    "path": "M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"
-  },
-  {
-    "name": "Facebook",
-    "hex": "0866FF",
-    "path": "M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"
-  },
-  {
-    "name": "TikTok",
-    "hex": "000000",
-    "path": "M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"
-  },
-  {
-    "name": "LinkedIn",
-    "hex": "0A66C2",
-    "path": "M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
-  },
-  {
-    "name": "X",
-    "hex": "000000",
-    "path": "M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"
-  },
-  {
-    "name": "WhatsApp",
-    "hex": "25D366",
-    "path": "M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"
-  },
-  {
-    "name": "Telegram",
-    "hex": "26A5E4",
-    "path": "M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"
-  },
-  {
-    "name": "Pinterest",
-    "hex": "BD081C",
-    "path": "M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.39 18.592.026 11.985.026L12.017 0z"
-  },
-  {
-    "name": "Reddit",
-    "hex": "FF4500",
-    "path": "M12 0C5.373 0 0 5.373 0 12c0 3.314 1.343 6.314 3.515 8.485l-2.286 2.286C.775 23.225 1.097 24 1.738 24H12c6.627 0 12-5.373 12-12S18.627 0 12 0Zm4.388 3.199c1.104 0 1.999.895 1.999 1.999 0 1.105-.895 2-1.999 2-.946 0-1.739-.657-1.947-1.539v.002c-1.147.162-2.032 1.15-2.032 2.341v.007c1.776.067 3.4.567 4.686 1.363.473-.363 1.064-.58 1.707-.58 1.547 0 2.802 1.254 2.802 2.802 0 1.117-.655 2.081-1.601 2.531-.088 3.256-3.637 5.876-7.997 5.876-4.361 0-7.905-2.617-7.998-5.87-.954-.447-1.614-1.415-1.614-2.538 0-1.548 1.255-2.802 2.803-2.802.645 0 1.239.218 1.712.585 1.275-.79 2.881-1.291 4.64-1.365v-.01c0-1.663 1.263-3.034 2.88-3.207.188-.911.993-1.595 1.959-1.595Zm-8.085 8.376c-.784 0-1.459.78-1.506 1.797-.047 1.016.64 1.429 1.426 1.429.786 0 1.371-.369 1.418-1.385.047-1.017-.553-1.841-1.338-1.841Zm7.406 0c-.786 0-1.385.824-1.338 1.841.047 1.017.634 1.385 1.418 1.385.785 0 1.473-.413 1.426-1.429-.046-1.017-.721-1.797-1.506-1.797Zm-3.703 4.013c-.974 0-1.907.048-2.77.135-.147.015-.241.168-.183.305.483 1.154 1.622 1.964 2.953 1.964 1.33 0 2.47-.81 2.953-1.964.057-.137-.037-.29-.184-.305-.863-.087-1.795-.135-2.769-.135Z"
-  },
-  {
-    "name": "Discord",
-    "hex": "5865F2",
-    "path": "M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"
+let userPaused = false;
+function toggle() {
+  const v = demoVideo.value;
+  if (!v) return;
+  if (v.paused) {
+    userPaused = false;
+    v.play().catch(() => {});
+  } else {
+    userPaused = true;
+    v.pause();
   }
-];
-
-const toImg = (b) =>
-  "data:image/svg+xml;utf8," +
-  encodeURIComponent(
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#${b.hex}" d="${b.path}"/></svg>`
-  );
-
-const social = brands
-  .filter((b) => b.name !== "Discord" && b.name !== "YouTube")
-  .map((b) => ({ name: b.name, img: toImg(b) }));
-const ringIcons = [...social, ...social];
-
-// hollow circles riding the inner rings (a = angle, s = size in px)
-const dotsB = [
-  { a: 18, s: 14 }, { a: 88, s: 28 }, { a: 158, s: 12 },
-  { a: 228, s: 22 }, { a: 300, s: 16 },
-];
-const dotsC = [
-  { a: 52, s: 20 }, { a: 140, s: 10 }, { a: 214, s: 30 }, { a: 322, s: 14 },
-];
+}
 
 let ticking = false;
 let raf = null;
+let io = null;
 function update() {
-  rot.value = window.scrollY * 0.12;
   const el = card.value;
   if (el) {
     // progress 0 → 1 while the card's top travels from 88% down the viewport to 8%
@@ -180,16 +137,32 @@ function onScroll() {
 onMounted(() => {
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (reduce) {
+    userPaused = true;
+    bgVideo.value?.pause();
+    demoVideo.value?.pause();
     return;
   }
   update();
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", onScroll, { passive: true });
+
+  // play the demo only while it is on screen (saves battery / CPU)
+  io = new IntersectionObserver(
+    ([e]) => {
+      const v = demoVideo.value;
+      if (!v || userPaused) return;
+      if (e.isIntersecting) v.play().catch(() => {});
+      else v.pause();
+    },
+    { threshold: 0.15 }
+  );
+  if (card.value) io.observe(card.value);
 });
 onBeforeUnmount(() => {
   window.removeEventListener("scroll", onScroll);
   window.removeEventListener("resize", onScroll);
   if (raf !== null) cancelAnimationFrame(raf);
+  io?.disconnect();
 });
 </script>
 
@@ -202,10 +175,7 @@ onBeforeUnmount(() => {
   --muted: #5d6068;
   --title: clamp(46px, 4.2vw, 104px);
 
-  --ring: min(1560px, 175vw);   /* outer orbit diameter */
-  --step: 95px;                 /* gap between concentric rings */
-  --crest: 54px;                /* where the outer ring peaks inside the orbit strip */
-  --top0: clamp(110px, 12vw, 160px); /* dashboard card top offset (orbit strip height) */
+  --top0: clamp(20px, 3vw, 40px); /* gap between the buttons and the video */
   --w0: min(1180px, calc(100vw - 40px));
 
   position: relative;
@@ -226,49 +196,42 @@ onBeforeUnmount(() => {
   z-index: -1;
   overflow: hidden;
   pointer-events: none;
-  -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 80px), transparent 100%);
-  mask-image: linear-gradient(180deg, #000 calc(100% - 80px), transparent 100%);
-  background:
-    radial-gradient(ellipse 52% 48% at 50% 38%, #fff 0%, rgba(255, 255, 255, 0.88) 44%, rgba(255, 255, 255, 0.5) 68%, transparent 100%),
-    linear-gradient(180deg, transparent 0%, #fff clamp(240px, 32vh, 360px)),
-    linear-gradient(90deg, #ffb29a 0%, #ff9a7c 25%, #ff967b 50%, #ff9a7c 75%, #ffb29a 100%);
+  background: #fff;
 }
-
+.bg-video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* light veil so the dark text stays readable over any video; lower the alpha to show more video */
 .bg::after {
   content: "";
   position: absolute;
   inset: 0;
-  background:
-    repeating-linear-gradient(
-      90deg,
-      transparent 0px,
-      transparent 34px,
-      rgba(255, 255, 255, 0.025) 38px,
-      rgba(255, 255, 255, 0.055) 41px,
-      rgba(255, 255, 255, 0.08) 43px,
-      rgba(255, 255, 255, 0.035) 46px,
-      transparent 51px,
-      transparent 82px
-    );
-  -webkit-mask-image: linear-gradient(
-    90deg,
-    #000 0%,
-    transparent 30%,
-    transparent 70%,
-    #000 100%
-  );
-  mask-image: linear-gradient(
-    90deg,
-    #000 0%,
-    transparent 30%,
-    transparent 70%,
-    #000 100%
-  );
-  -webkit-backdrop-filter: blur(3px);
-  backdrop-filter: blur(3px);
+  background: rgba(255, 255, 255, 0.55);
 }
 
 .top { position: relative; z-index: 1; }
+
+/* ---------- dotted top corners ---------- */
+.dots {
+  position: absolute; top: 0; z-index: 0; pointer-events: none;
+  width: min(34vw, 520px); height: clamp(260px, 34vw, 460px);
+  background-image: radial-gradient(circle, rgba(10, 10, 10, 0.55) 1.6px, transparent 2px);
+  background-size: 24px 24px;
+}
+.dots-l {
+  left: 0;
+  -webkit-mask-image: radial-gradient(ellipse 100% 100% at 0 0, #000 0%, transparent 72%);
+  mask-image: radial-gradient(ellipse 100% 100% at 0 0, #000 0%, transparent 72%);
+}
+.dots-r {
+  right: 0;
+  -webkit-mask-image: radial-gradient(ellipse 100% 100% at 100% 0, #000 0%, transparent 72%);
+  mask-image: radial-gradient(ellipse 100% 100% at 100% 0, #000 0%, transparent 72%);
+}
+
 
 /* ---------- content ---------- */
 .content {
@@ -324,96 +287,121 @@ h1 {
 
 /* ---------- stage ---------- */
 .stage { position: relative; padding-top: var(--top0); }
-.stage::after {
-  content: "";
-  position: absolute;
-  z-index: 0;
-  top: 0;
-  left: 50%;
-  width: min(1320px, 100%);
-  height: clamp(320px, 62vw, 760px);
-  border-radius: 50%;
-  background: radial-gradient(ellipse, rgba(255, 112, 79, 0.3) 0%, rgba(255, 154, 124, 0.2) 38%, rgba(255, 227, 216, 0.08) 58%, transparent 74%);
-  transform: translateX(-50%);
-  pointer-events: none;
-}
 
-/* ---------- orbit (below the text, behind the card) ---------- */
-.orbit {
-  position: absolute; z-index: 0; top: 0; left: 0; right: 0; height: 700px;
-  overflow: hidden; pointer-events: none;
-  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 55%, transparent 100%);
-  mask-image: linear-gradient(180deg, #000 0%, #000 55%, transparent 100%);
-}
-.ring {
-  position: absolute; left: 50%;
-  width: var(--d); height: var(--d); top: var(--top); margin-left: calc(var(--d) / -2);
-  border-radius: 50%; border: 1px solid rgba(23, 25, 29, 0.2);
-  transform: rotate(var(--rot, 0deg)); will-change: transform;
-}
-.ring-a { --d: var(--ring); --top: var(--crest); }
-.ring-b { --d: calc(var(--ring) - var(--step) * 2); --top: calc(var(--crest) + var(--step)); border: 1px dashed rgba(23, 25, 29, 0.3); }
-.ring-c { --d: calc(var(--ring) - var(--step) * 4); --top: calc(var(--crest) + var(--step) * 2); border-color: rgba(23, 25, 29, 0.12); }
-
-.node {
-  position: absolute; top: 50%; left: 50%;
-  display: grid; place-items: center; width: 66px; height: 66px;
-  background: #fff; border-radius: 20px;
-  box-shadow: 0 10px 28px rgba(23, 25, 29, 0.09), 0 1px 3px rgba(23, 25, 29, 0.06);
-  transform:
-    translate(-50%, -50%) rotate(var(--a))
-    translateY(calc(var(--d) / -2))
-    rotate(calc(var(--a) * -1 - var(--rot, 0deg)));
-}
-.node img { display: block; width: 32px; height: 32px; user-select: none; }
-
-.dot {
-  position: absolute; top: 50%; left: 50%; display: block;
-  width: var(--s); height: var(--s);
-  background: #fff; border: 2px solid var(--orange); border-radius: 50%;
-  transform: translate(-50%, -50%) rotate(var(--a)) translateY(calc(var(--d) / -2));
-}
-.ring-c .dot { border-color: rgba(23, 25, 29, 0.55); border-width: 1.5px; }
-
-/* ---------- dashboard image (normal scroll, scales down + fades as it leaves) ---------- */
+/* ---------- demo video (normal scroll, scales down as it leaves) ---------- */
 .hero-card {
   --p: 0;
   --pull: 0px;
   position: relative; z-index: 1; isolation: isolate; overflow: hidden;
   width: var(--w0); margin: 0 auto var(--pull);
-  background: #fff;
+  aspect-ratio: 16 / 9;
+  background: linear-gradient(135deg, #1d2230, #0b0c0e); /* shows until the video loads (or if the file is missing) */
   border: 6px solid #fff; border-radius: 28px;
   box-shadow: 0 40px 90px rgba(23, 25, 29, 0.22);
   transform: scale(calc(1 - 0.17 * var(--p)));
   transform-origin: top center;
   will-change: transform;
-  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 62%, transparent 100%);
-  mask-image: linear-gradient(180deg, #000 0%, #000 62%, transparent 100%);
 }
-.hero-image { display: block; width: 100%; height: auto; user-select: none; }
+.hero-video { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; user-select: none; }
+
+/* pause / play */
+.vid-toggle {
+  position: absolute; right: 16px; bottom: 16px; z-index: 2;
+  display: grid; place-items: center;
+  width: 44px; height: 44px; padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.35); border-radius: 50%;
+  background: rgba(15, 17, 23, 0.5);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  color: #fff; cursor: pointer;
+  transition: background 0.25s, transform 0.25s;
+}
+.vid-toggle:hover { background: rgba(240, 75, 35, 0.9); transform: scale(1.06); }
+.vid-toggle svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
 
 @keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+
+/* ---------- 5 cards ---------- */
+.cards {
+  position: relative; z-index: 1;
+  display: grid; grid-template-columns: repeat(5, 1fr); align-items: stretch; gap: 14px;
+  width: calc(100% - 2 * clamp(12px, 1.6vw, 28px)); margin: 8px auto 0;
+}
+.hc { height: 400px; position: relative; overflow: hidden; border-radius: 24px; text-align: left; isolation: isolate; transition: transform .4s cubic-bezier(.2,.7,.2,1), box-shadow .4s; }
+.hc:hover { transform: translateY(-6px); }
+.hc h3 { margin: 0; font-size: 22px; line-height: 1.15; font-weight: 600; letter-spacing: -0.035em; }
+.hc p { margin: 0; font-size: 14px; line-height: 1.5; }
+.hc-ic { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: #0f172a; box-shadow: 0 8px 18px rgba(15,23,42,.22); }
+.hc-ic svg { width: 20px; height: 20px; fill: none; stroke: #fff; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+/* dark */
+.hc-dark { padding: 26px 22px; color: #fff; background: radial-gradient(120% 70% at 85% 105%, rgba(148,176,168,.35), transparent 60%), linear-gradient(170deg, #1b2230, #0a0d14); box-shadow: 0 24px 50px rgba(11,16,32,.28); }
+.hc-dark h3 { color: #fff !important; }
+.hc-path { position: absolute; left: 14px; right: 14px; bottom: 18px; width: calc(100% - 28px); height: 150px; fill: none; stroke: rgba(255,255,255,.28); stroke-width: 1.3; stroke-dasharray: 2 6; stroke-linecap: round; }
+.hc-dot { position: absolute; width: 14px; height: 14px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 6px rgba(255,255,255,.12); }
+.hc-dot.d1 { left: 22px; bottom: 100px; background: #b9d4cb; box-shadow: 0 0 0 6px rgba(185,212,203,.22), 0 0 18px rgba(185,212,203,.6); }
+.hc-dot.d2 { right: 26px; bottom: 62px; }
+
+/* photos */
+.hc-photo { background: linear-gradient(135deg, #dfe6e3, #c4d0cb); box-shadow: 0 18px 40px rgba(23,25,29,.16); }
+.hc-photo img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .8s cubic-bezier(.2,.7,.2,1); }
+.hc-photo:hover img { transform: scale(1.05); }
+.hc-photo::after { content: ""; position: absolute; inset: 0; z-index: 0; background: linear-gradient(180deg, transparent 45%, rgba(8,12,24,.78)); pointer-events: none; }
+.hc-photo.p1 { }
+.hc-photo.p2 { }
+.hc-cap { position: absolute; left: 18px; right: 18px; bottom: 18px; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; color: #fff; font-size: 15px; font-weight: 500; line-height: 1.35; letter-spacing: -0.01em; }
+
+/* cream */
+.hc-mint { padding: 20px; display: flex; flex-direction: column; justify-content: space-between; color: #17191d; background: #e4efe9; box-shadow: 0 18px 40px rgba(23,25,29,.08); }
+.hc-mint p { font-size: 16px; font-weight: 600; line-height: 1.3; letter-spacing: -0.02em; }
+
+/* white */
+.hc-light { padding: 24px 22px; color: #17191d; background: #fff; box-shadow: inset 0 0 0 1px rgba(23,25,29,.07), 0 18px 40px rgba(23,25,29,.1); }
+.hc-bars { position: absolute; left: 22px; right: 22px; bottom: 22px; display: flex; align-items: flex-end; gap: 8px; height: 110px; }
+.hc-bars i { flex: 1; border-radius: 10px; background: #f1f2f4; }
+.hc-bars i:last-child { background: linear-gradient(180deg, #2b3550, #0f172a); box-shadow: 0 10px 20px rgba(15,23,42,.25); }
+.hc-bars i:nth-child(1) { height: 35%; } .hc-bars i:nth-child(2) { height: 55%; } .hc-bars i:nth-child(3) { height: 78%; } .hc-bars i:nth-child(4) { height: 100%; }
+@media (max-width: 900px) {
+  .cards { grid-template-columns: repeat(2, 1fr); }
+  .hc { height: 220px; }
+  .hc-photo.p2 { grid-column: span 2; }
+}
+
+
+/* desktop: whole hero fits the visible screen */
+@media (min-width: 901px) {
+  .hero { --ch: clamp(200px, 38svh, 420px); min-height: 100svh; display: flex; flex-direction: column; padding-bottom: clamp(14px, 2.4svh, 28px); }
+  .content { padding: clamp(84px, 13svh, 120px) 0 clamp(12px, 2.4svh, 28px); }
+  h1 { font-size: clamp(38px, min(5vw, 7.6svh), 72px); }
+  .lead { margin-top: clamp(10px, 2svh, 24px); font-size: clamp(13.5px, 1.9svh, 16px); line-height: 1.6; }
+  .actions { margin-top: clamp(14px, 3svh, 36px); }
+  .btn { min-height: clamp(44px, 6svh, 54px); }
+  .support { margin-top: clamp(8px, 1.6svh, 18px); }
+  .cards { margin-top: auto; }
+  .hc { height: var(--ch); }
+  .hc h3 { font-size: clamp(17px, 2.4svh, 22px); }
+  .hc-bars { height: 34%; }
+}
 
 /* ---------- responsive ---------- */
 @media (max-width: 900px) {
   .content { padding-top: 96px; }
 }
 @media (max-width: 760px) {
-  .hero { --ring: min(1100px, 230vw); --step: 58px; --crest: 44px; --top0: 120px; --w0: calc(100vw - 24px); --title: clamp(38px, 10.5vw, 64px); padding-bottom: 40px; }
+  .hero { --top0: 24px; --w0: calc(100vw - 24px); --title: clamp(38px, 10.5vw, 64px); padding-bottom: 40px; }
   .content { width: calc(100% - 32px); padding: 76px 0 24px; }
   h1 { font-size: clamp(40px, 9vw, 58px); }
   .lead { font-size: 15px; margin-top: 22px; }
   .actions { width: 100%; gap: 10px; margin-top: 28px; }
+  .dots { opacity: .7; background-size: 20px 20px; }
   .btn { min-height: 50px; padding: 0 20px; font-size: 14px; }
-  .node { width: 52px; height: 52px; border-radius: 16px; }
-  .node img { width: 26px; height: 26px; }
+  .hero-card { border-width: 4px; border-radius: 22px; }
+  .vid-toggle { right: 10px; bottom: 10px; width: 40px; height: 40px; }
 }
 @media (max-width: 380px) {
   .actions { flex-direction: column; align-items: stretch; }
 }
 @media (prefers-reduced-motion: reduce) {
   h1, .lead, .actions, .support { animation: none; }
-  .orbit { height: calc(var(--top0) + 160px); }
   .hero-card { transform: none; margin-bottom: 0; }
 }
 </style>
