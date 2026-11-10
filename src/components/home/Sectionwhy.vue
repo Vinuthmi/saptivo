@@ -224,9 +224,7 @@ onMounted(() => {
   overflow: hidden;
   font-family: 'Poppins', system-ui, sans-serif;
   color: var(--ink);
-  background:
-    radial-gradient(700px 520px at 14% 70%, rgba(255, 138, 58, 0.12), transparent 62%),
-    radial-gradient(560px 400px at 100% 0%, rgba(255, 138, 58, 0.05), transparent 60%), #fff;
+  background: #fff;
 }
 .wx *,
 .wx *::before,

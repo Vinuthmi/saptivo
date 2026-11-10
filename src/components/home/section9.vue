@@ -495,9 +495,7 @@ onBeforeUnmount(() => {
   overflow: hidden;
   font-family: 'Poppins', system-ui, sans-serif;
   color: var(--ink);
-  background:
-    radial-gradient(760px 520px at 88% 72%, rgba(255, 138, 58, 0.1), transparent 62%),
-    radial-gradient(600px 420px at 0% 0%, rgba(255, 138, 58, 0.06), transparent 60%), #fff;
+  background: #fff;
 }
 .hx *,
 .hx *::before,
