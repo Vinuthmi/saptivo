@@ -240,7 +240,7 @@ onBeforeUnmount(() => {
   color: #0f172a;
   background: #fff;
 }
-.op-wrap { max-width: 1280px; margin: 0 auto; padding: clamp(32px, 4vw, 64px) clamp(16px, 3vw, 32px); }
+.op-wrap { width: 100%; max-width: none; margin: 0; padding: clamp(32px, 4vw, 64px) clamp(10px, 1.4vw, 24px); }
 
 /* heading: same style as the other sections */
 .op-title {
@@ -262,7 +262,7 @@ onBeforeUnmount(() => {
 }
 
 /* ---------- cards ---------- */
-.op-row { display: flex; gap: clamp(10px, 1.2vw, 16px); height: clamp(480px, 39vw, 560px); }
+.op-row { display: flex; gap: clamp(10px, 1.2vw, 16px); height: clamp(480px, 42vw, 680px); }
 .op-panel {
   position: relative;
   display: flex;

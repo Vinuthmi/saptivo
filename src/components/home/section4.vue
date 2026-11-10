@@ -372,6 +372,9 @@
                 <span><b>Webhook delivered</b><small>invoice.paid → Accounting</small></span>
               </div>
             </div>
+            <!-- soft cursor that "uses" the screen after each tab opens -->
+            <svg v-if="motion && !compact" :key="'cur' + active" class="ig-cur" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3l14 7.5-6 1.8L10.5 19z" /></svg>
+            <i v-if="motion && !compact" :key="'rip' + active" class="ig-rip" aria-hidden="true"></i>
           </div>
         </div>
 
@@ -1018,11 +1021,11 @@ onBeforeUnmount(() => {
 .tic.g svg { stroke: #15803d; }
 .tic.wa { background: #e6f9ee; }
 .tic.wa svg { stroke: #16a34a; }
-.t1 { left: 870px; top: 424px; width: 310px; }
-.t2 { left: 920px; top: 428px; }
-.t3 { left: 870px; top: 424px; width: 310px; }
-.t4 { left: 920px; top: 430px; }
-.t5 { left: 920px; top: 430px; }
+.t1 { left: 870px; top: 392px; width: 310px; }
+.t2 { left: 920px; top: 396px; }
+.t3 { left: 870px; top: 392px; width: 310px; }
+.t4 { left: 920px; top: 398px; }
+.t5 { left: 920px; top: 398px; }
 
 /* compact (phone) scene: CRM window only */
 .compact { width: 700px; }
@@ -1198,6 +1201,70 @@ onBeforeUnmount(() => {
 }
 
 .link { display: none !important; }
+
+/* one light-grey rounded container for the whole section */
+.ig { background: #f4f5f7; border-radius: clamp(24px, 3vw, 40px); overflow: hidden; }
+.ig-bottom { background: transparent; }
+.ig-tabs { border-bottom-color: #e3e6eb; }
+
+/* ============ premium motion: calmer, softer, slower (no bounce) ============ */
+.ig { --ease: cubic-bezier(0.22, 1, 0.36, 1); }
+.sl.on .toast { animation: ig-float 9s ease-in-out 2s infinite; }
+@keyframes ig-float { 50% { margin-top: -2px; } }
+.card, .win, .toast { translate: 0 18px; scale: 0.985; filter: blur(4px); transition: opacity 0.9s var(--ease), translate 1.1s var(--ease), scale 1.1s var(--ease), filter 0.9s var(--ease); }
+.card { translate: -14px 0; }
+.sl.on .card, .sl.on .win, .sl.on .toast { scale: 1; translate: 0 0; filter: blur(0); }
+.sl.on .card { transition-delay: calc(var(--d, 0) * 0.18s + 0.35s); }
+.sl.on .win { transition-delay: 0.6s; }
+.sl.on .toast { transition-delay: 1.5s; }
+.sl.on .kpis span, .sl.on .trow, .sl.on .stage { transition-timing-function: var(--ease); transition-duration: 0.9s; }
+.ig-desc .pt { animation-duration: 0.9s; animation-timing-function: var(--ease); }
+.ig-tab::after { transition-duration: 0.5s; transition-timing-function: var(--ease); }
+.sl.on .trow.fresh { animation-duration: 6s; }
+@media (prefers-reduced-motion: reduce) { .card, .win, .toast { filter: none; } }
+
+/* ============ live scene effects (reference video): cursor, click ripple, row highlight sweep ============ */
+.ig-cur { position: absolute; left: 0; top: 0; z-index: 8; fill: #0f172a; stroke: #fff; stroke-width: 1.6; stroke-linejoin: round; filter: drop-shadow(0 5px 7px rgba(15, 23, 42, 0.3)); opacity: 0; pointer-events: none; animation: ig-cursor 6.2s cubic-bezier(0.45, 0, 0.2, 1) 1.9s both; }
+@keyframes ig-cursor {
+  0% { opacity: 0; transform: translate(1120px, 70px); }
+  8% { opacity: 1; }
+  38% { transform: translate(640px, 250px); }
+  46% { transform: translate(640px, 250px) scale(0.86); }
+  54% { transform: translate(640px, 250px); }
+  80% { opacity: 1; transform: translate(820px, 330px); }
+  100% { opacity: 0; transform: translate(900px, 360px); }
+}
+.ig-rip { position: absolute; left: 640px; top: 250px; z-index: 7; width: 34px; height: 34px; margin: -12px 0 0 -12px; border-radius: 50%; border: 2px solid rgba(15, 23, 42, 0.35); opacity: 0; pointer-events: none; animation: ig-ripple 1s ease-out 4.25s both; }
+@keyframes ig-ripple { 0% { opacity: 0.9; transform: scale(0.3); } 100% { opacity: 0; transform: scale(1.7); } }
+.sl.on .trow:nth-of-type(1) { animation: ig-hot 8s ease-in-out 3s infinite; }
+.sl.on .trow:nth-of-type(2) { animation: ig-hot 8s ease-in-out 5s infinite; }
+.sl.on .trow:nth-of-type(3) { animation: ig-hot 8s ease-in-out 7s infinite; }
+@keyframes ig-hot { 0%, 22%, 100% { background-color: #fff; } 8%, 14% { background-color: #f1f5f9; } }
+@media (prefers-reduced-motion: reduce) { .ig-cur, .ig-rip { display: none; } }
+
+/* ============ rich glass notifications (transparent, frosted) ============ */
+.toast {
+  gap: 12px; padding: 13px 16px 13px 13px; border-radius: 18px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.42));
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  -webkit-backdrop-filter: blur(18px) saturate(1.7); backdrop-filter: blur(18px) saturate(1.7);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), inset 0 -1px 0 rgba(15, 23, 42, 0.04), 0 1px 2px rgba(15, 23, 42, 0.05), 0 18px 36px -14px rgba(15, 23, 42, 0.32), 0 6px 14px -8px rgba(15, 23, 42, 0.18);
+}
+.toast::after { content: ''; position: absolute; top: 12px; right: 14px; width: 7px; height: 7px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.18); animation: ig-live 2.4s ease-in-out infinite; }
+@keyframes ig-live { 50% { box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); } }
+.toast b { color: #0b1220; font-size: 12.5px; letter-spacing: -0.01em; }
+.toast small { color: #3b4658; }
+.toast em { color: #5b6678; }
+.tic { width: 38px; height: 38px; border-radius: 12px; background: linear-gradient(160deg, rgba(255, 255, 255, 0.95), rgba(238, 241, 246, 0.7)); box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.06), 0 6px 12px -6px rgba(15, 23, 42, 0.3); }
+.tic.g { background: linear-gradient(160deg, #f0fdf4, #d9f6e4); }
+.tic.wa { background: linear-gradient(160deg, #f0fdf4, #d3f5e0); }
+.card, .win, .toast { filter: blur(4px); }
+.sl.on .toast { filter: none; }
+@media (prefers-reduced-motion: reduce) { .toast::after { animation: none; } }
+
+/* glass notification slides in from the right edge, overlapping the screen like the reference */
+.toast { translate: 46px 0; background: linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.3)); -webkit-backdrop-filter: blur(22px) saturate(1.8); backdrop-filter: blur(22px) saturate(1.8); }
+.sl.on .toast { translate: 0 0; transition-duration: 1.2s; }
 
 /* reveal */
 .ig-head, .ig-tabs, .ig-stage { opacity: 0; transform: translateY(16px); transition: opacity 0.7s ease, transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }

@@ -43,37 +43,6 @@
     </div>
     </div>
 
-    <!-- 5 feature cards -->
-    <div class="cards">
-      <article class="hc hc-dark">
-        <h3>Capture every lead.</h3>
-        <svg class="hc-path" viewBox="0 0 120 150" aria-hidden="true">
-          <path d="M20 4 C 20 40, 100 40, 100 76 S 20 100, 20 146" />
-        </svg>
-        <span class="hc-dot d1"></span><span class="hc-dot d2"></span>
-      </article>
-
-      <article class="hc hc-photo p1">
-        <img :src="cardImg1" alt="" loading="lazy" decoding="async" />
-        <p class="hc-cap"><span class="hc-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z" /></svg></span>Log every phone call.</p>
-      </article>
-
-      <article class="hc hc-mint">
-        <span class="hc-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.7 7L4 20l1.1-4.6A8 8 0 1 1 21 12z" /></svg></span>
-        <p>Answer every WhatsApp message.</p>
-      </article>
-
-      <article class="hc hc-light">
-        <h3>Turn quotations into invoices in one click.</h3>
-        <div class="hc-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-      </article>
-
-      <article class="hc hc-photo p2">
-        <img :src="cardImg2" alt="" loading="lazy" decoding="async" />
-        <p class="hc-cap">Built by a Colombo software house with more than 25 years of experience.</p>
-      </article>
-    </div>
-
   </section>
 </template>
 
@@ -85,9 +54,6 @@ defineOptions({ name: "HeroSection" });
 const heroVideo = `${import.meta.env.BASE_URL}videos/hero-bg.mp4`; // full-width background video
 const heroDemoVideo = `${import.meta.env.BASE_URL}videos/hero-demo.mp4`; // video that replaces the dashboard photo
 const heroDemoPoster = `${import.meta.env.BASE_URL}images/hero-demo-poster.jpg`; // optional still shown until the video starts
-
-const cardImg1 = "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=900&auto=format&fit=crop";
-const cardImg2 = "https://images.unsplash.com/photo-1789724920013-b88079687da2?q=80&w=900&auto=format&fit=crop";
 
 const bgVideo = ref(null);
 const demoVideo = ref(null);
@@ -319,68 +285,6 @@ h1 {
 .vid-toggle svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
 
 @keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
-
-/* ---------- 5 cards ---------- */
-.cards {
-  position: relative; z-index: 1;
-  display: grid; grid-template-columns: repeat(5, 1fr); align-items: stretch; gap: 14px;
-  width: calc(100% - 2 * clamp(12px, 1.6vw, 28px)); margin: 8px auto 0;
-}
-.hc { height: 400px; position: relative; overflow: hidden; border-radius: 24px; text-align: left; isolation: isolate; transition: transform .4s cubic-bezier(.2,.7,.2,1), box-shadow .4s; }
-.hc:hover { transform: translateY(-6px); }
-.hc h3 { margin: 0; font-size: 22px; line-height: 1.15; font-weight: 600; letter-spacing: -0.035em; }
-.hc p { margin: 0; font-size: 14px; line-height: 1.5; }
-.hc-ic { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: #0f172a; box-shadow: 0 8px 18px rgba(15,23,42,.22); }
-.hc-ic svg { width: 20px; height: 20px; fill: none; stroke: #fff; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-
-/* dark */
-.hc-dark { padding: 26px 22px; color: #fff; background: radial-gradient(120% 70% at 85% 105%, rgba(148,176,168,.35), transparent 60%), linear-gradient(170deg, #1b2230, #0a0d14); box-shadow: 0 24px 50px rgba(11,16,32,.28); }
-.hc-dark h3 { color: #fff !important; }
-.hc-path { position: absolute; left: 14px; right: 14px; bottom: 18px; width: calc(100% - 28px); height: 150px; fill: none; stroke: rgba(255,255,255,.28); stroke-width: 1.3; stroke-dasharray: 2 6; stroke-linecap: round; }
-.hc-dot { position: absolute; width: 14px; height: 14px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 6px rgba(255,255,255,.12); }
-.hc-dot.d1 { left: 22px; bottom: 100px; background: #b9d4cb; box-shadow: 0 0 0 6px rgba(185,212,203,.22), 0 0 18px rgba(185,212,203,.6); }
-.hc-dot.d2 { right: 26px; bottom: 62px; }
-
-/* photos */
-.hc-photo { background: linear-gradient(135deg, #dfe6e3, #c4d0cb); box-shadow: 0 18px 40px rgba(23,25,29,.16); }
-.hc-photo img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .8s cubic-bezier(.2,.7,.2,1); }
-.hc-photo:hover img { transform: scale(1.05); }
-.hc-photo::after { content: ""; position: absolute; inset: 0; z-index: 0; background: linear-gradient(180deg, transparent 45%, rgba(8,12,24,.78)); pointer-events: none; }
-.hc-photo.p1 { }
-.hc-photo.p2 { }
-.hc-cap { position: absolute; left: 18px; right: 18px; bottom: 18px; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; color: #fff; font-size: 15px; font-weight: 500; line-height: 1.35; letter-spacing: -0.01em; }
-
-/* cream */
-.hc-mint { padding: 20px; display: flex; flex-direction: column; justify-content: space-between; color: #17191d; background: #e4efe9; box-shadow: 0 18px 40px rgba(23,25,29,.08); }
-.hc-mint p { font-size: 16px; font-weight: 600; line-height: 1.3; letter-spacing: -0.02em; }
-
-/* white */
-.hc-light { padding: 24px 22px; color: #17191d; background: #fff; box-shadow: inset 0 0 0 1px rgba(23,25,29,.07), 0 18px 40px rgba(23,25,29,.1); }
-.hc-bars { position: absolute; left: 22px; right: 22px; bottom: 22px; display: flex; align-items: flex-end; gap: 8px; height: 110px; }
-.hc-bars i { flex: 1; border-radius: 10px; background: #f1f2f4; }
-.hc-bars i:last-child { background: linear-gradient(180deg, #2b3550, #0f172a); box-shadow: 0 10px 20px rgba(15,23,42,.25); }
-.hc-bars i:nth-child(1) { height: 35%; } .hc-bars i:nth-child(2) { height: 55%; } .hc-bars i:nth-child(3) { height: 78%; } .hc-bars i:nth-child(4) { height: 100%; }
-@media (max-width: 900px) {
-  .cards { grid-template-columns: repeat(2, 1fr); }
-  .hc { height: 220px; }
-  .hc-photo.p2 { grid-column: span 2; }
-}
-
-
-/* desktop: whole hero fits the visible screen */
-@media (min-width: 901px) {
-  .hero { --ch: clamp(200px, 38svh, 420px); min-height: 100svh; display: flex; flex-direction: column; padding-bottom: clamp(14px, 2.4svh, 28px); }
-  .content { padding: clamp(84px, 13svh, 120px) 0 clamp(12px, 2.4svh, 28px); }
-  h1 { font-size: clamp(38px, min(5vw, 7.6svh), 72px); }
-  .lead { margin-top: clamp(10px, 2svh, 24px); font-size: clamp(13.5px, 1.9svh, 16px); line-height: 1.6; }
-  .actions { margin-top: clamp(14px, 3svh, 36px); }
-  .btn { min-height: clamp(44px, 6svh, 54px); }
-  .support { margin-top: clamp(8px, 1.6svh, 18px); }
-  .cards { margin-top: auto; }
-  .hc { height: var(--ch); }
-  .hc h3 { font-size: clamp(17px, 2.4svh, 22px); }
-  .hc-bars { height: 34%; }
-}
 
 /* ---------- responsive ---------- */
 @media (max-width: 900px) {
