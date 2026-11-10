@@ -92,12 +92,277 @@ button {
   padding-block: 80px;
 }
 
-/* Keep secondary headings on the features page consistent with its hero. */
+.features-page,
+.features-page * {
+  font-family: "Urbanist", sans-serif !important;
+}
+
+.sales-pipeline-page,
+.sales-pipeline-page * {
+  font-family: "Urbanist", sans-serif !important;
+}
+
+.sales-pipeline-page h2.title {
+  font-family: "Urbanist", sans-serif !important;
+  font-size: clamp(34px, 3.6vw, 56px) !important;
+  font-weight: 500 !important;
+  line-height: 1.15 !important;
+  letter-spacing: -0.03em !important;
+  color: var(--ink, #14120f) !important;
+}
+
+.sales-pipeline-page h2.title > span {
+  background: none !important;
+  color: inherit !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+
+.sales-pipeline-page h2.title > .soft {
+  color: var(--muted, #6a6560) !important;
+  -webkit-text-fill-color: var(--muted, #6a6560) !important;
+}
+
+.lead-management-page,
+.lead-management-page * {
+  font-family: "Urbanist", sans-serif !important;
+}
+
+.lead-management-page {
+  --lead-accent: #80564b;
+  --lead-accent-soft: #f1dfdc;
+  --lead-accent-pastel: #fbf4f2;
+  --lead-border: #e8d3ce;
+}
+
+.lead-management-page :is(.cap, .scr, .lr, .ct, .ac, .cd, .ltc, .hw, .rs, .faq) {
+  --orange: var(--lead-accent) !important;
+  --orange-soft: var(--lead-accent-soft) !important;
+  --line: var(--lead-border) !important;
+}
+
+.lead-management-page :is(
+  .src.on .ic,
+  .rule.on .sw,
+  .item.open .pm,
+  .src.website,
+  .eic,
+  .rrdots i.next,
+  .ln b,
+  .deg.on,
+  .oav,
+  .stem.hot,
+  .drop.hot,
+  .convert,
+  .btn:hover,
+  .btn.sm:hover,
+  .btn.primary,
+  .chip.on,
+  .rec.on .ric,
+  .doc.on .num,
+  .act .node,
+  .track .after,
+  .dots li,
+  .key.got,
+  .vb.top i,
+  .rbar u,
+  .bar i
+) {
+  background-color: var(--lead-accent-soft) !important;
+  border-color: var(--lead-border) !important;
+  color: var(--lead-accent) !important;
+}
+
+.lead-management-page :is(.item.open, .stage:hover, .rep.target, .rec.b, .rec.on, .rep.active, .node.on, .act .m, .rl li.lift, .doc.on, .deg.on, .chip.on) {
+  background-color: var(--lead-accent-pastel) !important;
+  border-color: var(--lead-border) !important;
+  color: var(--lead-accent) !important;
+  box-shadow: 0 12px 28px rgba(128, 86, 75, 0.1) !important;
+}
+
+.lead-management-page .step::after {
+  background-color: var(--lead-accent-soft) !important;
+}
+
+.lead-management-page .photo::after {
+  background: linear-gradient(180deg, rgba(128, 86, 75, 0.12) 0%, rgba(251, 244, 242, 0) 38%, rgba(251, 244, 242, 0.85) 82%, #fbf4f2 100%) !important;
+}
+
+.lead-management-page .faq .glow {
+  background: radial-gradient(circle, rgba(128, 86, 75, 0.36), rgba(128, 86, 75, 0) 68%) !important;
+}
+
+.lead-management-page :is(.panel, .photo) {
+  background-color: var(--lead-accent-pastel) !important;
+}
+
+.lead-management-page .hero .bg {
+  background:
+    radial-gradient(ellipse 52% 48% at 50% 38%, #fff 0%, rgba(255, 255, 255, 0.88) 44%, rgba(255, 255, 255, 0.5) 68%, transparent 100%),
+    linear-gradient(180deg, transparent 0%, #fff clamp(240px, 32vh, 360px)),
+    linear-gradient(90deg, #ead7d2 0%, #f4e7e3 25%, #f0dfda 50%, #f4e7e3 75%, #ead7d2 100%) !important;
+}
+
+.lead-management-page .hero .accent {
+  background: none !important;
+  color: var(--lead-accent) !important;
+  -webkit-text-fill-color: var(--lead-accent) !important;
+}
+
+.lead-management-page .hero .btn-primary {
+  background: var(--lead-accent) !important;
+  border-color: var(--lead-accent) !important;
+  color: #fff !important;
+}
+
+.lead-management-page .title .soft {
+  background: none !important;
+  color: var(--lead-accent) !important;
+  -webkit-text-fill-color: var(--lead-accent) !important;
+}
+
+.lead-management-page h2.title {
+  font-family: "Urbanist", sans-serif !important;
+  font-size: clamp(34px, 3.6vw, 56px) !important;
+  font-weight: 500 !important;
+  line-height: 1.15 !important;
+  letter-spacing: -0.03em !important;
+  text-wrap: balance;
+}
+
 .features-page .title .soft {
-  background: linear-gradient(100deg, #ff9a3d 0%, #ff6a1a 45%, #f2540c 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  background: none !important;
+  color: #33485d !important;
+  -webkit-text-fill-color: #33485d !important;
+}
+
+.features-page :is(.wmc, .ch, .ops, .wsm, .one, .cm, .who, .faq) {
+  --orange: #33485d !important;
+  --orange-hover: #33485d !important;
+  --orange-deep: #33485d !important;
+  --orange-soft: #edf1f4 !important;
+  --line: #e4e9ed !important;
+}
+
+.features-page .ops {
+  --tint: #f5f7f8 !important;
+}
+
+.features-page .wmc .m-card small,
+.features-page .cm .oc-chips span {
+  color: #33485d !important;
+}
+
+.features-page .wsm .tint-a {
+  background: #edf1f4;
+}
+
+.features-page .cm .lc.new {
+  border-color: rgba(51, 72, 93, 0.5) !important;
+}
+
+.features-page .who .list li {
+  background: #f5f7f8;
+}
+
+.features-page :is(.wmc .tab, .ch .p, .one .mod, .who .role, .faq .item) {
+  border-color: #e4e9ed;
+}
+
+.features-page :is(.wmc .tab.on, .ch .p.on, .one .mod.on, .who .role.on, .faq .item.open) {
+  border-color: rgba(51, 72, 93, 0.35) !important;
+  background-color: #f5f7f8 !important;
+  box-shadow: 0 16px 36px rgba(51, 72, 93, 0.1);
+}
+
+.features-page .ops .card {
+  box-shadow: 0 1px 2px rgba(23, 25, 29, 0.04), 0 16px 36px -16px rgba(51, 72, 93, 0.14);
+}
+
+.features-page .ops svg path[stroke="#ff6338"] {
+  stroke: #33485d !important;
+}
+
+.features-page .wsm .back-b {
+  background: #dce5eb;
+}
+
+.features-page .faq .glow {
+  background: radial-gradient(circle, rgba(51, 72, 93, 0.24), rgba(51, 72, 93, 0) 68%);
+}
+
+.features-page .faq .btn.primary {
+  background: #33485d;
+  box-shadow: 0 12px 28px rgba(51, 72, 93, 0.24);
+}
+
+.features-page .faq .btn.primary:hover {
+  box-shadow: 0 16px 34px rgba(51, 72, 93, 0.32);
+}
+
+.whatsapp-crm-page > section:nth-child(even) {
+  background: linear-gradient(180deg, #e7edf1 0%, #f7f9fa 100%) !important;
+}
+
+.whatsapp-crm-page > section:nth-child(odd):not(:first-child) {
+  background: linear-gradient(180deg, #f7f9fa 0%, #e7edf1 100%) !important;
+}
+
+/* Use a consistent blue-gray accent for highlighted headings on the home page. */
+.home-page :is(
+  .accent,
+  .fs-title span,
+  .op-title em,
+  .ms-title em,
+  .ig-title em,
+  .s4-security-title span,
+  .cm-title span,
+  .hx-title .l2,
+  .wx-g,
+  .fq-g,
+  .grad,
+  .copy h2 span,
+  .trusted-brands-title span
+) {
+  background: none !important;
+  color: #33485d !important;
+  -webkit-text-fill-color: #33485d !important;
+}
+
+.main-layout:has(.home-page) .site-footer .grad {
+  background: none !important;
+  color: #33485d !important;
+  -webkit-text-fill-color: #33485d !important;
+}
+
+.home-page :is(.hero, .fs, .op, .ms, .ig, .s4, .cm, .hx, .wx, .fq, .cta) {
+  --orange: #33485d !important;
+  --orange-dark: #33485d !important;
+  --orange-deep: #33485d !important;
+  --orange-soft: #edf1f4 !important;
+  --o: #33485d !important;
+  --o1: #33485d !important;
+  --o2: #33485d !important;
+  --o-soft: #edf1f4 !important;
+  --og: linear-gradient(145deg, #33485d, #33485d) !important;
+  --cm-o: #33485d !important;
+  --cm-og: linear-gradient(145deg, #33485d, #33485d) !important;
+}
+
+.home-page :is(.btn-primary, .btn.o, .ig-btn.o, .cta .btn),
+.main-layout:has(.home-page) :is(.start-btn, .site-footer .btn-primary) {
+  background: #ff6818 !important;
+  border-color: #ff6818 !important;
+  box-shadow: 0 10px 24px rgba(255, 104, 24, 0.24) !important;
+}
+
+.home-page :is(.btn-primary, .btn.o, .ig-btn.o, .cta .btn):hover,
+.main-layout:has(.home-page) :is(.start-btn, .site-footer .btn-primary):hover {
+  box-shadow: 0 16px 32px rgba(255, 104, 24, 0.32) !important;
+}
+
+.home-page,
+.home-page * {
+  font-family: "Urbanist", sans-serif !important;
 }
 
 /* 6. Shared headings */
@@ -114,12 +379,22 @@ h6,
   font-weight: 600;
 }
 
-:is(h1, h2, h3, h4, h5, h6, [role='heading']) :is(em, span, strong) {
+.faq h2.title,
+.fq-title {
+  color: #14120f !important;
+}
+
+.features-page .faq .cta h3,
+.sales-pipeline-page .faq .cta h3,
+.lead-management-page .faq .cta h3 {
+  color: #fff !important;
+}
+
+.faq h2.title > span,
+.fq-title > span {
   background: none !important;
-  -webkit-background-clip: border-box !important;
-  background-clip: border-box !important;
-  color: var(--color-heading-accent) !important;
-  -webkit-text-fill-color: var(--color-heading-accent) !important;
+  color: #14120f !important;
+  -webkit-text-fill-color: #14120f !important;
 }
 
 h1 {

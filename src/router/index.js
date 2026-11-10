@@ -23,6 +23,41 @@ const routes = [
         component: () => import('../views/LeadManagementView.vue')
       },
       {
+        path: 'features/sales-pipeline/',
+        name: 'sales-pipeline',
+        component: () => import('../views/SalesPipelineView.vue')
+      },
+      {
+        path: 'features/quotations-invoicing/',
+        name: 'quotations-invoicing',
+        component: () => import('../views/Quotations&Invoicing.vue')
+      },
+      {
+        path: 'features/whatsapp-crm/',
+        name: 'whatsapp-crm',
+        component: () => import('../views/WhatsAppCRM.vue')
+      },
+      {
+        path: 'features/3cx-crm-integration/',
+        name: '3CX Call Integration',
+        component: () => import('../views/3CX_Call.vue')
+      },
+      {
+        path: 'features/3CX/',
+        name: '3CX Call Integration Legacy',
+        component: () => import('../views/3CX_Call.vue')
+      },
+      {
+        path: 'features/vodia-integration/',
+        name: 'Vodia Integration & AI Calls',
+        component: () => import('../views/VodiaIntegration&AiCalls.vue')
+      },
+      {
+        path: 'features/workflow-automation/',
+        name: 'Workflow Automation',
+        component: () => import('../views/WorkflowAutomationView.vue')
+      },
+      {
         path: '/industries/',
         name: 'industries',
         component: () => import('../views/IndustriesView.vue')

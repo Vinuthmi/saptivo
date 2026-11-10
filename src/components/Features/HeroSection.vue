@@ -31,7 +31,7 @@ defineOptions({ name: "FeaturesHero" });
 
 <style scoped>
 .hero {
-  --orange: #ff6338;
+  --orange: #33485d;
   --ink: #17191d;
   --paper: #fff;
   --title: clamp(46px, 4.2vw, 104px);
@@ -43,7 +43,7 @@ defineOptions({ name: "FeaturesHero" });
   text-align: center;
   color: var(--ink);
   background: var(--paper);
-  font-family: 'Urbanist', system-ui, sans-serif;
+  font-family: "Urbanist", sans-serif;
 }
 .hero *, .hero *::before, .hero *::after { box-sizing: border-box; }
 .hero a:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; }
@@ -56,27 +56,19 @@ defineOptions({ name: "FeaturesHero" });
   pointer-events: none;
   -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 80px), transparent 100%);
   mask-image: linear-gradient(180deg, #000 calc(100% - 80px), transparent 100%);
-  background:
-    radial-gradient(ellipse 52% 48% at 50% 38%, #fff 0%, rgba(255, 255, 255, 0.88) 44%, rgba(255, 255, 255, 0.5) 68%, transparent 100%),
-    linear-gradient(180deg, transparent 0%, #fff clamp(240px, 32vh, 360px)),
-    linear-gradient(90deg, #ffb29a 0%, #ff9a7c 25%, #ff967b 50%, #ff9a7c 75%, #ffb29a 100%);
+  background: #fff;
 }
-.bg::after {
+.bg::before {
   content: "";
   position: absolute;
-  inset: 0;
-  background:
-    repeating-linear-gradient(
-      90deg,
-      transparent 0px, transparent 34px,
-      rgba(255, 255, 255, 0.025) 38px, rgba(255, 255, 255, 0.055) 41px,
-      rgba(255, 255, 255, 0.08) 43px, rgba(255, 255, 255, 0.035) 46px,
-      transparent 51px, transparent 82px
-    );
-  -webkit-mask-image: linear-gradient(90deg, #000 0%, transparent 30%, transparent 70%, #000 100%);
-  mask-image: linear-gradient(90deg, #000 0%, transparent 30%, transparent 70%, #000 100%);
-  -webkit-backdrop-filter: blur(3px);
-  backdrop-filter: blur(3px);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: radial-gradient(circle, rgba(23, 25, 29, 0.14) 1px, transparent 1.5px) 0 0 / 22px 22px;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 60%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 60%, transparent 100%);
+  animation: dot-drift 24s linear infinite;
 }
 
 .content {
@@ -96,10 +88,7 @@ h1 {
   width: fit-content;
   margin: 0 auto -0.14em;
   padding-bottom: 0.14em;
-  background: linear-gradient(100deg, #ff9a3d 0%, #ff6a1a 45%, #f2540c 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #33485d;
 }
 .lead {
   max-width: 760px; margin: 24px 0 0;
@@ -116,11 +105,32 @@ h1 {
   text-decoration: none; font-size: 15px; font-weight: 600;
   transition: transform 0.2s, box-shadow 0.2s;
 }
-.btn-primary { color: #fff; background: linear-gradient(180deg, #ff7a45, #f2531f); box-shadow: inset 0 0 0 1px rgba(255,255,255,.35), 0 10px 24px rgba(240,75,35,.3); }
-.btn-primary:hover { transform: translateY(-2px); box-shadow: inset 0 0 0 1px rgba(255,255,255,.4), 0 16px 32px rgba(240,75,35,.4); }
-.btn-outline { color: #fff; background: #0b0c0e; box-shadow: inset 0 0 0 1px rgba(255,255,255,.14), 0 10px 24px rgba(0,0,0,.18); }
-.btn-outline:hover { transform: translateY(-2px); box-shadow: inset 0 0 0 1px rgba(255,255,255,.28), 0 16px 32px rgba(0,0,0,.28); }
+.btn-primary {
+  color: #fff;
+  background: #17191d;
+  border: 1px solid #17191d;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  background: #000;
+  border-color: #000;
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.24);
+}
+.btn-outline {
+  color: #17191d;
+  background: #fff;
+  border: 1px solid #17191d;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+}
+.btn-outline:hover {
+  transform: translateY(-2px);
+  background: #f5f5f5;
+  border-color: #000;
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.14);
+}
 
+@keyframes dot-drift { to { background-position: 44px 44px; } }
 @keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
 
 @media (max-width: 900px) {
@@ -138,5 +148,6 @@ h1 {
 }
 @media (prefers-reduced-motion: reduce) {
   h1, .lead, .actions { animation: none; }
+  .bg::before { animation: none; }
 }
 </style>

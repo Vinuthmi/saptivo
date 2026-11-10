@@ -162,7 +162,13 @@ onBeforeUnmount(() => {
   z-index: -1;
   overflow: hidden;
   pointer-events: none;
-  background: #fff;
+  -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 160px), transparent 100%);
+  mask-image: linear-gradient(180deg, #000 calc(100% - 160px), transparent 100%);
+  background:
+    radial-gradient(60% 52% at 10% 6%, #ffe3d3 0%, rgba(255, 227, 211, 0) 72%),
+    radial-gradient(55% 50% at 92% 2%, #e6e3ff 0%, rgba(230, 227, 255, 0) 72%),
+    radial-gradient(48% 40% at 52% 46%, #fff0e6 0%, rgba(255, 240, 230, 0) 75%),
+    linear-gradient(180deg, #fff8f3 0%, #fffdfb 70%, #fff 100%);
 }
 .bg-video {
   display: block;
@@ -170,7 +176,18 @@ onBeforeUnmount(() => {
   height: 100%;
   object-fit: cover;
 }
-/* light veil so the dark text stays readable over any video; lower the alpha to show more video */
+.bg::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: radial-gradient(circle, rgba(120, 80, 60, 0.16) 1px, transparent 1.5px) 0 0 / 22px 22px;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 60%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 60%, transparent 100%);
+  animation: dot-drift 24s linear infinite;
+}
 .bg::after {
   content: "";
   position: absolute;
@@ -246,10 +263,33 @@ h1 {
 }
 .btn-primary { color: #fff; background: linear-gradient(180deg, #ff7a45, #f2531f); box-shadow: inset 0 0 0 1px rgba(255,255,255,.35), 0 10px 24px rgba(240,75,35,.3); }
 .btn-primary:hover { transform: translateY(-2px); box-shadow: inset 0 0 0 1px rgba(255,255,255,.4), 0 16px 32px rgba(240,75,35,.4); }
+.hero .actions .btn-primary {
+  color: #fff !important;
+  background: #17191d !important;
+  border: 1px solid #17191d !important;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18) !important;
+}
+.hero .actions .btn-primary:hover {
+  background: #000 !important;
+  border-color: #000 !important;
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.24) !important;
+}
 .arrow { display: inline-block; transition: transform 0.25s; }
 .btn-primary:hover .arrow { transform: rotate(45deg); }
 .btn-outline { color: #fff; background: #0b0c0e; box-shadow: inset 0 0 0 1px rgba(255,255,255,.14), 0 10px 24px rgba(0,0,0,.18); }
 .btn-outline:hover { transform: translateY(-2px); box-shadow: inset 0 0 0 1px rgba(255,255,255,.28), 0 16px 32px rgba(0,0,0,.28); }
+.hero .actions .btn-outline {
+  color: #17191d !important;
+  background: #fff !important;
+  border: 1px solid #17191d !important;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08) !important;
+}
+.hero .actions .btn-outline:hover {
+  color: #17191d !important;
+  background: #f5f5f5 !important;
+  border-color: #000 !important;
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.14) !important;
+}
 
 /* ---------- stage ---------- */
 .stage { position: relative; padding-top: var(--top0); }
@@ -285,6 +325,7 @@ h1 {
 .vid-toggle svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
 
 @keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+@keyframes dot-drift { to { background-position: 44px 44px; } }
 
 /* ---------- responsive ---------- */
 @media (max-width: 900px) {
@@ -306,6 +347,7 @@ h1 {
 }
 @media (prefers-reduced-motion: reduce) {
   h1, .lead, .actions, .support { animation: none; }
+  .bg::before { animation: none; }
   .hero-card { transform: none; margin-bottom: 0; }
 }
 </style>

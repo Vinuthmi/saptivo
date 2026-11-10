@@ -2,7 +2,12 @@
   <section id="contact-timeline" ref="root" class="ct" :class="{ in: seen, live }" aria-labelledby="ct-title">
     <div class="wrap">
       <!-- ============ live 360° contact panel ============ -->
-      <div class="panel" :style="panelStyle">
+      <div class="panel">
+        <!-- photo header: the picture fades into the panel and the cards overlap it -->
+        <div class="photo" aria-hidden="true">
+          <img v-if="bgImage && imgOk" :src="bgImage" alt="" loading="lazy" @error="imgOk = false" />
+          <span class="badge"><i></i>Live timeline</span>
+        </div>
         <div class="board">
           <!-- profile -->
           <div class="card pc">
@@ -103,10 +108,10 @@
 <script setup>
 import { ref, reactive, computed, onMounted, onBeforeUnmount } from "vue";
 
-// Optional background photo behind the panel. Put a picture in public/images/ and set the path,
-// or leave "" for the flat tinted panel.
-const bgImage = "";
-const panelStyle = bgImage ? { backgroundImage: `url(${bgImage})` } : {};
+// Photo at the top of the panel. Put the picture in public/images/features/ (or change the path).
+// If the file is missing the header falls back to the soft tinted gradient, nothing breaks.
+const bgImage = "/images/features/smiling-man-working-at-desk-in-modern-office-2026-09-24-04-02-15-utc.jpg";
+const imgOk = ref(true);
 
 const fieldPills = ["Name", "Company", "Role", "Phone", "Email", "Social links", "Custom fields"];
 
@@ -270,8 +275,16 @@ onBeforeUnmount(() => {
 .pills li { padding: 7px 14px; border-radius: 99px; border: 1px solid var(--line); background: #fff; font-size: 13px; font-weight: 500; color: #5d5651; }
 
 /* ---------- panel ---------- */
-.panel { min-width: 0; padding: 22px; border-radius: 30px; background-color: #fbf3ee; background-size: cover; background-position: center; border: 1px solid var(--line); }
-.board { display: flex; flex-direction: column; gap: 14px; }
+.panel { position: relative; min-width: 0; overflow: hidden; padding: 0 22px 22px; border-radius: 30px; background-color: #fbf3ee; border: 1px solid var(--line); }
+.photo { position: relative; height: 210px; margin: 0 -22px; background: linear-gradient(135deg, #ffd9c2 0%, #ffe9dc 55%, #fbf3ee 100%); }
+.photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 28%; transform: scale(1.04); }
+.ct.in .photo img { animation: settle 1.6s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+/* warm tint on top, then a fade into the panel colour so the cards sit on it */
+.photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(255, 99, 56, 0.16) 0%, rgba(251, 243, 238, 0) 38%, rgba(251, 243, 238, 0.85) 82%, #fbf3ee 100%); }
+.badge { position: absolute; z-index: 1; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 8px; padding: 6px 13px 6px 10px; border-radius: 99px; background: rgba(255, 255, 255, 0.82); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); font-size: 12px; font-weight: 600; color: var(--ink); }
+.badge i { width: 8px; height: 8px; border-radius: 50%; background: #25b865; animation: blink 1.8s ease-in-out infinite; }
+.ct:not(.live) .badge i { animation-play-state: paused; }
+.board { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 14px; margin-top: -78px; }
 .card { background: #fff; border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 1px 2px rgba(80, 40, 20, 0.04), 0 10px 24px -14px rgba(80, 40, 20, 0.3); }
 
 .pc { display: grid; grid-template-columns: 118px 1fr; gap: 6px 18px; align-items: center; padding: 18px; }
@@ -349,6 +362,7 @@ onBeforeUnmount(() => {
 @keyframes spin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
 @keyframes swap { from { opacity: 0; transform: translateY(6px) scale(0.9); } to { opacity: 1; transform: none; } }
 @keyframes glow { 0% { box-shadow: 0 0 0 0 rgba(255, 99, 56, 0.35); } 100% { box-shadow: 0 0 0 22px rgba(255, 99, 56, 0); } }
+@keyframes settle { from { transform: scale(1.12); } to { transform: scale(1.04); } }
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
 /* ---------- responsive ---------- */
@@ -360,7 +374,9 @@ onBeforeUnmount(() => {
 @media (max-width: 640px) {
   .ct { padding: 72px 0; }
   .wrap { width: calc(100% - 32px); }
-  .panel { padding: 14px; border-radius: 24px; }
+  .panel { padding: 0 14px 14px; border-radius: 24px; }
+  .photo { height: 170px; margin: 0 -14px; }
+  .board { margin-top: -60px; }
   .pc { grid-template-columns: 96px 1fr; padding: 14px; }
   .ringbox { width: 96px; height: 96px; }
   .avatar { inset: 18px; font-size: 18px; }

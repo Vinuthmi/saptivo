@@ -65,7 +65,7 @@ defineOptions({ name: "FeaturesSection8" });
 
 // Background photo for the CTA card. Keep the asset in public/images/features/.
 // Make sure this file name matches the real file exactly (it is case sensitive).
-const bgImage = "/saptivo/images/features/threecolleagues-.jpg";
+const bgImage = `${import.meta.env.BASE_URL}images/features/threecolleagues-.jpg`;
 // Dark gradient on top keeps the text readable: strongest on the left where the text sits,
 // lighter on the right so the photo still shows through.
 const ctaStyle = bgImage
@@ -123,11 +123,11 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .faq {
-  --orange: #ff6338;
-  --orange-soft: #fff1ec;
-  --ink: #14120f;
+  --orange: #33485d;
+  --orange-soft: #edf1f4;
+  --ink: #000000;
   --muted: #6a6560;
-  --line: #f1e7e2;
+  --line: #e4e9ed;
   position: relative;
   overflow: clip;
   scroll-margin-top: 100px;
@@ -155,7 +155,7 @@ onBeforeUnmount(() => {
 /* ---------- accordion ---------- */
 .list { display: grid; gap: 14px; align-content: start; min-width: 0; }
 .item { border: 1px solid var(--line); border-radius: 20px; background: #fff; transition: border-color 0.3s, background 0.3s, box-shadow 0.4s; }
-.item.open { border-color: rgba(255, 99, 56, 0.35); background: #fff8f5; box-shadow: 0 16px 36px rgba(255, 99, 56, 0.1); }
+.item.open { border-color: rgba(51, 72, 93, 0.35); background: #f5f7f8; box-shadow: 0 16px 36px rgba(51, 72, 93, 0.1); }
 .item h3 { margin: 0; font: inherit; }
 .q {
   width: 100%; display: flex; align-items: center; gap: 16px; padding: 22px 24px;
@@ -188,7 +188,7 @@ onBeforeUnmount(() => {
 /* decorative glow: stays absolutely positioned, behind the content */
 .glow {
   position: absolute; right: -90px; top: -90px; z-index: 0; width: 320px; height: 320px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 99, 56, 0.6), rgba(255, 99, 56, 0) 68%);
+  background: radial-gradient(circle, rgba(51, 72, 93, 0.24), rgba(51, 72, 93, 0) 68%);
   animation: drift 7s ease-in-out infinite; pointer-events: none;
 }
 .cta-body { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; }
@@ -203,8 +203,8 @@ onBeforeUnmount(() => {
   transition: transform 0.35s cubic-bezier(0.3, 1.4, 0.5, 1), background 0.3s, border-color 0.3s, box-shadow 0.3s;
 }
 .btn svg { transition: transform 0.35s cubic-bezier(0.3, 1.4, 0.5, 1); }
-.btn.primary { background: var(--orange); color: #fff; box-shadow: 0 12px 28px rgba(255, 99, 56, 0.4); }
-.btn.primary:hover { transform: translateY(-2px); box-shadow: 0 16px 34px rgba(255, 99, 56, 0.5); }
+.btn.primary { background: #33485d; color: #fff; box-shadow: 0 12px 28px rgba(51, 72, 93, 0.24); }
+.btn.primary:hover { transform: translateY(-2px); box-shadow: 0 16px 34px rgba(51, 72, 93, 0.32); }
 .btn.primary:hover svg { transform: translateX(4px); }
 .btn.primary::after { content: ""; position: absolute; inset: 0; background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, 0.28) 50%, transparent 70%); transform: translateX(-100%); animation: sheen 3.6s ease-in-out infinite; }
 .btn.ghost { color: #fff; border: 1px solid rgba(255, 255, 255, 0.35); background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(6px); }

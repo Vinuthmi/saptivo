@@ -5,9 +5,6 @@
 
       <!-- Section heading -->
       <header class="wis-heading">
-        <span class="wis-eyebrow">
-          <i></i> BUILT FOR YOUR INDUSTRY
-        </span>
 
         <h2 id="wis-title">
           Why choose an <em>industry-specific CRM?</em>

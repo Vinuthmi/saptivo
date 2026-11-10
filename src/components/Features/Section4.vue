@@ -95,7 +95,7 @@ onBeforeUnmount(() => io?.disconnect());
 
 <style scoped>
 .wsm {
-  --orange: #ff6338;
+  --orange: #33485d;
   --ink: #14120f;
   --muted: #6a6560;
   position: relative;
@@ -125,14 +125,14 @@ onBeforeUnmount(() => io?.disconnect());
   transition: transform 1s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 .back-a { background: var(--orange); }
-.back-b { background: #ffb86b; }
+.back-b { background: #dce5eb; }
 .in .back-a { transform: rotate(-4deg) scale(0.95); animation: sway-a 7s ease-in-out 1.2s infinite alternate; }
 .in .back-b { transform: rotate(3.5deg) scale(0.95); animation: sway-b 7s ease-in-out 1.2s infinite alternate; }
 .face {
   position: absolute; inset: 0; overflow: hidden; border-radius: 24px;
   border: 1px solid rgba(20, 18, 15, 0.06);
 }
-.tint-a { background: #fff3ec; }
+.tint-a { background: #edf1f4; }
 .tint-b { background: #fff6e8; }
 
 /* workflow */
@@ -144,7 +144,7 @@ onBeforeUnmount(() => io?.disconnect());
   box-shadow: 0 8px 24px rgba(20, 18, 15, 0.07); font-size: 12.5px; font-weight: 500;
 }
 .node small { margin-left: auto; color: var(--muted); font-weight: 400; font-size: 11px; }
-.n-ic { flex: none; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 8px; background: #fff3ed; color: var(--orange); font-style: normal; font-size: 12px; font-weight: 600; }
+.n-ic { flex: none; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 8px; background: #edf1f4; color: var(--orange); font-style: normal; font-size: 12px; font-weight: 600; }
 .wire { display: block; position: relative; width: 2px; height: 22px; margin-left: 27px; background: rgba(20, 18, 15, 0.12); overflow: hidden; }
 .wire::after { content: ""; position: absolute; left: 0; top: -100%; width: 100%; height: 100%; background: var(--orange); }
 .in .node { animation: rise 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d) both, glow 5.2s ease-in-out calc(1.8s + var(--g)) infinite; }
@@ -160,9 +160,9 @@ onBeforeUnmount(() => io?.disconnect());
 .up { font-size: 11px; font-weight: 500; color: #128a47; }
 .chart { position: relative; min-height: 0; padding: 14px; }
 .chart svg { display: block; width: 100%; height: 100%; overflow: visible; }
-.area { fill: rgba(255, 99, 56, 0.12); }
+.area { fill: rgba(51, 72, 93, 0.12); }
 .ln { fill: none; stroke: var(--orange); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 0; }
-.end { position: absolute; right: 9px; top: calc(9px + (100% - 28px) * 0.109); width: 10px; height: 10px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 0 0 rgba(255, 99, 56, 0.5); }
+.end { position: absolute; right: 9px; top: calc(9px + (100% - 28px) * 0.109); width: 10px; height: 10px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 0 0 rgba(51, 72, 93, 0.5); }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .chip { padding: 6px 12px; border-radius: 99px; background: #fff; border: 1px solid rgba(20, 18, 15, 0.08); font-size: 11.5px; font-weight: 500; }
 .chip.g { background: #e6f9ee; border-color: transparent; color: #128a47; }
@@ -178,7 +178,7 @@ onBeforeUnmount(() => io?.disconnect());
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px;
 }
 .feat { display: grid; justify-items: center; align-content: start; gap: 14px; text-align: center; }
-.icon { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 12px; color: var(--orange); background: #fff3ed; transition: background 0.3s, color 0.3s; }
+.icon { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 12px; color: var(--orange); background: #edf1f4; transition: background 0.3s, color 0.3s; }
 .feat:hover .icon { color: #fff; background: var(--orange); }
 .feat h3 { margin: 6px 0 0; font-size: 19px; font-weight: 500; letter-spacing: -0.02em; }
 .feat p { margin: 0; max-width: 320px; font-size: 15px; line-height: 1.7; color: var(--muted); }
@@ -188,7 +188,7 @@ onBeforeUnmount(() => io?.disconnect());
 @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
 @keyframes draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
 @keyframes wire { 0% { top: -100%; } 60%, 100% { top: 100%; } }
-@keyframes ping { 0% { box-shadow: 0 0 0 0 rgba(255, 99, 56, 0.5); } 100% { box-shadow: 0 0 0 14px rgba(255, 99, 56, 0); } }
+@keyframes ping { 0% { box-shadow: 0 0 0 0 rgba(51, 72, 93, 0.5); } 100% { box-shadow: 0 0 0 14px rgba(51, 72, 93, 0); } }
 
 /* ---- more live motion (section 2) ---- */
 @property --n { syntax: "<integer>"; initial-value: 0; inherits: false; }
@@ -209,8 +209,8 @@ onBeforeUnmount(() => io?.disconnect());
 
 @keyframes count { from { --n: 0; } }
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
-@keyframes glow { 0%, 24%, 100% { box-shadow: 0 8px 24px rgba(20, 18, 15, 0.07); } 8%, 16% { box-shadow: 0 0 0 3px rgba(255, 99, 56, 0.35), 0 8px 24px rgba(20, 18, 15, 0.07); } }
-@keyframes ic { 0%, 24%, 100% { background: #fff3ed; color: #ff6338; } 8%, 16% { background: #ff6338; color: #fff; } }
+@keyframes glow { 0%, 24%, 100% { box-shadow: 0 8px 24px rgba(20, 18, 15, 0.07); } 8%, 16% { box-shadow: 0 0 0 3px rgba(51, 72, 93, 0.35), 0 8px 24px rgba(20, 18, 15, 0.07); } }
+@keyframes ic { 0%, 24%, 100% { background: #edf1f4; color: #33485d; } 8%, 16% { background: #33485d; color: #fff; } }
 @keyframes travel { 0% { stroke-dashoffset: 0.1; opacity: 1; } 90% { opacity: 1; } 100% { stroke-dashoffset: -1; opacity: 0; } }
 @keyframes bob { to { transform: translateY(-3px); } }
 @keyframes dot { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
