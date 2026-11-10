@@ -176,8 +176,8 @@ const features = [
     title: 'Lead and contact management',
     description:
       'Enquiries from your website, Facebook Lead Ads and WhatsApp arrive in Saptivo automatically, tagged with their source. Duplicates are merged, leads are scored and each one is assigned to the right salesperson within seconds.',
-    bg: 'linear-gradient(145deg, #ffe3d0, #ffb98a 60%, #ff9456)',
-    glow: ['#fff3ea', '#f2540c'],
+    bg: '#F4F1DE',
+    glow: ['#ffffff', '#B58863'],
     points: [
       ['Automatic capture', 'Website, Facebook Lead Ads and WhatsApp'],
       ['Source tagging', 'Every lead shows where it came from'],
@@ -191,8 +191,8 @@ const features = [
     title: 'Sales pipeline',
     description:
       'Drag deals across stages you define, set follow-up reminders and see weighted revenue forecasts in real time. Overdue deals are flagged before they go cold.',
-    bg: 'linear-gradient(180deg, #2a8fb0 0%, #7ea4b8 38%, #e3a894 66%, #ff9a52 100%)',
-    glow: ['#1b7fa6', '#ff7a12'],
+    bg: '#DCE5EF',
+    glow: ['#ffffff', '#778D7A'],
     points: [
       ['Stages you define', 'Drag deals from stage to stage'],
       ['Follow-up reminders', 'Always know the next step'],
@@ -206,8 +206,8 @@ const features = [
     title: 'Quotations and invoicing',
     description:
       'Create branded PDF quotations from your product catalog in seconds, send them on WhatsApp or email, and convert approved quotes into tax invoices in one click. VAT, discounts and multicurrency are built in.',
-    bg: 'linear-gradient(145deg, #ff8a2a, #f2540c 70%, #d9420a)',
-    glow: ['#ffb36b', '#9a2f06'],
+    bg: '#F0DBC6',
+    glow: ['#F4F1DE', '#B58863'],
     points: [
       ['Branded PDF quotes', 'Built from your product catalog'],
       ['Send anywhere', 'On WhatsApp or by email'],
@@ -221,8 +221,8 @@ const features = [
     title: 'WhatsApp CRM',
     description:
       "Give your whole team one shared WhatsApp Business inbox on the official API. Assign chats, use saved replies and approved templates, and keep every conversation on the customer's timeline.",
-    bg: 'linear-gradient(160deg, #ffe9da, #ffc9a3 55%, #8fb9d6)',
-    glow: ['#ffffff', '#3e86b5'],
+    bg: '#D6E0D3',
+    glow: ['#ffffff', '#778D7A'],
     points: [
       ['Shared team inbox', 'One WhatsApp Business inbox on the official API'],
       ['Assign chats', 'The right person on every conversation'],
@@ -236,8 +236,8 @@ const features = [
     title: '3CX and Vodia call integration',
     description:
       "See who is calling before you answer. Saptivo connects to your 3CX or Vodia phone system, pops up the caller's profile and logs every inbound, outbound and missed call automatically. With Vodia, AI voice agents can also make reminder and follow-up calls using your CRM data.",
-    bg: 'linear-gradient(135deg, #f5821f 0%, #c9531c 38%, #1d5a8a 78%, #0f3358 100%)',
-    glow: ['#ffa24d', '#2f7fc0'],
+    bg: '#E9DDD9',
+    glow: ['#F4F1DE', '#B58863'],
     points: [
       ['Caller pop-up', 'See who is calling before you answer'],
       ['Automatic call log', 'Inbound, outbound and missed calls'],
@@ -251,8 +251,8 @@ const features = [
     title: 'Service and AMC management',
     description:
       'For businesses that install and maintain equipment, Saptivo manages annual maintenance contracts, preventive service schedules, technician dispatch, spare parts and warranty billing.',
-    bg: 'linear-gradient(180deg, #1e8cab 0%, #8f9fb3 34%, #e0a595 62%, #ffa670 82%, #ff8f1f 100%)',
-    glow: ['#2fb6ec', '#ff7a12'],
+    bg: '#F4F1DE',
+    glow: ['#ffffff', '#D4C4A8'],
     points: [
       ['AMC contracts', 'Annual maintenance contracts in one place'],
       ['Preventive schedules', 'Services planned ahead'],
@@ -640,6 +640,7 @@ onBeforeUnmount(() => {
   transform: none;
 }
 .fx-blob {
+  display: none; /* flat pastel cards: no glow blobs */
   position: absolute;
   width: 320px;
   height: 320px;

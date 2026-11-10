@@ -12,9 +12,8 @@
         preload="auto"
       ></video>
     </div>
-    <!-- dotted pattern on the top left / right sides -->
-    <span class="dots dots-l" aria-hidden="true"></span>
-    <span class="dots dots-r" aria-hidden="true"></span>
+    <!-- dotted pattern at the top (same as the footer) -->
+    <span class="dots" aria-hidden="true"></span>
 
     <div class="top">
     <div class="content">
@@ -43,6 +42,46 @@
     </div>
     </div>
 
+    <!-- demo video: starts as a rounded card, grows to full width as you scroll -->
+    <div ref="stage" class="stage">
+      <div
+        ref="card"
+        class="hero-card"
+        :class="{ hovering: hover }"
+        :style="{ '--p': progress }"
+        @pointerenter="onEnter"
+        @pointermove="onMove"
+        @pointerleave="hover = false"
+      >
+        <video
+          ref="demoVideo"
+          class="hero-video"
+          :src="heroDemoVideo"
+          :poster="heroDemoPoster"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+          @play="playing = true"
+          @pause="playing = false"
+        ></video>
+        <button
+          type="button"
+          class="vid-pill"
+          :style="{ '--x': cx + 'px', '--y': cy + 'px' }"
+          :aria-label="playing ? 'Pause video' : 'Play video'"
+          @click="toggle"
+        >
+          <span class="vp-ic" aria-hidden="true">
+            <svg v-if="playing" viewBox="0 0 24 24"><path d="M9 5v14M15 5v14" /></svg>
+            <svg v-else viewBox="0 0 24 24"><path d="M8 5l11 7-11 7z" /></svg>
+          </span>
+          {{ playing ? "Pause Video" : "Play Video" }}
+        </button>
+      </div>
+    </div>
+
   </section>
 </template>
 
@@ -52,7 +91,7 @@ defineOptions({ name: "HeroSection" });
 
 // Put your files in public/videos/ (or change these paths)
 const heroVideo = `${import.meta.env.BASE_URL}videos/hero-bg.mp4`; // full-width background video
-const heroDemoVideo = `${import.meta.env.BASE_URL}videos/hero-demo.mp4`; // video that replaces the dashboard photo
+const heroDemoVideo = "https://video-previews.elements.envatousercontent.com/bb3c2f5b-287f-4c9a-a92e-ef18cd955794/watermarked_preview/watermarked_preview.mp4"; // demo video shown in the rounded card
 const heroDemoPoster = `${import.meta.env.BASE_URL}images/hero-demo-poster.jpg`; // optional still shown until the video starts
 
 const bgVideo = ref(null);
@@ -78,19 +117,48 @@ function toggle() {
   }
 }
 
+// custom "Pause Video" pill that follows the mouse over the card
+const cx = ref(0);
+const cy = ref(0);
+const hover = ref(false);
+let tx = 0;
+let ty = 0;
+let rafC = null;
+function local(e) {
+  const r = card.value.getBoundingClientRect();
+  tx = e.clientX - r.left;
+  ty = e.clientY - r.top;
+}
+function follow() {
+  cx.value += (tx - cx.value) * 0.22;
+  cy.value += (ty - cy.value) * 0.22;
+  rafC = Math.abs(tx - cx.value) + Math.abs(ty - cy.value) > 0.5 ? requestAnimationFrame(follow) : null;
+}
+function onEnter(e) {
+  if (e.pointerType !== "mouse") return;
+  local(e);
+  cx.value = tx;
+  cy.value = ty;
+  hover.value = true;
+}
+function onMove(e) {
+  if (e.pointerType !== "mouse") return;
+  local(e);
+  hover.value = true;
+  if (rafC === null) rafC = requestAnimationFrame(follow);
+}
+
+// scroll: 0 = rounded card inside the page, 1 = full width
 let ticking = false;
 let raf = null;
 let io = null;
 function update() {
   const el = card.value;
   if (el) {
-    // progress 0 → 1 while the card's top travels from 88% down the viewport to 8%
     const vh = window.innerHeight;
     const top = el.getBoundingClientRect().top;
-    const p = (vh * 0.88 - top) / (vh * 0.8);
+    const p = (vh * 0.92 - top) / (vh * 0.62);
     progress.value = Math.min(Math.max(p, 0), 1);
-    // the card scales from its top edge, so pull the content below it up by the space it frees
-    pull.value = -Math.round(el.offsetHeight * 0.17 * progress.value);
   }
   ticking = false;
 }
@@ -128,6 +196,7 @@ onBeforeUnmount(() => {
   window.removeEventListener("scroll", onScroll);
   window.removeEventListener("resize", onScroll);
   if (raf !== null) cancelAnimationFrame(raf);
+  if (rafC !== null) cancelAnimationFrame(rafC);
   io?.disconnect();
 });
 </script>
@@ -185,6 +254,7 @@ onBeforeUnmount(() => {
     linear-gradient(180deg, #fff8f3 0%, #fffdfb 70%, #fff 100%);
 }
 .bg::before {
+  display: none;
   content: "";
   position: absolute;
   top: 0;
@@ -199,22 +269,14 @@ onBeforeUnmount(() => {
 
 .top { position: relative; z-index: 1; }
 
-/* ---------- dotted top corners ---------- */
+/* ---------- dotted top background (same pattern as the footer) ---------- */
 .dots {
-  position: absolute; top: 0; z-index: 0; pointer-events: none;
-  width: min(34vw, 520px); height: clamp(260px, 34vw, 460px);
-  background-image: radial-gradient(circle, rgba(10, 10, 10, 0.55) 1.6px, transparent 2px);
-  background-size: 24px 24px;
-}
-.dots-l {
-  left: 0;
-  -webkit-mask-image: radial-gradient(ellipse 100% 100% at 0 0, #000 0%, transparent 72%);
-  mask-image: radial-gradient(ellipse 100% 100% at 0 0, #000 0%, transparent 72%);
-}
-.dots-r {
-  right: 0;
-  -webkit-mask-image: radial-gradient(ellipse 100% 100% at 100% 0, #000 0%, transparent 72%);
-  mask-image: radial-gradient(ellipse 100% 100% at 100% 0, #000 0%, transparent 72%);
+  position: absolute; top: 0; left: 0; right: 0; z-index: 0; pointer-events: none;
+  height: min(100%, 680px);
+  background-image: radial-gradient(circle, rgba(23, 25, 29, 0.42) 1px, transparent 1.4px);
+  background-size: 22px 22px;
+  -webkit-mask-image: radial-gradient(ellipse 85% 100% at 50% 0%, #000 0%, rgba(0, 0, 0, 0.5) 55%, transparent 95%);
+  mask-image: radial-gradient(ellipse 85% 100% at 50% 0%, #000 0%, rgba(0, 0, 0, 0.5) 55%, transparent 95%);
 }
 
 
@@ -293,35 +355,46 @@ h1 {
 /* ---------- stage ---------- */
 .stage { position: relative; padding-top: var(--top0); }
 
-/* ---------- demo video (normal scroll, scales down as it leaves) ---------- */
+/* ---------- demo video: rounded card -> full width while scrolling ---------- */
 .hero-card {
   --p: 0;
-  --pull: 0px;
   position: relative; z-index: 1; isolation: isolate; overflow: hidden;
-  width: var(--w0); margin: 0 auto var(--pull);
+  width: calc(var(--w0) + (100% - var(--w0)) * var(--p));
+  margin: 0 auto;
   aspect-ratio: 16 / 9;
+  max-height: 92svh;
   background: linear-gradient(135deg, #1d2230, #0b0c0e); /* shows until the video loads (or if the file is missing) */
-  border: 6px solid rgba(255, 255, 255, 0.9); border-radius: 28px;
-  box-shadow: 0 40px 90px rgba(23, 25, 29, 0.22);
-  transform: scale(calc(1 - 0.17 * var(--p)));
-  transform-origin: top center;
-  will-change: transform;
+  border-radius: calc(44px - 12px * var(--p));
+  box-shadow: 0 40px 90px rgba(23, 25, 29, calc(0.22 - 0.12 * var(--p)));
+  will-change: width;
 }
 .hero-video { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; user-select: none; }
 
-/* pause / play */
-.vid-toggle {
-  position: absolute; right: 16px; bottom: 16px; z-index: 2;
-  display: grid; place-items: center;
-  width: 44px; height: 44px; padding: 0;
-  border: 1px solid rgba(255, 255, 255, 0.35); border-radius: 50%;
-  background: rgba(15, 17, 23, 0.5);
-  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
-  color: #fff; cursor: pointer;
-  transition: background 0.25s, transform 0.25s;
+/* "Pause Video" pill: follows the mouse on desktop, sits bottom-right on touch / keyboard */
+.vid-pill {
+  position: absolute; left: 0; top: 0; z-index: 2;
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 9px 16px 9px 10px; border: 0; border-radius: 999px;
+  background: rgba(255, 255, 255, 0.94); color: #17191d;
+  font: 600 13px/1 'Urbanist', system-ui, sans-serif; white-space: nowrap;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  transform: translate(calc(var(--x) - 50%), calc(var(--y) - 50%)) scale(0.8);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s, scale 0.25s;
 }
-.vid-toggle:hover { background: rgba(240, 75, 35, 0.9); transform: scale(1.06); }
-.vid-toggle svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.hero-card.hovering .vid-pill { opacity: 1; pointer-events: auto; transform: translate(calc(var(--x) - 50%), calc(var(--y) - 50%)) scale(1); }
+.vp-ic { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: #17191d; color: #fff; }
+.vp-ic svg { width: 11px; height: 11px; fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+@media (hover: hover) and (pointer: fine) { .hero-card.hovering { cursor: none; } .hero-card.hovering .vid-pill { cursor: none; } }
+.vid-pill:focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
+.hero-card:not(.hovering) .vid-pill:focus-visible,
+.hero-card:not(.hovering) .vid-pill:focus {
+  opacity: 1; pointer-events: auto; transform: none; left: auto; top: auto; right: 16px; bottom: 16px;
+}
+@media (hover: none), (pointer: coarse) {
+  .vid-pill { opacity: 1; pointer-events: auto; transform: none; left: auto; top: auto; right: 12px; bottom: 12px; padding: 8px 14px 8px 8px; }
+}
 
 @keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
 @keyframes dot-drift { to { background-position: 44px 44px; } }
@@ -336,10 +409,9 @@ h1 {
   h1 { font-size: clamp(40px, 9vw, 58px); }
   .lead { font-size: 15px; margin-top: 22px; }
   .actions { width: 100%; gap: 10px; margin-top: 28px; }
-  .dots { opacity: .7; background-size: 20px 20px; }
+  .dots { background-size: 20px 20px; }
   .btn { min-height: 50px; padding: 0 20px; font-size: 14px; }
-  .hero-card { border-width: 4px; border-radius: 22px; }
-  .vid-toggle { right: 10px; bottom: 10px; width: 40px; height: 40px; }
+  .hero-card { max-height: none; }
 }
 @media (max-width: 380px) {
   .actions { flex-direction: column; align-items: stretch; }
@@ -347,6 +419,6 @@ h1 {
 @media (prefers-reduced-motion: reduce) {
   h1, .lead, .actions, .support { animation: none; }
   .bg::before { animation: none; }
-  .hero-card { transform: none; margin-bottom: 0; }
+  .hero-card { width: var(--w0); }
 }
 </style>
