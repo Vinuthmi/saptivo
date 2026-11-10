@@ -1284,4 +1284,79 @@ onBeforeUnmount(() => {
   .spark .sln { stroke-dashoffset: 0; }
   .card, .win, .toast, .link, .trow, .stage, .evt, .kpis span, .sl, .ig-head, .ig-tabs, .ig-stage { transition-duration: 0.01s !important; transition-delay: 0s !important; }
 }
+
+/* ============ enhancements: bigger tab titles + descriptions, no divider line under the tabs ============ */
+.ig {
+  background: #f4f5f7;
+}
+
+/* tab titles: larger, in the heading font, no line underneath */
+.ig-tabs {
+  gap: clamp(22px, 3vw, 44px);
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+.ig-tab {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 2px;
+  color: #7b8391;
+  font: 500 clamp(15px, 1.1vw, 17px)/1.2 'Urbanist', system-ui, sans-serif;
+  letter-spacing: -0.02em;
+}
+.ig-tab::before { display: none; }
+/* underline under the selected tab */
+.ig-tab::after {
+  display: block;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: #0f172a;
+}
+.ig-tab:hover { color: #1f2937; }
+.ig-tab.on { color: #0f172a; font-weight: 600; }
+.ig-tab.on::after { transform: scaleX(1); }
+
+/* subtitle */
+.ig-sub { font-size: clamp(15px, 1vw, 17px); line-height: 1.5; max-width: 680px; }
+
+/* description under the preview */
+.ig-desc {
+  max-width: 1180px;
+  margin: 26px auto 0;
+  font-family: 'Urbanist', system-ui, sans-serif;
+  font-size: clamp(14.5px, 1vw, 16px);
+  font-weight: 500;
+  line-height: 1.7;
+  letter-spacing: -0.01em;
+  color: #475569;
+}
+.ig-desc b { font-weight: 700; color: #0f172a; }
+.ig-desc .sep {
+  width: 5px;
+  height: 5px;
+  margin: 0 12px;
+  border-radius: 50%;
+  vertical-align: middle;
+  background: #b4bcc8;
+}
+
+/* progress dots under the description */
+.ig-dots { gap: 8px; }
+.ig-dot { width: 9px; height: 9px; }
+.ig-dot.on { width: 32px; background: #0f172a; }
+
+@media (min-width: 861px) {
+  .ig-sub { font-size: clamp(14px, min(1vw, 2.2svh), 17px); }
+  .ig-tabs { margin-top: clamp(14px, 2.8svh, 32px); }
+  .ig-desc { margin-top: clamp(12px, 2.2svh, 26px); }
+  .ig-dots { margin-top: clamp(10px, 1.8svh, 20px); }
+}
+@media (max-width: 860px) {
+  .ig-tab { font-size: 15.5px; }
+  .ig-tabs { gap: 26px; }
+  .ig-desc { font-size: 15px; line-height: 1.65; margin-top: 20px; }
+  .ig-desc .sep { margin: 0 10px; }
+}
 </style>

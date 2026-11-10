@@ -164,17 +164,25 @@ onBeforeUnmount(() => {
   pointer-events: none;
   -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 160px), transparent 100%);
   mask-image: linear-gradient(180deg, #000 calc(100% - 160px), transparent 100%);
-  background:
-    radial-gradient(60% 52% at 10% 6%, #ffe3d3 0%, rgba(255, 227, 211, 0) 72%),
-    radial-gradient(55% 50% at 92% 2%, #e6e3ff 0%, rgba(230, 227, 255, 0) 72%),
-    radial-gradient(48% 40% at 52% 46%, #fff0e6 0%, rgba(255, 240, 230, 0) 75%),
-    linear-gradient(180deg, #fff8f3 0%, #fffdfb 70%, #fff 100%);
+  background: #fff;
 }
 .bg-video {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+/* light veil so the dark text stays readable over any video; lower the alpha to show more video */
+.bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.55)),
+    radial-gradient(60% 52% at 10% 6%, #ffe3d3 0%, rgba(255, 227, 211, 0) 72%),
+    radial-gradient(55% 50% at 92% 2%, #e6e3ff 0%, rgba(230, 227, 255, 0) 72%),
+    radial-gradient(48% 40% at 52% 46%, #fff0e6 0%, rgba(255, 240, 230, 0) 75%),
+    linear-gradient(180deg, #fff8f3 0%, #fffdfb 70%, #fff 100%);
 }
 .bg::before {
   content: "";
@@ -187,12 +195,6 @@ onBeforeUnmount(() => {
   -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 60%, transparent 100%);
   mask-image: linear-gradient(180deg, #000 0%, #000 60%, transparent 100%);
   animation: dot-drift 24s linear infinite;
-}
-.bg::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(255, 255, 255, 0.55);
 }
 
 .top { position: relative; z-index: 1; }
@@ -234,13 +236,10 @@ h1 {
 }
 .accent {
   display: block;
-  width: fit-content; /* gradient spans the text itself */
+  width: fit-content;
   margin: 0 auto -0.14em;
-  padding-bottom: 0.14em; /* keeps the "g" descender inside the clipped background */
-  background: linear-gradient(100deg, #ff9a3d 0%, #ff6a1a 45%, #f2540c 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  padding-bottom: 0.14em;
+  color: #615f5a;
 }
 .lead {
   max-width: 760px; margin: 24px 0 0;
@@ -302,7 +301,7 @@ h1 {
   width: var(--w0); margin: 0 auto var(--pull);
   aspect-ratio: 16 / 9;
   background: linear-gradient(135deg, #1d2230, #0b0c0e); /* shows until the video loads (or if the file is missing) */
-  border: 6px solid #fff; border-radius: 28px;
+  border: 6px solid rgba(255, 255, 255, 0.9); border-radius: 28px;
   box-shadow: 0 40px 90px rgba(23, 25, 29, 0.22);
   transform: scale(calc(1 - 0.17 * var(--p)));
   transform-origin: top center;

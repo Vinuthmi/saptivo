@@ -271,8 +271,13 @@ const footerGroups = [
 .footer-main {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(180px, 1.15fr) minmax(0, 1.5fr) minmax(0, 0.85fr) minmax(0, 0.9fr) minmax(0, 0.8fr);
-  gap: clamp(22px, 3vw, 42px);
+  /* brand column + four link columns sized to their content and spread evenly:
+     equal gaps between columns, first column on the left edge, last column ending on the right edge */
+  grid-template-columns: minmax(200px, 280px) repeat(4, max-content);
+  justify-content: space-between;
+  align-items: start;
+  column-gap: clamp(22px, 3vw, 42px);
+  row-gap: 30px;
   padding-bottom: 44px;
 }
 
@@ -307,6 +312,7 @@ const footerGroups = [
 .footer-heading {
   display: inline-block;
   margin-bottom: 5px;
+  line-height: 1.3;
   color: #fff;
   font-size: 15px;
   font-weight: 700;
@@ -429,6 +435,7 @@ const footerGroups = [
 @media (max-width: 1100px) {
   .footer-main {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+    justify-content: normal;
   }
 
   .footer-brand-block {
@@ -452,6 +459,7 @@ const footerGroups = [
 
   .footer-main {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-content: normal;
   }
 
   .footer-brand-block {

@@ -127,18 +127,15 @@ const items = [
   font-family: 'Urbanist', system-ui, sans-serif;
   font-size: clamp(34px, 3.6vw, 56px);
   font-weight: 500;
-  line-height: 1.1;
-  letter-spacing: -0.06em;
-  color: #000 !important;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  color: var(--ink);
 }
 .fq-title span {
   display: block;
 }
 .fq-g {
-  background: none !important;
-  color: #000 !important;
-  -webkit-text-fill-color: #000 !important;
-  padding-bottom: 0.08em;
+  color: var(--mute);
 }
 .fq-list {
   list-style: none;

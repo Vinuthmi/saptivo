@@ -19,7 +19,6 @@
                   <p>{{ cur.description }}</p>
                   <a class="fx-btn" href="#">
                     Explore {{ cur.tab }}
-                    <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" /></svg>
                   </a>
                 </div>
               </Transition>
@@ -44,7 +43,6 @@
               <p>{{ f.description }}</p>
               <a class="fx-btn" href="#">
                 Explore {{ f.tab }}
-                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" /></svg>
               </a>
             </div>
 
@@ -92,7 +90,7 @@
                       <div class="w-dh"><span class="w-nm"><b>Line items</b><small>8% VAT · 5% discount · multicurrency</small></span><span class="w-stt">APPROVED</span></div>
                       <div v-for="l in lines" :key="l[0]" class="w-ln"><span>{{ l[0] }}</span><span>{{ l[1] }}</span><b>{{ l[2] }}</b></div>
                       <div class="w-tot"><span>Total</span><b>$7,420.00</b></div>
-                      <div class="w-acts"><span class="w-btn o">Convert to invoice →</span><span class="w-btn">Send on WhatsApp</span></div>
+                      <div class="w-acts"><span class="w-btn o">Convert to invoice</span><span class="w-btn">Send on WhatsApp</span></div>
                       <div class="w-flow"><span v-for="s in ['Sent', 'Viewed', 'Approved']" :key="s"><i>✓</i>{{ s }}</span></div>
                     </div>
                   </div>
@@ -145,6 +143,18 @@
                 </template>
               </div>
             </div>
+
+            <!-- wide screens: a companion panel beside the card, same width and height -->
+            <div class="fx-side">
+              <span class="fx-side-label">What you get</span>
+              <h4>{{ f.tab }}</h4>
+              <ul>
+                <li v-for="pt in f.points" :key="pt[0]">
+                  <i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7" /></svg></i>
+                  <span><b>{{ pt[0] }}</b><small>{{ pt[1] }}</small></span>
+                </li>
+              </ul>
+            </div>
           </article>
         </div>
       </div>
@@ -168,6 +178,12 @@ const features = [
       'Enquiries from your website, Facebook Lead Ads and WhatsApp arrive in Saptivo automatically, tagged with their source. Duplicates are merged, leads are scored and each one is assigned to the right salesperson within seconds.',
     bg: 'linear-gradient(145deg, #ffe3d0, #ffb98a 60%, #ff9456)',
     glow: ['#fff3ea', '#f2540c'],
+    points: [
+      ['Automatic capture', 'Website, Facebook Lead Ads and WhatsApp'],
+      ['Source tagging', 'Every lead shows where it came from'],
+      ['Duplicates merged', 'One clean record per customer'],
+      ['Scored and assigned', 'To the right salesperson in seconds'],
+    ],
   },
   {
     id: 'pipeline',
@@ -177,6 +193,12 @@ const features = [
       'Drag deals across stages you define, set follow-up reminders and see weighted revenue forecasts in real time. Overdue deals are flagged before they go cold.',
     bg: 'linear-gradient(180deg, #2a8fb0 0%, #7ea4b8 38%, #e3a894 66%, #ff9a52 100%)',
     glow: ['#1b7fa6', '#ff7a12'],
+    points: [
+      ['Stages you define', 'Drag deals from stage to stage'],
+      ['Follow-up reminders', 'Always know the next step'],
+      ['Live forecast', 'Weighted revenue in real time'],
+      ['Overdue flags', 'Spot deals before they go cold'],
+    ],
   },
   {
     id: 'quotes',
@@ -186,6 +208,12 @@ const features = [
       'Create branded PDF quotations from your product catalog in seconds, send them on WhatsApp or email, and convert approved quotes into tax invoices in one click. VAT, discounts and multicurrency are built in.',
     bg: 'linear-gradient(145deg, #ff8a2a, #f2540c 70%, #d9420a)',
     glow: ['#ffb36b', '#9a2f06'],
+    points: [
+      ['Branded PDF quotes', 'Built from your product catalog'],
+      ['Send anywhere', 'On WhatsApp or by email'],
+      ['One-click invoice', 'Approved quotes become tax invoices'],
+      ['VAT and multicurrency', 'Discounts and taxes built in'],
+    ],
   },
   {
     id: 'whatsapp',
@@ -195,6 +223,12 @@ const features = [
       "Give your whole team one shared WhatsApp Business inbox on the official API. Assign chats, use saved replies and approved templates, and keep every conversation on the customer's timeline.",
     bg: 'linear-gradient(160deg, #ffe9da, #ffc9a3 55%, #8fb9d6)',
     glow: ['#ffffff', '#3e86b5'],
+    points: [
+      ['Shared team inbox', 'One WhatsApp Business inbox on the official API'],
+      ['Assign chats', 'The right person on every conversation'],
+      ['Saved replies and templates', 'Approved templates ready to send'],
+      ['Customer timeline', 'Every conversation stays on the record'],
+    ],
   },
   {
     id: 'calls',
@@ -204,6 +238,12 @@ const features = [
       "See who is calling before you answer. Saptivo connects to your 3CX or Vodia phone system, pops up the caller's profile and logs every inbound, outbound and missed call automatically. With Vodia, AI voice agents can also make reminder and follow-up calls using your CRM data.",
     bg: 'linear-gradient(135deg, #f5821f 0%, #c9531c 38%, #1d5a8a 78%, #0f3358 100%)',
     glow: ['#ffa24d', '#2f7fc0'],
+    points: [
+      ['Caller pop-up', 'See who is calling before you answer'],
+      ['Automatic call log', 'Inbound, outbound and missed calls'],
+      ['3CX and Vodia', 'Connects to your phone system'],
+      ['AI voice agents', 'Reminder and follow-up calls with Vodia'],
+    ],
   },
   {
     id: 'service',
@@ -213,6 +253,12 @@ const features = [
       'For businesses that install and maintain equipment, Saptivo manages annual maintenance contracts, preventive service schedules, technician dispatch, spare parts and warranty billing.',
     bg: 'linear-gradient(180deg, #1e8cab 0%, #8f9fb3 34%, #e0a595 62%, #ffa670 82%, #ff8f1f 100%)',
     glow: ['#2fb6ec', '#ff7a12'],
+    points: [
+      ['AMC contracts', 'Annual maintenance contracts in one place'],
+      ['Preventive schedules', 'Services planned ahead'],
+      ['Technician dispatch', 'The right person sent on site'],
+      ['Spare parts and warranty', 'Parts tracked, warranty billed'],
+    ],
   },
 ]
 
@@ -356,10 +402,10 @@ onBeforeUnmount(() => {
   --line: #f1ece8;
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
   position: relative;
-  width: calc(100% - 2 * clamp(8px, 1.6vw, 24px));
-  max-width: 1680px;
-  margin: clamp(32px, 5vw, 64px) auto;
-  padding: clamp(36px, 5vw, 72px) clamp(16px, 4vw, 64px) clamp(48px, 6vw, 88px);
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: clamp(36px, 5vw, 72px) clamp(16px, 4vw, 72px) clamp(48px, 6vw, 88px);
   border: 0;
   border-radius: 0;
   background: transparent;
@@ -376,8 +422,9 @@ onBeforeUnmount(() => {
   display: block;
 }
 .fx-wrap {
-  max-width: 1120px;
-  margin: 0 auto;
+  width: 100%;
+  max-width: none;
+  margin: 0;
 }
 
 /* ---------- heading ---------- */
@@ -478,27 +525,16 @@ onBeforeUnmount(() => {
 .fx-btn {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
   padding: 14px 24px;
   border-radius: 999px;
   background: var(--navy);
   color: #fff;
   font: 500 14px/1 'Poppins', system-ui, sans-serif;
   text-decoration: none;
-  transition: background 0.3s, gap 0.3s, transform 0.3s;
-}
-.fx-btn svg {
-  width: 16px;
-  height: 16px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  transition: background 0.3s, transform 0.3s;
 }
 .fx-btn:hover {
   background: var(--o);
-  gap: 14px;
   transform: translateY(-2px);
 }
 .fx-btn:focus-visible {
@@ -622,6 +658,104 @@ onBeforeUnmount(() => {
   bottom: -120px;
   opacity: 0.55;
   transform: translateY(calc(var(--p) * -40px));
+}
+
+/* companion panel beside each card (wide screens only) */
+.fx-side {
+  display: none;
+}
+@media (min-width: 1840px) {
+  .fx-grid {
+    grid-template-columns: 480px minmax(0, 1144px);
+  }
+  .fx-item {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 560px));
+    gap: 24px;
+    align-items: start;
+  }
+  .fx-side {
+    display: flex;
+    flex-direction: column;
+    height: 480px;
+    padding: 36px 34px;
+    border: 1px solid #ffe3d0;
+    border-radius: 36px;
+    background: linear-gradient(160deg, #fff8f3 0%, #fff1e8 100%);
+    opacity: 0;
+    transform: translateY(44px) scale(0.97);
+    transition: opacity 0.8s ease 0.15s, transform 1s var(--ease) 0.15s;
+  }
+  .fx-item.in .fx-side {
+    opacity: 1;
+    transform: none;
+  }
+}
+.fx-side-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--o);
+}
+.fx-side h4 {
+  margin: 12px 0 22px;
+  font-family: 'Urbanist', system-ui, sans-serif;
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: #0a0a0a;
+}
+.fx-side ul {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.fx-side li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 0;
+  border-top: 1px solid #f3dccb;
+}
+.fx-side li i {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 11px;
+  background: var(--og);
+}
+.fx-side li svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.fx-side li span {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.fx-side li b {
+  font-family: 'Urbanist', system-ui, sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: #0a0a0a;
+}
+.fx-side li small {
+  font-family: 'Urbanist', system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
 }
 
 /* the product window, cropped by the card edge like a screenshot */
@@ -1240,6 +1374,7 @@ onBeforeUnmount(() => {
     animation: none !important;
   }
   .fx-card,
+  .fx-side,
   .fx-head,
   .fx-aside {
     opacity: 1 !important;
