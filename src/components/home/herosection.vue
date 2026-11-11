@@ -1,17 +1,5 @@
 <template>
   <section id="top" ref="hero" class="hero" aria-labelledby="hero-title">
-    <div class="bg" aria-hidden="true">
-      <video
-        ref="bgVideo"
-        class="bg-video"
-        :src="heroVideo"
-        autoplay
-        muted
-        loop
-        playsinline
-        preload="auto"
-      ></video>
-    </div>
     <!-- dotted pattern at the top (same as the footer) -->
     <span class="dots" aria-hidden="true"></span>
 
@@ -90,8 +78,7 @@ import { ref, onMounted, onBeforeUnmount } from "vue";
 defineOptions({ name: "HeroSection" });
 
 // Put your files in public/videos/ (or change these paths)
-const heroVideo = `${import.meta.env.BASE_URL}videos/hero-bg.mp4`; // full-width background video
-const heroDemoVideo = "https://video-previews.elements.envatousercontent.com/bb3c2f5b-287f-4c9a-a92e-ef18cd955794/watermarked_preview/watermarked_preview.mp4"; // demo video shown in the rounded card
+const heroDemoVideo = "https://public-assets.content-platform.envatousercontent.com/b988f3ac-00c7-49e0-947e-5f2743e6ea8d/d47db0a7-fe33-45c5-b831-412229fb0b2e/b988f3ac-00c7-49e0-947e-5f2743e6ea8d/preview_540p_crf22_higher_quality.mp4"; // demo video shown in the rounded card
 const heroDemoPoster = `${import.meta.env.BASE_URL}images/hero-demo-poster.jpg`; // optional still shown until the video starts
 
 const bgVideo = ref(null);
@@ -216,7 +203,7 @@ onBeforeUnmount(() => {
   position: relative;
   isolation: isolate;
   overflow: clip; /* "hidden" would break the sticky video */
-  padding-bottom: 56px;
+  padding-bottom: 0;
   text-align: center;
   color: var(--ink);
   background: var(--paper);
@@ -224,48 +211,6 @@ onBeforeUnmount(() => {
 }
 .hero *, .hero *::before, .hero *::after { box-sizing: border-box; }
 .hero a:focus-visible, .hero button:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; }
-
-.bg {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  overflow: hidden;
-  pointer-events: none;
-  -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 160px), transparent 100%);
-  mask-image: linear-gradient(180deg, #000 calc(100% - 160px), transparent 100%);
-  background: #fff;
-}
-.bg-video {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-/* light veil so the dark text stays readable over any video; lower the alpha to show more video */
-.bg::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.55)),
-    radial-gradient(60% 52% at 10% 6%, #ffe3d3 0%, rgba(255, 227, 211, 0) 72%),
-    radial-gradient(55% 50% at 92% 2%, #e6e3ff 0%, rgba(230, 227, 255, 0) 72%),
-    radial-gradient(48% 40% at 52% 46%, #fff0e6 0%, rgba(255, 240, 230, 0) 75%),
-    linear-gradient(180deg, #fff8f3 0%, #fffdfb 70%, #fff 100%);
-}
-.bg::before {
-  display: none;
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 50%;
-  background: radial-gradient(circle, rgba(120, 80, 60, 0.16) 1px, transparent 1.5px) 0 0 / 22px 22px;
-  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 60%, transparent 100%);
-  mask-image: linear-gradient(180deg, #000 0%, #000 60%, transparent 100%);
-  animation: dot-drift 24s linear infinite;
-}
 
 .top { position: relative; z-index: 1; }
 
@@ -365,7 +310,6 @@ h1 {
   max-height: 92svh;
   background: linear-gradient(135deg, #1d2230, #0b0c0e); /* shows until the video loads (or if the file is missing) */
   border-radius: calc(44px - 12px * var(--p));
-  box-shadow: 0 40px 90px rgba(23, 25, 29, calc(0.22 - 0.12 * var(--p)));
   will-change: width;
 }
 .hero-video { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; user-select: none; }
@@ -397,14 +341,13 @@ h1 {
 }
 
 @keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
-@keyframes dot-drift { to { background-position: 44px 44px; } }
 
 /* ---------- responsive ---------- */
 @media (max-width: 900px) {
   .content { padding-top: 96px; }
 }
 @media (max-width: 760px) {
-  .hero { --top0: 24px; --w0: calc(100vw - 24px); --title: clamp(38px, 10.5vw, 64px); padding-bottom: 40px; }
+  .hero { --top0: 24px; --w0: calc(100vw - 24px); --title: clamp(38px, 10.5vw, 64px); padding-bottom: 0; }
   .content { width: calc(100% - 32px); padding: 76px 0 24px; }
   h1 { font-size: clamp(40px, 9vw, 58px); }
   .lead { font-size: 15px; margin-top: 22px; }
@@ -418,7 +361,6 @@ h1 {
 }
 @media (prefers-reduced-motion: reduce) {
   h1, .lead, .actions, .support { animation: none; }
-  .bg::before { animation: none; }
   .hero-card { width: var(--w0); }
 }
 </style>

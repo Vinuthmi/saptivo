@@ -1,275 +1,367 @@
-<script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue'
-
-defineOptions({ name: 'IndustriesStack' })
-
-const root = ref(null)
-let io
-let timer = null
-
-const img = (id) => `https://images.unsplash.com/photo-${id}?w=1400&q=80&auto=format&fit=crop`
-
-/* small decorative icons on the floating card */
-const tools = [
-  '<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/>',
-  '<path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/>',
-  '<path d="M13 3 5 14h6l-1 7 8-11h-6z"/>',
-]
-
-/* Photos are free Unsplash photos — swap any URL below. Copy and bullets come from the Saptivo content doc. */
-const industries = [
-  {
-    key: 'retail',
-    to: '/industries/retail/',
-    pre: 'Retail and',
-    em: 'supermarkets',
-    text: 'Multi-counter checkouts, instant inventory audits, VIP loyalty tiers and WhatsApp receipts. Run every store from one head-office dashboard and turn one-time shoppers into regulars.',
-    photo: 'https://images.unsplash.com/photo-1605447813584-26aeb3f8e6ae?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D', // Retail and supermarkets
-    alt: 'Shoppers in a brightly lit supermarket aisle',
-    card: { title: 'Counter checkout', steps: ['Customer recognised', 'Gold tier applied', 'WhatsApp receipt sent'], pairs: [['Loyalty', 'Gold tier'], ['Receipt', 'WhatsApp']] },
-  },
-  {
-    key: 'wholesale',
-    to: '/industries/wholesale-distribution/',
-    pre: 'Wholesale and',
-    em: 'distribution',
-    text: 'Bulk tier pricing, dealer credit limits and repayment tracking, fast bulk quotations and stock across multiple warehouses. Your reps sell more and your accounts team chases less.',
-    photo: img('1664382953403-fc1ac77073a0'), // Centre for Ageing Better
-    alt: 'Two people walking through a warehouse aisle with shelving',
-    card: { title: 'Dealer order', steps: ['Order placed', 'Credit limit checked', 'Approved within limit'], pairs: [['Credit', 'Within limit'], ['Pricing', 'Bulk tier']] },
-  },
-  {
-    key: 'contractors',
-    to: '/industries/contractors-services/',
-    pre: 'Contractors and',
-    em: 'services',
-    text: 'Job tracking from enquiry to final payment: estimates, milestone deposits, site photos and mobile receipts, with clients following progress in their own portal.',
-    photo: img('1694521787193-9293daeddbaa'), // Glenov Brankovic
-    alt: 'Construction workers in hard hats measuring a concrete block wall',
-    card: { title: 'Job progress', steps: ['Estimate approved', 'Deposit received', 'Site photos added'], pairs: [['Deposit', 'Received'], ['Client portal', 'Shared']] },
-  },
-  {
-    key: 'field',
-    to: '/industries/field-service/',
-    pre: 'Field service and',
-    em: 'maintenance',
-    text: 'Built for air conditioning, solar, generator, lift and CCTV companies: installed asset registers, annual maintenance contracts, preventive scheduling, technician apps and warranty-aware billing.',
-    photo: img('1758101755915-462eddc23f57'), // Toolmash Expo
-    alt: 'A technician testing an electrical panel with a multimeter',
-    card: { title: 'Maintenance contract', steps: ['Visit scheduled', 'Technician on site', 'Service report sent'], pairs: [['Visit', 'Scheduled'], ['Warranty', 'Covered']] },
-  },
-  {
-    key: 'startups',
-    to: '/industries/startups/',
-    pre: 'Startups and',
-    em: 'SMEs',
-    text: 'Zero-friction quotations and a clear client pipeline, up and running in an afternoon. No setup fee, no upgrade fees, and room to grow as you hire.',
-    photo: img('1781246212288-7fa538344718'), // Ngital
-    alt: 'A small team collaborating around a table with laptops',
-    card: { title: 'Client pipeline', steps: ['Lead added', 'Quotation sent', 'Deal won'], pairs: [['Quotation', 'Sent'], ['Setup fee', 'None']] },
-  },
-]
-
-/* the floating card acts out a short process: its steps advance in turn, then loop */
-const phase = ref(0)
-
-onMounted(() => {
-  const reduce = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches
-  if (reduce) phase.value = 2
-  else timer = setInterval(() => { if (!document.hidden) phase.value++ }, 2300)
-
-  const items = root.value?.querySelectorAll('.is-row') || []
-  if (!('IntersectionObserver' in window)) {
-    items.forEach((el) => el.classList.add('in'))
-    return
-  }
-  io = new IntersectionObserver(
-    (entries) =>
-      entries.forEach((e) => {
-        if (e.isIntersecting) {
-          e.target.classList.add('in')
-          io.unobserve(e.target)
-        }
-      }),
-    { threshold: 0.3 }
-  )
-  items.forEach((el) => io.observe(el))
-})
-onBeforeUnmount(() => {
-  clearInterval(timer)
-  io && io.disconnect()
-})
-</script>
-
 <template>
-  <section class="is" ref="root" aria-label="Industries">
-    <article
-      v-for="(it, i) in industries"
-      :key="it.key"
-      class="is-row"
-      :style="{ '--i': i }"
-    >
-      <div class="is-copy">
-        <h2 class="is-title">{{ it.pre }} <em>{{ it.em }}</em></h2>
-        <p class="is-text">{{ it.text }}</p>
-        <router-link :to="it.to" class="is-btn">
-          Explore industry
-          <svg viewBox="0 0 20 20" width="16" height="16" fill="none" aria-hidden="true">
-            <path d="M4 10h11m-4-4.5L15.5 10 11 14.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-        </router-link>
+  <section ref="rootEl" class="fx" :class="{ 'fx-in': revealed }" aria-label="Industries">
+    <div class="fx-wrap">
+      <div class="fx-grid">
+        <!-- ============ left: stays in view while you scroll ============ -->
+        <aside class="fx-aside">
+          <div class="fx-aside-in">
+            <div class="fx-copy-box">
+              <Transition name="fx-swap" mode="out-in">
+                <div :key="cur.id" class="fx-copy">
+                  <h2>{{ cur.title }}</h2>
+                  <p>{{ cur.description }}</p>
+                  <router-link class="fx-btn" :to="cur.href">Explore</router-link>
+                </div>
+              </Transition>
+            </div>
 
-      </div>
+            <ul class="fx-list" aria-label="Industries">
+              <li v-for="(f, i) in items_" :key="f.id">
+                <button type="button" :class="{ on: active === i }" :aria-current="active === i ? 'true' : undefined" @click="goTo(i)">
+                  {{ f.title }}
+                </button>
+              </li>
+            </ul>
+          </div>
+        </aside>
 
-      <div class="is-visual">
-        <img class="is-photo" :src="it.photo" :alt="it.alt" loading="lazy" decoding="async" @error="$event.target.style.display = 'none'" />
+        <!-- ============ right: one card per industry ============ -->
+        <div class="fx-cards">
+          <article v-for="(f, i) in items_" :key="f.id" :ref="(el) => (items[i] = el)" class="fx-item">
+            <!-- phones: the text sits above each card instead of pinned on the left -->
+            <div class="fx-mcopy">
+              <h2>{{ f.title }}</h2>
+              <p>{{ f.description }}</p>
+              <router-link class="fx-btn" :to="f.href">Explore</router-link>
+            </div>
 
-        <div class="is-card" aria-hidden="true">
-          <div class="ic-head">
-            <i class="ic-dot"></i>
-            <b>{{ it.card.title }}</b>
-            <span class="ic-kebab"><i></i><i></i><i></i></span>
-          </div>
-          <p class="ic-step" :key="(phase + i) % 3">{{ it.card.steps[(phase + i) % 3] }}</p>
-          <div class="ic-tools">
-            <span v-for="(t, n) in tools" :key="n"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" v-html="t"></svg></span>
-            <span class="ic-more">+ more</span>
-          </div>
-          <div class="ic-meta">
-            <div v-for="p in it.card.pairs" :key="p[0]"><small>{{ p[0] }}</small><b>{{ p[1] }}</b></div>
-          </div>
-          <div class="ic-prog">
-            <small>Progress</small>
-            <span class="ic-bar"><i :style="{ transform: 'scaleX(' + (((phase + i) % 3) + 1) / 3 + ')' }"></i></span>
-          </div>
+            <div class="fx-card" :style="{ background: f.bg }" aria-hidden="true">
+              <img class="fx-img" :src="f.img" alt="" loading="lazy" decoding="async" @error="$event.target.style.display = 'none'" />
+              <span class="fx-of">{{ f.title }}</span>
+              <div class="fx-chips">
+                <span v-for="(c, n) in f.chips" :key="c" class="fx-chip" :style="{ '--i': n }">
+                  <i><svg viewBox="0 0 24 24"><path d="m5 12.500 4.500 4.500L19 7" /></svg></i>{{ c }}
+                </span>
+              </div>
+            </div>
+          </article>
         </div>
       </div>
-    </article>
+    </div>
   </section>
 </template>
 
-<style scoped>
-.is { font-family: 'Poppins', system-ui, sans-serif; color: #0f172a; background: #fff; padding: clamp(16px, 3vw, 36px) clamp(10px, 1.8vw, 28px) clamp(40px, 6vw, 80px); }
+<script setup>
+defineOptions({ name: 'IndustriesScroll' })
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 
-/* stacked cards: each one pins near the top and the next card slides over it */
-.is-row {
-  --top: clamp(72px, 10vh, 104px);
-  position: sticky;
-  top: calc(var(--top) + var(--i) * 14px);
-  max-width: 1360px;
-  height: clamp(440px, 74svh, 620px);
-  margin: 0 auto clamp(24px, 6vh, 56px);
+/* `img` is the photo on each card (swap any URL), `bg` the flat pastel shown behind / until the photo loads.
+   `chips` are the features named in each description. */
+const items_ = [
+  {
+    id: 'retail',
+    href: '/industries/retail/',
+    title: 'Retail and supermarkets',
+    description:
+      'Multi-counter checkouts, instant inventory audits, VIP loyalty tiers and WhatsApp receipts. Run every store from one head-office dashboard and turn one-time shoppers into regulars.',
+    img: 'https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=1200&q=80&auto=format&fit=crop',
+    bg: '#D6E0D3',
+    chips: ['Multi-counter checkouts', 'Instant inventory audits', 'VIP loyalty tiers', 'WhatsApp receipts', 'One head-office dashboard'],
+  },
+  {
+    id: 'wholesale',
+    href: '/industries/wholesale-distribution/',
+    title: 'Wholesale and distribution',
+    description:
+      'Bulk tier pricing, dealer credit limits and repayment tracking, fast bulk quotations and stock across multiple warehouses. Your reps sell more and your accounts team chases less.',
+    img: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1200&q=80&auto=format&fit=crop',
+    bg: '#DCE5EF',
+    chips: ['Bulk tier pricing', 'Dealer credit limits', 'Repayment tracking', 'Fast bulk quotations', 'Stock across multiple warehouses'],
+  },
+  {
+    id: 'contractors',
+    href: '/industries/contractors-services/',
+    title: 'Contractors and services',
+    description:
+      'Job tracking from enquiry to final payment: estimates, milestone deposits, site photos and mobile receipts, with clients following progress in their own portal.',
+    img: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1200&q=80&auto=format&fit=crop',
+    bg: '#F0DBC6',
+    chips: ['Estimates', 'Milestone deposits', 'Site photos', 'Mobile receipts', 'Client progress portal'],
+  },
+  {
+    id: 'field',
+    href: '/industries/field-service/',
+    title: 'Field service and maintenance',
+    description:
+      'Built for air conditioning, solar, generator, lift and CCTV companies: installed asset registers, annual maintenance contracts, preventive scheduling, technician apps and warranty-aware billing.',
+    img: 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=1200&q=80&auto=format&fit=crop',
+    bg: '#E9DDD9',
+    chips: ['Installed asset registers', 'Annual maintenance contracts', 'Preventive scheduling', 'Technician apps', 'Warranty-aware billing'],
+  },
+  {
+    id: 'startups',
+    href: '/industries/startups/',
+    title: 'Startups and SMEs',
+    description:
+      'Zero-friction quotations and a clear client pipeline, up and running in an afternoon. No setup fee, no upgrade fees, and room to grow as you hire.',
+    img: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&q=80&auto=format&fit=crop',
+    bg: '#F4F1DE',
+    chips: ['Zero-friction quotations', 'Clear client pipeline', 'Up and running in an afternoon', 'No setup fee', 'No upgrade fees'],
+  },
+]
+
+/* ---------- scroll logic ---------- */
+const rootEl = ref(null)
+const active = ref(0)
+const revealed = ref(false)
+const cur = computed(() => items_[active.value])
+
+const items = [] // the <article> elements
+let cards = [] // their .fx-card children
+let raf = 0
+let io = null
+let rootIo = null
+
+/* the card closest to the middle of the screen is the active one;
+   --p (-1 … 1) is how far a card is from the middle, used for a gentle parallax */
+function update() {
+  raf = 0
+  const vh = window.innerHeight
+  const mid = midLine()
+  let best = 0
+  let bestD = Infinity
+  cards.forEach((el, i) => {
+    if (!el) return
+    const r = el.getBoundingClientRect()
+    const c = r.top + r.height / 2
+    const d = Math.abs(c - mid)
+    if (d < bestD) {
+      bestD = d
+      best = i
+    }
+    el.style.setProperty('--p', Math.max(-1, Math.min(1, (c - mid) / vh)).toFixed(3))
+  })
+  if (best !== active.value) active.value = best
+}
+function queue() {
+  if (!raf) raf = requestAnimationFrame(update)
+}
+/* centre of the visible area under the fixed header; the pinned column is centred on the same line */
+function midLine() {
+  const vh = window.innerHeight
+  const aside = rootEl.value?.querySelector('.fx-aside')
+  const top = aside ? parseFloat(getComputedStyle(aside).top) || 0 : 0
+  return top + (vh - top) / 2
+}
+function goTo(i) {
+  const el = cards[i]
+  if (!el) return
+  const r = el.getBoundingClientRect()
+  window.scrollTo({ top: window.scrollY + r.top + r.height / 2 - midLine(), behavior: 'smooth' })
+}
+
+onMounted(() => {
+  cards = items.map((el) => el?.querySelector('.fx-card'))
+  update()
+  window.addEventListener('scroll', queue, { passive: true })
+  window.addEventListener('resize', queue)
+
+  io = new IntersectionObserver(
+    (entries) =>
+      entries.forEach((en) => {
+        if (en.isIntersecting) {
+          en.target.classList.add('in')
+          io.unobserve(en.target)
+        }
+      }),
+    { threshold: 0.12 },
+  )
+  items.forEach((el) => el && io.observe(el))
+
+  rootIo = new IntersectionObserver(([en]) => en.isIntersecting && (revealed.value = true), { threshold: 0.1 })
+  rootIo.observe(rootEl.value)
+})
+onBeforeUnmount(() => {
+  cancelAnimationFrame(raf)
+  window.removeEventListener('scroll', queue)
+  window.removeEventListener('resize', queue)
+  io?.disconnect()
+  rootIo?.disconnect()
+})
+</script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Urbanist:wght@500;600&display=swap');
+
+/* NOTE: no `overflow: hidden` on .fx or its parents, it would stop the left column from staying pinned. */
+.fx {
+  --navy: #0f172a;
+  --ink: #3b4659;
+  --nav-dim: #667085;
+  --fx-top: var(--fx-header, 104px); /* distance below the fixed site header; set --fx-header on a parent if your header is taller */
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  position: relative;
+  width: 100%;
+  padding: clamp(32px, 4vw, 56px) clamp(12px, 1.6vw, 28px) clamp(48px, 6vw, 88px);
+  background: #fff;
+  font-family: 'Poppins', system-ui, sans-serif;
+  color: var(--navy);
+}
+.fx, .fx *, .fx *::before, .fx *::after { box-sizing: border-box; }
+.fx svg { display: block; }
+.fx-wrap { width: 100%; max-width: 1240px; margin: 0 auto; }
+
+.fx-aside { opacity: 0; transform: translateY(16px); transition: opacity 0.7s ease, transform 0.8s var(--ease); }
+.fx-in .fx-aside { opacity: 1; transform: none; }
+
+/* ---------- two columns ---------- */
+.fx-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  overflow: hidden;
-  border: 1px solid #efe6dc;
-  border-radius: 30px;
-  background: #fbf8f4;
-  box-shadow: 0 30px 60px -36px rgba(15, 23, 42, 0.35);
+  grid-template-columns: minmax(300px, 520px) minmax(0, 560px);
+  justify-content: space-between;
+  gap: 24px;
+  align-items: start;
 }
-.is-row:last-child { margin-bottom: 0; }
 
-/* ---------- left: copy ---------- */
-.is-copy { display: flex; flex-direction: column; align-items: flex-start; padding: clamp(24px, 3.2vw, 48px); min-height: 0; }
-.is-title {
-  margin: 0;
+/* ---------- left: pinned text ---------- */
+.fx-aside {
+  position: sticky;
+  top: var(--fx-top);
+  display: flex;
+  height: calc(100vh - 2 * var(--fx-top));
+  height: calc(100svh - 2 * var(--fx-top));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  padding: 4px 6px 4px 0;
+}
+.fx-aside::-webkit-scrollbar { display: none; }
+.fx-aside-in { width: 100%; margin: auto 0; }
+.fx-copy-box { min-height: clamp(230px, 34svh, 290px); }
+.fx-copy h2, .fx-mcopy h2 {
+  margin: 0 0 14px;
   font-family: 'Urbanist', system-ui, sans-serif;
-  font-size: clamp(30px, 3.4vw, 50px);
+  font-size: clamp(30px, 3.1vw, 42px);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.05em;
+  color: #0a0a0a;
+}
+.fx-copy p, .fx-mcopy p {
+  margin: 0 0 24px;
+  font-family: 'Urbanist', system-ui, sans-serif;
+  font-size: 16px;
   font-weight: 500;
-  line-height: 1.08;
-  letter-spacing: -0.055em;
-  color: #0f172a;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+  color: var(--ink);
 }
-.is-title em {
-  font-style: normal;
-  background: linear-gradient(100deg, #ff9a3d 0%, #ff6a1a 45%, #f2540c 100%);
-  -webkit-background-clip: text; background-clip: text; color: transparent;
-}
-.is-text { margin: auto 0 0; max-width: 440px; font-size: clamp(14px, 1.1vw, 16px); line-height: 1.65; color: #5b6676; }
-.is-btn {
-  margin-top: 18px;
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 11px 22px; border-radius: 999px;
-  font-size: 14px; font-weight: 500; text-decoration: none; color: #fff;
-  background: linear-gradient(135deg, #ff6818, #f2540c);
-  box-shadow: 0 10px 24px -12px rgba(242, 84, 12, 0.7);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-.is-btn svg { transition: transform 0.25s ease; }
-.is-btn:hover { transform: translateY(-2px); }
-.is-btn:hover svg { transform: translateX(3px); }
-.is-btn:focus-visible { outline: 2px solid #0f172a; outline-offset: 3px; }
+.fx-swap-enter-active { transition: opacity 0.5s ease 0.05s, transform 0.65s var(--ease), filter 0.5s ease; }
+.fx-swap-leave-active { transition: opacity 0.22s ease, transform 0.3s ease, filter 0.25s ease; }
+.fx-swap-enter-from { opacity: 0; transform: translateY(16px); filter: blur(3px); }
+.fx-swap-leave-to { opacity: 0; transform: translateY(-10px); filter: blur(4px); }
 
+/* industry list */
+.fx-list { margin: 20px 0 0; padding: 18px 0 0; list-style: none; border-top: 1px solid #e6e3df; display: grid; gap: 1px; }
+.fx-list button {
+  display: flex; align-items: center; width: 100%; padding: 4px 0;
+  border: 0; background: none; cursor: pointer; text-align: left;
+  font-family: 'Urbanist', system-ui, sans-serif; font-size: 18px; font-weight: 500; line-height: 1.3; letter-spacing: -0.02em;
+  color: var(--nav-dim); transition: color 0.3s;
+}
+.fx-list button::before {
+  content: ''; flex: none; width: 0; height: 7px; margin-right: 0; border-radius: 50%; background: #0a0a0a;
+  transition: width 0.3s var(--ease), margin-right 0.3s var(--ease);
+}
+.fx-list button:hover { color: #0a0a0a; }
+.fx-list button.on { color: #0a0a0a; font-weight: 600; }
+.fx-list button.on::before { width: 7px; margin-right: 10px; }
+.fx-list button:focus-visible { outline: 2px solid #0a0a0a; outline-offset: 3px; border-radius: 6px; }
 
-/* entrance */
-.is-title, .is-text, .is-btn { opacity: 0; transform: translateY(16px); transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1); }
-.is-row.in .is-title, .is-row.in .is-text, .is-row.in .is-btn { opacity: 1; transform: none; }
-.is-row.in .is-title { transition-delay: 0.08s; }
-.is-row.in .is-text { transition-delay: 0.16s; }
-.is-row.in .is-btn { transition-delay: 0.24s; }
+/* Explore button */
+.fx-btn {
+  display: inline-flex; align-items: center;
+  padding: 14px 26px; border-radius: 999px;
+  background: #0a0a0a; color: #fff; text-decoration: none;
+  font: 500 14px/1 'Poppins', system-ui, sans-serif;
+  transition: background 0.3s, transform 0.3s;
+}
+.fx-btn:hover { background: #2a2a2e; transform: translateY(-2px); }
+.fx-btn:focus-visible { outline: 2px solid #0a0a0a; outline-offset: 3px; }
 
-/* ---------- right: photo, runs to the card edge ---------- */
-.is-visual { position: relative; overflow: hidden; min-height: 0; background: linear-gradient(145deg, #ff9a3d 0%, #ff6a1a 48%, #f2540c 100%); /* shows if a photo fails to load */ }
-.is-visual::before { /* warm brand tint */
-  content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
-  background: linear-gradient(135deg, rgba(255, 106, 26, 0.3) 0%, rgba(242, 84, 12, 0.08) 45%, rgba(11, 17, 32, 0.22) 100%);
-  mix-blend-mode: multiply;
+/* ---------- right: cards ---------- */
+.fx-item { padding-bottom: clamp(56px, 12vh, 120px); }
+.fx-item:last-child { padding-bottom: 130px; } /* keeps the left text pinned while the last card is in view */
+.fx-mcopy { display: none; }
+.fx-card {
+  --p: 0;
+  position: relative;
+  height: 480px;
+  border-radius: 36px;
+  overflow: hidden;
+  isolation: isolate;
+  opacity: 0;
+  transform: translateY(44px) scale(0.97);
+  transition: opacity 0.8s ease, transform 1s var(--ease);
 }
-.is-visual::after { /* shade so the card always reads */
-  content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
-  background: linear-gradient(to top, rgba(11, 17, 32, 0.5), transparent 60%);
-}
-.is-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: scale(1.1); transition: transform 1.8s cubic-bezier(0.2, 0.7, 0.2, 1); }
-.is-row.in .is-photo { transform: scale(1); }
-.is-row:hover .is-photo { transform: scale(1.04); }
+.fx-item.in .fx-card { opacity: 1; transform: none; }
 
-/* floating card — words only, no figures */
-.is-card {
-  position: absolute; z-index: 2; left: 50%; top: 50%;
-  width: min(80%, 380px);
-  padding: 18px 18px 16px;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.96);
-  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
-  box-shadow: 0 28px 60px -22px rgba(0, 0, 0, 0.6);
-  transform: translate(-50%, calc(-50% + 22px)); opacity: 0;
-  transition: opacity 0.7s ease 0.5s, transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) 0.5s;
+.fx-img { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; transform: scale(calc(1.08 + var(--p) * 0.04)) translateY(calc(var(--p) * 16px)); }
+.fx-of {
+  position: absolute; right: 26px; top: 26px; max-width: calc(100% - 52px);
+  padding: 0 16px; height: 42px; display: inline-flex; align-items: center; border-radius: 999px;
+  background: rgba(255, 255, 255, 0.78); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  font: 600 13px/1 'Poppins', sans-serif; color: #0a0a0a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-.is-row.in .is-card { transform: translate(-50%, -50%); opacity: 1; }
-.ic-head { display: flex; align-items: center; gap: 10px; font-size: 15px; }
-.ic-head b { font-weight: 600; letter-spacing: -0.01em; }
-.ic-dot { width: 10px; height: 10px; border-radius: 50%; background: #f2540c; box-shadow: 0 0 0 4px rgba(242, 84, 12, 0.16); animation: ic-pulse 1.8s ease-out infinite; }
-@keyframes ic-pulse { 50% { box-shadow: 0 0 0 7px rgba(242, 84, 12, 0.04); } }
-.ic-kebab { margin-left: auto; display: grid; gap: 3px; }
-.ic-kebab i { width: 3.5px; height: 3.5px; border-radius: 50%; background: #94a0b0; }
-.ic-step { margin: 12px 0 0; font-size: 14px; color: #334155; animation: ic-swap 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
-@keyframes ic-swap { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-.ic-tools { display: flex; align-items: center; gap: 8px; margin-top: 12px; }
-.ic-tools span { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; border: 1px solid #e8ebf0; color: #475569; background: #fff; }
-.ic-tools .ic-more { width: auto; padding: 0 12px; border-radius: 999px; font-size: 11.5px; font-weight: 600; background: #f4f5f7; }
-.ic-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; padding-top: 12px; border-top: 1px solid #eef0f3; }
-.ic-meta small { display: block; font-size: 11.5px; color: #64748b; }
-.ic-meta b { display: block; margin-top: 2px; font-size: 14px; font-weight: 600; }
-.ic-prog { margin-top: 12px; }
-.ic-prog small { display: block; font-size: 11.5px; color: #64748b; }
-.ic-bar { display: block; margin-top: 6px; height: 5px; border-radius: 5px; background: #eceef2; overflow: hidden; }
-.ic-bar i { display: block; height: 100%; width: 100%; border-radius: inherit; background: linear-gradient(90deg, #ff9a3d, #f2540c); transform-origin: left; transition: transform 1s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.fx-chips {
+  position: absolute; left: 24px; right: 24px; bottom: 26px;
+  display: flex; flex-wrap: wrap; gap: 8px;
+  transform: translateY(calc(var(--p) * -14px));
+}
+.fx-chip {
+  display: inline-flex; align-items: center; gap: 9px;
+  max-width: 100%;
+  padding: 7px 15px 7px 7px; border-radius: 999px;
+  background: rgba(255, 255, 255, 0.86);
+  -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  font-family: 'Urbanist', system-ui, sans-serif; font-size: 15px; font-weight: 600; letter-spacing: -0.01em; color: #0a0a0a;
+  opacity: 0; transform: translateY(14px);
+  transition: opacity 0.6s ease, transform 0.8s var(--ease);
+  transition-delay: calc(0.25s + var(--i) * 0.09s);
+}
+.fx-item.in .fx-chip { opacity: 1; transform: none; }
+.fx-chip i { flex: none; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: #0a0a0a; }
+.fx-chip svg { width: 12px; height: 12px; fill: none; stroke: #fff; stroke-width: 2.8; stroke-linecap: round; stroke-linejoin: round; }
 
-/* ---------- smaller screens: plain stacked cards ---------- */
-@media (max-width: 860px) {
-  .is-row { position: relative; top: auto; height: auto; grid-template-columns: 1fr; border-radius: 24px; margin-bottom: 16px; }
-  .is-visual { order: 1; aspect-ratio: 1.25; }
-  .is-copy { order: 2; padding: 22px 20px 26px; }
-  .is-card { width: min(86%, 340px); padding: 14px 14px 13px; }
+/* short laptop screens */
+@media (min-width: 901px) and (max-height: 760px) {
+  .fx-copy h2 { font-size: 34px; margin-bottom: 10px; }
+  .fx-copy p { font-size: 14.5px; margin-bottom: 18px; }
+  .fx-copy-box { min-height: 220px; }
+  .fx-list { margin-top: 14px; padding-top: 12px; }
+  .fx-list button { font-size: 17px; padding: 3px 0; }
 }
-@media (max-height: 600px) and (min-width: 861px) {
-  .is-row { position: relative; top: auto; height: auto; min-height: 440px; }
+
+/* ---------- tablets / phones: text moves above each card ---------- */
+@media (max-width: 900px) {
+  .fx-grid { grid-template-columns: minmax(0, 1fr); max-width: 560px; margin: 0 auto; gap: 0; }
+  .fx-aside { display: none; }
+  .fx-mcopy { display: block; margin-bottom: 22px; }
+  .fx-mcopy h2 { font-size: clamp(32px, 8vw, 44px); line-height: 1.2; }
+  .fx-item, .fx-item:last-child { padding-bottom: 64px; }
+  .fx-item:last-child { padding-bottom: 0; }
+  .fx-card { height: 440px; border-radius: 28px; }
 }
+@media (max-width: 480px) {
+  .fx-copy h2, .fx-mcopy h2 { font-size: 34px; line-height: 1.2; }
+  .fx-of { right: 18px; top: 18px; }
+  .fx-chips { left:a 16px; right: 16px; bottom: 18px; }
+  .fx-chip { font-size: 14px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .is-title, .is-text, .is-btn { opacity: 1; transform: none; transition: none; }
-  .is-card { opacity: 1; transform: translate(-50%, -50%); transition: none; }
-  .is-photo { transform: none; transition: none; }
-  .ic-dot, .ic-step { animation: none; }
-  .ic-bar i { transition: none; }
+  .fx-card, .fx-chip, .fx-aside { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .fx-img, .fx-chips { transform: none !important; }
 }
 </style>

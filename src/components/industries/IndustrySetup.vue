@@ -234,19 +234,19 @@ onBeforeUnmount(() => {
 
 .his-heading h2 {
   margin: 0;
-  font-family: 'Urbanist', sans-serif;
-  font-size: clamp(36px, 5vw, 64px);
-  font-weight: 500;
-  line-height: 1.08;
-  letter-spacing: -0.055em;
+  font-family: Urbanist, "Urbanist Placeholder", sans-serif !important;
+  font-size: 54px !important;
+  font-weight: 600 !important;
+  line-height: 65px !important;
+  letter-spacing: -1px !important;
+  color: #0a0a0a !important;
 }
 
 .his-heading h2 em {
   font-style: normal;
-  background: linear-gradient(100deg, #ff9a3d, #ff6a1a, #f2540c);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  background: none !important;
+  color: #615f5a !important;
+  -webkit-text-fill-color: #615f5a !important;
 }
 
 .his-heading > p {
@@ -590,9 +590,14 @@ onBeforeUnmount(() => {
 
 }
 
-@media (max-width: 480px) {
+@media (max-width: 768px) {
   .his {
     padding: 55px 16px;
+  }
+
+  .his-heading h2 {
+    font-size: clamp(36px, 8vw, 48px) !important;
+    line-height: 1.15 !important;
   }
 
   .his-heading {

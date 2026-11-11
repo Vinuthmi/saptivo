@@ -8,7 +8,7 @@
       <div class="oc-grid">
         <!-- 1 · the problem -->
         <article class="oc-card oc-tint" style="--i: 0">
-          <span class="oc-cat">The problem</span>
+
           <h3 class="oc-h">Deals slip away quietly</h3>
           <p class="oc-p">
             When leads sit in WhatsApp, calls go unlogged and quotations live in spreadsheets, deals slip away quietly.
@@ -41,7 +41,7 @@
           />
           <span class="oc-shade" aria-hidden="true"></span>
           <div class="oc-cap">
-            <span class="oc-cat">The fix</span>
+
             <h3 class="oc-h">One all-in-one CRM</h3>
             <p class="oc-p">
               Saptivo replaces those scattered tools with one all-in-one CRM built around the way sales, support and
@@ -53,7 +53,7 @@
 
         <!-- 3 · the result -->
         <article class="oc-card oc-tint" style="--i: 2">
-          <span class="oc-cat">The result</span>
+
           <h3 class="oc-h">Everyone knows where it stands</h3>
           <p class="oc-p">
             Anyone on your team can open it and know exactly where the relationship stands, what was promised and what
@@ -171,14 +171,8 @@ onBeforeUnmount(() => io?.disconnect())
   transition-delay: calc(var(--i) * 0.12s);
 }
 
-.oc-cat {
-  font-size: 10.5px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
 .oc .oc-h {
-  margin: 14px 0 0;
+  margin: 0;
   max-width: 14em;
   font-family: 'Urbanist', system-ui, sans-serif;
   font-size: clamp(24px, 2.2vw, 32px);
@@ -195,7 +189,6 @@ onBeforeUnmount(() => io?.disconnect())
 
 /* light cards */
 .oc-tint { background: linear-gradient(150deg, var(--oc-tint-a) 0%, var(--oc-tint-b) 100%); }
-.oc-tint .oc-cat { color: #c2410c; }
 .oc .oc-tint .oc-h { color: #17172b; }
 .oc .oc-tint .oc-p { color: #4a4d58; }
 
@@ -278,7 +271,6 @@ onBeforeUnmount(() => io?.disconnect())
   z-index: -1;
   background: linear-gradient(180deg, rgba(8, 11, 16, 0.05) 0%, rgba(8, 11, 16, 0.3) 40%, rgba(8, 11, 16, 0.9) 100%);
 }
-.oc .oc-photo .oc-cat,
 .oc .oc-photo .oc-h,
 .oc .oc-photo .oc-p { color: #fff !important; opacity: 1; text-shadow: 0 1px 14px rgba(0, 0, 0, 0.55); }
 .oc .oc-photo .oc-h { max-width: 12em; }
