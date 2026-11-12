@@ -92,32 +92,44 @@ const industries = [
   {
     title: 'Retail & Supermarkets',
     description: 'Multi-counter checkouts, instant inventory audits, VIP loyalty tiers and WhatsApp receipts',
+    blurb: 'Checkouts, stock and loyalty',
     href: '/industries/retail/',
     icon: 'cart'
   },
   {
     title: 'Wholesale & Distribution',
     description: 'Bulk tier pricing, dealer credit limits and repayment tracking',
+    blurb: 'Tier pricing and dealer credit',
     href: '/industries/wholesale-distribution/',
     icon: 'truck'
   },
   {
     title: 'Contractors & Services',
     description: 'Job tracking from enquiry to final payment, milestone deposits and mobile receipts',
+    blurb: 'Jobs, deposits and receipts',
     href: '/industries/contractors-services/',
     icon: 'clipboard'
   },
   {
     title: 'Field Service & Maintenance',
     description: 'Installed asset registers, annual maintenance contracts and technician apps',
+    blurb: 'Assets, contracts and technicians',
     href: '/industries/field-service/',
     icon: 'wrench'
   },
   {
     title: 'Startups & SMEs',
     description: 'Zero-friction quotations and a clear client pipeline, with no setup fee',
+    blurb: 'Quotes and pipeline, no setup fee',
     href: '/industries/startups/',
     icon: 'rocket'
+  },
+  {
+    title: 'More industries',
+    description: 'Custom setups for almost any business',
+    blurb: 'Custom setups for any business',
+    href: '/industries/',
+    icon: 'globe'
   }
 ]
 
@@ -307,19 +319,20 @@ onBeforeUnmount(() => {
           </router-link>
 
           <Transition name="mega">
-            <div v-if="openMenu === 'industries'" class="mega-menu mm mm-mid">
-              <div class="mm-grid mm-grid-3 mm-grid-sm">
+            <div v-if="openMenu === 'industries'" class="mega-menu mm mm-wide">
+              <div class="mm-grid mm-grid-3">
                 <div class="mm-tabs">
-                  <router-link to="/industries/" class="mm-tab on" @click="closeAll">All industries</router-link>
+                  <span class="mm-tab on">Industries</span>
+                  <router-link to="/industries/" class="mm-all" @click="closeAll">All industries</router-link>
                 </div>
                 <div class="mm-body">
-                  <p class="mm-h">Industries</p>
-                  <div class="mm-items">
+                  <p class="mm-h">Built for the way you sell</p>
+                  <div class="mm-items mm-items-2">
                     <router-link v-for="industry in industries" :key="industry.href" :to="industry.href" class="mm-it" @click="closeAll">
                       <svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path v-for="(d, i) in ICONS[industry.icon]" :key="i" :d="d" /></svg>
                       <span class="mm-it-t">
                         <strong>{{ industry.title }}</strong>
-                        <small>{{ industry.description }}</small>
+                        <small>{{ industry.blurb }}</small>
                       </span>
                     </router-link>
                   </div>
