@@ -513,7 +513,7 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Urbanist:wght@500;600&display=swap');
 
 /* =========================================================
    ROOT
@@ -889,22 +889,24 @@ onBeforeUnmount(() => {
   border-radius: 999px;
   text-decoration: none;
   white-space: nowrap;
-  font-size: 13.5px;
-  font-weight: 500;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-family: 'Urbanist', system-ui, sans-serif; /* same font as the hero buttons */
+  font-size: 14.5px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  transition: transform 0.2s ease, background 0.2s ease;
 }
 
-/* Match the hero buttons: black for the demo and orange for the trial. */
+/* Same colours as the hero buttons: black for the demo, orange gradient for the trial, no shadows. */
 .demo-btn {
   color: #fff;
-  background: #0b0c0e;
+  background: #000;
   box-shadow: none;
 }
 
 .start-btn {
   color: #fff;
-  background: linear-gradient(180deg, #ff7a45, #f2531f);
-  box-shadow: 0 8px 20px -8px rgba(242, 83, 31, 0.55);
+  background: linear-gradient(135deg, #f26a1b 0%, #cf440a 100%) !important;
+  box-shadow: none !important;
 }
 
 .demo-btn:hover,
@@ -913,12 +915,12 @@ onBeforeUnmount(() => {
 }
 
 .demo-btn:hover {
-  background: #202124;
+  background: #1a1a1a;
 }
 
 .start-btn:hover {
-  background: linear-gradient(180deg, #ff7a45, #f2531f);
-  box-shadow: 0 12px 26px -8px rgba(242, 83, 31, 0.65);
+  background: linear-gradient(135deg, #f97b2d 0%, #dc4c0d 100%) !important;
+  box-shadow: none !important;
 }
 
 /* =========================================================

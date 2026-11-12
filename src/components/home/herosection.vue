@@ -1,9 +1,25 @@
 <template>
-  <section id="top" ref="hero" class="hero" aria-labelledby="hero-title">
-    <!-- dotted pattern at the top (same as the footer) -->
+  <section id="top" ref="hero" class="hero" aria-labelledby="hero-title" @click="onHeroClick">
+    <!-- background video -->
+    <video
+      ref="demoVideo"
+      class="hero-video"
+      :src="heroDemoVideo"
+      :poster="heroDemoPoster"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="metadata"
+      aria-hidden="true"
+      tabindex="-1"
+      @play="playing = true"
+      @pause="playing = false"
+    ></video>
+    <span class="shade" aria-hidden="true"></span>
+    <!-- dotted pattern over the whole hero -->
     <span class="dots" aria-hidden="true"></span>
 
-    <div class="top">
     <div class="content">
       <h1 id="hero-title">
         Manage and automate your
@@ -28,47 +44,6 @@
       </div>
       <p class="support">No setup fee · No upgrade fees · No credit card required</p>
     </div>
-    </div>
-
-    <!-- demo video: starts as a rounded card, grows to full width as you scroll -->
-    <div ref="stage" class="stage">
-      <div
-        ref="card"
-        class="hero-card"
-        :class="{ hovering: hover }"
-        :style="{ '--p': progress }"
-        @pointerenter="onEnter"
-        @pointermove="onMove"
-        @pointerleave="hover = false"
-      >
-        <video
-          ref="demoVideo"
-          class="hero-video"
-          :src="heroDemoVideo"
-          :poster="heroDemoPoster"
-          autoplay
-          muted
-          loop
-          playsinline
-          preload="metadata"
-          @play="playing = true"
-          @pause="playing = false"
-        ></video>
-        <button
-          type="button"
-          class="vid-pill"
-          :style="{ '--x': cx + 'px', '--y': cy + 'px' }"
-          :aria-label="playing ? 'Pause video' : 'Play video'"
-          @click="toggle"
-        >
-          <span class="vp-ic" aria-hidden="true">
-            <svg v-if="playing" viewBox="0 0 24 24"><path d="M9 5v14M15 5v14" /></svg>
-            <svg v-else viewBox="0 0 24 24"><path d="M8 5l11 7-11 7z" /></svg>
-          </span>
-          {{ playing ? "Pause Video" : "Play Video" }}
-        </button>
-      </div>
-    </div>
 
   </section>
 </template>
@@ -78,20 +53,24 @@ import { ref, onMounted, onBeforeUnmount } from "vue";
 defineOptions({ name: "HeroSection" });
 
 // Put your files in public/videos/ (or change these paths)
-const heroDemoVideo = "https://public-assets.content-platform.envatousercontent.com/b988f3ac-00c7-49e0-947e-5f2743e6ea8d/d47db0a7-fe33-45c5-b831-412229fb0b2e/b988f3ac-00c7-49e0-947e-5f2743e6ea8d/preview_540p_crf22_higher_quality.mp4"; // demo video shown in the rounded card
+const heroDemoVideo = "https://public-assets.content-platform.envatousercontent.com/b988f3ac-00c7-49e0-947e-5f2743e6ea8d/d47db0a7-fe33-45c5-b831-412229fb0b2e/b988f3ac-00c7-49e0-947e-5f2743e6ea8d/preview_540p_crf22_higher_quality.mp4"; // background video
 const heroDemoPoster = `${import.meta.env.BASE_URL}images/hero-demo-poster.jpg`; // optional still shown until the video starts
 
-const bgVideo = ref(null);
-const demoVideo = ref(null);
 const hero = ref(null);
-const stage = ref(null);
-const card = ref(null);
-const pull = ref(0);
-const progress = ref(0);
+const demoVideo = ref(null);
 const playing = ref(true);
-const videoOk = ref(true);
 
 let userPaused = false;
+let io = null;
+let raf = 0;
+let onScroll = null;
+
+// click the video (anywhere on the hero except links / buttons) to pause or play it
+function onHeroClick(e) {
+  if (e.target.closest("a, button")) return;
+  toggle();
+}
+
 function toggle() {
   const v = demoVideo.value;
   if (!v) return;
@@ -104,70 +83,29 @@ function toggle() {
   }
 }
 
-// custom "Pause Video" pill that follows the mouse over the card
-const cx = ref(0);
-const cy = ref(0);
-const hover = ref(false);
-let tx = 0;
-let ty = 0;
-let rafC = null;
-function local(e) {
-  const r = card.value.getBoundingClientRect();
-  tx = e.clientX - r.left;
-  ty = e.clientY - r.top;
-}
-function follow() {
-  cx.value += (tx - cx.value) * 0.22;
-  cy.value += (ty - cy.value) * 0.22;
-  rafC = Math.abs(tx - cx.value) + Math.abs(ty - cy.value) > 0.5 ? requestAnimationFrame(follow) : null;
-}
-function onEnter(e) {
-  if (e.pointerType !== "mouse") return;
-  local(e);
-  cx.value = tx;
-  cy.value = ty;
-  hover.value = true;
-}
-function onMove(e) {
-  if (e.pointerType !== "mouse") return;
-  local(e);
-  hover.value = true;
-  if (rafC === null) rafC = requestAnimationFrame(follow);
-}
-
-// scroll: 0 = rounded card inside the page, 1 = full width
-let ticking = false;
-let raf = null;
-let io = null;
-function update() {
-  const el = card.value;
-  if (el) {
-    const vh = window.innerHeight;
-    const top = el.getBoundingClientRect().top;
-    const p = (vh * 0.92 - top) / (vh * 0.62);
-    progress.value = Math.min(Math.max(p, 0), 1);
-  }
-  ticking = false;
-}
-function onScroll() {
-  if (ticking) return;
-  ticking = true;
-  raf = requestAnimationFrame(update);
-}
-
 onMounted(() => {
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (reduce) {
-    userPaused = true;
-    bgVideo.value?.pause();
-    demoVideo.value?.pause();
-    return;
-  }
-  update();
+
+  // round the bottom corners of the video as the page scrolls down
+  const el = hero.value;
+  const maxR = () => parseFloat(getComputedStyle(el).getPropertyValue("--r-max")) || 48;
+  const setRadius = () => {
+    raf = 0;
+    const p = Math.min(Math.max(window.scrollY / (el.offsetHeight * 0.45), 0), 1);
+    el.style.setProperty("--r", `${(reduce ? 1 : p) * maxR()}px`);
+  };
+  onScroll = () => { if (!raf) raf = requestAnimationFrame(setRadius); };
+  setRadius();
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", onScroll, { passive: true });
 
-  // play the demo only while it is on screen (saves battery / CPU)
+  if (reduce) {
+    userPaused = true;
+    demoVideo.value?.pause();
+    return;
+  }
+
+  // play only while the hero is on screen (saves battery / CPU)
   io = new IntersectionObserver(
     ([e]) => {
       const v = demoVideo.value;
@@ -175,61 +113,74 @@ onMounted(() => {
       if (e.isIntersecting) v.play().catch(() => {});
       else v.pause();
     },
-    { threshold: 0.15 }
+    { threshold: 0.1 }
   );
-  if (card.value) io.observe(card.value);
+  if (hero.value) io.observe(hero.value);
 });
 onBeforeUnmount(() => {
-  window.removeEventListener("scroll", onScroll);
-  window.removeEventListener("resize", onScroll);
-  if (raf !== null) cancelAnimationFrame(raf);
-  if (rafC !== null) cancelAnimationFrame(rafC);
   io?.disconnect();
+  if (onScroll) {
+    window.removeEventListener("scroll", onScroll);
+    window.removeEventListener("resize", onScroll);
+  }
+  cancelAnimationFrame(raf);
 });
 </script>
 
 <style scoped>
 .hero {
   --orange: #ff6338;
-  --orange-deep: #f04b23;
   --ink: #17191d;
-  --paper: #fff;
-  --muted: #5d6068;
-  --title: clamp(46px, 4.2vw, 104px);
-
-  --top0: clamp(20px, 3vw, 40px); /* gap between the buttons and the video */
-  --w0: min(1180px, calc(100vw - 40px));
+  --r-max: clamp(28px, 4.2vw, 64px);
 
   position: relative;
   isolation: isolate;
-  overflow: clip; /* "hidden" would break the sticky video */
-  padding-bottom: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: max(640px, 100svh);
+  padding: 120px 0 96px;
   text-align: center;
-  color: var(--ink);
-  background: var(--paper);
+  color: #fff;
+  background: #0b0c0e; /* shows until the video loads */
+  /* bottom corners round off as you scroll down (--r is set from the script) */
+  border-radius: 0 0 var(--r, 0px) var(--r, 0px);
   font-family: 'Urbanist', system-ui, sans-serif;
+  cursor: pointer; /* click to pause / play the video */
 }
 .hero *, .hero *::before, .hero *::after { box-sizing: border-box; }
-.hero a:focus-visible, .hero button:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; }
+.hero a { cursor: pointer; }
+.hero a:focus-visible, .hero button:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
 
-.top { position: relative; z-index: 1; }
-
-/* ---------- dotted top background (same pattern as the footer) ---------- */
-.dots {
-  position: absolute; top: 0; left: 0; right: 0; z-index: 0; pointer-events: none;
-  height: min(100%, 680px);
-  background-image: radial-gradient(circle, rgba(23, 25, 29, 0.42) 1px, transparent 1.4px);
-  background-size: 22px 22px;
-  -webkit-mask-image: radial-gradient(ellipse 85% 100% at 50% 0%, #000 0%, rgba(0, 0, 0, 0.5) 55%, transparent 95%);
-  mask-image: radial-gradient(ellipse 85% 100% at 50% 0%, #000 0%, rgba(0, 0, 0, 0.5) 55%, transparent 95%);
+/* ---------- background video ---------- */
+.hero-video {
+  position: absolute; inset: 0; z-index: 0;
+  display: block; width: 100%; height: 100%;
+  object-fit: cover; user-select: none; pointer-events: none;
+}
+/* dark wash so the text stays readable on any frame */
+.shade {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(8, 10, 14, 0.62) 0%, rgba(8, 10, 14, 0.5) 45%, rgba(8, 10, 14, 0.72) 100%);
 }
 
+/* ---------- dotted pattern around the edges of the section ---------- */
+.dots {
+  position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.3) 1px, transparent 1.4px);
+  background-size: 22px 22px;
+  /* keep the middle (the text and buttons) clear: dots only show around the edges */
+  -webkit-mask-image: radial-gradient(ellipse 56% 50% at 50% 50%, transparent 0%, transparent 68%, #000 100%);
+  mask-image: radial-gradient(ellipse 56% 50% at 50% 50%, transparent 0%, transparent 68%, #000 100%);
+}
 
 /* ---------- content ---------- */
 .content {
+  position: relative; z-index: 3;
   display: flex; flex-direction: column; align-items: center;
   width: min(1040px, calc(100% - 40px)); margin: 0 auto;
-  padding: 112px 0 28px;
 }
 h1 {
   margin: 0;
@@ -238,19 +189,45 @@ h1 {
   font-weight: 600;
   line-height: 1.1;
   letter-spacing: -1px;
-  color: #0a0a0a80;
+  color: #fff;
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.35);
   animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+/* force white even if a global heading style exists */
+.hero h1#hero-title {
+  color: #e4e6ea !important;
+  background: linear-gradient(180deg, #ffffff 0%, #e6e8ec 55%, #b9bec7 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  text-shadow: none;
+  opacity: 1 !important;
+}
+.hero h1#hero-title .accent {
+  color: inherit !important;
+  background: none !important;
+  -webkit-text-fill-color: transparent !important;
+}
+.accent {
+  color: #c4c8cf !important;
+  background: linear-gradient(95deg, #ffffff 0%, #e4e6ea 40%, #b4b9c2 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  text-shadow: none;
+  opacity: 1 !important;
 }
 .accent {
   display: block;
   width: fit-content;
   margin: 0 auto -0.14em;
   padding-bottom: 0.14em;
-  color: #615f5a;
+  color: inherit;
 }
 .lead {
   max-width: 760px; margin: 24px 0 0;
-  font-size: 16px; line-height: 1.7; color: #4a4d55;
+  font-size: 16px; line-height: 1.7; color: #d3d6dc;
+  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.4);
   animation: rise 0.9s 0.1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
 .actions {
@@ -258,109 +235,58 @@ h1 {
   animation: rise 0.9s 0.2s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
 .support {
-  margin: 18px 0 0; font-size: 13.5px; line-height: 1.5; color: #5b5e66;
+  margin: 18px 0 0; font-size: 13.5px; line-height: 1.5; color: #b4b9c2;
   animation: rise 0.9s 0.3s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 12px;
   min-height: 54px; padding: 0 24px; border-radius: 12px;
   text-decoration: none; font-size: 15px; font-weight: 600;
-  transition: transform 0.2s, background 0.2s, border-color 0.2s, box-shadow 0.2s;
+  transition: transform 0.2s, background 0.2s, border-color 0.2s, box-shadow 0.2s, color 0.2s;
 }
-.btn-primary { color: #fff; background: linear-gradient(180deg, #ff7a45, #f2531f); box-shadow: inset 0 0 0 1px rgba(255,255,255,.35), 0 10px 24px rgba(240,75,35,.3); }
-.btn-primary:hover { transform: translateY(-2px); box-shadow: inset 0 0 0 1px rgba(255,255,255,.4), 0 16px 32px rgba(240,75,35,.4); }
+.btn:hover { transform: translateY(-2px); }
 .hero .actions .btn-primary {
   color: #fff !important;
-  background: #17191d !important;
-  border: 1px solid #17191d !important;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18) !important;
+  background: linear-gradient(135deg, #f26a1b 0%, #cf440a 100%) !important;
+  border: 1px solid transparent !important;
+  box-shadow: none !important;
 }
 .hero .actions .btn-primary:hover {
-  background: #000 !important;
-  border-color: #000 !important;
-  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.24) !important;
+  background: linear-gradient(135deg, #f97b2d 0%, #dc4c0d 100%) !important;
+  box-shadow: none !important;
 }
-.arrow { display: inline-block; transition: transform 0.25s; }
-.btn-primary:hover .arrow { transform: rotate(45deg); }
-.btn-outline { color: #fff; background: #0b0c0e; box-shadow: inset 0 0 0 1px rgba(255,255,255,.14), 0 10px 24px rgba(0,0,0,.18); }
-.btn-outline:hover { transform: translateY(-2px); box-shadow: inset 0 0 0 1px rgba(255,255,255,.28), 0 16px 32px rgba(0,0,0,.28); }
 .hero .actions .btn-outline {
-  color: #17191d !important;
-  background: #fff !important;
-  border: 1px solid #17191d !important;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08) !important;
+  color: #fff !important;
+  background: #000 !important;
+  border: 1px solid #000 !important;
+  box-shadow: none !important;
 }
 .hero .actions .btn-outline:hover {
-  color: #17191d !important;
-  background: #f5f5f5 !important;
-  border-color: #000 !important;
-  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.14) !important;
-}
-
-/* ---------- stage ---------- */
-.stage { position: relative; padding-top: var(--top0); }
-
-/* ---------- demo video: rounded card -> full width while scrolling ---------- */
-.hero-card {
-  --p: 0;
-  position: relative; z-index: 1; isolation: isolate; overflow: hidden;
-  width: calc(var(--w0) + (100% - var(--w0)) * var(--p));
-  margin: 0 auto;
-  aspect-ratio: 16 / 9;
-  max-height: 92svh;
-  background: linear-gradient(135deg, #1d2230, #0b0c0e); /* shows until the video loads (or if the file is missing) */
-  border-radius: calc(44px - 12px * var(--p));
-  will-change: width;
-}
-.hero-video { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; user-select: none; }
-
-/* "Pause Video" pill: follows the mouse on desktop, sits bottom-right on touch / keyboard */
-.vid-pill {
-  position: absolute; left: 0; top: 0; z-index: 2;
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 9px 16px 9px 10px; border: 0; border-radius: 999px;
-  background: rgba(255, 255, 255, 0.94); color: #17191d;
-  font: 600 13px/1 'Urbanist', system-ui, sans-serif; white-space: nowrap;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-  cursor: pointer;
-  transform: translate(calc(var(--x) - 50%), calc(var(--y) - 50%)) scale(0.8);
-  opacity: 0; pointer-events: none;
-  transition: opacity 0.25s, scale 0.25s;
-}
-.hero-card.hovering .vid-pill { opacity: 1; pointer-events: auto; transform: translate(calc(var(--x) - 50%), calc(var(--y) - 50%)) scale(1); }
-.vp-ic { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: #17191d; color: #fff; }
-.vp-ic svg { width: 11px; height: 11px; fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
-@media (hover: hover) and (pointer: fine) { .hero-card.hovering { cursor: none; } .hero-card.hovering .vid-pill { cursor: none; } }
-.vid-pill:focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
-.hero-card:not(.hovering) .vid-pill:focus-visible,
-.hero-card:not(.hovering) .vid-pill:focus {
-  opacity: 1; pointer-events: auto; transform: none; left: auto; top: auto; right: 16px; bottom: 16px;
-}
-@media (hover: none), (pointer: coarse) {
-  .vid-pill { opacity: 1; pointer-events: auto; transform: none; left: auto; top: auto; right: 12px; bottom: 12px; padding: 8px 14px 8px 8px; }
+  background: #1a1a1a !important;
+  border-color: #1a1a1a !important;
+  box-shadow: none !important;
 }
 
 @keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
 
 /* ---------- responsive ---------- */
 @media (max-width: 900px) {
-  .content { padding-top: 96px; }
+  .hero { padding: 104px 0 88px; }
 }
 @media (max-width: 760px) {
-  .hero { --top0: 24px; --w0: calc(100vw - 24px); --title: clamp(38px, 10.5vw, 64px); padding-bottom: 0; }
-  .content { width: calc(100% - 32px); padding: 76px 0 24px; }
+  .hero { min-height: max(600px, 92svh); padding: 92px 0 84px; }
+  .content { width: calc(100% - 32px); }
   h1 { font-size: clamp(40px, 9vw, 58px); }
   .lead { font-size: 15px; margin-top: 22px; }
   .actions { width: 100%; gap: 10px; margin-top: 28px; }
   .dots { background-size: 20px 20px; }
   .btn { min-height: 50px; padding: 0 20px; font-size: 14px; }
-  .hero-card { max-height: none; }
 }
 @media (max-width: 380px) {
   .actions { flex-direction: column; align-items: stretch; }
 }
 @media (prefers-reduced-motion: reduce) {
   h1, .lead, .actions, .support { animation: none; }
-  .hero-card { width: var(--w0); }
+  .btn { transition: none; }
 }
 </style>
