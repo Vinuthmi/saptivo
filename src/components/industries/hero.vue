@@ -5,16 +5,15 @@
 
     <div class="wrap">
       <h1 id="ih-title">
-        Tailor-made CRM workflows
+        CRM by industry
         <span class="accent">for high-volume businesses</span>
       </h1>
 
       <p class="lead">
-        Whether you operate a multi-branch supermarket chain, a bulk
-        distribution hub or a fleet of service technicians, Saptivo adapts to
-        your daily velocity. Generic CRMs make you bend your process to fit the
-        software. Saptivo's industry-specific CRM workflows start from how your
-        business already runs.
+        Industry CRM software for high-volume businesses. Whether you operate a multi-branch supermarket chain, a bulk
+        distribution hub or a fleet of service technicians, Saptivo adapts to your daily velocity. Generic CRMs make you
+        bend your process to fit the software. Saptivo's industry-specific CRM workflows start from how your business
+        already runs.
       </p>
 
       <!-- optional: <InnerHero><a class="btn">…</a></InnerHero> to add buttons later -->

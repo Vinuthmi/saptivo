@@ -58,9 +58,24 @@ const routes = [
         component: () => import('../views/WorkflowAutomationView.vue')
       },
       {
+        path: 'integrations/',
+        name: 'integrations',
+        component: () => import('../views/IntegrationsView.vue'),
+        meta: {
+          title: 'CRM Integrations | WhatsApp, 3CX, Vodia & More | Saptivo',
+          description:
+            'Connect Saptivo with WhatsApp Business, 3CX, Vodia, WordPress forms, Facebook Lead Ads, Google Calendar and your own tools.'
+        }
+      },
+      {
         path: '/industries/',
         name: 'industries',
-        component: () => import('../views/IndustriesView.vue')
+        component: () => import('../views/IndustriesView.vue'),
+        meta: {
+          title: 'CRM Software by Industry | Retail, Distribution, Service',
+          description:
+            'Saptivo adapts to your industry: retail chains, wholesale distributors, contractors, field service companies and fast-growing startups.'
+        }
       }
     ]
   }
@@ -72,6 +87,18 @@ const router = createRouter({
   scrollBehavior() {
     return { top: 0 }
   },
+})
+
+const defaultTitle = 'CRM Software in Sri Lanka | All-in-One Cloud CRM – Saptivo'
+const defaultDescription =
+  'Manage leads, WhatsApp chats, 3CX calls, quotations and invoices in one cloud CRM. No setup fee. Start your 14-day free trial of Saptivo today.'
+
+router.afterEach((to) => {
+  document.title = to.meta.title ?? defaultTitle
+  const description = document.querySelector('meta[name="description"]')
+  if (description) {
+    description.setAttribute('content', to.meta.description ?? defaultDescription)
+  }
 })
 
 export default router

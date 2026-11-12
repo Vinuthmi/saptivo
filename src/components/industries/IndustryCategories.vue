@@ -63,7 +63,7 @@ const items_ = [
     href: '/industries/retail/',
     title: 'Retail and supermarkets',
     description:
-      'Multi-counter checkouts, instant inventory audits, VIP loyalty tiers and WhatsApp receipts. Run every store from one head-office dashboard and turn one-time shoppers into regulars.',
+      'CRM for retail teams: multi-counter checkouts, instant inventory audits, VIP loyalty tiers and WhatsApp receipts. Run every store from one head-office dashboard and turn one-time shoppers into regulars.',
     img: 'https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=1200&q=80&auto=format&fit=crop',
     bg: '#D6E0D3',
     chips: ['Multi-counter checkouts', 'Instant inventory audits', 'VIP loyalty tiers', 'WhatsApp receipts', 'One head-office dashboard'],
@@ -73,7 +73,7 @@ const items_ = [
     href: '/industries/wholesale-distribution/',
     title: 'Wholesale and distribution',
     description:
-      'Bulk tier pricing, dealer credit limits and repayment tracking, fast bulk quotations and stock across multiple warehouses. Your reps sell more and your accounts team chases less.',
+      'CRM for distributors: bulk tier pricing, dealer credit limits and repayment tracking, fast bulk quotations and stock across multiple warehouses. Your reps sell more and your accounts team chases less.',
     img: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1200&q=80&auto=format&fit=crop',
     bg: '#DCE5EF',
     chips: ['Bulk tier pricing', 'Dealer credit limits', 'Repayment tracking', 'Fast bulk quotations', 'Stock across multiple warehouses'],
@@ -93,7 +93,7 @@ const items_ = [
     href: '/industries/field-service/',
     title: 'Field service and maintenance',
     description:
-      'Built for air conditioning, solar, generator, lift and CCTV companies: installed asset registers, annual maintenance contracts, preventive scheduling, technician apps and warranty-aware billing.',
+      'Field service CRM for air conditioning, solar, generator, lift and CCTV companies: installed asset registers, annual maintenance contracts, preventive scheduling, technician apps and warranty-aware billing.',
     img: 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=1200&q=80&auto=format&fit=crop',
     bg: '#E9DDD9',
     chips: ['Installed asset registers', 'Annual maintenance contracts', 'Preventive scheduling', 'Technician apps', 'Warranty-aware billing'],
