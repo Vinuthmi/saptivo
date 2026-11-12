@@ -40,10 +40,13 @@ defineOptions({ name: "FeaturesHero" });
   position: relative;
   isolation: isolate;
   overflow: clip;
+  display: flex;
+  align-items: center;
+  min-height: 90vh;
   padding-bottom: 96px;
   text-align: center;
   color: var(--ink);
-  background: var(--paper);
+  background: #f7f9fa;
   font-family: "Inter", system-ui, sans-serif;
 }
 .hero *, .hero *::before, .hero *::after { box-sizing: border-box; }
@@ -67,17 +70,10 @@ defineOptions({ name: "FeaturesHero" });
   position: absolute;
   inset: 0;
   background:
-    repeating-linear-gradient(
-      90deg,
-      transparent 0px, transparent 34px,
-      rgba(54, 68, 83, 0.02) 38px, rgba(54, 68, 83, 0.04) 41px,
-      rgba(54, 68, 83, 0.06) 43px, rgba(54, 68, 83, 0.025) 46px,
-      transparent 51px, transparent 82px
-    );
-  -webkit-mask-image: linear-gradient(90deg, #000 0%, transparent 30%, transparent 70%, #000 100%);
-  mask-image: linear-gradient(90deg, #000 0%, transparent 30%, transparent 70%, #000 100%);
-  -webkit-backdrop-filter: blur(2px);
-  backdrop-filter: blur(2px);
+    radial-gradient(circle, rgba(51, 72, 93, 0.16) 1.1px, transparent 1.4px);
+  background-size: 22px 22px;
+  -webkit-mask-image: radial-gradient(ellipse 72% 82% at 50% 42%, #000 0%, rgba(0, 0, 0, 0.72) 58%, transparent 100%);
+  mask-image: radial-gradient(ellipse 72% 82% at 50% 42%, #000 0%, rgba(0, 0, 0, 0.72) 58%, transparent 100%);
 }
 
 .content {
@@ -128,7 +124,7 @@ h1 {
   .content { padding-top: 96px; }
 }
 @media (max-width: 760px) {
-  .hero { --title: clamp(38px, 10.5vw, 64px); padding-bottom: 64px; }
+  .hero { --title: clamp(38px, 10.5vw, 64px); min-height: 90svh; padding-bottom: 64px; }
   .content { width: calc(100% - 32px); padding: 76px 0 24px; }
   .lead { font-size: 15px; margin-top: 22px; }
   .actions { width: 100%; gap: 10px; margin-top: 28px; }

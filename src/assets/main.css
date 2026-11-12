@@ -300,7 +300,7 @@ button {
 }
 
 .whatsapp-crm-page > section:nth-child(even) {
-  background: linear-gradient(180deg, #e7edf1 0%, #f7f9fa 100%) !important;
+  background: linear-gradient(180deg, #f7f9fa 0%, #edf2f5 100%) !important;
 }
 
 .whatsapp-crm-page > section:nth-child(odd):not(:first-child) {
@@ -455,4 +455,23 @@ select:focus-visible {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* Keep section titles monochrome and consistently semibold across every page. */
+h1,
+h2 {
+  color: #000 !important;
+  font-weight: 600 !important;
+}
+
+h1 :is(span, em, strong),
+h2 :is(span, em, strong) {
+  color: inherit !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+
+h1 :is(.soft, .l2, .accent, .grad, em),
+h2 :is(.soft, .l2, .accent, .grad, em) {
+  color: #6b6866 !important;
+  -webkit-text-fill-color: #6b6866 !important;
 }
