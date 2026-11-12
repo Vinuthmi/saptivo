@@ -27,7 +27,7 @@
         <!-- product window -->
         <div class="sx-win" aria-hidden="true">
           <div class="sx-wh">
-            <span class="sx-logo">saptivo<i>.</i></span>
+            <img class="sx-logo" :src="logoSrc" alt="" draggable="false" />
             <span class="sx-wl">{{ it.label }}</span>
           </div>
           <div class="sx-wb">
@@ -122,6 +122,9 @@ defineOptions({ name: 'HomeSecuritySection' })
  * No props. Browser APIs are only used in onMounted (SSR / Nuxt safe).
  */
 import { ref, onMounted, onBeforeUnmount } from 'vue'
+
+// Saptivo logo (public/saptivo-logo.png, the same file the footer uses), shown in black
+const logoSrc = `${import.meta.env.BASE_URL}saptivo-logo.png`
 
 const rootEl = ref(null)
 const mounted = ref(false)
@@ -330,15 +333,12 @@ onBeforeUnmount(() => io?.disconnect())
   border-bottom: 1px solid rgba(20, 21, 43, 0.07);
 }
 .sx-logo {
-  font-family: 'Urbanist', system-ui, sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  color: #17172b;
-}
-.sx-logo i {
-  font-style: normal;
-  color: var(--acc);
+  display: block;
+  width: auto;
+  height: 14px;
+  max-width: 70px;
+  object-fit: contain;
+  filter: brightness(0); /* logo in black */
 }
 .sx-wl {
   font-size: 8.5px;
