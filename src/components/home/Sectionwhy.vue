@@ -224,9 +224,7 @@ onMounted(() => {
   overflow: hidden;
   font-family: 'Poppins', system-ui, sans-serif;
   color: var(--ink);
-  background:
-    radial-gradient(700px 520px at 14% 70%, rgba(255, 138, 58, 0.12), transparent 62%),
-    radial-gradient(560px 400px at 100% 0%, rgba(255, 138, 58, 0.05), transparent 60%), #fff;
+  background: #fff;
 }
 .wx *,
 .wx *::before,
@@ -265,17 +263,15 @@ onMounted(() => {
   font-weight: 500;
   line-height: 1.1;
   letter-spacing: -0.06em;
-  color: #0f172a;
+  color: #000 !important;
 }
 .wx-title span {
   display: block;
 }
 .wx-g {
-  background: linear-gradient(100deg, #ff9a3d 0%, #ff6a1a 45%, #f2540c 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
+  background: none !important;
+  color: #000 !important;
+  -webkit-text-fill-color: #000 !important;
   padding-bottom: 0.08em;
 }
 .wx-list {

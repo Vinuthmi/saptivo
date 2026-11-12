@@ -1,257 +1,232 @@
-
-<script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue'
-
-defineOptions({ name: 'HowIndustrySetup' })
-
-const active = ref(0)
-const root = ref(null)
-const inView = ref(false)
-
-let timer = null
-let observer = null
-
-const steps = [
-  {
-    id: 'configure',
-    number: '01',
-    tag: 'Industry configuration',
-    title: 'Configured around your industry.',
-    description:
-      'We set up pipelines, custom fields, checklists and reports to match the way your business operates.',
-    details: ['Sales pipelines', 'Custom fields', 'Checklists & reports'],
-    image:
-      'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1400&q=85&auto=format&fit=crop',
-    visualTitle: 'Industry workspace',
-    visualItems: [
-      ['Sales pipeline', 'Configured'],
-      ['Custom fields', 'Added'],
-      ['Reports', 'Ready'],
-    ],
-  },
-  {
-    id: 'import',
-    number: '02',
-    tag: 'Business data migration',
-    title: 'Your business data, brought together.',
-    description:
-      'We import your existing customer and product information so your team can continue working with organised business data.',
-    details: ['Customer records', 'Product information', 'Organised data'],
-    image:
-      'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1400&q=85&auto=format&fit=crop',
-    visualTitle: 'Data import',
-    visualItems: [
-      ['Customers', 'Imported'],
-      ['Products', 'Imported'],
-      ['Business data', 'Organised'],
-    ],
-  },
-  {
-    id: 'training',
-    number: '03',
-    tag: 'Team onboarding',
-    title: 'Your team, ready to get started.',
-    description:
-      'We train your staff to use the configured system, helping your team get started with a CRM that already speaks your business language.',
-    details: ['Staff training', 'System walkthrough', 'Ready to get started'],
-    image:
-      'https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=1400&q=85&auto=format&fit=crop',
-    visualTitle: 'Team onboarding',
-    visualItems: [
-      ['Team training', 'Completed'],
-      ['System walkthrough', 'Ready'],
-      ['CRM setup', 'Complete'],
-    ],
-  },
-]
-
-function select(index) {
-  active.value = (index + steps.length) % steps.length
-}
-
-onMounted(() => {
-  observer = new IntersectionObserver(
-    ([entry]) => {
-      inView.value = entry.isIntersecting
-    },
-    { threshold: 0.1 }
-  )
-
-  if (root.value) observer.observe(root.value)
-
-  const reducedMotion = window.matchMedia(
-    '(prefers-reduced-motion: reduce)'
-  ).matches
-
-  if (!reducedMotion) {
-    timer = setInterval(() => {
-      if (inView.value && !document.hidden) {
-        select(active.value + 1)
-      }
-    }, 6500)
-  }
-})
-
-onBeforeUnmount(() => {
-  clearInterval(timer)
-  observer?.disconnect()
-})
-</script>
-
 <template>
-  <section class="his" ref="root" aria-labelledby="his-title">
-    <div class="his-wrap">
-
-      <!-- Heading -->
-      <div class="his-heading">
-        <h2 id="his-title">
-          How industry <em>setup works.</em>
-        </h2>
-
-        <p>
-          From configuration to team training, we prepare Saptivo around
-          your business so you can get started without building a CRM
-          from scratch.
+  <section ref="root" class="su" :class="{ 'su-arm': armed, 'su-in': shown }" aria-labelledby="su-title">
+    <div class="su-wrap">
+      <!-- ============ heading ============ -->
+      <header class="su-head">
+        <h2 id="su-title" class="su-title">How <span>industry setup</span> works</h2>
+        <p class="su-sub">
+          You start with a system that already speaks your language rather than a blank CRM you have to design yourself.
         </p>
-      </div>
+      </header>
 
-      <!-- Interactive panels -->
-      <div class="his-panels">
-        <article
-          v-for="(step, i) in steps"
-          :key="step.id"
-          class="his-panel"
-          :class="{ active: active === i }"
-          :style="{ '--i': i, '--panel-image': `url('${step.image}')` }"
-          role="button"
-          tabindex="0"
-          :aria-expanded="active === i"
-          @click="select(i)"
-          @pointerenter="active = i"
-          @keydown.enter.prevent="select(i)"
-          @keydown.space.prevent="select(i)"
-          @keydown.right.prevent="select(i + 1)"
-          @keydown.left.prevent="select(i - 1)"
-        >
+      <div class="su-grid">
+        <!-- ============ 1 · configured for your industry ============ -->
+        <article class="su-col" style="--i: 0">
+          <div class="su-card su-grad">
+            <span class="su-grain" aria-hidden="true"></span>
 
-          <div class="his-bg"></div>
+            <div class="su-panel" aria-hidden="true">
+              <div class="pn-h">
+                <img class="pn-logo" :src="logoSrc" alt="" draggable="false" />
+                <b>Saptivo onboarding</b>
+              </div>
 
-          <!-- Top label -->
-          <div class="his-tag">
-            {{ step.tag }}
-          </div>
+              <div class="pn-rows">
+                <div class="pn-r">
+                  <span>Status</span>
+                  <em class="chip" :class="done ? 'ok' : 'wip'">
+                    <svg v-if="done" viewBox="0 0 24 24"><path d="m6 12.500 4 4 8-9" /></svg>
+                    <i v-else></i>
+                    {{ done ? 'Configured' : 'Configuring' }}
+                  </em>
+                </div>
+                <div class="pn-r">
+                  <span>Industry</span>
+                  <b :key="ind" class="swap">{{ industries[ind] }}</b>
+                </div>
+                <div class="pn-r">
+                  <span>Set up by</span>
+                  <b class="by"><i>S</i>Saptivo team</b>
+                </div>
+              </div>
 
-          <!-- Floating UI preview -->
-          <div class="his-preview">
-            <div class="preview-head">
-              <span class="preview-dot"></span>
-              <b>{{ step.visualTitle }}</b>
-              <span class="preview-status">Ready</span>
-            </div>
-
-            <div class="preview-body">
-              <div
-                v-for="(item, n) in step.visualItems"
-                :key="item[0]"
-                class="preview-item"
-                :style="{ '--item': n }"
-              >
-                <span class="preview-check">
-                  <svg viewBox="0 0 20 20" fill="none">
-                    <path
-                      d="M4 10.5L8 14L16 6"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                </span>
-
-                <span class="preview-label">{{ item[0] }}</span>
-                <span class="preview-value">{{ item[1] }}</span>
+              <div class="pn-ev">
+                <small>Setup steps</small>
+                <ol>
+                  <li v-for="(e, k) in events" :key="e[1]" :class="{ show: tick >= 2 + k * 2 }">
+                    <span><i class="ev-ic"><svg viewBox="0 0 24 24" v-html="icons[e[0]]"></svg></i>{{ e[1] }}</span>
+                    <b>{{ e[2] }}</b>
+                  </li>
+                </ol>
               </div>
             </div>
+          </div>
 
-            <div class="preview-footer">
-              <span> Saptivo onboarding </span>
-              <span class="preview-live">
-                <i></i> In progress
-              </span>
+          <h3 class="su-ct">Configured for your industry.</h3>
+          <p class="su-cd">Our team configures pipelines, custom fields, checklists and reports for your industry.</p>
+        </article>
+
+        <!-- ============ 2 · imported and trained ============ -->
+        <article class="su-col" style="--i: 1">
+          <div class="su-card su-photo">
+            <img v-if="photo && !photoFail" class="su-img" :src="photo" alt="" loading="lazy" decoding="async" draggable="false" @error="photoFail = true" />
+            <span class="su-sky" aria-hidden="true"></span>
+
+            <div class="su-over" aria-hidden="true">
+              <div class="pn-h">
+                <img class="pn-logo" :src="logoSrc" alt="" draggable="false" />
+                <b>Your data and team</b>
+                <em class="chip blue"><svg viewBox="0 0 24 24"><path d="m6 12.500 4 4 8-9" /></svg>In progress</em>
+              </div>
+              <div class="ov-g">
+                <div><small>Customers imported</small><b>1,284</b></div>
+                <div><small>Products imported</small><b>342</b></div>
+              </div>
+              <div class="ov-t">
+                <span><small>Staff trained</small><b>{{ trained }} of 12</b></span>
+                <i class="bar"><u :style="{ width: (trained / 12) * 100 + '%' }"></u></i>
+              </div>
             </div>
           </div>
 
-          <!-- Card content -->
-          <div class="his-content">
-            <span class="his-step">STEP {{ step.number }}</span>
-
-            <h3>{{ step.title }}</h3>
-
-            <div class="his-description">
-              <p>{{ step.description }}</p>
-
-              <ul>
-                <li v-for="detail in step.details" :key="detail">
-                  <span class="detail-check">✓</span>
-                  {{ detail }}
-                </li>
-              </ul>
-            </div>
-          </div>
-
+          <h3 class="su-ct">Imported and trained.</h3>
+          <p class="su-cd">We import your customers and products, and train your staff.</p>
         </article>
       </div>
-
     </div>
   </section>
 </template>
 
+<script setup>
+/**
+ * SectionSetup.vue — "How industry setup works" (Vue 3, <script setup>)
+ *
+ * Two large cards like the reference: a soft gradient card with a white onboarding panel, and a photo card with a
+ * white overlay card. Each has a caption underneath; the heading and the closing sentence sit above.
+ * • The left panel plays a short loop (status flips from "Configuring" to "Configured", the setup steps tick in,
+ *   the industry cycles); the right card's training bar fills. Loops while on screen; respects prefers-reduced-motion.
+ * • Palette: the light tones of the Holst / blue swatches (sky #c0e6fd, #80aad3, #5b86b6, sand #D4C4A8, ivory #F4F1DE)
+ *   with a soft peach glow that ties back to the Saptivo orange.
+ * • Photo: pass `photo` (any image URL). If it fails to load the card falls back to a gradient.
+ *
+ * Figures on the cards (1,284 / 342 / 8 of 12) are sample data. Prop: photo. SSR / Nuxt safe.
+ */
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+defineOptions({ name: 'IndustrySetupSection' })
+
+// Saptivo logo (public/saptivo-logo.png, same file the footer uses), shown in black
+const logoSrc = `${import.meta.env.BASE_URL}saptivo-logo.png`
+
+defineProps({
+  photo: {
+    type: String,
+    default: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1400&q=80&auto=format&fit=crop',
+  },
+})
+
+const icons = {
+  flow: '<circle cx="6" cy="6" r="2.200"/><circle cx="6" cy="18" r="2.200"/><circle cx="18" cy="12" r="2.200"/><path d="M6 8.200v7.600M8 6c6 0 8 2 8 4M8 18c6 0 8-2 8-4"/>',
+  list: '<path d="M9 7h11M9 12h11M9 17h11"/><path d="m3.500 7 1.200 1.200L6.800 6M3.500 12l1.200 1.200L6.800 11M3.500 17l1.200 1.200L6.800 16"/>',
+  chart: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+}
+const events = [
+  ['flow', 'Step 1', 'Pipelines and fields set up'],
+  ['list', 'Step 2', 'Checklists added'],
+  ['chart', 'Step 3', 'Reports ready'],
+]
+const industries = ['Retail chain', 'Solar installer', 'Distribution hub', 'Contracting firm']
+
+const root = ref(null)
+const armed = ref(false)
+const shown = ref(false)
+const photoFail = ref(false)
+const tick = ref(0) // demo clock 0..9
+const ind = ref(0)
+const LOOP = 10
+const done = computed(() => tick.value >= 8)
+const trained = computed(() => (tick.value >= 3 ? 8 : 0))
+
+let io = null
+let timer = null
+let inView = false
+
+onMounted(() => {
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  if (reduce) {
+    tick.value = LOOP - 1
+    shown.value = true
+    return
+  }
+  armed.value = true
+  io = new IntersectionObserver(
+    ([e]) => {
+      inView = e.isIntersecting
+      if (e.isIntersecting) shown.value = true
+    },
+    { threshold: 0.2 },
+  )
+  io.observe(root.value)
+  timer = setInterval(() => {
+    if (!inView || document.hidden) return
+    const n = (tick.value + 1) % LOOP
+    if (n === 0) ind.value = (ind.value + 1) % industries.length
+    tick.value = n
+  }, 1100)
+})
+onBeforeUnmount(() => {
+  io?.disconnect()
+  clearInterval(timer)
+})
+</script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Urbanist:wght@500;600&display=swap');
+</style>
+
 <style scoped>
-.his,
-.his * {
+.su {
+  --ink: #0f172a;
+  --mute: #6b7280;
+  --sky: #c0e6fd;
+  --sky-2: #80aad3;
+  --sky-3: #5b86b6;
+  --sand: #d4c4a8;
+  --ivory: #f4f1de;
+  --o: #f2540c;
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  margin: clamp(10px, 1.6vw, 28px); /* gap around the rounded box */
+  border-radius: clamp(28px, 3.4vw, 48px);
+  overflow: hidden;
+  padding: clamp(36px, 5vw, 72px) clamp(14px, 3vw, 32px);
+  background: #fff;
+  color: var(--ink);
+  font-family: 'Poppins', system-ui, sans-serif;
+}
+.su *,
+.su *::before,
+.su *::after {
   box-sizing: border-box;
 }
-
-.his {
-  background-color: #ffffff;
-  color: #0f172a;
-  font-family: 'Poppins', system-ui, sans-serif;
-  padding: clamp(55px, 7vw, 100px) 20px;
+.su svg {
+  display: block;
 }
-
-.his-wrap {
-  max-width: 1280px;
+.su-wrap {
+  max-width: 1240px;
   margin: 0 auto;
 }
 
-/* Heading */
-
-.his-heading {
-  max-width: 760px;
-  margin: 0 auto 42px;
+/* ============ heading ============ */
+.su-head {
   text-align: center;
+  margin-bottom: clamp(22px, 3vw, 36px);
 }
-
-.his-heading h2 {
+.su-title {
   margin: 0;
-  font-family: 'Urbanist', sans-serif;
-  font-size: clamp(36px, 5vw, 64px);
-  font-weight: 500;
-  line-height: 1.08;
-  letter-spacing: -0.055em;
+  font-family: Urbanist, "Urbanist Placeholder", sans-serif !important;
+  font-size: 54px !important;
+  font-weight: 600 !important;
+  line-height: 65px !important;
+  letter-spacing: -1px !important;
+  color: #0a0a0a !important;
 }
-
-.his-heading h2 em {
-  font-style: normal;
-  background: linear-gradient(100deg, #ff9a3d, #ff6a1a, #f2540c);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+.su-title span {
+  background: none !important;
+  color: #615f5a !important;
+  -webkit-text-fill-color: #615f5a !important;
 }
-
-.his-heading > p {
-  max-width: 720px;
-  margin: 14px 0 0;
+.su-sub {
+  max-width: 640px;
+  margin: 14px auto 0;
   font-family: 'Urbanist', system-ui, sans-serif;
   font-size: clamp(15px, 1.1vw, 18px);
   font-weight: 500;
@@ -260,361 +235,401 @@ onBeforeUnmount(() => {
   color: #475569;
 }
 
-/* Cards */
-
-.his-panels {
-  display: flex;
-  gap: 14px;
-  height: clamp(470px, 43vw, 570px);
+/* ============ grid ============ */
+.su-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(14px, 1.8vw, 24px);
 }
-
-.his-panel {
+.su-card {
   position: relative;
-  isolation: isolate;
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  justify-content: flex-end;
-  min-width: 0;
+  height: clamp(420px, 41vw, 574px);
+  border-radius: clamp(22px, 2.4vw, 30px);
   overflow: hidden;
-  padding: 24px;
-  border-radius: 25px;
-  color: #fff;
-  background: #211d1b;
-  cursor: pointer;
-  outline: none;
-  transition:
-    flex-grow 0.8s cubic-bezier(.2,.8,.2,1),
-    border-radius 0.4s ease;
+  isolation: isolate;
+}
+.su-ct {
+  margin: 20px 0 0;
+  font-family: 'Urbanist', system-ui, sans-serif;
+  font-size: clamp(20px, 1.8vw, 26px);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  color: #0a0a0a;
+}
+.su-cd {
+  max-width: 400px;
+  margin: 8px 0 0;
+  font-family: 'Urbanist', system-ui, sans-serif;
+  font-size: clamp(15px, 1.1vw, 17px);
+  font-weight: 500;
+  line-height: 1.55;
+  letter-spacing: -0.01em;
+  color: #475569;
 }
 
-.his-panel.active {
-  flex-grow: 2.2;
-  cursor: default;
+/* ---------- left: gradient card ---------- */
+.su-grad {
+  background:
+    radial-gradient(72% 56% at 18% -6%, var(--sky) 0%, rgba(192, 230, 253, 0) 70%),
+    radial-gradient(60% 50% at 104% 14%, #e5edf6 0%, rgba(229, 237, 246, 0) 72%),
+    radial-gradient(90% 46% at 22% 54%, rgba(91, 134, 182, 0.95) 0%, rgba(91, 134, 182, 0) 70%),
+    radial-gradient(78% 56% at 86% 106%, rgba(255, 160, 126, 0.85) 0%, rgba(255, 160, 126, 0) 70%),
+    radial-gradient(70% 56% at 6% 104%, rgba(226, 140, 158, 0.9) 0%, rgba(226, 140, 158, 0) 70%),
+    linear-gradient(165deg, #a9d3ef 0%, #8fb5da 48%, #d6b9c9 100%);
 }
-
-.his-panel:focus-visible {
-  box-shadow: 0 0 0 3px #f2540c;
-}
-
-/* Background images */
-
-.his-bg {
+.su-grain {
   position: absolute;
   inset: 0;
-  z-index: -2;
-  background-image: var(--panel-image);
-  background-position: center;
-  background-size: cover;
-  filter: brightness(.75) saturate(.85);
-  transform: scale(1.04);
-  transition:
-    transform 1.2s ease,
-    filter .6s ease;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.18;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-.his-panel.active .his-bg {
-  transform: scale(1);
-  filter: brightness(.8) saturate(1);
+/* white UI panels (shared look) */
+.su-panel,
+.su-over {
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 34px 60px -30px rgba(23, 50, 90, 0.45), 0 2px 8px rgba(23, 50, 90, 0.06);
+  font-family: 'Poppins', system-ui, sans-serif;
 }
-
-.his-panel::after {
-  content: '';
+.su-panel {
   position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: linear-gradient(
-    180deg,
-    rgba(10, 12, 20, .12) 0%,
-    rgba(10, 12, 20, .2) 35%,
-    rgba(10, 12, 20, .8) 100%
-  );
+  z-index: 1;
+  left: 50%;
+  top: 50%;
+  width: min(62%, 392px);
+  min-width: 290px;
+  padding: 22px 24px 20px;
+  transform: translate(-50%, -52%);
 }
-
-/* Top tag */
-
-.his-tag {
-  position: absolute;
-  top: 23px;
-  left: 23px;
+.pn-h {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #f0f1f4;
+}
+.pn-h b {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pn-logo {
+  flex: none;
+  display: block;
+  width: auto;
+  height: 17px;
+  max-width: 80px;
+  object-fit: contain;
+  filter: brightness(0); /* logo in black */
+}
+.pn-rows {
+  padding: 4px 0 6px;
+  border-bottom: 1px solid #f0f1f4;
+}
+.pn-r {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 0;
+  font-size: 14px;
+  color: var(--mute);
+}
+.pn-r b {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+.swap {
+  animation: su-swap 0.5s var(--ease);
+}
+.by {
   display: inline-flex;
   align-items: center;
-  gap: 9px;
-  padding: 8px 14px;
-  border: 1px solid rgba(255,255,255,.2);
-  border-radius: 50px;
-  background: rgba(20,20,25,.4);
-  backdrop-filter: blur(12px);
-  font-size: 11px;
-  font-weight: 500;
-  white-space: nowrap;
+  gap: 8px;
 }
-
-/* Preview UI */
-
-.his-preview {
-  position: absolute;
-  top: 75px;
-  left: 22px;
-  width: min(390px, calc(100% - 44px));
-  padding: 14px;
-  border: 1px solid rgba(255,255,255,.7);
-  border-radius: 17px;
-  color: #14152b;
-  background: rgba(255,255,255,.95);
-  backdrop-filter: blur(14px);
-  box-shadow: 0 20px 50px rgba(0,0,0,.25);
-  opacity: 0;
-  transform: translateY(15px);
-  pointer-events: none;
-  transition:
-    opacity .5s ease,
-    transform .6s ease;
-}
-
-.his-panel.active .his-preview {
-  opacity: 1;
-  transform: translateY(0);
-  transition-delay: .2s;
-}
-
-.preview-head {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid #eceef2;
-  font-size: 12px;
-}
-
-.preview-dot {
-  width: 9px;
-  height: 9px;
+.by i {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
-  background: #f2540c;
-}
-
-.preview-head b {
+  background: #0f172a;
+  color: #fff;
+  font-style: normal;
+  font-size: 10.5px;
   font-weight: 600;
 }
-
-.preview-status {
-  margin-left: auto;
-  padding: 4px 9px;
-  border-radius: 30px;
-  color: #15803d;
-  background: #dcfce7;
-  font-size: 10px;
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 11px;
+  border-radius: 8px;
+  font-style: normal;
+  font-size: 12.5px;
+  font-weight: 500;
+  transition: background 0.4s, color 0.4s;
 }
-
-.preview-body {
+.chip svg {
+  width: 13px;
+  height: 13px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.chip.ok {
+  background: #e6f8ef;
+  color: #16a05a;
+}
+.chip.wip {
+  background: #fff1d6;
+  color: #b7740b;
+}
+.chip.wip i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: su-blink 1.2s ease-in-out infinite;
+}
+.chip.blue {
+  background: #e4edff;
+  color: #3f63d8;
+}
+.pn-ev {
+  padding-top: 12px;
+}
+.pn-ev small {
+  font-size: 13.5px;
+  color: var(--mute);
+}
+.pn-ev ol {
+  position: relative;
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
   display: grid;
-  gap: 7px;
-  margin-top: 12px;
+  gap: 15px;
 }
-
-.preview-item {
+.pn-ev ol::before {
+  content: '';
+  position: absolute;
+  left: 10px;
+  top: 14px;
+  bottom: 14px;
+  width: 1px;
+  background: #e7e9ee;
+}
+.pn-ev li {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 9px;
-  padding: 10px;
-  border-radius: 10px;
-  background: #f8f6f2;
-  opacity: 0;
-  transform: translateX(-10px);
-  transition: opacity .4s ease, transform .4s ease;
-  transition-delay: calc(var(--item) * .12s);
+  justify-content: space-between;
+  gap: 10px;
+  opacity: 0.25;
+  transform: translateX(-6px);
+  transition: opacity 0.5s ease, transform 0.6s var(--ease);
 }
-
-.his-panel.active .preview-item {
+.pn-ev li.show {
   opacity: 1;
   transform: none;
 }
-
-.preview-check {
+.pn-ev li > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  color: var(--mute);
+  white-space: nowrap;
+}
+.pn-ev li > b {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-align: right;
+}
+.ev-ic {
+  position: relative;
+  z-index: 1;
   display: grid;
   place-items: center;
-  width: 23px;
-  height: 23px;
+  width: 21px;
+  height: 21px;
   border-radius: 50%;
-  color: #f2540c;
-  background: #fff0e7;
+  background: #fff;
+  color: #16a05a;
+}
+.ev-ic svg {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
-.preview-check svg {
-  width: 14px;
-  height: 14px;
+/* ---------- right: photo card ---------- */
+.su-photo {
+  background: linear-gradient(165deg, #b9dcf3 0%, #8fb5da 55%, #d9c3a6 100%); /* fallback if the photo can't load */
 }
-
-.preview-label {
-  flex: 1;
-  font-size: 11px;
-  font-weight: 500;
+.su-img {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 28%;
+  transition: transform 1.4s var(--ease);
 }
-
-.preview-value {
-  color: #15803d;
-  font-size: 10px;
-  font-weight: 600;
+.su-photo:hover .su-img {
+  transform: scale(1.04);
 }
-
-.preview-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 12px;
-  padding-top: 10px;
-  border-top: 1px solid #eceef2;
-  color: #64748b;
-  font-size: 10px;
+.su-sky {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(192, 230, 253, 0.28) 0%, rgba(192, 230, 253, 0) 38%),
+    linear-gradient(0deg, rgba(13, 27, 42, 0.38) 0%, rgba(13, 27, 42, 0) 42%);
 }
-
-.preview-live {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  color: #15803d;
+.su-over {
+  position: absolute;
+  left: clamp(16px, 2.6vw, 32px);
+  bottom: clamp(16px, 2.6vw, 32px);
+  width: min(90%, 420px);
+  padding: 18px 20px 18px;
 }
-
-.preview-live i {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #16a34a;
+.su-over .pn-h {
+  padding-bottom: 12px;
 }
-
-/* Content */
-
-.his-content {
-  position: relative;
-  z-index: 2;
-  max-width: 520px;
+.su-over .chip {
+  padding: 3px 10px;
+  font-size: 12px;
 }
-
-.his-step {
-  display: block;
-  margin-bottom: 10px;
-  color: #fff;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: .13em;
-}
-
-.his-content h3 {
-  margin: 0;
-  font-family: 'Urbanist', sans-serif;
-  font-size: clamp(19px, 2vw, 27px);
-  font-weight: 500;
-  line-height: 1.2;
-  letter-spacing: -.035em;
-}
-
-.his-description {
+.ov-g {
   display: grid;
-  grid-template-rows: 0fr;
-  opacity: 0;
-  transition:
-    grid-template-rows .6s ease,
-    opacity .4s ease;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 12px 0 12px;
+  border-bottom: 1px solid #f0f1f4;
 }
-
-.his-panel.active .his-description {
-  grid-template-rows: 1fr;
-  opacity: 1;
+.ov-g small,
+.ov-t small {
+  display: block;
+  font-size: 12.5px;
+  color: var(--mute);
 }
-
-.his-description p {
+.ov-g b {
+  display: block;
+  margin-top: 3px;
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+.ov-t {
+  padding-top: 12px;
+}
+.ov-t span {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.ov-t b {
+  font-size: 13.5px;
+  font-weight: 600;
+}
+.bar {
+  display: block;
+  height: 6px;
+  margin-top: 8px;
+  border-radius: 6px;
+  background: #eceef3;
   overflow: hidden;
-  margin: 12px 0 0;
-  color: rgba(255,255,255,.85);
-  font-size: 13px;
-  line-height: 1.7;
+}
+.bar u {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #80aad3, #3f6593);
+  transition: width 1.2s var(--ease);
 }
 
-.his-description ul {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 14px;
-  padding: 0;
-  margin: 14px 0 0;
+/* ============ motion ============ */
+.su-arm .su-col {
+  opacity: 0;
+  transform: translateY(34px);
 }
-
-.his-description li {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: rgba(255,255,255,.9);
-  font-size: 11px;
+.su-arm.su-in .su-col {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.9s var(--ease), transform 1.1s var(--ease);
+  transition-delay: calc(var(--i) * 0.14s);
 }
-
-.detail-check {
-  color: #ff9a3d;
-  font-weight: 700;
+.su-arm .su-panel,
+.su-arm .su-over {
+  opacity: 0;
 }
+.su-arm.su-in .su-panel {
+  opacity: 1;
+  transition: opacity 0.8s ease 0.4s;
+}
+.su-arm.su-in .su-over {
+  opacity: 1;
+  transition: opacity 0.8s ease 0.6s;
+}
+@keyframes su-swap { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@keyframes su-blink { 50% { opacity: 0.3; } }
 
-/* Responsive */
-
+/* ============ responsive ============ */
 @media (max-width: 860px) {
-  .his-panels {
-    flex-direction: column;
-    height: auto;
+  .su-title {
+    font-size: clamp(36px, 8vw, 48px) !important;
+    line-height: 1.15 !important;
   }
-
-  .his-panel {
-    flex: none;
-    height: 100px;
-    padding: 20px;
-    border-radius: 20px;
-    transition: height .65s ease;
+  .su-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 34px;
   }
-
-  .his-panel.active {
-    height: 490px;
+  .su-card {
+    height: clamp(420px, 96vw, 520px);
   }
-
-  .his-preview {
-    top: 65px;
-    left: 20px;
-    width: min(390px, calc(100% - 40px));
+  .su-panel {
+    width: min(88%, 392px);
   }
-
-  .his-tag {
-    top: 19px;
-    left: 20px;
+  .su-over {
+    width: calc(100% - 32px);
   }
-
-  .his-content h3 {
-    font-size: 23px;
-  }
-
 }
-
-@media (max-width: 480px) {
-  .his {
-    padding: 55px 16px;
-  }
-
-  .his-heading {
-    margin-bottom: 30px;
-  }
-
-  .his-panel.active {
-    height: 510px;
-  }
-
-  .his-description li {
-    font-size: 10px;
-  }
-
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .his *,
-  .his *::before,
-  .his *::after {
-    transition-duration: .01ms !important;
-    animation-duration: .01ms !important;
+  .su *,
+  .su *::before,
+  .su *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  .su-arm .su-col,
+  .su-arm .su-panel,
+  .su-arm .su-over {
+    opacity: 1;
+    transform: none;
   }
 }
 </style>

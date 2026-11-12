@@ -307,7 +307,7 @@ button {
   background: linear-gradient(180deg, #f7f9fa 0%, #e7edf1 100%) !important;
 }
 
-/* Use a consistent blue-gray accent for highlighted headings on the home page. */
+/* Keep the blue-gray accent for non-heading highlights on the home page. */
 .home-page :is(
   .accent,
   .fs-title span,
@@ -326,6 +326,27 @@ button {
   background: none !important;
   color: #33485d !important;
   -webkit-text-fill-color: #33485d !important;
+}
+
+/* Match emphasized homepage headings to the gray used by the CRM heading. */
+.home-page :is(
+  .hero .accent,
+  .fx-title span,
+  .op-title em,
+  .ms-title em,
+  .ig-title em,
+  .s4-security-title span,
+  .cm-title span,
+  .hx-title .l2,
+  .wx-g,
+  .fq-g,
+  .cta-title .grad,
+  .copy h2 span,
+  .trusted-brands-title span
+) {
+  background: none !important;
+  color: #615f5a !important;
+  -webkit-text-fill-color: #615f5a !important;
 }
 
 .main-layout:has(.home-page) .site-footer .grad {
@@ -407,6 +428,41 @@ h2 {
   font-weight: 600 !important;
   line-height: 1.2 !important;
   letter-spacing: -1px !important;
+}
+
+.home-page h2 {
+  font-family: Urbanist, "Urbanist Placeholder", sans-serif !important;
+  font-size: 54px !important;
+  font-weight: 600 !important;
+  line-height: 65px !important;
+  letter-spacing: -1px !important;
+  color: #0a0a0a !important;
+}
+
+.home-page :is(
+  .fx-title span,
+  .op-title em,
+  .ms-title em,
+  .ig-title em,
+  .s4-security-title span,
+  .cm-title span,
+  .hx-title .l2,
+  .wx-g,
+  .fq-g,
+  .cta-title .grad,
+  .copy h2 span,
+  .trusted-brands-title span
+) {
+  background: none !important;
+  color: #615f5a !important;
+  -webkit-text-fill-color: #615f5a !important;
+}
+
+@media (max-width: 768px) {
+  .home-page h2 {
+    font-size: clamp(36px, 8vw, 48px) !important;
+    line-height: 1.15 !important;
+  }
 }
 
 p {

@@ -495,9 +495,7 @@ onBeforeUnmount(() => {
   overflow: hidden;
   font-family: 'Poppins', system-ui, sans-serif;
   color: var(--ink);
-  background:
-    radial-gradient(760px 520px at 88% 72%, rgba(255, 138, 58, 0.1), transparent 62%),
-    radial-gradient(600px 420px at 0% 0%, rgba(255, 138, 58, 0.06), transparent 60%), #fff;
+  background: #fff;
 }
 .hx *,
 .hx *::before,
@@ -530,7 +528,7 @@ onBeforeUnmount(() => {
   padding-bottom: 0.2em;
   font-family: 'Urbanist', system-ui, sans-serif;
   font-size: clamp(32px, 4.2vw, 62px);
-  color: #0f172a;
+  color: #000 !important;
   font-weight: 500;
   line-height: 1.12;
   letter-spacing: -0.05em;
@@ -539,11 +537,9 @@ onBeforeUnmount(() => {
   display: block;
 }
 .hx-title .l2 {
-  background: linear-gradient(100deg, #ff9a3d 0%, #ff6a1a 45%, #f2540c 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
+  background: none !important;
+  color: #000 !important;
+  -webkit-text-fill-color: #000 !important;
   opacity: 1;
   padding-bottom: 0.08em;
 }

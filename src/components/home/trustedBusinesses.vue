@@ -28,6 +28,7 @@ const clients = [
   { name: 'Paint House by Nadeeka', src: `${import.meta.env.BASE_URL}images/clients/paint-house1.png`, w: 2045, h: 727, dw: 115 },
   { name: 'Tera Computers', src: `${import.meta.env.BASE_URL}images/clients/tera1.png`, w: 447, h: 447, dw: 60 },
   { name: 'Lanka Grills', src: `${import.meta.env.BASE_URL}images/clients/lanka-grills1.png`, w: 1317, h: 783, dw: 75 },
+  { name: 'STC', src: `${import.meta.env.BASE_URL}images/clients/stc1.png`, w: 978, h: 1127, dw: 48 },
 ]
 </script>
 

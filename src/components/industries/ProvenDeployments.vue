@@ -1,11 +1,13 @@
 <template>
   <section id="deployments" ref="root" class="trusted-brands" aria-labelledby="trusted-brands-title">
-    <h2 id="trusted-brands-title" class="trusted-brands-title">
-      Proven <span>deployments</span>
-    </h2>
-    <p class="trusted-brands-lead">
-      From resorts and furniture retailers to computer stores and service businesses, Sri Lankan companies such as Tree of Life Nature Resort, Nilkamal and Tera Computers run their customer relationships on Saptivo.
-    </p>
+    <div class="tb-text">
+      <h2 id="trusted-brands-title" class="trusted-brands-title">
+        Proven <span>deployments</span>
+      </h2>
+      <p class="trusted-brands-lead">
+        From resorts and furniture retailers to computer stores and service businesses, Sri Lankan companies such as Tree of Life Nature Resort, Nilkamal and Tera Computers run their customer relationships on Saptivo.
+      </p>
+    </div>
     <ul class="trusted-logos">
       <li v-for="(client, i) in clients" :key="client.name" :style="{ '--i': i }">
         <img
@@ -49,64 +51,63 @@ onBeforeUnmount(() => io && io.disconnect())
 <style scoped>
 .trusted-brands {
   position: relative;
-  width: min(1000px, calc(100% - 40px));
-  margin: clamp(48px, 6vw, 96px) auto;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: clamp(56px, 7vw, 96px) clamp(28px, 9vw, 168px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(28px, 5vw, 80px);
 }
 
-.trusted-brands-title {
-  max-width: 900px;
-  margin: 0 auto;
-  padding-bottom: 0.2em;
-  font-family: 'Urbanist', system-ui, sans-serif;
-  color: #0f172a;
-  font-size: clamp(32px, 4.2vw, 62px);
-  font-weight: 500;
-  line-height: 1.12;
-  letter-spacing: -0.05em;
-  text-align: center;
+.tb-text { min-width: 0; max-width: 720px; }
+
+.trusted-brands .trusted-brands-title {
+  margin: 0;
+  padding-bottom: 0.1em;
+  font-family: Urbanist, "Urbanist Placeholder", sans-serif;
+  color: #0a0a0a;
+  font-size: 54px;
+  font-weight: 600;
+  line-height: 65px;
+  letter-spacing: -1px;
+  white-space: nowrap; /* heading stays on one line */
 }
 
-.trusted-brands-title span {
-  display: inline-block;
-  padding-bottom: 0.08em;
-  background: linear-gradient(100deg, #ff9a3d 0%, #ff6a1a 45%, #f2540c 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
+.trusted-brands .trusted-brands-title span {
+  display: inline;
+  color: #615f5a;
+  -webkit-text-fill-color: currentColor;
+  background: none;
 }
 
 .trusted-brands-lead {
-  max-width: 760px;
-  margin: 10px auto 0;
+  margin: 18px 0 0;
   font-family: 'Urbanist', system-ui, sans-serif;
-  font-size: clamp(15px, 1.15vw, 18px);
+  font-size: clamp(15px, 1vw, 18px);
   font-weight: 500;
-  line-height: 1.6;
-  letter-spacing: -0.015em;
+  line-height: 1.5;
+  letter-spacing: -0.02em;
   color: #475569;
-  text-align: center;
 }
 
+/* logos beside the text */
 .trusted-logos {
   display: flex;
-  justify-content: center;
   align-items: stretch;
-  max-width: 860px;
-  margin: clamp(32px, 4vw, 52px) auto 0;
-  padding: 18px 0;
+  margin: 0;
+  padding: 0;
   list-style: none;
-  border-top: 1px solid #e6e6ea;
-  border-bottom: 1px solid #e6e6ea;
+  background: #fff;
 }
 
 .trusted-logos li {
-  flex: 1 1 0;
-  min-width: 0;
   display: grid;
   place-items: center;
-  height: 88px;
-  padding: 0 clamp(12px, 1.4vw, 20px);
+  width: clamp(150px, 15vw, 210px);
+  height: 140px;
+  padding: 0 20px;
 }
 
 .trusted-logos li + li {
@@ -125,7 +126,7 @@ onBeforeUnmount(() => io && io.disconnect())
 
 .trusted-logos li:hover img {
   filter: brightness(0);
-  transform: scale(1.04);
+  transform: scale(1.05);
 }
 
 /* entrance */
@@ -140,35 +141,18 @@ onBeforeUnmount(() => io && io.disconnect())
 .in .trusted-brands-lead,
 .in .trusted-logos li { opacity: 1; transform: none; }
 .in .trusted-brands-lead { transition-delay: 0.1s; }
-.in .trusted-logos li { transition-delay: calc(0.25s + var(--i) * 0.07s); }
+.in .trusted-logos li { transition-delay: calc(0.25s + var(--i) * 0.08s); }
 
-@media (max-width: 900px) {
-  .trusted-logos {
-    flex-wrap: wrap;
-    row-gap: 6px;
-    margin-top: 26px;
-    border-bottom: 0;
-  }
-
-  .trusted-logos li {
-    flex: 0 0 33.333%;
-    height: 76px;
-    border-left: 0;
-  }
-
-  .trusted-logos img {
-    width: calc(var(--dw) * 0.85);
-  }
+@media (max-width: 1100px) {
+  .trusted-brands { grid-template-columns: minmax(0, 1fr); }
+  .trusted-logos { justify-self: start; }
 }
 
-@media (max-width: 480px) {
-  .trusted-logos li {
-    flex-basis: 50%;
-  }
-
-  .trusted-logos img {
-    width: calc(var(--dw) * 0.78);
-  }
+@media (max-width: 620px) {
+  .trusted-brands .trusted-brands-title { font-size: 36px; line-height: 46px; letter-spacing: -0.7px; white-space: normal; }
+  .trusted-logos { width: 100%; }
+  .trusted-logos li { flex: 1 1 0; width: auto; height: 100px; padding: 0 10px; }
+  .trusted-logos img { width: calc(var(--dw) * 0.7); }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -92,32 +92,44 @@ const industries = [
   {
     title: 'Retail & Supermarkets',
     description: 'Multi-counter checkouts, instant inventory audits, VIP loyalty tiers and WhatsApp receipts',
+    blurb: 'Checkouts, stock and loyalty',
     href: '/industries/retail/',
     icon: 'cart'
   },
   {
     title: 'Wholesale & Distribution',
     description: 'Bulk tier pricing, dealer credit limits and repayment tracking',
+    blurb: 'Tier pricing and dealer credit',
     href: '/industries/wholesale-distribution/',
     icon: 'truck'
   },
   {
     title: 'Contractors & Services',
     description: 'Job tracking from enquiry to final payment, milestone deposits and mobile receipts',
+    blurb: 'Jobs, deposits and receipts',
     href: '/industries/contractors-services/',
     icon: 'clipboard'
   },
   {
     title: 'Field Service & Maintenance',
     description: 'Installed asset registers, annual maintenance contracts and technician apps',
+    blurb: 'Assets, contracts and technicians',
     href: '/industries/field-service/',
     icon: 'wrench'
   },
   {
     title: 'Startups & SMEs',
     description: 'Zero-friction quotations and a clear client pipeline, with no setup fee',
+    blurb: 'Quotes and pipeline, no setup fee',
     href: '/industries/startups/',
     icon: 'rocket'
+  },
+  {
+    title: 'More industries',
+    description: 'Custom setups for almost any business',
+    blurb: 'Custom setups for any business',
+    href: '/industries/',
+    icon: 'globe'
   }
 ]
 
@@ -226,7 +238,7 @@ onBeforeUnmount(() => {
 <template>
   <header class="nav-shell" :class="{ scrolled, expanded: menuOpen }">
     <nav class="glass-nav" aria-label="Main navigation">
-      <!-- BRAND (original logo, painted through a mask: S A P dark orange, T I V rich dark blue, O split orange / blue, so any transparent PNG works) -->
+      <!-- BRAND (original logo, painted with a black to orange gradient through a mask, so any transparent PNG works) -->
       <router-link to="/" class="brand" aria-label="Saptivo CRM home" @click="closeAll">
         <span class="brand-logo" role="img" aria-label="Saptivo CRM" :style="{ '--logo': `url(${logoSrc})` }"></span>
       </router-link>
@@ -307,19 +319,20 @@ onBeforeUnmount(() => {
           </router-link>
 
           <Transition name="mega">
-            <div v-if="openMenu === 'industries'" class="mega-menu mm mm-mid">
-              <div class="mm-grid mm-grid-3 mm-grid-sm">
+            <div v-if="openMenu === 'industries'" class="mega-menu mm mm-wide">
+              <div class="mm-grid mm-grid-3">
                 <div class="mm-tabs">
-                  <router-link to="/industries/" class="mm-tab on" @click="closeAll">All industries</router-link>
+                  <span class="mm-tab on">Industries</span>
+                  <router-link to="/industries/" class="mm-all" @click="closeAll">All industries</router-link>
                 </div>
                 <div class="mm-body">
-                  <p class="mm-h">Industries</p>
-                  <div class="mm-items">
+                  <p class="mm-h">Built for the way you sell</p>
+                  <div class="mm-items mm-items-2">
                     <router-link v-for="industry in industries" :key="industry.href" :to="industry.href" class="mm-it" @click="closeAll">
                       <svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path v-for="(d, i) in ICONS[industry.icon]" :key="i" :d="d" /></svg>
                       <span class="mm-it-t">
                         <strong>{{ industry.title }}</strong>
-                        <small>{{ industry.description }}</small>
+                        <small>{{ industry.blurb }}</small>
                       </span>
                     </router-link>
                   </div>
@@ -500,7 +513,7 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Urbanist:wght@500;600&display=swap');
 
 /* =========================================================
    ROOT
@@ -575,10 +588,7 @@ onBeforeUnmount(() => {
   display: block;
   width: 156px;
   height: 38px;
-  /* S A P orange · T I V blue · the O is orange on top, blue underneath */
-  background:
-    linear-gradient(180deg, #e2540f 0 50%, #0b2a6b 50% 100%) right center / 19% 100% no-repeat,
-    linear-gradient(90deg, #e2540f 0 44%, #0b2a6b 44% 100%);
+  background: linear-gradient(90deg, #0b0c0e 0%, #0b0c0e 45%, #f2531f 82%, #ff7a45 100%);
   -webkit-mask: var(--logo) left center / contain no-repeat;
   mask: var(--logo) left center / contain no-repeat;
 }
@@ -879,22 +889,24 @@ onBeforeUnmount(() => {
   border-radius: 999px;
   text-decoration: none;
   white-space: nowrap;
-  font-size: 13.5px;
-  font-weight: 500;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-family: 'Urbanist', system-ui, sans-serif; /* same font as the hero buttons */
+  font-size: 14.5px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  transition: transform 0.2s ease, background 0.2s ease;
 }
 
-/* Match the hero buttons: black for the demo and orange for the trial. */
+/* Same colours as the hero buttons: black for the demo, orange gradient for the trial, no shadows. */
 .demo-btn {
   color: #fff;
-  background: #0b0c0e;
+  background: #000;
   box-shadow: none;
 }
 
 .start-btn {
   color: #fff;
-  background: linear-gradient(180deg, #ff7a45, #f2531f);
-  box-shadow: 0 8px 20px -8px rgba(242, 83, 31, 0.55);
+  background: linear-gradient(135deg, #f26a1b 0%, #cf440a 100%) !important;
+  box-shadow: none !important;
 }
 
 .demo-btn:hover,
@@ -903,12 +915,12 @@ onBeforeUnmount(() => {
 }
 
 .demo-btn:hover {
-  background: #202124;
+  background: #1a1a1a;
 }
 
 .start-btn:hover {
-  background: linear-gradient(180deg, #ff7a45, #f2531f);
-  box-shadow: 0 12px 26px -8px rgba(242, 83, 31, 0.65);
+  background: linear-gradient(135deg, #f97b2d 0%, #dc4c0d 100%) !important;
+  box-shadow: none !important;
 }
 
 /* =========================================================

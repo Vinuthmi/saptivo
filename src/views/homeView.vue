@@ -12,6 +12,7 @@ import Section9 from '../components/home/section9.vue'
 import Sectionwhy from '../components/home/Sectionwhy.vue'
 import FAQ from '../components/home/FAQ.vue'
 import Section11 from '../components/home/section11.vue'
+import FooterCta from '../components/home/footercta.vue'
 import TrustedBusinesses from '../components/home/trustedBusinesses.vue'
 
 
@@ -28,8 +29,8 @@ const isSection6Preview = computed(() => route.query.preview === 'section6')
       <HeroSection />
       <Section2 v-if="!isSection2Preview" />
       <Section1 :preview="isSection2Preview" />
-      <Section3 />
       <Section4 />
+      <Section3 />
       <Section10 />
       <Section6 preview />
       <TrustedBusinesses />
@@ -37,6 +38,7 @@ const isSection6Preview = computed(() => route.query.preview === 'section6')
       <Sectionwhy />
       <FAQ />
       <Section11 />
+      <FooterCta />
     </template>
   </main>
 </template>

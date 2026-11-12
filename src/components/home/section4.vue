@@ -19,32 +19,27 @@
       </header>
 
       <!-- ============ tabs ============ -->
-      <div class="ig-tabs" role="tablist" aria-label="Integrations">
-        <button
-          v-for="(s, i) in slides"
-          :id="`ig-tab-${i}`"
-          :key="s.id"
-          type="button"
-          role="tab"
-          class="ig-tab"
-          :class="{ on: active === i }"
-          :aria-selected="active === i"
-          :aria-controls="`ig-panel-${i}`"
-          :tabindex="active === i ? 0 : -1"
-          @click="goTo(i)"
-        >
-          <svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true" v-html="icon[s.icon]"></svg>
-          {{ s.tab }}
-        </button>
-      </div>
+        <div class="ig-tabs" role="tablist" aria-label="Integrations">
+          <button
+            v-for="(s, i) in slides"
+            :id="`ig-tab-${i}`"
+            :key="s.id"
+            type="button"
+            role="tab"
+            class="ig-tab"
+            :class="{ on: active === i }"
+            :aria-selected="active === i"
+            :aria-controls="`ig-panel-${i}`"
+            :tabindex="active === i ? 0 : -1"
+            @click="goTo(i)"
+          >
+            {{ s.tab }}
+          </button>
+        </div>
+    </div>
 
-      <!-- ============ description for the active tab ============ -->
-      <ul :key="active" class="ig-desc" aria-live="polite">
-        <li v-for="(pt, i) in activePoints" :key="i" :style="{ '--i': i }">
-          <i class="ck"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 12.5 4 4 8-9" /></svg></i>
-          <span><b>{{ pt.b }}</b>{{ pt.t }}</span>
-        </li>
-      </ul>
+    <div class="ig-bottom">
+    <div class="ig-wrap ig-wrap2">
 
       <!-- ============ stage ============ -->
       <div
@@ -105,11 +100,6 @@
                 </div>
               </div>
 
-              <svg class="link" viewBox="0 0 44 40" aria-hidden="true">
-                <path id="lk0" d="M2 20 H42" />
-                <circle v-if="motion" r="4"><animateMotion dur="2.2s" repeatCount="indefinite" begin="0s"><mpath href="#lk0" /></animateMotion></circle>
-                <circle v-if="motion" r="4"><animateMotion dur="2.2s" repeatCount="indefinite" begin="1.1s"><mpath href="#lk0" /></animateMotion></circle>
-              </svg>
 
               <div class="win" style="--d: 1">
                 <div class="hero">
@@ -170,11 +160,6 @@
                 </div>
               </div>
 
-              <svg class="link" viewBox="0 0 44 40" aria-hidden="true">
-                <path id="lk1" d="M2 20 H42" />
-                <circle v-if="motion" r="4"><animateMotion dur="2.2s" repeatCount="indefinite" begin="0s"><mpath href="#lk1" /></animateMotion></circle>
-                <circle v-if="motion" r="4"><animateMotion dur="2.2s" repeatCount="indefinite" begin="1.1s"><mpath href="#lk1" /></animateMotion></circle>
-              </svg>
 
               <div class="win" style="--d: 1">
                 <div class="hero">
@@ -240,11 +225,6 @@
                 </div>
               </div>
 
-              <svg class="link" viewBox="0 0 44 40" aria-hidden="true">
-                <path id="lk2" d="M2 20 H42" />
-                <circle v-if="motion" r="4"><animateMotion dur="2.2s" repeatCount="indefinite" begin="0s"><mpath href="#lk2" /></animateMotion></circle>
-                <circle v-if="motion" r="4"><animateMotion dur="2.2s" repeatCount="indefinite" begin="1.1s"><mpath href="#lk2" /></animateMotion></circle>
-              </svg>
 
               <div class="win" style="--d: 1">
                 <div class="hero slim">
@@ -303,11 +283,6 @@
                 </div>
               </div>
 
-              <svg class="link" viewBox="0 0 44 40" aria-hidden="true">
-                <path id="lk3" d="M2 20 H42" />
-                <circle v-if="motion" r="4"><animateMotion dur="2.2s" repeatCount="indefinite" begin="0s"><mpath href="#lk3" /></animateMotion></circle>
-                <circle v-if="motion" r="4"><animateMotion dur="2.2s" repeatCount="indefinite" begin="1.1s" keyPoints="1;0" keyTimes="0;1" calcMode="linear"><mpath href="#lk3" /></animateMotion></circle>
-              </svg>
 
               <div class="win" style="--d: 1">
                 <div class="cal-bar">
@@ -371,11 +346,6 @@
                 </div>
               </div>
 
-              <svg class="link" viewBox="0 0 44 40" aria-hidden="true">
-                <path id="lk4" d="M2 20 H42" />
-                <circle v-if="motion" r="4"><animateMotion dur="2.2s" repeatCount="indefinite" begin="0s"><mpath href="#lk4" /></animateMotion></circle>
-                <circle v-if="motion" r="4"><animateMotion dur="2.2s" repeatCount="indefinite" begin="1.1s" keyPoints="1;0" keyTimes="0;1" calcMode="linear"><mpath href="#lk4" /></animateMotion></circle>
-              </svg>
 
               <div class="win" style="--d: 1">
                 <div class="hero">
@@ -402,8 +372,19 @@
                 <span><b>Webhook delivered</b><small>invoice.paid → Accounting</small></span>
               </div>
             </div>
+            <!-- soft cursor that "uses" the screen after each tab opens -->
+            <svg v-if="motion && !compact" :key="'cur' + active" class="ig-cur" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3l14 7.5-6 1.8L10.5 19z" /></svg>
+            <i v-if="motion && !compact" :key="'rip' + active" class="ig-rip" aria-hidden="true"></i>
           </div>
         </div>
+
+        <!-- ============ description for the active tab (sits under the preview) ============ -->
+        <p :key="active" class="ig-desc" aria-live="polite">
+          <template v-for="(pt, i) in activePoints" :key="i">
+            <span v-if="i" class="sep" aria-hidden="true">·</span>
+            <span class="pt" :style="{ '--i': i }"><b>{{ pt.b }}</b>{{ pt.t }}</span>
+          </template>
+        </p>
 
         <div class="ig-dots" role="group" aria-label="Choose integration">
           <button
@@ -418,6 +399,7 @@
           ></button>
         </div>
       </div>
+    </div>
     </div>
   </section>
 </template>
@@ -437,7 +419,7 @@ defineOptions({ name: 'HomeIntegrationsSection' })
  */
 import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
 
-const SCENE_W = 1160
+const SCENE_W = 1200
 const SCENE_H = 490
 const COMPACT_W = 700
 const PHONE_W = 400
@@ -598,12 +580,21 @@ function fit() {
   compact.value = w < 900 // tablets + phones: CRM window only, so text stays readable
   phone.value = w < 560 // phones: a narrower, simplified window
   const base = phone.value ? PHONE_W : compact.value ? COMPACT_W : SCENE_W
-  scale.value = Math.min(1, +(w / base).toFixed(3)) || 1
+  let sc = Math.min(1, w / base)
+  // desktop: also shrink the preview so the whole section (heading, tabs, preview, text, dots) fits the visible screen
+  if (!compact.value && rootEl.value) {
+    const view = rootEl.value.querySelector('.ig-view')
+    const other = rootEl.value.offsetHeight - (view ? view.offsetHeight : 0)
+    const hs = (window.innerHeight - other) / SCENE_H
+    sc = Math.min(sc, Math.max(hs, 0.42))
+  }
+  scale.value = +sc.toFixed(3) || 1
 }
 
 onMounted(() => {
   motion.value = !(typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches)
   fit()
+  window.addEventListener('resize', fit)
   ro = new ResizeObserver(fit)
   ro.observe(stageEl.value)
   io = new IntersectionObserver(([en]) => {
@@ -615,6 +606,7 @@ onMounted(() => {
 })
 onBeforeUnmount(() => {
   stopTimer()
+  window.removeEventListener('resize', fit)
   ro?.disconnect()
   io?.disconnect()
 })
@@ -633,32 +625,19 @@ onBeforeUnmount(() => {
   --mute: #94a3b8;
   --line: #f1f5f9;
   position: relative;
-  /* boxed: a rounded card inset from the page edges */
-  width: calc(100% - 2 * clamp(12px, 3vw, 40px));
-  max-width: 1680px;
-  margin: clamp(16px, 3vw, 40px) auto clamp(48px, 6vw, 88px);
-  border: 1px solid rgba(15, 23, 42, 0.06);
-  border-radius: clamp(22px, 2.6vw, 36px);
-  box-shadow: 0 30px 60px -36px rgba(150, 70, 30, 0.35), 0 1px 0 #fff inset;
-  overflow: hidden;
+  /* full-bleed band: the grey runs edge to edge, the content stays centred inside .ig-wrap */
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  border: 0;
+  border-radius: clamp(24px, 3vw, 40px);
+  box-shadow: none;
+  overflow: hidden; /* rounds the corners and clips the 1160px scene on narrow screens, so the band never adds a horizontal scrollbar */
   isolation: isolate;
   font-family: 'Poppins', system-ui, sans-serif;
   color: var(--navy);
-  padding: clamp(24px, 3vw, 40px) 0 clamp(40px, 4vw, 56px);
-  background:
-    radial-gradient(900px 420px at 100% 0%, #fde3d9 0%, transparent 70%),
-    radial-gradient(800px 500px at 0% 0%, #fce7e0 0%, transparent 65%),
-    linear-gradient(180deg, #fdeee8 0%, #fbf3ef 55%, #fdf7f3 100%);
-}
-.ig::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(rgba(190, 120, 90, 0.13) 1px, transparent 1.2px);
-  background-size: 26px 26px;
-  mask-image: radial-gradient(ellipse 70% 60% at 50% 60%, #000 30%, transparent 85%);
-  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 60%, #000 30%, transparent 85%);
-  pointer-events: none;
+  padding: clamp(56px, 6vw, 96px) 0 clamp(56px, 6vw, 96px);
+  background: #f4f5f7;
 }
 .ig-wrap {
   position: relative;
@@ -699,17 +678,17 @@ onBeforeUnmount(() => {
 }
 .ig-title em { font-style: normal; background: linear-gradient(100deg, #ff9a3d 0%, #ff6a1a 45%, #f2540c 100%); -webkit-background-clip: text; background-clip: text; color: transparent; white-space: nowrap; }
 .ig-nav:focus-visible, .ig-tab:focus-visible { outline: 2px solid var(--o); outline-offset: 3px; }
-.ig-sub { margin: 10px auto 0; max-width: 640px; text-align: center; font-family: 'Urbanist', system-ui, sans-serif; font-size: clamp(15px, 1vw, 18px); font-weight: 500; line-height: 1.45; letter-spacing: -0.02em; color: #475569; }
+.ig-sub { margin: 20px auto 0; max-width: 640px; text-align: center; font-family: 'Urbanist', system-ui, sans-serif; font-size: clamp(15px, 1vw, 18px); font-weight: 500; line-height: 1.45; letter-spacing: -0.02em; color: #475569; }
 
 
 /* ============ active-tab description ============ */
-.ig-desc { list-style: none; margin: 16px auto 0; padding: 0 clamp(16px, 4vw, 64px); max-width: 1240px; min-height: 52px; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: center; align-items: flex-start; gap: 10px 28px; }
-.ig-desc li { display: flex; align-items: flex-start; gap: 10px; flex: 1 1 0; min-width: 0; max-width: 400px; font-size: 14px; line-height: 1.4; color: var(--ink); animation: ig-descin 0.45s ease both; animation-delay: calc(var(--i, 0) * 0.08s); }
+/* wider than the preview frame so the three statements fit on one line on desktop; wraps naturally below that */
+.ig-desc { position: relative; left: 50%; width: min(1440px, calc(100vw - 2 * clamp(16px, 2.4vw, 40px))); transform: translateX(-50%); margin: 28px 0 0; padding: 0; min-height: 52px; text-align: center; font-size: 14px; line-height: 1.8; color: var(--ink); text-wrap: pretty; }
+.ig-desc .pt { display: inline; animation: ig-descin 0.45s ease both; animation-delay: calc(var(--i, 0) * 0.08s); }
 .ig-desc b { font-weight: 600; color: var(--navy); }
-.ig-desc .ck { flex: none; display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: linear-gradient(160deg, #ff8a4c, #f2540c); }
-.ig-desc .ck svg { width: 12px; height: 12px; fill: none; stroke: #fff; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.ig-desc .sep { display: inline-block; width: 1px; height: 14px; margin: 0 11px; vertical-align: middle; background: #c5ccd6; font-size: 0; }
 @keyframes ig-descin { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-@media (max-width: 860px) { .ig-desc { flex-direction: column; align-items: flex-start; min-height: 64px; max-width: 560px; } .ig-desc li { flex: none; max-width: none; font-size: 13px; } }
+@media (max-width: 860px) { .ig-desc { font-size: 14px; line-height: 1.7; margin-top: 22px; } .ig-desc .sep { margin: 0 10px; } }
 
 /* ============ tabs ============ */
 .ig-tabs {
@@ -717,7 +696,7 @@ onBeforeUnmount(() => {
   flex-wrap: wrap;
   justify-content: center;
   gap: 8px;
-  margin: 22px auto 0;
+  margin: 36px auto 0;
 }
 .ig-tab {
   display: inline-flex;
@@ -726,7 +705,7 @@ onBeforeUnmount(() => {
   padding: 10px 18px;
   border: 1px solid rgba(15, 23, 42, 0.1);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.85);
   color: var(--ink);
   font: 500 13.5px/1 'Poppins', system-ui, sans-serif;
   cursor: pointer;
@@ -737,14 +716,14 @@ onBeforeUnmount(() => {
 .ig-tab.on { background: var(--navy); border-color: var(--navy); color: #fff; box-shadow: 0 10px 22px -8px rgba(15, 23, 42, 0.5); }
 
 /* ============ stage ============ */
-.ig-stage { position: relative; margin: 14px auto 0; max-width: 1160px; padding: 0 60px; /* room for the arrows */ outline: none; }
+.ig-stage { position: relative; margin: 40px auto 0; max-width: 1160px; padding: 0 60px; /* room for the arrows */ outline: none; }
 .ig-view { position: relative; }
 .ig-view:has(.compact) { margin-bottom: 4px; }
 .ig-scene {
   position: absolute;
   left: 50%;
   top: 0;
-  width: 1160px;
+  width: 1200px;
   height: 490px;
   transform-origin: 50% 0;
 }
@@ -762,7 +741,7 @@ onBeforeUnmount(() => {
   content: '';
   position: absolute;
   left: 4%; right: 4%; bottom: 22px; height: 40px;
-  background: radial-gradient(closest-side, rgba(190, 90, 50, 0.2), transparent);
+  background: radial-gradient(closest-side, rgba(15, 23, 42, 0.14), transparent);
   filter: blur(10px);
 }
 
@@ -865,14 +844,15 @@ onBeforeUnmount(() => {
 .sd-stats small { font-size: 8.5px; color: var(--mute); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 /* connector */
-.link { position: absolute; left: 304px; top: 120px; width: 44px; height: 40px; overflow: visible; }
-.link path { fill: none; stroke: #ffb48c; stroke-width: 2; stroke-dasharray: 3 6; stroke-linecap: round; }
+.link { position: absolute; left: 310px; top: 120px; width: 78px; height: 40px; overflow: visible; }
+.link path { fill: none; stroke: #ff9a66; stroke-width: 2; stroke-dasharray: 2 7; stroke-linecap: round; }
+.link circle.end { fill: #fff; stroke: #ff9a66; stroke-width: 2; filter: none; }
 .link circle { fill: var(--o); filter: drop-shadow(0 0 5px rgba(255, 87, 34, 0.8)); }
 
 /* CRM window */
 .win {
   position: absolute;
-  left: 348px;
+  left: 388px;
   top: 0;
   width: 812px;
   height: 458px;
@@ -1041,11 +1021,11 @@ onBeforeUnmount(() => {
 .tic.g svg { stroke: #15803d; }
 .tic.wa { background: #e6f9ee; }
 .tic.wa svg { stroke: #16a34a; }
-.t1 { left: 830px; top: 424px; width: 310px; }
-.t2 { left: 880px; top: 428px; }
-.t3 { left: 830px; top: 424px; width: 310px; }
-.t4 { left: 880px; top: 430px; }
-.t5 { left: 880px; top: 430px; }
+.t1 { left: 870px; top: 392px; width: 310px; }
+.t2 { left: 920px; top: 396px; }
+.t3 { left: 870px; top: 392px; width: 310px; }
+.t4 { left: 920px; top: 398px; }
+.t5 { left: 920px; top: 398px; }
 
 /* compact (phone) scene: CRM window only */
 .compact { width: 700px; }
@@ -1117,12 +1097,174 @@ onBeforeUnmount(() => {
 .ig-nav:hover { transform: scale(1.08); box-shadow: 0 10px 22px rgba(15, 23, 42, 0.18); }
 .ig-prev { left: -58px; }
 .ig-next { right: -58px; }
-.ig-dots { display: flex; justify-content: center; gap: 6px; margin-top: 18px; }
+.ig-dots { display: flex; justify-content: center; gap: 6px; margin-top: 26px; }
 .ig-dot { position: relative; width: 8px; height: 8px; padding: 0; border: 0; border-radius: 8px; background: #cfcbd0; cursor: pointer; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s; }
 .ig-dot::after { content: ''; position: absolute; inset: -10px -4px; } /* bigger tap target */
 .ig-dot:hover { background: #f5a07f; }
 .ig-dot:focus-visible { outline: 2px solid var(--o); outline-offset: 3px; }
 .ig-dot.on { width: 28px; background: var(--o); cursor: default; }
+
+
+/* ============ tabs: text-only underline bar + gray notched panel (video reference) ============ */
+.ig-tabs { flex-wrap: nowrap; justify-content: center; gap: clamp(20px, 3vw, 44px); margin: 40px auto 0; padding: 0 0 2px; overflow-x: auto; scrollbar-width: none; }
+.ig-tabs::-webkit-scrollbar { display: none; }
+.ig-tab { position: relative; flex: none; gap: 0; padding: 10px 2px; border: 0; border-radius: 0; background: transparent; box-shadow: none; color: #8b929d; font: 500 14px/1.2 'Poppins', system-ui, sans-serif; letter-spacing: 0; text-transform: none; white-space: nowrap; transition: color 0.25s; }
+.ig-tab::after { content: ''; position: absolute; left: 2px; right: 2px; bottom: 0; height: 2px; border-radius: 2px; background: #2d3138; transform: scaleX(0); transform-origin: left; transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
+.ig-tab:hover { background: transparent; color: #4b525d; }
+.ig-tab.on { background: transparent; border: 0; box-shadow: none; color: #1f2328; }
+.ig-tab.on::after { transform: scaleX(1); }
+
+.ig-stage { max-width: 1360px; margin-top: 28px; padding: 38px 88px 30px; border-radius: 30px; background: #1f2227; box-shadow: 0 30px 60px -30px rgba(15, 23, 42, 0.45); }
+.ig-stage::before { content: ''; position: absolute; inset: 12px; z-index: 0; border-radius: 22px; background: linear-gradient(160deg, #3a3f47, #2c3037); clip-path: polygon(0 0, 100% 0, 100% calc(100% - 64px), calc(100% - 64px) 100%, 0 100%); pointer-events: none; }
+.ig-stage > * { position: relative; z-index: 1; }
+.ig-prev { left: -72px; }
+.ig-next { right: -72px; }
+.ig-desc { left: 0; width: 100%; transform: none; margin-top: 22px; color: #c9ced6; font-size: 13.5px; }
+.ig-desc b { color: #fff; }
+.ig-desc .sep { background: rgba(255, 255, 255, 0.28); }
+.ig-dots { margin-top: 20px; }
+.ig-dot { background: rgba(255, 255, 255, 0.28); }
+.ig-dot:hover { background: rgba(255, 255, 255, 0.6); }
+.ig-dot.on { background: #fff; }
+.ig-dot:focus-visible { outline-color: #fff; }
+@media (max-width: 860px) {
+  .ig-tabs { justify-content: flex-start; gap: 24px; }
+  .ig-stage { padding: 22px 14px 20px; border-radius: 24px; }
+  .ig-stage::before { inset: 8px; border-radius: 18px; clip-path: polygon(0 0, 100% 0, 100% calc(100% - 40px), calc(100% - 40px) 100%, 0 100%); }
+}
+
+
+/* ============ full-width dark-grey section ============ */
+.ig { border-radius: 0; background: #fff; padding: clamp(56px, 6vw, 96px) 0 0; }
+.ig-wrap { max-width: none; padding: 0 clamp(12px, 3vw, 48px); }
+.ig-tabs { margin: 32px auto 0; padding-bottom: 0; border-bottom: 1px solid #e7e9ed; }
+.ig-bottom { background: #23262c; margin-top: 0; padding: clamp(32px, 4vw, 56px) 0 clamp(40px, 5vw, 72px); }
+.ig-stage { max-width: none; width: 100%; margin: 0 auto; padding: 44px 88px 34px; border-radius: 0; background: transparent; box-shadow: none; }
+.ig-stage::before { inset: 0; border-radius: 26px 26px 0 26px; background: linear-gradient(160deg, #3a3f47, #30343b); clip-path: polygon(0 0, 100% 0, 100% calc(100% - 72px), calc(100% - 72px) 100%, 0 100%); }
+@media (max-width: 860px) {
+  .ig-wrap { padding-left: 12px; padding-right: 12px; }
+  .ig-stage { padding: 22px 12px 22px; }
+  .ig-stage::before { inset: 0; border-radius: 20px 20px 0 20px; clip-path: polygon(0 0, 100% 0, 100% calc(100% - 44px), calc(100% - 44px) 100%, 0 100%); }
+}
+
+/* ============ light-grey lower part ============ */
+.ig-bottom { background: #f4f5f7; }
+.ig-stage::before { background: linear-gradient(160deg, #eceef2, #e3e6eb); }
+.ig-desc { color: #475569; }
+.ig-desc b { color: #0f172a; }
+.ig-desc .sep { background: #c5ccd6; }
+.ig-dot { background: #c3c9d2; }
+.ig-dot:hover { background: #8b929d; }
+.ig-dot.on { background: #0f172a; }
+.ig-dot:focus-visible { outline-color: #0f172a; }
+
+/* ============ tab-change animation (reference video): old content clears, then the new content builds in step by step ============ */
+.sl { transition: opacity 0.25s ease, visibility 0s linear 0.25s; }
+.sl.on { transition: opacity 0.45s ease 0.28s, visibility 0s linear 0.28s; }
+.card, .win, .toast, .link { translate: 0 24px; scale: 0.97; transition: opacity 0.6s ease, translate 0.85s cubic-bezier(0.2, 0.7, 0.2, 1), scale 0.85s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.card { translate: -24px 0; scale: 1; }
+.sl.on .card, .sl.on .win, .sl.on .toast, .sl.on .link { scale: 1; translate: 0 0; transition-delay: calc(var(--d, 0) * 0.16s + 0.36s); }
+.sl.on .link { transition-delay: 0.85s; }
+.ig-desc .pt { animation: ig-descin2 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both; animation-delay: calc(0.45s + var(--i, 0) * 0.14s); }
+@keyframes ig-descin2 { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+/* no inner box: scene sits directly on the light-grey band */
+.ig-stage::before, .ig-stage::after { display: none !important; content: none !important; }
+.ig-stage { background: transparent !important; box-shadow: none !important; border: 0 !important; border-radius: 0 !important; clip-path: none !important; }
+
+/* ---- sequence refined to the reference video: text first, then the visual, then the overlay cards last ---- */
+.ig-desc .pt { animation-delay: calc(0.12s + var(--i, 0) * 0.12s); }
+.sl { transition: opacity 0.25s ease, visibility 0s linear 0.25s; }
+.win { filter: blur(6px); transition: opacity 0.7s ease, translate 0.95s cubic-bezier(0.2, 0.7, 0.2, 1), scale 0.95s cubic-bezier(0.2, 0.7, 0.2, 1), filter 0.7s ease; }
+.sl.on .win { filter: blur(0); transition-delay: 0.55s; }
+.sl.on .card { transition-delay: calc(var(--d, 0) * 0.16s + 0.4s); }
+.sl.on .link { transition-delay: 1s; }
+.sl.on .toast { transition-delay: 1.5s; }
+.sl.on .kpis span { transition-delay: calc(0.95s + var(--k, 0) * 0.1s); }
+.sl.on .trow { transition-delay: calc(1.05s + var(--k, 0) * 0.12s); }
+.sl.on .stage { transition-delay: calc(0.95s + var(--k) * 0.1s); }
+.ig-tab { transition: color 0.3s ease; }
+@media (prefers-reduced-motion: reduce) { .win { filter: none; } }
+
+/* ---- fit the whole section inside the visible screen (desktop) ---- */
+@media (min-width: 861px) {
+  .ig { padding-top: clamp(14px, 3svh, 36px); }
+  .ig-wrap { padding-top: clamp(8px, 2svh, 24px); }
+  .ig-title { font-size: clamp(28px, min(4.4vw, 6.2svh), 64px); line-height: 1.05; }
+  .ig-sub { margin-top: clamp(8px, 1.6svh, 18px); font-size: clamp(13px, 1.9svh, 17px); }
+  .ig-bar .ig-tabs, .ig-tabs { margin-top: clamp(10px, 2.2svh, 26px); }
+  .ig-tab { padding-top: clamp(6px, 1.3svh, 12px); padding-bottom: clamp(6px, 1.3svh, 12px); }
+  .ig-bottom { padding-top: clamp(8px, 2svh, 28px); padding-bottom: clamp(12px, 2.6svh, 36px); }
+  .ig-stage { padding-top: 6px; padding-bottom: 4px; }
+  .ig-desc { margin-top: clamp(6px, 1.4svh, 16px); min-height: 0; }
+  .ig-dots { margin-top: clamp(6px, 1.4svh, 14px); }
+}
+
+.link { display: none !important; }
+
+/* one light-grey rounded container for the whole section */
+.ig { background: #f4f5f7; border-radius: clamp(24px, 3vw, 40px); overflow: hidden; }
+.ig-bottom { background: transparent; }
+.ig-tabs { border-bottom-color: #e3e6eb; }
+
+/* ============ premium motion: calmer, softer, slower (no bounce) ============ */
+.ig { --ease: cubic-bezier(0.22, 1, 0.36, 1); }
+.sl.on .toast { animation: ig-float 9s ease-in-out 2s infinite; }
+@keyframes ig-float { 50% { margin-top: -2px; } }
+.card, .win, .toast { translate: 0 18px; scale: 0.985; filter: blur(4px); transition: opacity 0.9s var(--ease), translate 1.1s var(--ease), scale 1.1s var(--ease), filter 0.9s var(--ease); }
+.card { translate: -14px 0; }
+.sl.on .card, .sl.on .win, .sl.on .toast { scale: 1; translate: 0 0; filter: blur(0); }
+.sl.on .card { transition-delay: calc(var(--d, 0) * 0.18s + 0.35s); }
+.sl.on .win { transition-delay: 0.6s; }
+.sl.on .toast { transition-delay: 1.5s; }
+.sl.on .kpis span, .sl.on .trow, .sl.on .stage { transition-timing-function: var(--ease); transition-duration: 0.9s; }
+.ig-desc .pt { animation-duration: 0.9s; animation-timing-function: var(--ease); }
+.ig-tab::after { transition-duration: 0.5s; transition-timing-function: var(--ease); }
+.sl.on .trow.fresh { animation-duration: 6s; }
+@media (prefers-reduced-motion: reduce) { .card, .win, .toast { filter: none; } }
+
+/* ============ live scene effects (reference video): cursor, click ripple, row highlight sweep ============ */
+.ig-cur { position: absolute; left: 0; top: 0; z-index: 8; fill: #0f172a; stroke: #fff; stroke-width: 1.6; stroke-linejoin: round; filter: drop-shadow(0 5px 7px rgba(15, 23, 42, 0.3)); opacity: 0; pointer-events: none; animation: ig-cursor 6.2s cubic-bezier(0.45, 0, 0.2, 1) 1.9s both; }
+@keyframes ig-cursor {
+  0% { opacity: 0; transform: translate(1120px, 70px); }
+  8% { opacity: 1; }
+  38% { transform: translate(640px, 250px); }
+  46% { transform: translate(640px, 250px) scale(0.86); }
+  54% { transform: translate(640px, 250px); }
+  80% { opacity: 1; transform: translate(820px, 330px); }
+  100% { opacity: 0; transform: translate(900px, 360px); }
+}
+.ig-rip { position: absolute; left: 640px; top: 250px; z-index: 7; width: 34px; height: 34px; margin: -12px 0 0 -12px; border-radius: 50%; border: 2px solid rgba(15, 23, 42, 0.35); opacity: 0; pointer-events: none; animation: ig-ripple 1s ease-out 4.25s both; }
+@keyframes ig-ripple { 0% { opacity: 0.9; transform: scale(0.3); } 100% { opacity: 0; transform: scale(1.7); } }
+.sl.on .trow:nth-of-type(1) { animation: ig-hot 8s ease-in-out 3s infinite; }
+.sl.on .trow:nth-of-type(2) { animation: ig-hot 8s ease-in-out 5s infinite; }
+.sl.on .trow:nth-of-type(3) { animation: ig-hot 8s ease-in-out 7s infinite; }
+@keyframes ig-hot { 0%, 22%, 100% { background-color: #fff; } 8%, 14% { background-color: #f1f5f9; } }
+@media (prefers-reduced-motion: reduce) { .ig-cur, .ig-rip { display: none; } }
+
+/* ============ rich glass notifications (transparent, frosted) ============ */
+.toast {
+  gap: 12px; padding: 13px 16px 13px 13px; border-radius: 18px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.42));
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  -webkit-backdrop-filter: blur(18px) saturate(1.7); backdrop-filter: blur(18px) saturate(1.7);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), inset 0 -1px 0 rgba(15, 23, 42, 0.04), 0 1px 2px rgba(15, 23, 42, 0.05), 0 18px 36px -14px rgba(15, 23, 42, 0.32), 0 6px 14px -8px rgba(15, 23, 42, 0.18);
+}
+.toast::after { content: ''; position: absolute; top: 12px; right: 14px; width: 7px; height: 7px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.18); animation: ig-live 2.4s ease-in-out infinite; }
+@keyframes ig-live { 50% { box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); } }
+.toast b { color: #0b1220; font-size: 12.5px; letter-spacing: -0.01em; }
+.toast small { color: #3b4658; }
+.toast em { color: #5b6678; }
+.tic { width: 38px; height: 38px; border-radius: 12px; background: linear-gradient(160deg, rgba(255, 255, 255, 0.95), rgba(238, 241, 246, 0.7)); box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.06), 0 6px 12px -6px rgba(15, 23, 42, 0.3); }
+.tic.g { background: linear-gradient(160deg, #f0fdf4, #d9f6e4); }
+.tic.wa { background: linear-gradient(160deg, #f0fdf4, #d3f5e0); }
+.card, .win, .toast { filter: blur(4px); }
+.sl.on .toast { filter: none; }
+@media (prefers-reduced-motion: reduce) { .toast::after { animation: none; } }
+
+/* glass notification slides in from the right edge, overlapping the screen like the reference */
+.toast { translate: 46px 0; background: linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.3)); -webkit-backdrop-filter: blur(22px) saturate(1.8); backdrop-filter: blur(22px) saturate(1.8); }
+.sl.on .toast { translate: 0 0; transition-duration: 1.2s; }
 
 /* reveal */
 .ig-head, .ig-tabs, .ig-stage { opacity: 0; transform: translateY(16px); transition: opacity 0.7s ease, transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
@@ -1136,11 +1278,85 @@ onBeforeUnmount(() => {
   .ig-tabs::-webkit-scrollbar { display: none; }
   .ig-tab { flex: none; }
   .ig-nav { display: none; }
-  .ig-stage { padding: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   .ig *, .ig *::before { animation: none !important; }
   .spark .sln { stroke-dashoffset: 0; }
   .card, .win, .toast, .link, .trow, .stage, .evt, .kpis span, .sl, .ig-head, .ig-tabs, .ig-stage { transition-duration: 0.01s !important; transition-delay: 0s !important; }
+}
+
+/* ============ enhancements: bigger tab titles + descriptions, no divider line under the tabs ============ */
+.ig {
+  background: #f4f5f7;
+}
+
+/* tab titles: larger, in the heading font, no line underneath */
+.ig-tabs {
+  gap: clamp(22px, 3vw, 44px);
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+.ig-tab {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 2px;
+  color: #7b8391;
+  font: 500 clamp(15px, 1.1vw, 17px)/1.2 'Urbanist', system-ui, sans-serif;
+  letter-spacing: -0.02em;
+}
+.ig-tab::before { display: none; }
+/* underline under the selected tab */
+.ig-tab::after {
+  display: block;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: #0f172a;
+}
+.ig-tab:hover { color: #1f2937; }
+.ig-tab.on { color: #0f172a; font-weight: 600; }
+.ig-tab.on::after { transform: scaleX(1); }
+
+/* subtitle */
+.ig-sub { font-size: clamp(15px, 1vw, 17px); line-height: 1.5; max-width: 680px; }
+
+/* description under the preview */
+.ig-desc {
+  max-width: 1180px;
+  margin: 26px auto 0;
+  font-family: 'Urbanist', system-ui, sans-serif;
+  font-size: clamp(14.5px, 1vw, 16px);
+  font-weight: 500;
+  line-height: 1.7;
+  letter-spacing: -0.01em;
+  color: #475569;
+}
+.ig-desc b { font-weight: 700; color: #0f172a; }
+.ig-desc .sep {
+  width: 5px;
+  height: 5px;
+  margin: 0 12px;
+  border-radius: 50%;
+  vertical-align: middle;
+  background: #b4bcc8;
+}
+
+/* progress dots under the description */
+.ig-dots { gap: 8px; }
+.ig-dot { width: 9px; height: 9px; }
+.ig-dot.on { width: 32px; background: #0f172a; }
+
+@media (min-width: 861px) {
+  .ig-sub { font-size: clamp(14px, min(1vw, 2.2svh), 17px); }
+  .ig-tabs { margin-top: clamp(14px, 2.8svh, 32px); }
+  .ig-desc { margin-top: clamp(12px, 2.2svh, 26px); }
+  .ig-dots { margin-top: clamp(10px, 1.8svh, 20px); }
+}
+@media (max-width: 860px) {
+  .ig-tab { font-size: 15.5px; }
+  .ig-tabs { gap: 26px; }
+  .ig-desc { font-size: 15px; line-height: 1.65; margin-top: 20px; }
+  .ig-desc .sep { margin: 0 10px; }
 }
 </style>
