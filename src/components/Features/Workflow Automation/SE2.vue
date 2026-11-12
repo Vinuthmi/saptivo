@@ -174,7 +174,7 @@ onBeforeUnmount(() => {
   --rose: #fde3ea; --rose-i: #d8567f;
   font-family: "Poppins", system-ui, sans-serif;
   color: var(--ink);
-  background: #fff;
+  background: linear-gradient(180deg, #fff 0%, #f8f6ff 100%);
   padding: 96px 16px;
   overflow: hidden;
 }

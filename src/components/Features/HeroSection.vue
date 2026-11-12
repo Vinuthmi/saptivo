@@ -79,7 +79,7 @@ defineOptions({ name: "FeaturesHero" });
   padding: 112px 0 28px;
 }
 h1 {
-  margin: 0; font-weight: 500; line-height: 1.12; letter-spacing: -0.06em; color: #0f172a;
+  margin: 0; font-weight: 600; line-height: 1.12; letter-spacing: -0.06em; color: #17191d;
   font-size: var(--title);
   animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
@@ -88,7 +88,7 @@ h1 {
   width: fit-content;
   margin: 0 auto -0.14em;
   padding-bottom: 0.14em;
-  color: #33485d;
+  color: #6b7280;
 }
 .lead {
   max-width: 760px; margin: 24px 0 0;

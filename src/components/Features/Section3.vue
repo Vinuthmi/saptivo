@@ -1,5 +1,10 @@
 <template>
-  <section id="operations" class="ops" aria-labelledby="ops-title">
+  <section
+    id="operations"
+    class="ops"
+    aria-labelledby="ops-title"
+    :style="{ '--ops-bg-image': `url('${imageBase}channel-2.jpg')` }"
+  >
     <h2 id="ops-title" class="title">
       <span>Run operations</span>
       <span class="soft">and after-sales service</span>
@@ -17,6 +22,10 @@
             <p>Track installed assets, maintenance contracts and preventive schedules, then send the right technician to each visit.</p>
           </div>
         </header>
+
+        <figure class="card-photo" aria-hidden="true">
+          <img :src="imageBase + '13.jpg'" alt="" loading="lazy" decoding="async" />
+        </figure>
 
         <div class="svc">
           <div class="panel">
@@ -86,6 +95,10 @@
           </div>
         </header>
 
+        <figure class="card-photo" aria-hidden="true">
+          <img :src="imageBase + '12.jpg'" alt="" loading="lazy" decoding="async" />
+        </figure>
+
         <div class="panel">
           <div class="panel-title"><b>Open tickets</b><span class="mono">42</span></div>
           <ul class="list">
@@ -122,6 +135,10 @@
             <p>See stock by location, get reorder alerts before a part runs out, and record every transfer between warehouses.</p>
           </div>
         </header>
+
+        <figure class="card-photo" aria-hidden="true">
+          <img :src="imageBase + '10.jpg'" alt="" loading="lazy" decoding="async" />
+        </figure>
 
         <div class="panel">
           <div class="panel-title"><b>Compressor 1.5T · SKU CP-150</b><span>Reorder level 10</span></div>
@@ -160,6 +177,10 @@
             <p>Run from one HQ dashboard whether you have 1 branch or 100+, and decide what each branch team can see and change.</p>
           </div>
         </header>
+
+        <figure class="card-photo" aria-hidden="true">
+          <img :src="imageBase + 'young.jpg'" alt="" loading="lazy" decoding="async" />
+        </figure>
 
         <div class="hq">
           <div class="panel">
@@ -211,6 +232,8 @@
 <script setup>
 import { reactive } from "vue";
 defineOptions({ name: "OpsFeaturesSection" });
+
+const imageBase = `${import.meta.env.BASE_URL}images/features/`;
 
 const assets = [
   { name: "Split AC 2.0T · Unit 4471", meta: "AMC-2041 · ends 14 Mar 2027", label: "Active", tone: "ok" },
@@ -292,7 +315,11 @@ const toggle = (row, i) => {
   scroll-margin-top: 100px;
   padding: 112px 0;
   color: var(--ink);
-  background: #fff;
+  background-color: #fff;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), var(--ops-bg-image);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
   font-family: 'Urbanist', system-ui, sans-serif;
 }
 .ops *, .ops *::before, .ops *::after { box-sizing: border-box; }
@@ -331,6 +358,8 @@ const toggle = (row, i) => {
 .head p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.7; max-width: 56ch; }
 .icon { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid var(--line); border-radius: 12px; color: var(--orange); background: transparent; }
 .icon svg { width: 22px; height: 22px; }
+.card-photo { width: 100%; height: 180px; margin: -4px 0 0; overflow: hidden; border-radius: 18px; background: var(--tint); }
+.card-photo img { width: 100%; height: 100%; display: block; object-fit: cover; }
 
 /* shared mockup parts */
 .panel { min-width: 0; background: transparent; border: 1px solid var(--line); border-radius: 18px; padding: 16px; }
