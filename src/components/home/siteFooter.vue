@@ -128,31 +128,6 @@ const footerGroups = [
     <div class="footer-card">
       <div class="footer-dots" aria-hidden="true"></div>
 
-      <!-- Trusted businesses -->
-      <section class="trusted-brands" aria-label="Trusted businesses">
-        <ul class="trusted-logos">
-          <li v-for="client in clients" :key="client.name">
-            <component
-              :is="client.href ? 'a' : 'span'"
-              :href="client.href"
-              :aria-label="client.href ? `Visit ${client.name} website` : client.name"
-              :target="client.href ? '_blank' : null"
-              :rel="client.href ? 'noopener noreferrer' : null"
-            >
-              <img
-                :src="client.src"
-                :alt="client.name"
-                :width="client.width"
-                :height="client.height"
-                :style="{ '--dw': `${client.displayWidth}px` }"
-                loading="lazy"
-                draggable="false"
-              />
-            </component>
-          </li>
-        </ul>
-      </section>
-
       <div class="footer-main">
         <!-- Brand -->
         <div class="footer-brand-block">
@@ -192,6 +167,31 @@ const footerGroups = [
         </nav>
       </div>
 
+      <!-- Trusted businesses -->
+      <section class="trusted-brands" aria-label="Trusted businesses">
+        <ul class="trusted-logos">
+          <li v-for="client in clients" :key="client.name">
+            <component
+              :is="client.href ? 'a' : 'span'"
+              :href="client.href"
+              :aria-label="client.href ? `Visit ${client.name} website` : client.name"
+              :target="client.href ? '_blank' : null"
+              :rel="client.href ? 'noopener noreferrer' : null"
+            >
+              <img
+                :src="client.src"
+                :alt="client.name"
+                :width="client.width"
+                :height="client.height"
+                :style="{ '--dw': `${client.displayWidth}px` }"
+                loading="lazy"
+                draggable="false"
+              />
+            </component>
+          </li>
+        </ul>
+      </section>
+
       <div class="footer-bottom">
         <span>© {{ year }} Saptivo. All rights reserved.</span>
 
@@ -228,7 +228,7 @@ const footerGroups = [
   position: relative;
   box-sizing: border-box;
   width: 100%;
-  padding: 44px max(clamp(20px, 4vw, 56px), calc((100% - 1440px) / 2 + 56px)) 26px;
+  padding: 44px max(clamp(20px, 5vw, 80px), calc((100% - 1560px) / 2 + 80px)) 26px;
   overflow: hidden;
   border-radius: 50px 50px 0 0;
   background: #17191d;
@@ -238,9 +238,9 @@ const footerGroups = [
 
 .footer-dots {
   position: absolute;
+  top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
   height: 50%;
   background-image: radial-gradient(
     circle,
@@ -248,8 +248,8 @@ const footerGroups = [
     transparent 1.4px
   );
   background-size: 22px 22px;
-  -webkit-mask-image: linear-gradient(0deg, #000 0%, rgba(0, 0, 0, 0.6) 55%, transparent 100%);
-  mask-image: linear-gradient(0deg, #000 0%, rgba(0, 0, 0, 0.6) 55%, transparent 100%);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.6) 55%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.6) 55%, transparent 100%);
   pointer-events: none;
 }
 
@@ -330,33 +330,39 @@ const footerGroups = [
   z-index: 1;
   width: 100%;
   margin: 0 auto;
-  margin-bottom: 38px;
-  padding: 4px 0 30px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 30px 0 34px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* all logos on one even row (no scrolling); they wrap into tidy columns on smaller screens */
+/* logos sit in one centred row and wrap into centred rows on narrower screens */
 .trusted-logos {
-  display: grid;
-  grid-template-columns: repeat(8, minmax(0, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  justify-items: center;
-  gap: 8px 12px;
+  justify-content: center;
+  gap: 8px clamp(10px, 2.2vw, 36px);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
+/* one row on desktop: logos spread across the same width as the link columns above */
+@media (min-width: 1101px) {
+  .trusted-logos {
+    justify-content: space-between;
+    gap: 8px 12px;
+  }
+}
+
 .trusted-logos li {
   display: grid;
-  width: 100%;
+  flex: 0 0 auto;
   height: 72px;
   place-items: center;
 }
 
 .trusted-logos li > :is(a, span) {
   display: grid;
-  width: 100%;
   height: 100%;
   padding: 8px 10px;
   place-items: center;
@@ -425,13 +431,6 @@ const footerGroups = [
   }
 }
 
-@media (max-width: 1100px) {
-  .trusted-logos {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 10px 16px;
-  }
-}
-
 @media (max-width: 900px) {
   .trusted-logos img {
     width: calc(var(--dw) * 0.85);
@@ -454,16 +453,15 @@ const footerGroups = [
   }
 
   .trusted-brands {
-    margin-bottom: 30px;
-    padding: 0 0 22px;
-  }
-
-  .trusted-logos {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 24px 0 26px;
   }
 
   .trusted-logos li {
-    height: 64px;
+    height: 56px;
+  }
+
+  .trusted-logos li > :is(a, span) {
+    padding: 6px;
   }
 
   .trusted-logos img {
@@ -474,6 +472,10 @@ const footerGroups = [
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 30px 20px;
     padding-bottom: 32px;
+  }
+
+  .footer-links a {
+    overflow-wrap: anywhere;
   }
 
   .footer-brand-block {
@@ -488,6 +490,17 @@ const footerGroups = [
 
   .footer-legal {
     gap: 14px;
+  }
+}
+
+@media (max-width: 400px) {
+  .footer-main {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .footer-bottom a,
+  .footer-legal {
+    gap: 12px;
   }
 }
 
