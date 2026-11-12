@@ -17,7 +17,7 @@
       @pause="playing = false"
     ></video>
     <span class="shade" aria-hidden="true"></span>
-    <!-- dotted pattern over the whole hero -->
+    <!-- dotted pattern on the left and right sides -->
     <span class="dots" aria-hidden="true"></span>
 
     <div class="content">
@@ -30,7 +30,7 @@
         Saptivo is the all-in-one cloud CRM that brings your customers,
         conversations and team into one connected workspace. Capture every
         lead, answer every WhatsApp message, log every phone call and turn
-        quotations into invoices in one click.<br> Built by a Colombo software
+        quotations into invoices in one click. Built by a Colombo software
         house with more than 25 years of experience, Saptivo is the CRM
         software Sri Lanka businesses use to sell faster and serve customers
         better.
@@ -163,17 +163,16 @@ onBeforeUnmount(() => {
 .shade {
   position: absolute; inset: 0; z-index: 1; pointer-events: none;
   background:
-    linear-gradient(180deg, rgba(8, 10, 14, 0.62) 0%, rgba(8, 10, 14, 0.5) 45%, rgba(8, 10, 14, 0.72) 100%);
+    linear-gradient(180deg, rgba(8, 10, 14, 0.44) 0%, rgba(8, 10, 14, 0.32) 45%, rgba(8, 10, 14, 0.52) 100%);
 }
 
-/* ---------- dotted pattern around the edges of the section ---------- */
+/* ---------- dotted pattern on the sides (the middle stays clear) ---------- */
 .dots {
   position: absolute; inset: 0; z-index: 2; pointer-events: none;
-  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.3) 1px, transparent 1.4px);
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.36) 1px, transparent 1.4px);
   background-size: 22px 22px;
-  /* keep the middle (the text and buttons) clear: dots only show around the edges */
-  -webkit-mask-image: radial-gradient(ellipse 56% 50% at 50% 50%, transparent 0%, transparent 68%, #000 100%);
-  mask-image: radial-gradient(ellipse 56% 50% at 50% 50%, transparent 0%, transparent 68%, #000 100%);
+  -webkit-mask-image: linear-gradient(90deg, #000 0%, rgba(0, 0, 0, 0.55) 14%, transparent 30%, transparent 70%, rgba(0, 0, 0, 0.55) 86%, #000 100%);
+  mask-image: linear-gradient(90deg, #000 0%, rgba(0, 0, 0, 0.55) 14%, transparent 30%, transparent 70%, rgba(0, 0, 0, 0.55) 86%, #000 100%);
 }
 
 /* ---------- content ---------- */
@@ -195,25 +194,21 @@ h1 {
 }
 /* force white even if a global heading style exists */
 .hero h1#hero-title {
-  color: #e4e6ea !important;
-  background: linear-gradient(180deg, #ffffff 0%, #e6e8ec 55%, #b9bec7 100%) !important;
-  -webkit-background-clip: text !important;
-  background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
+  color: #fff !important;
+  background: none !important;
+  -webkit-text-fill-color: #fff !important;
   text-shadow: none;
   opacity: 1 !important;
 }
 .hero h1#hero-title .accent {
-  color: inherit !important;
+  color: #fff !important;
   background: none !important;
-  -webkit-text-fill-color: transparent !important;
+  -webkit-text-fill-color: #fff !important;
 }
 .accent {
-  color: #c4c8cf !important;
-  background: linear-gradient(95deg, #ffffff 0%, #e4e6ea 40%, #b4b9c2 100%) !important;
-  -webkit-background-clip: text !important;
-  background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
+  color: #fff !important;
+  background: none !important;
+  -webkit-text-fill-color: #fff !important;
   text-shadow: none;
   opacity: 1 !important;
 }
@@ -226,7 +221,7 @@ h1 {
 }
 .lead {
   max-width: 760px; margin: 24px 0 0;
-  font-size: 16px; line-height: 1.7; color: #d3d6dc;
+  font-size: 16px; line-height: 1.7; color: #fff;
   text-shadow: 0 1px 14px rgba(0, 0, 0, 0.4);
   animation: rise 0.9s 0.1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
@@ -235,7 +230,7 @@ h1 {
   animation: rise 0.9s 0.2s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
 .support {
-  margin: 18px 0 0; font-size: 13.5px; line-height: 1.5; color: #b4b9c2;
+  margin: 18px 0 0; font-size: 13.5px; line-height: 1.5; color: #fff;
   animation: rise 0.9s 0.3s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
 .btn {
@@ -274,12 +269,12 @@ h1 {
   .hero { padding: 104px 0 88px; }
 }
 @media (max-width: 760px) {
+  .dots { background-size: 20px 20px; }
   .hero { min-height: max(600px, 92svh); padding: 92px 0 84px; }
   .content { width: calc(100% - 32px); }
   h1 { font-size: clamp(40px, 9vw, 58px); }
   .lead { font-size: 15px; margin-top: 22px; }
   .actions { width: 100%; gap: 10px; margin-top: 28px; }
-  .dots { background-size: 20px 20px; }
   .btn { min-height: 50px; padding: 0 20px; font-size: 14px; }
 }
 @media (max-width: 380px) {
