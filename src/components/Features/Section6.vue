@@ -26,7 +26,10 @@
 
         <div class="one-card">
           <div class="oc-head">
-            <b>Saptivo</b>
+            <div class="brand-lockup" aria-label="Saptivo brand">
+              <img :src="logoSrc" alt="Saptivo logo" class="oc-logo" />
+
+            </div>
             <span class="oc-badge">One system</span>
           </div>
           <div class="oc-chips">
@@ -106,6 +109,8 @@
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 
 defineOptions({ name: "FeaturesSection6" });
+
+const logoSrc = `${import.meta.env.BASE_URL}saptivo-logo.png`;
 
 const picks = [
   {
@@ -226,6 +231,9 @@ onBeforeUnmount(() => {
   box-shadow: 0 22px 50px rgba(51, 72, 93, 0.2), 0 0 0 4px rgba(51, 72, 93, 0.08);
 }
 .oc-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.brand-lockup { display: inline-flex; align-items: center; gap: 10px; }
+.oc-logo { width: 72px; height: 42px; border-radius: 12px; object-fit: contain; box-shadow: 0 8px 16px rgba(51, 72, 93, 0.12); }
+.oc-brand-name { font-size: 1.2rem; font-weight: 700; letter-spacing: -0.03em; }
 .oc-head b { font-size: 18px; font-weight: 600; letter-spacing: -0.02em; }
 .oc-badge { padding: 5px 11px; border-radius: 99px; background: var(--orange); color: #fff; font-size: 11.5px; font-weight: 600; }
 .oc-chips { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 14px; }

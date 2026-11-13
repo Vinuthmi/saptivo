@@ -23,6 +23,16 @@ const routes = [
         component: () => import('../views/LeadManagementView.vue')
       },
       {
+        path: 'features/multi-branch-management/',
+        name: 'multi-branch-management',
+        component: () => import('../views/Multi-Branch Management.vue'),
+        meta: {
+          title: 'Multi-Branch Management CRM | Saptivo',
+          description:
+            'Manage sales, staff and stock across every location from one central Saptivo dashboard.'
+        }
+      },
+      {
         path: 'features/sales-pipeline/',
         name: 'sales-pipeline',
         component: () => import('../views/SalesPipelineView.vue')
