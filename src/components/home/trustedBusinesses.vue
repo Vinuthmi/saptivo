@@ -5,15 +5,17 @@
     </h2>
     <ul class="trusted-logos">
       <li v-for="client in clients" :key="client.name">
-        <img
-          :src="client.src"
-          :alt="client.name"
-          :width="client.w"
-          :height="client.h"
-          :style="{ '--dw': `${client.dw}px` }"
-          loading="lazy"
-          draggable="false"
-        />
+        <span>
+          <img
+            :src="client.src"
+            :alt="client.name"
+            :width="client.w"
+            :height="client.h"
+            :style="{ '--dw': `${client.dw}px` }"
+            loading="lazy"
+            draggable="false"
+          />
+        </span>
       </li>
     </ul>
   </section>
@@ -21,21 +23,22 @@
 
 <script setup>
 const clients = [
-  { name: 'Tree of Life Nature Resort', src: `${import.meta.env.BASE_URL}images/clients/tree-of-life1.png`, w: 136, h: 91, dw: 95 },
-  { name: 'Nilkamal', src: `${import.meta.env.BASE_URL}images/clients/nilkamal1.png`, w: 130, h: 90, dw: 80},
-  { name: 'Nastars', src: `${import.meta.env.BASE_URL}images/clients/nastars1.png`, w: 1878, h: 203, dw: 130 },
-  { name: 'Be Waxed Sri Lanka', src: `${import.meta.env.BASE_URL}images/clients/bewaxed1.png`, w: 220, h: 219, dw: 68 },
-  { name: 'Paint House by Nadeeka', src: `${import.meta.env.BASE_URL}images/clients/paint-house1.png`, w: 2045, h: 727, dw: 115 },
-  { name: 'Tera Computers', src: `${import.meta.env.BASE_URL}images/clients/tera1.png`, w: 447, h: 447, dw: 60 },
-  { name: 'Lanka Grills', src: `${import.meta.env.BASE_URL}images/clients/lanka-grills1.png`, w: 1317, h: 783, dw: 75 },
-  { name: 'STC', src: `${import.meta.env.BASE_URL}images/clients/stc1.png`, w: 978, h: 1127, dw: 48 },
+  { name: 'AutoSale.lk', src: `${import.meta.env.BASE_URL}images/clients/autosale.png`, w: 1694, h: 255, dw: 125 },
+  { name: 'Cartinno', src: `${import.meta.env.BASE_URL}images/clients/cartinno.webp`, w: 800, h: 226, dw: 100 },
+  { name: 'SaaSBeds', src: `${import.meta.env.BASE_URL}images/clients/saasbeds.png`, w: 2048, h: 462, dw: 115 },
+  { name: 'Ipsova', src: `${import.meta.env.BASE_URL}images/clients/ipsova.png`, w: 1000, h: 284, dw: 110 },
+  { name: 'Saptify', src: `${import.meta.env.BASE_URL}images/clients/saptify.png`, w: 720, h: 180, dw: 105 },
+  { name: 'Sepova', src: `${import.meta.env.BASE_URL}images/clients/sepova.png`, w: 2048, h: 283, dw: 130 },
+  { name: 'Veyogo', src: `${import.meta.env.BASE_URL}images/clients/veyogo.png`, w: 1154, h: 224, dw: 115 },
+  { name: 'Voxinnova', src: `${import.meta.env.BASE_URL}images/clients/voxinnova.png`, w: 433, h: 102, dw: 120 },
+  { name: 'Smardove', src: `${import.meta.env.BASE_URL}images/clients/smardove.png`, w: 727, h: 275, dw: 115 },
 ]
 </script>
 
 <style scoped>
 .trusted-brands {
   position: relative;
-  width: min(1240px, calc(100% - 40px));
+  width: min(1240px, calc(100% - 16px));
   margin: clamp(36px, 5vw, 72px) auto;
 }
 
@@ -64,33 +67,44 @@ const clients = [
 
 .trusted-logos {
   display: flex;
-  justify-content: center;
-  align-items: stretch;
+  width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  align-items: center;
+  gap: 8px;
+  scrollbar-width: none;
   margin: 40px 0 0;
-  padding: 0;
   list-style: none;
 }
 
 .trusted-logos li {
+  display: flex;
   flex: 1 1 0;
   min-width: 0;
-  display: grid;
-  place-items: center;
+  align-items: center;
+  justify-content: center;
   height: 88px;
-  padding: 0 clamp(12px, 1.4vw, 20px);
+  padding: 0 6px;
 }
 
-.trusted-logos li + li {
-  border-left: 1px solid #e6e6ea;
+.trusted-logos li > span {
+  display: grid;
+  max-width: 100%;
+  place-items: center;
+}
+
+.trusted-logos::-webkit-scrollbar {
+  display: none;
 }
 
 .trusted-logos img {
   display: block;
-  width: var(--dw);
+  width: min(var(--dw), calc((100vw - 132px) / 9));
   max-width: 100%;
   height: auto;
   object-fit: contain;
   user-select: none;
+  filter: brightness(0) invert(0.7);
   transition: filter 0.3s ease, transform 0.3s ease;
 }
 
@@ -100,30 +114,24 @@ const clients = [
 }
 
 @media (max-width: 900px) {
-  .trusted-logos {
-    flex-wrap: wrap;
-    row-gap: 6px;
-    margin-top: 26px;
-  }
-
   .trusted-logos li {
-    flex: 0 0 33.333%;
-    height: 76px;
-    border-left: 0;
-  }
-
-  .trusted-logos img {
-    width: calc(var(--dw) * 0.85);
+    height: 68px;
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 640px) {
   .trusted-logos li {
-    flex-basis: 50%;
+    flex: 0 0 auto;
+    height: 68px;
+  }
+
+  .trusted-logos {
+    width: max-content;
+    min-width: 100%;
   }
 
   .trusted-logos img {
-    width: calc(var(--dw) * 0.78);
+    width: calc(var(--dw) * 0.7);
   }
 }
 </style>

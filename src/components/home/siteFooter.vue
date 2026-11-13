@@ -7,67 +7,67 @@ const logoSrc = `${baseUrl}saptivo-logo.png`
 
 const clients = [
   {
-    name: 'Tree of Life Nature Resort',
-    src: `${baseUrl}images/clients/tree-of-life1.png`,
-    width: 136,
-    height: 91,
-    displayWidth: 95,
-    href: 'https://hoteltreeoflife.com/',
+    name: 'AutoSale.lk',
+    src: `${baseUrl}images/clients/autosale.png`,
+    width: 1694,
+    height: 255,
+    displayWidth: 125,
   },
   {
-    name: 'Nilkamal',
-    src: `${baseUrl}images/clients/nilkamal1.png`,
-    width: 130,
-    height: 90,
-    displayWidth: 80,
-    href: 'https://nilkamal.lk/',
+    name: 'Cartinno',
+    src: `${baseUrl}images/clients/cartinno.webp`,
+    width: 800,
+    height: 226,
+    displayWidth: 100,
   },
   {
-    name: 'Nastars',
-    src: `${baseUrl}images/clients/nastars1.png`,
-    width: 1878,
-    height: 203,
-    displayWidth: 130,
-    href: 'https://nastars.com/',
-  },
-  {
-    name: 'Be Waxed Sri Lanka',
-    src: `${baseUrl}images/clients/bewaxed1.png`,
-    width: 220,
-    height: 219,
-    displayWidth: 68,
-    href: 'https://bewaxed.lk/',
-  },
-  {
-    name: 'Paint House by Nadeeka',
-    src: `${baseUrl}images/clients/paint-house1.png`,
-    width: 2045,
-    height: 727,
+    name: 'SaaSBeds',
+    src: `${baseUrl}images/clients/saasbeds.png`,
+    width: 2048,
+    height: 462,
     displayWidth: 115,
-    href: 'https://painthouse.lk/',
   },
   {
-    name: 'Tera Computers',
-    src: `${baseUrl}images/clients/tera1.png`,
-    width: 447,
-    height: 447,
-    displayWidth: 60,
-    href: 'https://tera-computers.business.site/',
+    name: 'Ipsova',
+    src: `${baseUrl}images/clients/ipsova.png`,
+    width: 1000,
+    height: 284,
+    displayWidth: 110,
   },
   {
-    name: 'Lanka Grills',
-    src: `${baseUrl}images/clients/lanka-grills1.png`,
-    width: 1317,
-    height: 783,
-    displayWidth: 75,
-    href: 'https://lankagrills.com/',
+    name: 'Saptify',
+    src: `${baseUrl}images/clients/saptify.png`,
+    width: 720,
+    height: 180,
+    displayWidth: 105,
   },
   {
-    name: 'STC',
-    src: `${baseUrl}images/clients/stc1.png`,
-    width: 978,
-    height: 1127,
-    displayWidth: 48,
+    name: 'Sepova',
+    src: `${baseUrl}images/clients/sepova.png`,
+    width: 2048,
+    height: 283,
+    displayWidth: 130,
+  },
+  {
+    name: 'Veyogo',
+    src: `${baseUrl}images/clients/veyogo.png`,
+    width: 1154,
+    height: 224,
+    displayWidth: 115,
+  },
+  {
+    name: 'Voxinnova',
+    src: `${baseUrl}images/clients/voxinnova.png`,
+    width: 433,
+    height: 102,
+    displayWidth: 120,
+  },
+  {
+    name: 'Smardove',
+    src: `${baseUrl}images/clients/smardove.png`,
+    width: 727,
+    height: 275,
+    displayWidth: 115,
   },
 ]
 
@@ -329,56 +329,59 @@ const footerGroups = [
   position: relative;
   z-index: 1;
   width: 100%;
+  overflow-x: auto;
   margin: 0 auto;
   padding: 30px 0 34px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+  scrollbar-width: none;
 }
 
-/* logos sit in one centred row and wrap into centred rows on narrower screens */
+.trusted-brands::-webkit-scrollbar {
+  display: none;
+}
+
 .trusted-logos {
   display: flex;
-  flex-wrap: wrap;
+  width: 100%;
+  min-width: 0;
+  flex-wrap: nowrap;
   align-items: center;
-  justify-content: center;
-  gap: 8px clamp(10px, 2.2vw, 36px);
+  justify-content: flex-start;
+  gap: 8px clamp(6px, 0.7vw, 10px);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-/* one row on desktop: logos spread across the same width as the link columns above */
-@media (min-width: 1101px) {
-  .trusted-logos {
-    justify-content: space-between;
-    gap: 8px 12px;
-  }
-}
-
 .trusted-logos li {
   display: grid;
-  flex: 0 0 auto;
+  flex: 1 1 0;
+  min-width: 0;
   height: 72px;
   place-items: center;
 }
 
 .trusted-logos li > :is(a, span) {
   display: grid;
+  width: 100%;
   height: 100%;
-  padding: 8px 10px;
+  padding: 8px 2px;
   place-items: center;
 }
 
 .trusted-logos img {
   display: block;
-  width: var(--dw);
+  width: min(var(--dw), calc((100vw - 132px) / 9));
   max-width: 100%;
   height: auto;
   object-fit: contain;
   user-select: none;
-  transition: transform 0.3s ease;
+  filter: brightness(0) invert(0.7);
+  transition: filter 0.3s ease, transform 0.3s ease;
 }
 
 .trusted-logos li > :is(a, span):hover img {
+  filter: brightness(0);
   transform: scale(1.04);
 }
 
@@ -421,6 +424,14 @@ const footerGroups = [
 /* Responsive */
 
 @media (max-width: 1100px) {
+  .trusted-brands {
+    width: calc(100% + 160px);
+    margin-left: -80px;
+    padding-right: 16px;
+    padding-left: 16px;
+    box-sizing: border-box;
+  }
+
   .footer-main {
     grid-template-columns: repeat(4, minmax(0, 1fr));
     justify-content: normal;
@@ -432,8 +443,8 @@ const footerGroups = [
 }
 
 @media (max-width: 900px) {
-  .trusted-logos img {
-    width: calc(var(--dw) * 0.85);
+  .trusted-logos li {
+    height: 64px;
   }
 
   .footer-main {
@@ -453,19 +464,30 @@ const footerGroups = [
   }
 
   .trusted-brands {
+    width: calc(100% + 40px);
+    margin-left: -20px;
     padding: 24px 0 26px;
+    padding-right: 8px;
+    padding-left: 8px;
   }
 
   .trusted-logos li {
+    flex: 0 0 auto;
     height: 56px;
   }
 
+  .trusted-logos {
+    width: max-content;
+    min-width: 100%;
+  }
+
   .trusted-logos li > :is(a, span) {
-    padding: 6px;
+    width: auto;
+    padding: 6px 2px;
   }
 
   .trusted-logos img {
-    width: calc(var(--dw) * 0.78);
+    width: calc(var(--dw) * 0.62);
   }
 
   .footer-main {
