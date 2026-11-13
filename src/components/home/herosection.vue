@@ -1,7 +1,7 @@
 <template>
   <section class="ih" aria-labelledby="hh-title">
    <div ref="root" class="card">
-    <!-- background video -->
+    
     <video
       ref="vid"
       class="bg-video"
