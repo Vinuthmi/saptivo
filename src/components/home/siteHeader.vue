@@ -1206,8 +1206,8 @@ onBeforeUnmount(() => {
 }
 
 .glass-nav {
-  background: rgba(255, 255, 255, 0.72) !important;
-  -webkit-backdrop-filter: blur(26px) saturate(170%) !important;
-  backdrop-filter: blur(26px) saturate(170%) !important;
+  background: rgba(255, 255, 255, 0.55) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(140%) !important;
+  backdrop-filter: blur(14px) saturate(140%) !important;
 }
 </style>
