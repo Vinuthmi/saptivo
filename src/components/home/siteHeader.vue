@@ -556,20 +556,22 @@ onBeforeUnmount(() => {
   gap: 24px;
   width: min(1390px, 100%);
   min-height: 72px;
-  margin: 8px auto 0;
+  margin: 20px auto 0; /* space above the header, so it sits inside the hero panel */
   padding: 11px 13px 11px 25px;
+  /* glass effect: translucent white and a strong blur, no edge line */
   border: 0;
   border-radius: 22px;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(26px) saturate(170%);
-  -webkit-backdrop-filter: blur(26px) saturate(170%);
-  box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.04), 0 10px 34px -4px rgba(15, 23, 42, 0.16), 0 2px 8px rgba(15, 23, 42, 0.06);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.46) 0%, rgba(255, 255, 255, 0.24) 100%);
+  backdrop-filter: blur(34px) saturate(240%) brightness(1.08);
+  -webkit-backdrop-filter: blur(34px) saturate(240%) brightness(1.08);
+  box-shadow: 0 12px 38px -6px rgba(15, 23, 42, 0.28), 0 2px 8px rgba(15, 23, 42, 0.1);
   transition: background 0.3s ease, box-shadow 0.3s ease, border-radius 0.3s ease, transform 0.3s ease;
 }
 
+/* a little more opaque once the page scrolls, so it stays readable over any section */
 .scrolled .glass-nav {
-  background: rgba(255, 255, 255, 0.98);
-  box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.05), 0 16px 44px -4px rgba(15, 23, 42, 0.22), 0 3px 10px rgba(15, 23, 42, 0.08);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.74) 0%, rgba(255, 255, 255, 0.62) 100%);
+  box-shadow: 0 16px 44px -4px rgba(15, 23, 42, 0.22), 0 3px 10px rgba(15, 23, 42, 0.08);
 }
 
 /* =========================================================
@@ -1148,7 +1150,7 @@ onBeforeUnmount(() => {
 
   .glass-nav {
     min-height: 66px;
-    margin-top: 7px;
+    margin-top: 16px;
     padding: 10px 14px 10px 20px;
     border-radius: 19px;
   }
