@@ -143,18 +143,6 @@
                 </template>
               </div>
             </div>
-
-            <!-- wide screens: a companion panel beside the card, same width and height -->
-            <div class="fx-side">
-              <span class="fx-side-label">What you get</span>
-              <h4>{{ f.tab }}</h4>
-              <ul>
-                <li v-for="pt in f.points" :key="pt[0]">
-                  <i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7" /></svg></i>
-                  <span><b>{{ pt[0] }}</b><small>{{ pt[1] }}</small></span>
-                </li>
-              </ul>
-            </div>
           </article>
         </div>
       </div>
@@ -178,12 +166,6 @@ const features = [
       'Enquiries from your website, Facebook Lead Ads and WhatsApp arrive in Saptivo automatically, tagged with their source. Duplicates are merged, leads are scored and each one is assigned to the right salesperson within seconds.',
     bg: '#F4F1DE',
     glow: ['#ffffff', '#B58863'],
-    points: [
-      ['Automatic capture', 'Website, Facebook Lead Ads and WhatsApp'],
-      ['Source tagging', 'Every lead shows where it came from'],
-      ['Duplicates merged', 'One clean record per customer'],
-      ['Scored and assigned', 'To the right salesperson in seconds'],
-    ],
   },
   {
     id: 'pipeline',
@@ -193,12 +175,6 @@ const features = [
       'Drag deals across stages you define, set follow-up reminders and see weighted revenue forecasts in real time. Overdue deals are flagged before they go cold.',
     bg: '#DCE5EF',
     glow: ['#ffffff', '#778D7A'],
-    points: [
-      ['Stages you define', 'Drag deals from stage to stage'],
-      ['Follow-up reminders', 'Always know the next step'],
-      ['Live forecast', 'Weighted revenue in real time'],
-      ['Overdue flags', 'Spot deals before they go cold'],
-    ],
   },
   {
     id: 'quotes',
@@ -208,12 +184,6 @@ const features = [
       'Create branded PDF quotations from your product catalog in seconds, send them on WhatsApp or email, and convert approved quotes into tax invoices in one click. VAT, discounts and multicurrency are built in.',
     bg: '#F0DBC6',
     glow: ['#F4F1DE', '#B58863'],
-    points: [
-      ['Branded PDF quotes', 'Built from your product catalog'],
-      ['Send anywhere', 'On WhatsApp or by email'],
-      ['One-click invoice', 'Approved quotes become tax invoices'],
-      ['VAT and multicurrency', 'Discounts and taxes built in'],
-    ],
   },
   {
     id: 'whatsapp',
@@ -223,12 +193,6 @@ const features = [
       "Give your whole team one shared WhatsApp Business inbox on the official API. Assign chats, use saved replies and approved templates, and keep every conversation on the customer's timeline.",
     bg: '#D6E0D3',
     glow: ['#ffffff', '#778D7A'],
-    points: [
-      ['Shared team inbox', 'One WhatsApp Business inbox on the official API'],
-      ['Assign chats', 'The right person on every conversation'],
-      ['Saved replies and templates', 'Approved templates ready to send'],
-      ['Customer timeline', 'Every conversation stays on the record'],
-    ],
   },
   {
     id: 'calls',
@@ -238,12 +202,6 @@ const features = [
       "See who is calling before you answer. Saptivo connects to your 3CX or Vodia phone system, pops up the caller's profile and logs every inbound, outbound and missed call automatically. With Vodia, AI voice agents can also make reminder and follow-up calls using your CRM data.",
     bg: '#E9DDD9',
     glow: ['#F4F1DE', '#B58863'],
-    points: [
-      ['Caller pop-up', 'See who is calling before you answer'],
-      ['Automatic call log', 'Inbound, outbound and missed calls'],
-      ['3CX and Vodia', 'Connects to your phone system'],
-      ['AI voice agents', 'Reminder and follow-up calls with Vodia'],
-    ],
   },
   {
     id: 'service',
@@ -253,12 +211,6 @@ const features = [
       'For businesses that install and maintain equipment, Saptivo manages annual maintenance contracts, preventive service schedules, technician dispatch, spare parts and warranty billing.',
     bg: '#F4F1DE',
     glow: ['#ffffff', '#D4C4A8'],
-    points: [
-      ['AMC contracts', 'Annual maintenance contracts in one place'],
-      ['Preventive schedules', 'Services planned ahead'],
-      ['Technician dispatch', 'The right person sent on site'],
-      ['Spare parts and warranty', 'Parts tracked, warranty billed'],
-    ],
   },
 ]
 
@@ -661,102 +613,19 @@ onBeforeUnmount(() => {
   transform: translateY(calc(var(--p) * -40px));
 }
 
-/* companion panel beside each card (wide screens only) */
-.fx-side {
-  display: none;
-}
-@media (min-width: 1840px) {
+/* large screens: a slightly bigger card so the layout stays balanced now that each feature is a single card */
+@media (min-width: 1400px) {
   .fx-grid {
-    grid-template-columns: 480px minmax(0, 1144px);
+    grid-template-columns: minmax(300px, 520px) minmax(0, 680px);
   }
-  .fx-item {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 560px));
-    gap: 24px;
-    align-items: start;
+  .fx-card {
+    height: 540px;
   }
-  .fx-side {
-    display: flex;
-    flex-direction: column;
-    height: 480px;
-    padding: 36px 34px;
-    border: 1px solid #ffe3d0;
-    border-radius: 36px;
-    background: linear-gradient(160deg, #fff8f3 0%, #fff1e8 100%);
-    opacity: 0;
-    transform: translateY(44px) scale(0.97);
-    transition: opacity 0.8s ease 0.15s, transform 1s var(--ease) 0.15s;
+  .fx-win {
+    left: 40px;
+    right: 40px;
+    top: 58px;
   }
-  .fx-item.in .fx-side {
-    opacity: 1;
-    transform: none;
-  }
-}
-.fx-side-label {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--o);
-}
-.fx-side h4 {
-  margin: 12px 0 22px;
-  font-family: 'Urbanist', system-ui, sans-serif;
-  font-size: 30px;
-  font-weight: 600;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-  color: #0a0a0a;
-}
-.fx-side ul {
-  display: grid;
-  gap: 0;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.fx-side li {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 16px 0;
-  border-top: 1px solid #f3dccb;
-}
-.fx-side li i {
-  flex: none;
-  display: grid;
-  place-items: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 11px;
-  background: var(--og);
-}
-.fx-side li svg {
-  width: 17px;
-  height: 17px;
-  fill: none;
-  stroke: #fff;
-  stroke-width: 2.2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.fx-side li span {
-  display: grid;
-  gap: 2px;
-  min-width: 0;
-}
-.fx-side li b {
-  font-family: 'Urbanist', system-ui, sans-serif;
-  font-size: 17px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  color: #0a0a0a;
-}
-.fx-side li small {
-  font-family: 'Urbanist', system-ui, sans-serif;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--ink);
 }
 
 /* the product window, cropped by the card edge like a screenshot */
@@ -1375,7 +1244,6 @@ onBeforeUnmount(() => {
     animation: none !important;
   }
   .fx-card,
-  .fx-side,
   .fx-head,
   .fx-aside {
     opacity: 1 !important;
