@@ -159,7 +159,7 @@ onBeforeUnmount(() => {
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
 .ch {
-  --orange: #33485d;
+  --orange: #6B6866;
   --orange-soft: #edf1f4;
   --ink: #14120f;
   --muted: #6a6560;
@@ -177,10 +177,10 @@ onBeforeUnmount(() => {
 
 .title {
   margin: 0 auto; width: min(900px, calc(100% - 40px)); text-align: center; text-wrap: balance;
-  font-size: clamp(34px, 3.6vw, 56px); font-weight: 500; line-height: 1.15; letter-spacing: -0.03em;
+  font-size: clamp(34px, 3.6vw, 56px); font-weight: 600; line-height: 1.15; letter-spacing: -0.03em; color: #17191d;
 }
 .title span { display: block; }
-.title .soft { color: var(--ink); }
+.title .soft { color: #6B6866;; }
 
 /* ---------- expanding panels ---------- */
 .panels { display: flex; gap: 14px; width: min(1000px, calc(100% - 40px)); height: 560px; margin: 56px auto 0; }
@@ -191,7 +191,7 @@ onBeforeUnmount(() => {
 .p.on { flex-grow: 6.4; border-color: rgba(51, 72, 93, 0.4); background: #fff; }
 
 /* photo layer: fills a collapsed panel, shrinks to a header strip when the panel opens */
-.ph { position: absolute; left: 0; right: 0; top: 0; height: 100%; overflow: hidden; background: linear-gradient(135deg, #33485d 0%, #6f879b 100%); transition: height 0.7s cubic-bezier(0.5, 0, 0.2, 1); }
+.ph { position: absolute; left: 0; right: 0; top: 0; height: 100%; overflow: hidden; background: linear-gradient(135deg, #6B6866 0%, #6f879b 100%); transition: height 0.7s cubic-bezier(0.5, 0, 0.2, 1); }
 .ph img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 25%; }
 .ph::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(20, 18, 15, 0.3) 0%, rgba(20, 18, 15, 0.72) 100%); transition: opacity 0.5s; }
 .ph::before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, rgba(255, 255, 255, 0) 40%, #fff 100%); opacity: 0; transition: opacity 0.5s; }

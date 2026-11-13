@@ -56,6 +56,7 @@ defineOptions({ name: "FeaturesHero" });
   overflow: hidden;
   pointer-events: none;
   background:
+    linear-gradient(180deg, transparent 45%, rgba(248,246,255,0.72) 78%, #f8f6ff 100%),
     radial-gradient(ellipse 52% 48% at 50% 38%, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.3) 44%, rgba(255,255,255,0.14) 68%, transparent 100%),
     linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.8) clamp(240px, 32vh, 360px)),
     linear-gradient(90deg, #dfe5e8 0%, #edf0f2 25%, #e2e7eb 50%, #edf0f2 75%, #dfe5e8 100%);
@@ -100,7 +101,7 @@ defineOptions({ name: "FeaturesHero" });
   padding: clamp(88px, 11vh, 112px) 0 clamp(20px, 4vh, 28px);
 }
 h1 {
-  margin: 0; font-weight: 500; line-height: 1.12; letter-spacing: -0.06em; color: #0f172a;
+  margin: 0; font-weight: 600; line-height: 1.12; letter-spacing: -0.06em; color: #6B6866;
   font-size: var(--title);
   animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }

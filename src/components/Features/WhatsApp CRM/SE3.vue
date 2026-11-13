@@ -16,6 +16,10 @@ const photos = [
   base + "professional-woman-during-online-meeting-in-modern-2026-09-21-18-23-13-utc.jpg",
   base + "smiling-man-with-headset-working-on-computer-2026-09-23-21-05-06-utc.JPG",
 ];
+const attachmentPhotos = [
+  base + "smiling-woman-using-smartphone-in-front-of-green-w-2026-10-27-20-08-47-utc.jpg",
+  base + "online-shopping-concept-with-miniature-shopping-ca-2026-09-22-00-24-13-utc (1).jpg",
+];
 const ok = ref([true, true]);
 
 const items = [
@@ -175,7 +179,9 @@ onBeforeUnmount(() => {
                 <time>{{ m.time }}</time>
               </template>
               <template v-else-if="m.who === 'm'">
-                <div v-if="m.kind === 'photo'" class="photo"><span></span></div>
+                <div v-if="m.kind === 'photo'" class="photo">
+                  <img :src="attachmentPhotos[photoIdx]" alt="Photo shared in the WhatsApp conversation" />
+                </div>
                 <div v-else-if="m.kind === 'pdf'" class="pdf">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M7 3h8l4 4v14H7zM15 3v4h4" /></svg>
                   <div><strong>Address-change.pdf</strong><span>PDF · 84 KB</span></div>
@@ -300,8 +306,8 @@ h2 { font-size: clamp(34px, 3.4vw, 56px); line-height: 1.08; font-weight: 500; m
 .note p { padding: 3px 0 0; font-size: 12px; background: none; }
 .note small { font-size: 10px; color: var(--butter-i); }
 
-.photo { width: 150px; height: 96px; border-radius: 14px; background: linear-gradient(135deg, #cfe4f8, #e8e3ff 55%, #d3f0e1); position: relative; overflow: hidden; }
-.photo span { position: absolute; left: 14px; bottom: 0; width: 60px; height: 44px; background: #fff7; border-radius: 40px 40px 0 0; }
+.photo { width: 176px; height: 112px; border-radius: 14px; background: linear-gradient(135deg, #cfe4f8, #e8e3ff 55%, #d3f0e1); position: relative; overflow: hidden; }
+.photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .pdf { display: flex; gap: 10px; align-items: center; background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 8px 14px 8px 10px; }
 .pdf svg { width: 30px; height: 30px; padding: 6px; border-radius: 8px; background: var(--rose); color: var(--rose-i); }
 .pdf strong { display: block; font-size: 12px; }
