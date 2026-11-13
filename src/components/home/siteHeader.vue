@@ -556,26 +556,16 @@ onBeforeUnmount(() => {
   gap: 24px;
   width: min(1390px, 100%);
   min-height: 72px;
-  margin: 20px auto 0;
+  margin: 20px auto 0; /* space above the header, so it sits inside the hero panel */
   padding: 11px 13px 11px 25px;
-
-  /* Refined frosted glass effect */
+  /* glass effect: translucent white and a strong blur, no edge line */
   border: 0;
   border-radius: 22px;
-  background: rgba(255, 255, 255, 0.52);
-
-  backdrop-filter: blur(34px) saturate(180%);
-  -webkit-backdrop-filter: blur(34px) saturate(180%);
-
-  box-shadow:
-    0 12px 38px -6px rgba(15, 23, 42, 0.22),
-    0 2px 8px rgba(15, 23, 42, 0.08);
-
-  transition:
-    background 0.3s ease,
-    box-shadow 0.3s ease,
-    border-radius 0.3s ease,
-    transform 0.3s ease;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.46) 0%, rgba(255, 255, 255, 0.24) 100%);
+  backdrop-filter: blur(34px) saturate(240%) brightness(1.08);
+  -webkit-backdrop-filter: blur(34px) saturate(240%) brightness(1.08);
+  box-shadow: 0 12px 38px -6px rgba(15, 23, 42, 0.28), 0 2px 8px rgba(15, 23, 42, 0.1);
+  transition: background 0.3s ease, box-shadow 0.3s ease, border-radius 0.3s ease, transform 0.3s ease;
 }
 
 /* a little more opaque once the page scrolls, so it stays readable over any section */
@@ -1213,5 +1203,11 @@ onBeforeUnmount(() => {
     transition: none !important;
     animation: none !important;
   }
+}
+
+.glass-nav {
+  background: rgba(255, 255, 255, 0.72) !important;
+  -webkit-backdrop-filter: blur(26px) saturate(170%) !important;
+  backdrop-filter: blur(26px) saturate(170%) !important;
 }
 </style>
