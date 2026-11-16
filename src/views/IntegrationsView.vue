@@ -2,6 +2,7 @@
 import Integrationshero from '@/components/Integrations/integrationshero.vue'
 import IntegrationDirectory from '@/components/Integrations/IntegrationDirectory.vue'
 import WhyIntegrations from '@/components/Integrations/whyIntergrations.vue'
+import Whatsapp from '@/components/Integrations/whatsapp.vue'
 </script>
 
 <template>
@@ -9,5 +10,6 @@ import WhyIntegrations from '@/components/Integrations/whyIntergrations.vue'
     <Integrationshero />
     <WhyIntegrations />
     <IntegrationDirectory />
+    <Whatsapp />
   </main>
 </template>

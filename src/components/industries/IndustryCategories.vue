@@ -1,367 +1,381 @@
 <template>
-  <section ref="rootEl" class="fx" :class="{ 'fx-in': revealed }" aria-label="Industries">
-    <div class="fx-wrap">
-      <div class="fx-grid">
-        <!-- ============ left: stays in view while you scroll ============ -->
-        <aside class="fx-aside">
-          <div class="fx-aside-in">
-            <div class="fx-copy-box">
-              <Transition name="fx-swap" mode="out-in">
-                <div :key="cur.id" class="fx-copy">
-                  <h2>{{ cur.title }}</h2>
-                  <p>{{ cur.description }}</p>
-                  <router-link class="fx-btn" :to="cur.href">Explore</router-link>
-                </div>
-              </Transition>
-            </div>
-
-            <ul class="fx-list" aria-label="Industries">
-              <li v-for="(f, i) in items_" :key="f.id">
-                <button type="button" :class="{ on: active === i }" :aria-current="active === i ? 'true' : undefined" @click="goTo(i)">
-                  {{ f.title }}
-                </button>
-              </li>
-            </ul>
-          </div>
-        </aside>
-
-        <!-- ============ right: one card per industry ============ -->
-        <div class="fx-cards">
-          <article v-for="(f, i) in items_" :key="f.id" :ref="(el) => (items[i] = el)" class="fx-item">
-            <!-- phones: the text sits above each card instead of pinned on the left -->
-            <div class="fx-mcopy">
-              <h2>{{ f.title }}</h2>
-              <p>{{ f.description }}</p>
-              <router-link class="fx-btn" :to="f.href">Explore</router-link>
-            </div>
-
-            <div class="fx-card" :style="{ background: f.bg }" aria-hidden="true">
-              <img class="fx-img" :src="f.img" alt="" loading="lazy" decoding="async" @error="$event.target.style.display = 'none'" />
-              <span class="fx-of">{{ f.title }}</span>
-              <div class="fx-chips">
-                <span v-for="(c, n) in f.chips" :key="c" class="fx-chip" :style="{ '--i': n }">
-                  <i><svg viewBox="0 0 24 24"><path d="m5 12.500 4.500 4.500L19 7" /></svg></i>{{ c }}
-                </span>
-              </div>
-            </div>
-          </article>
+  <section class="sc" aria-label="Industries Saptivo is built for">
+    <div class="sc-box">
+      <!-- connected white pill that floats over the top edge of the container -->
+      <div class="sc-navwrap">
+        <div class="sc-nav" role="tablist" aria-label="Industries" @keydown="onKey">
+          <button
+            v-for="(c, i) in items"
+            :id="'sc-tab-' + c.id"
+            :key="c.id"
+            ref="tabEls"
+            type="button"
+            role="tab"
+            class="sc-tab"
+            :class="{ on: i === active }"
+            :aria-selected="i === active"
+            :aria-controls="'sc-panel-' + c.id"
+            :tabindex="i === active ? 0 : -1"
+            @click="select(i)"
+          >
+            <span>{{ c.tab }}</span>
+          </button>
         </div>
+      </div>
+
+      <!-- photo layer (clipped to the rounded corners) -->
+      <div class="sc-media" aria-hidden="true">
+        <img
+          v-for="(c, i) in items"
+          :key="c.id"
+          class="sc-img"
+          :class="{ on: i === active }"
+          :src="c.img"
+          alt=""
+          :loading="i === 0 ? 'eager' : 'lazy'"
+          decoding="async"
+          draggable="false"
+          @error="$event.target.style.display = 'none'"
+        />
+        <span class="sc-shade"></span>
+      </div>
+
+      <!-- content -->
+      <div class="sc-body">
+        <Transition name="sc-swap" mode="out-in">
+          <div :id="'sc-panel-' + cur.id" :key="cur.id" class="sc-copy" role="tabpanel" :aria-labelledby="'sc-tab-' + cur.id">
+            <h2 class="sc-h">{{ cur.title }}</h2>
+            <p class="sc-p">{{ cur.text }}</p>
+            <router-link class="sc-btn" :to="cur.href">
+              Explore
+            </router-link>
+          </div>
+        </Transition>
       </div>
     </div>
   </section>
 </template>
 
 <script setup>
-defineOptions({ name: 'IndustriesScroll' })
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+/**
+ * SectionIndustriesShowcase.vue — interactive industries showcase (Vue 3, Composition API, <script setup>)
+ *
+ * One large rounded photo container. The five industry tabs sit in a white panel cut into the top edge of the photo
+ * (centred, rounded bottom corners, concave corners where it meets the edge, like the Cova reference). Active tab = orange text + no underline; inactive = navy.
+ * Below the pill: full-width photo (cross-fades per tab), navy-to-transparent overlay for white text, and the
+ * industry title, paragraph (your copy word for word) and an underlined Explore link on the left. The right side is left
+ * open so the photo shows.
+ * Keyboard: Left / Right / Home / End move between tabs. On narrow screens the pill scrolls sideways.
+ * `img` is the photo for each industry (swap any URL, or /images/industries/xxx.jpg from /public).
+ * Brand: navy #14243A, orange #FF6B16, ivory #F9F8F4, beige #F4F1DE.
+ */
+import { ref, computed, nextTick, watch } from 'vue'
+defineOptions({ name: 'SectionIndustriesShowcase' })
 
-/* `img` is the photo on each card (swap any URL), `bg` the flat pastel shown behind / until the photo loads.
-   `chips` are the features named in each description. */
-const items_ = [
+const items = [
   {
     id: 'retail',
-    href: '/industries/retail/',
+    tab: 'Retail & Supermarkets',
     title: 'Retail and supermarkets',
-    description:
-      'CRM for retail teams: multi-counter checkouts, instant inventory audits, VIP loyalty tiers and WhatsApp receipts. Run every store from one head-office dashboard and turn one-time shoppers into regulars.',
-    img: 'https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=1200&q=80&auto=format&fit=crop',
-    bg: '#D6E0D3',
-    chips: ['Multi-counter checkouts', 'Instant inventory audits', 'VIP loyalty tiers', 'WhatsApp receipts', 'One head-office dashboard'],
+    text: 'Multi-counter checkouts, instant inventory audits, VIP loyalty tiers and WhatsApp receipts. Run every store from one head-office dashboard and turn one-time shoppers into regulars.',
+    href: '/industries/retail/',
+    img: 'https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=1800&q=80&auto=format&fit=crop',
   },
   {
     id: 'wholesale',
-    href: '/industries/wholesale-distribution/',
+    tab: 'Wholesale & Distribution',
     title: 'Wholesale and distribution',
-    description:
-      'CRM for distributors: bulk tier pricing, dealer credit limits and repayment tracking, fast bulk quotations and stock across multiple warehouses. Your reps sell more and your accounts team chases less.',
-    img: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1200&q=80&auto=format&fit=crop',
-    bg: '#DCE5EF',
-    chips: ['Bulk tier pricing', 'Dealer credit limits', 'Repayment tracking', 'Fast bulk quotations', 'Stock across multiple warehouses'],
+    text: 'Bulk tier pricing, dealer credit limits and repayment tracking, fast bulk quotations and stock across multiple warehouses. Your reps sell more and your accounts team chases less.',
+    href: '/industries/wholesale-distribution/',
+    img: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1800&q=80&auto=format&fit=crop',
   },
   {
     id: 'contractors',
-    href: '/industries/contractors-services/',
+    tab: 'Contractors & Services',
     title: 'Contractors and services',
-    description:
-      'Job tracking from enquiry to final payment: estimates, milestone deposits, site photos and mobile receipts, with clients following progress in their own portal.',
-    img: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1200&q=80&auto=format&fit=crop',
-    bg: '#F0DBC6',
-    chips: ['Estimates', 'Milestone deposits', 'Site photos', 'Mobile receipts', 'Client progress portal'],
+    text: 'Job tracking from enquiry to final payment: estimates, milestone deposits, site photos and mobile receipts, with clients following progress in their own portal.',
+    href: '/industries/contractors-services/',
+    img: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1800&q=80&auto=format&fit=crop',
   },
   {
     id: 'field',
-    href: '/industries/field-service/',
+    tab: 'Field Service & Maintenance',
     title: 'Field service and maintenance',
-    description:
-      'Field service CRM for air conditioning, solar, generator, lift and CCTV companies: installed asset registers, annual maintenance contracts, preventive scheduling, technician apps and warranty-aware billing.',
-    img: 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=1200&q=80&auto=format&fit=crop',
-    bg: '#E9DDD9',
-    chips: ['Installed asset registers', 'Annual maintenance contracts', 'Preventive scheduling', 'Technician apps', 'Warranty-aware billing'],
+    text: 'Built for air conditioning, solar, generator, lift and CCTV companies: installed asset registers, annual maintenance contracts, preventive scheduling, technician apps and warranty-aware billing.',
+    href: '/industries/field-service/',
+    img: 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=1800&q=80&auto=format&fit=crop',
   },
   {
     id: 'startups',
-    href: '/industries/startups/',
+    tab: 'Startups & SMEs',
     title: 'Startups and SMEs',
-    description:
-      'Zero-friction quotations and a clear client pipeline, up and running in an afternoon. No setup fee, no upgrade fees, and room to grow as you hire.',
-    img: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&q=80&auto=format&fit=crop',
-    bg: '#F4F1DE',
-    chips: ['Zero-friction quotations', 'Clear client pipeline', 'Up and running in an afternoon', 'No setup fee', 'No upgrade fees'],
+    text: 'Zero-friction quotations and a clear client pipeline, up and running in an afternoon. No setup fee, no upgrade fees, and room to grow as you hire.',
+    href: '/industries/startups/',
+    img: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1800&q=80&auto=format&fit=crop',
   },
 ]
 
-/* ---------- scroll logic ---------- */
-const rootEl = ref(null)
 const active = ref(0)
-const revealed = ref(false)
-const cur = computed(() => items_[active.value])
+const tabEls = ref([])
+const cur = computed(() => items[active.value])
 
-const items = [] // the <article> elements
-let cards = [] // their .fx-card children
-let raf = 0
-let io = null
-let rootIo = null
-
-/* the card closest to the middle of the screen is the active one;
-   --p (-1 … 1) is how far a card is from the middle, used for a gentle parallax */
-function update() {
-  raf = 0
-  const vh = window.innerHeight
-  const mid = midLine()
-  let best = 0
-  let bestD = Infinity
-  cards.forEach((el, i) => {
-    if (!el) return
-    const r = el.getBoundingClientRect()
-    const c = r.top + r.height / 2
-    const d = Math.abs(c - mid)
-    if (d < bestD) {
-      bestD = d
-      best = i
-    }
-    el.style.setProperty('--p', Math.max(-1, Math.min(1, (c - mid) / vh)).toFixed(3))
-  })
-  if (best !== active.value) active.value = best
+function select(i) {
+  active.value = i
 }
-function queue() {
-  if (!raf) raf = requestAnimationFrame(update)
+function onKey(e) {
+  const n = items.length
+  let k = null
+  if (e.key === 'ArrowRight') k = (active.value + 1) % n
+  else if (e.key === 'ArrowLeft') k = (active.value + n - 1) % n
+  else if (e.key === 'Home') k = 0
+  else if (e.key === 'End') k = n - 1
+  if (k === null) return
+  e.preventDefault()
+  active.value = k
+  nextTick(() => tabEls.value[k]?.focus())
 }
-/* centre of the visible area under the fixed header; the pinned column is centred on the same line */
-function midLine() {
-  const vh = window.innerHeight
-  const aside = rootEl.value?.querySelector('.fx-aside')
-  const top = aside ? parseFloat(getComputedStyle(aside).top) || 0 : 0
-  return top + (vh - top) / 2
-}
-function goTo(i) {
-  const el = cards[i]
-  if (!el) return
-  const r = el.getBoundingClientRect()
-  window.scrollTo({ top: window.scrollY + r.top + r.height / 2 - midLine(), behavior: 'smooth' })
-}
-
-onMounted(() => {
-  cards = items.map((el) => el?.querySelector('.fx-card'))
-  update()
-  window.addEventListener('scroll', queue, { passive: true })
-  window.addEventListener('resize', queue)
-
-  io = new IntersectionObserver(
-    (entries) =>
-      entries.forEach((en) => {
-        if (en.isIntersecting) {
-          en.target.classList.add('in')
-          io.unobserve(en.target)
-        }
-      }),
-    { threshold: 0.12 },
-  )
-  items.forEach((el) => el && io.observe(el))
-
-  rootIo = new IntersectionObserver(([en]) => en.isIntersecting && (revealed.value = true), { threshold: 0.1 })
-  rootIo.observe(rootEl.value)
-})
-onBeforeUnmount(() => {
-  cancelAnimationFrame(raf)
-  window.removeEventListener('scroll', queue)
-  window.removeEventListener('resize', queue)
-  io?.disconnect()
-  rootIo?.disconnect()
+// on small screens keep the active tab inside the scrolling pill
+watch(active, (i) => {
+  nextTick(() => tabEls.value[i]?.scrollIntoView?.({ inline: 'center', block: 'nearest', behavior: 'smooth' }))
 })
 </script>
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Urbanist:wght@500;600&display=swap');
+</style>
 
-/* NOTE: no `overflow: hidden` on .fx or its parents, it would stop the left column from staying pinned. */
-.fx {
-  --navy: #0f172a;
-  --ink: #3b4659;
-  --nav-dim: #667085;
-  --fx-top: var(--fx-header, 104px); /* distance below the fixed site header; set --fx-header on a parent if your header is taller */
+<style scoped>
+.sc {
+  --navy: #14243a;
+  --orange: #ff6b16;
+  --ivory: #f9f8f4;
+  --beige: #f4f1de;
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
-  position: relative;
-  width: 100%;
-  padding: clamp(32px, 4vw, 56px) clamp(12px, 1.6vw, 28px) clamp(48px, 6vw, 88px);
+  padding: clamp(36px, 5vw, 72px) clamp(4px, 0.6vw, 8px);
   background: #fff;
   font-family: 'Poppins', system-ui, sans-serif;
-  color: var(--navy);
 }
-.fx, .fx *, .fx *::before, .fx *::after { box-sizing: border-box; }
-.fx svg { display: block; }
-.fx-wrap { width: 100%; max-width: 1240px; margin: 0 auto; }
-
-.fx-aside { opacity: 0; transform: translateY(16px); transition: opacity 0.7s ease, transform 0.8s var(--ease); }
-.fx-in .fx-aside { opacity: 1; transform: none; }
-
-/* ---------- two columns ---------- */
-.fx-grid {
-  display: grid;
-  grid-template-columns: minmax(300px, 520px) minmax(0, 560px);
-  justify-content: space-between;
-  gap: 24px;
-  align-items: start;
+.sc *,
+.sc *::before,
+.sc *::after {
+  box-sizing: border-box;
+}
+.sc svg {
+  display: block;
 }
 
-/* ---------- left: pinned text ---------- */
-.fx-aside {
-  position: sticky;
-  top: var(--fx-top);
+/* the photo layer is clipped to the rounded corners; the tab panel sits on the top edge */
+.sc-box {
+  position: relative;
+  max-width: 1680px;
+  height: clamp(480px, 42vw, 560px);
+  margin: 0 auto;
+  border-radius: clamp(24px, 2.6vw, 34px);
+  background: var(--navy);
+}
+
+/* ---------- tab panel: a white notch cut into the top edge, with concave corners where it meets the photo ---------- */
+.sc-navwrap {
+  --r: clamp(18px, 2.2vw, 30px); /* radius of the panel's bottom corners and of the concave corners */
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  left: 50%;
+  width: max-content;
+  max-width: calc(100% - 2 * var(--r) - 2 * clamp(24px, 2.6vw, 34px)); /* stays clear of the container's own rounded corners */
+  transform: translateX(-50%);
+  border-radius: 0 0 var(--r) var(--r);
+  background: #fff; /* same white as the page, so the panel reads as a cut-out of the container */
+}
+.sc-navwrap::before,
+.sc-navwrap::after {
+  /* concave (inverted) corners joining the panel to the container's top edge */
+  content: '';
+  position: absolute;
+  top: 0;
+  width: calc(var(--r) + 1px);
+  height: var(--r);
+  pointer-events: none;
+}
+.sc-navwrap::before {
+  right: calc(100% - 1px); /* 1px overlap hides the hairline seam */
+  background: radial-gradient(circle at 0 100%, transparent calc(var(--r) - 0.5px), #fff var(--r));
+}
+.sc-navwrap::after {
+  left: calc(100% - 1px);
+  background: radial-gradient(circle at 100% 100%, transparent calc(var(--r) - 0.5px), #fff var(--r));
+}
+.sc-nav {
   display: flex;
-  height: calc(100vh - 2 * var(--fx-top));
-  height: calc(100svh - 2 * var(--fx-top));
-  overflow-y: auto;
-  overscroll-behavior: contain;
+  align-items: center;
+  gap: clamp(0px, 0.6vw, 8px);
+  padding: 4px clamp(10px, 1.4vw, 20px) 6px;
+  overflow-x: auto;
   scrollbar-width: none;
-  padding: 4px 6px 4px 0;
 }
-.fx-aside::-webkit-scrollbar { display: none; }
-.fx-aside-in { width: 100%; margin: auto 0; }
-.fx-copy-box { min-height: clamp(230px, 34svh, 290px); }
-.fx-copy h2, .fx-mcopy h2 {
-  margin: 0 0 14px;
+.sc-nav::-webkit-scrollbar {
+  display: none;
+}
+.sc-tab {
+  position: relative;
+  flex: none;
+  padding: 14px clamp(11px, 1.15vw, 16px);
+  border: 0;
+  background: none;
+  cursor: pointer;
   font-family: 'Urbanist', system-ui, sans-serif;
-  font-size: clamp(30px, 3.1vw, 42px);
+  font-size: clamp(13.5px, 1.05vw, 15px);
   font-weight: 600;
-  line-height: 1.15;
-  letter-spacing: -0.05em;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  color: #8a8f98;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+.sc-tab span {
+  display: inline-block;
+  text-decoration: none;
+}
+.sc-tab:hover,
+.sc-tab.on,
+.sc-tab:focus-visible {
   color: #0a0a0a;
 }
-.fx-copy p, .fx-mcopy p {
-  margin: 0 0 24px;
+.sc-tab:focus-visible {
+  outline: 2px solid #0a0a0a;
+  outline-offset: -4px;
+  border-radius: 999px;
+}
+
+/* ---------- photo layer ---------- */
+.sc-media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  background: var(--navy);
+}
+.sc-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transform: scale(1.06);
+  transition: opacity 0.8s ease, transform 1.4s var(--ease);
+  user-select: none;
+}
+.sc-img.on {
+  opacity: 1;
+  transform: scale(1);
+}
+.sc-shade {
+  /* navy overlay: strong on the text side, lighter on the right so the photo still shows */
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(20, 36, 58, 0.88) 0%, rgba(20, 36, 58, 0.62) 42%, rgba(20, 36, 58, 0.18) 100%),
+    linear-gradient(0deg, rgba(20, 36, 58, 0.5) 0%, rgba(20, 36, 58, 0) 45%);
+}
+
+/* ---------- content ---------- */
+.sc-body {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: clamp(64px, 7vw, 84px) clamp(16px, 2vw, 30px) clamp(24px, 3vw, 36px);
+}
+.sc-copy {
+  max-width: 520px;
+}
+.sc-h {
+  margin: 0 !important;
+  font-family: Urbanist, 'Urbanist Placeholder', sans-serif !important;
+  font-size: 54px !important;
+  font-weight: 600 !important;
+  line-height: 65px !important;
+  letter-spacing: -1px !important;
+  color: #fff !important;
+}
+.sc-p {
+  margin: 16px 0 0;
   font-family: 'Urbanist', system-ui, sans-serif;
-  font-size: 16px;
+  font-size: clamp(15.5px, 1.25vw, 18px);
   font-weight: 500;
   line-height: 1.6;
   letter-spacing: -0.01em;
-  color: var(--ink);
+  color: rgba(255, 255, 255, 0.9);
 }
-.fx-swap-enter-active { transition: opacity 0.5s ease 0.05s, transform 0.65s var(--ease), filter 0.5s ease; }
-.fx-swap-leave-active { transition: opacity 0.22s ease, transform 0.3s ease, filter 0.25s ease; }
-.fx-swap-enter-from { opacity: 0; transform: translateY(16px); filter: blur(3px); }
-.fx-swap-leave-to { opacity: 0; transform: translateY(-10px); filter: blur(4px); }
+.sc-btn {
+  display: inline-block;
+  margin-top: 24px;
+  padding: 4px 0;
+  color: #fff;
+  font: 600 16px/1.2 'Urbanist', system-ui, sans-serif;
+  letter-spacing: -0.01em;
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 6px;
+  transition: opacity 0.3s, text-underline-offset 0.3s var(--ease);
+}
+.sc-btn:hover {
+  opacity: 0.8;
+  text-underline-offset: 9px;
+}
+.sc-btn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 4px;
+  border-radius: 4px;
+}
 
-/* industry list */
-.fx-list { margin: 20px 0 0; padding: 18px 0 0; list-style: none; border-top: 1px solid #e6e3df; display: grid; gap: 1px; }
-.fx-list button {
-  display: flex; align-items: center; width: 100%; padding: 4px 0;
-  border: 0; background: none; cursor: pointer; text-align: left;
-  font-family: 'Urbanist', system-ui, sans-serif; font-size: 18px; font-weight: 500; line-height: 1.3; letter-spacing: -0.02em;
-  color: var(--nav-dim); transition: color 0.3s;
+.sc-swap-enter-active {
+  transition: opacity 0.5s ease 0.05s, transform 0.65s var(--ease);
 }
-.fx-list button::before {
-  content: ''; flex: none; width: 0; height: 7px; margin-right: 0; border-radius: 50%; background: #0a0a0a;
-  transition: width 0.3s var(--ease), margin-right 0.3s var(--ease);
+.sc-swap-leave-active {
+  transition: opacity 0.2s ease, transform 0.25s ease;
 }
-.fx-list button:hover { color: #0a0a0a; }
-.fx-list button.on { color: #0a0a0a; font-weight: 600; }
-.fx-list button.on::before { width: 7px; margin-right: 10px; }
-.fx-list button:focus-visible { outline: 2px solid #0a0a0a; outline-offset: 3px; border-radius: 6px; }
-
-/* Explore button */
-.fx-btn {
-  display: inline-flex; align-items: center;
-  padding: 14px 26px; border-radius: 999px;
-  background: #0a0a0a; color: #fff; text-decoration: none;
-  font: 500 14px/1 'Poppins', system-ui, sans-serif;
-  transition: background 0.3s, transform 0.3s;
-}
-.fx-btn:hover { background: #2a2a2e; transform: translateY(-2px); }
-.fx-btn:focus-visible { outline: 2px solid #0a0a0a; outline-offset: 3px; }
-
-/* ---------- right: cards ---------- */
-.fx-item { padding-bottom: clamp(56px, 12vh, 120px); }
-.fx-item:last-child { padding-bottom: 130px; } /* keeps the left text pinned while the last card is in view */
-.fx-mcopy { display: none; }
-.fx-card {
-  --p: 0;
-  position: relative;
-  height: 480px;
-  border-radius: 36px;
-  overflow: hidden;
-  isolation: isolate;
+.sc-swap-enter-from {
   opacity: 0;
-  transform: translateY(44px) scale(0.97);
-  transition: opacity 0.8s ease, transform 1s var(--ease);
+  transform: translateY(16px);
 }
-.fx-item.in .fx-card { opacity: 1; transform: none; }
-
-.fx-img { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; transform: scale(calc(1.08 + var(--p) * 0.04)) translateY(calc(var(--p) * 16px)); }
-.fx-of {
-  position: absolute; right: 26px; top: 26px; max-width: calc(100% - 52px);
-  padding: 0 16px; height: 42px; display: inline-flex; align-items: center; border-radius: 999px;
-  background: rgba(255, 255, 255, 0.78); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
-  font: 600 13px/1 'Poppins', sans-serif; color: #0a0a0a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.fx-chips {
-  position: absolute; left: 24px; right: 24px; bottom: 26px;
-  display: flex; flex-wrap: wrap; gap: 8px;
-  transform: translateY(calc(var(--p) * -14px));
-}
-.fx-chip {
-  display: inline-flex; align-items: center; gap: 9px;
-  max-width: 100%;
-  padding: 7px 15px 7px 7px; border-radius: 999px;
-  background: rgba(255, 255, 255, 0.86);
-  -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.9);
-  font-family: 'Urbanist', system-ui, sans-serif; font-size: 15px; font-weight: 600; letter-spacing: -0.01em; color: #0a0a0a;
-  opacity: 0; transform: translateY(14px);
-  transition: opacity 0.6s ease, transform 0.8s var(--ease);
-  transition-delay: calc(0.25s + var(--i) * 0.09s);
-}
-.fx-item.in .fx-chip { opacity: 1; transform: none; }
-.fx-chip i { flex: none; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: #0a0a0a; }
-.fx-chip svg { width: 12px; height: 12px; fill: none; stroke: #fff; stroke-width: 2.8; stroke-linecap: round; stroke-linejoin: round; }
-
-/* short laptop screens */
-@media (min-width: 901px) and (max-height: 760px) {
-  .fx-copy h2 { font-size: 34px; margin-bottom: 10px; }
-  .fx-copy p { font-size: 14.5px; margin-bottom: 18px; }
-  .fx-copy-box { min-height: 220px; }
-  .fx-list { margin-top: 14px; padding-top: 12px; }
-  .fx-list button { font-size: 17px; padding: 3px 0; }
+.sc-swap-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
 }
 
-/* ---------- tablets / phones: text moves above each card ---------- */
+/* ---------- responsive ---------- */
+@media (max-width: 1100px) {
+  .sc-tab { padding: 14px 9px; font-size: 13px; }
+}
 @media (max-width: 900px) {
-  .fx-grid { grid-template-columns: minmax(0, 1fr); max-width: 560px; margin: 0 auto; gap: 0; }
-  .fx-aside { display: none; }
-  .fx-mcopy { display: block; margin-bottom: 22px; }
-  .fx-mcopy h2 { font-size: clamp(32px, 8vw, 44px); line-height: 1.2; }
-  .fx-item, .fx-item:last-child { padding-bottom: 64px; }
-  .fx-item:last-child { padding-bottom: 0; }
-  .fx-card { height: 440px; border-radius: 28px; }
+  .sc-box { height: clamp(500px, 78vw, 560px); }
+  .sc-shade {
+    background:
+      linear-gradient(90deg, rgba(20, 36, 58, 0.86) 0%, rgba(20, 36, 58, 0.55) 100%),
+      linear-gradient(0deg, rgba(20, 36, 58, 0.5) 0%, rgba(20, 36, 58, 0) 45%);
+  }
 }
-@media (max-width: 480px) {
-  .fx-copy h2, .fx-mcopy h2 { font-size: 34px; line-height: 1.2; }
-  .fx-of { right: 18px; top: 18px; }
-  .fx-chips { left:a 16px; right: 16px; bottom: 18px; }
-  .fx-chip { font-size: 14px; }
+@media (max-width: 620px) {
+  .sc-h {
+    font-size: 36px !important;
+    line-height: 46px !important;
+    letter-spacing: -0.7px !important;
+  }
 }
-
+@media (max-width: 560px) {
+  .sc-box { height: 560px; }
+  .sc-body { align-items: flex-end; padding: 64px 14px 20px; }
+  .sc-copy { max-width: none; }
+}
 @media (prefers-reduced-motion: reduce) {
-  .fx-card, .fx-chip, .fx-aside { opacity: 1 !important; transform: none !important; transition: none !important; }
-  .fx-img, .fx-chips { transform: none !important; }
+  .sc *,
+  .sc *::before,
+  .sc *::after {
+    transition: none !important;
+  }
 }
 </style>

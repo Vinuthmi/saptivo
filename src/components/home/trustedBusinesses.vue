@@ -125,11 +125,6 @@ const clients = [
     height: 68px;
   }
 
-  .trusted-logos {
-    width: max-content;
-    min-width: 100%;
-  }
-
   .trusted-logos img {
     width: calc(var(--dw) * 0.7);
   }

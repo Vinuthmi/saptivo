@@ -4,23 +4,39 @@
       <h2 id="trusted-brands-title" class="trusted-brands-title">
         Proven <span>deployments</span>
       </h2>
-      <p class="trusted-brands-lead">
-        From resorts and furniture retailers to computer stores and service businesses, Sri Lankan companies such as Tree of Life Nature Resort, Nilkamal and Tera Computers run their customer relationships on Saptivo.
-      </p>
     </div>
-    <ul class="trusted-logos">
-      <li v-for="(client, i) in clients" :key="client.name" :style="{ '--i': i }">
-        <img
-          :src="client.src"
-          :alt="client.name"
-          :width="client.w"
-          :height="client.h"
-          :style="{ '--dw': `${client.dw}px` }"
-          loading="lazy"
-          draggable="false"
-        />
-      </li>
-    </ul>
+
+    <!-- logo marquee beside the heading -->
+    <div class="tb-marquee" aria-label="Businesses running on Saptivo">
+      <div class="tb-track">
+        <ul class="trusted-logos">
+          <li v-for="client in clients" :key="client.name">
+            <img
+              :src="client.src"
+              :alt="client.name"
+              :width="client.w"
+              :height="client.h"
+              :style="{ '--dw': `${client.dw}px` }"
+              loading="lazy"
+              draggable="false"
+            />
+          </li>
+        </ul>
+        <ul class="trusted-logos" aria-hidden="true">
+          <li v-for="client in clients" :key="client.name + '-2'">
+            <img
+              :src="client.src"
+              alt=""
+              :width="client.w"
+              :height="client.h"
+              :style="{ '--dw': `${client.dw}px` }"
+              loading="lazy"
+              draggable="false"
+            />
+          </li>
+        </ul>
+      </div>
+    </div>
   </section>
 </template>
 
@@ -29,10 +45,17 @@ import { ref, onMounted, onBeforeUnmount } from 'vue'
 
 defineOptions({ name: 'ProvenDeployments' })
 
+const base = import.meta.env.BASE_URL
 const clients = [
-  { name: 'Tree of Life Nature Resort', src: `${import.meta.env.BASE_URL}images/clients/tree-of-life1.png`, w: 136, h: 91, dw: 120 },
-  { name: 'Nilkamal', src: `${import.meta.env.BASE_URL}images/clients/nilkamal1.png`, w: 130, h: 90, dw: 100 },
-  { name: 'Tera Computers', src: `${import.meta.env.BASE_URL}images/clients/tera1.png`, w: 447, h: 447, dw: 76 },
+  { name: 'AutoSale.lk', src: `${base}images/clients/autosale.png`, w: 1694, h: 255, dw: 125 },
+  { name: 'Cartinno', src: `${base}images/clients/cartinno.webp`, w: 800, h: 226, dw: 100 },
+  { name: 'SaaSBeds', src: `${base}images/clients/saasbeds.png`, w: 2048, h: 462, dw: 115 },
+  { name: 'Ipsova', src: `${base}images/clients/ipsova.png`, w: 1000, h: 284, dw: 110 },
+  { name: 'Saptify', src: `${base}images/clients/saptify.png`, w: 720, h: 180, dw: 105 },
+  { name: 'Sepova', src: `${base}images/clients/sepova.png`, w: 2048, h: 283, dw: 130 },
+  { name: 'Veyogo', src: `${base}images/clients/veyogo.png`, w: 1154, h: 224, dw: 115 },
+  { name: 'Voxinnova', src: `${base}images/clients/voxinnova.png`, w: 433, h: 102, dw: 120 },
+  { name: 'Smardove', src: `${base}images/clients/smardove.png`, w: 727, h: 275, dw: 115 },
 ]
 
 const root = ref(null)
@@ -51,17 +74,18 @@ onBeforeUnmount(() => io && io.disconnect())
 <style scoped>
 .trusted-brands {
   position: relative;
+  box-sizing: border-box;
   width: 100%;
   max-width: none;
   margin: 0;
   padding: clamp(56px, 7vw, 96px) clamp(28px, 9vw, 168px);
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
   gap: clamp(28px, 5vw, 80px);
 }
 
-.tb-text { min-width: 0; max-width: 720px; }
+.tb-text { min-width: 0; }
 
 .trusted-brands .trusted-brands-title {
   margin: 0;
@@ -82,80 +106,83 @@ onBeforeUnmount(() => io && io.disconnect())
   background: none;
 }
 
-.trusted-brands-lead {
-  margin: 18px 0 0;
-  font-family: 'Urbanist', system-ui, sans-serif;
-  font-size: clamp(15px, 1vw, 18px);
-  font-weight: 500;
-  line-height: 1.5;
-  letter-spacing: -0.02em;
-  color: #475569;
+/* ---------- logo marquee ---------- */
+.tb-marquee {
+  min-width: 0;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 10%, #000 90%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 10%, #000 90%, transparent 100%);
 }
 
-/* logos beside the text */
+.tb-track {
+  display: flex;
+  width: max-content;
+  animation: tb-marquee 36s linear infinite;
+}
+
+.tb-marquee:hover .tb-track { animation-play-state: paused; }
+
 .trusted-logos {
   display: flex;
-  align-items: stretch;
+  flex: none;
+  align-items: center;
+  gap: clamp(40px, 4.5vw, 72px);
   margin: 0;
-  padding: 0;
+  padding: 0 clamp(40px, 4.5vw, 72px) 0 0; /* trailing gap keeps the loop seamless */
   list-style: none;
-  background: #fff;
 }
 
 .trusted-logos li {
-  display: grid;
-  place-items: center;
-  width: clamp(150px, 15vw, 210px);
-  height: 140px;
-  padding: 0 20px;
-}
-
-.trusted-logos li + li {
-  border-left: 1px solid #e6e6ea;
+  display: flex;
+  flex: none;
+  align-items: center;
+  height: 88px;
 }
 
 .trusted-logos img {
   display: block;
   width: var(--dw);
-  max-width: 100%;
   height: auto;
   object-fit: contain;
   user-select: none;
-  transition: filter 0.3s ease, transform 0.3s ease;
+  filter: brightness(0); /* logos in black */
+  opacity: 0.85;
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 .trusted-logos li:hover img {
-  filter: brightness(0);
+  opacity: 1;
   transform: scale(1.05);
+}
+
+@keyframes tb-marquee {
+  to { transform: translateX(-50%); }
 }
 
 /* entrance */
 .trusted-brands-title,
-.trusted-brands-lead,
-.trusted-logos li {
+.tb-marquee {
   opacity: 0;
   transform: translateY(18px);
   transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 .in .trusted-brands-title,
-.in .trusted-brands-lead,
-.in .trusted-logos li { opacity: 1; transform: none; }
-.in .trusted-brands-lead { transition-delay: 0.1s; }
-.in .trusted-logos li { transition-delay: calc(0.25s + var(--i) * 0.08s); }
+.in .tb-marquee { opacity: 1; transform: none; }
+.in .tb-marquee { transition-delay: 0.15s; }
 
 @media (max-width: 1100px) {
-  .trusted-brands { grid-template-columns: minmax(0, 1fr); }
-  .trusted-logos { justify-self: start; }
+  .trusted-brands { grid-template-columns: minmax(0, 1fr); gap: 20px; }
 }
 
 @media (max-width: 620px) {
   .trusted-brands .trusted-brands-title { font-size: 36px; line-height: 46px; letter-spacing: -0.7px; white-space: normal; }
-  .trusted-logos { width: 100%; }
-  .trusted-logos li { flex: 1 1 0; width: auto; height: 100px; padding: 0 10px; }
+  .trusted-logos li { height: 68px; }
   .trusted-logos img { width: calc(var(--dw) * 0.7); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .trusted-brands-title, .trusted-brands-lead, .trusted-logos li { opacity: 1; transform: none; transition: none; }
+  .tb-track { animation: none; }
+  .tb-marquee { overflow-x: auto; scrollbar-width: none; }
+  .trusted-brands-title, .tb-marquee { opacity: 1; transform: none; transition: none; }
 }
 </style>
