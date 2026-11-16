@@ -34,7 +34,7 @@
 
           <div class="then">
             <span class="tag">Then</span>
-            <b>{{ r.then }}</b>
+            <b>{{ r.action }}</b>
             <Transition name="swap" mode="out-in">
               <small :key="state(r)">
                 <template v-if="state(r) === 'idle'">Waiting for the trigger</template>
@@ -75,10 +75,10 @@ const reps = [
 
 /* fire = the stage index at which the rule triggers */
 const rules = [
-  { id: "quote", tone: "butter", fire: 1, when: "Deal moves to Proposal", cond: "Any value", then: "Send a quotation reminder", done: "Reminder scheduled for 3 days after the quote" },
-  { id: "manager", tone: "lav", fire: 2, when: "Deal reaches Negotiation", cond: "Value over Rs 1M", then: "Notify the sales manager", done: "Kasun notified · ABC Solar · Rs 1.85M" },
-  { id: "handover", tone: "mint", fire: 3, when: "Deal is won", cond: "Any value", then: "Create a handover task for operations", done: "Task created for Operations · due in 2 days" },
-  { id: "assign", tone: "sky", fire: 0, when: "A new deal is created", cond: "Assignment rule", then: "Rotate the deal across your team", done: "" },
+  { id: "quote", tone: "butter", fire: 1, when: "Deal moves to Proposal", cond: "Any value", action: "Send a quotation reminder", done: "Reminder scheduled for 3 days after the quote" },
+  { id: "manager", tone: "lav", fire: 2, when: "Deal reaches Negotiation", cond: "Value over Rs 1M", action: "Notify the sales manager", done: "Kasun notified · ABC Solar · Rs 1.85M" },
+  { id: "handover", tone: "mint", fire: 3, when: "Deal is won", cond: "Any value", action: "Create a handover task for operations", done: "Task created for Operations · due in 2 days" },
+  { id: "assign", tone: "sky", fire: 0, when: "A new deal is created", cond: "Assignment rule", action: "Rotate the deal across your team", done: "" },
 ];
 
 const phase = ref(0);
