@@ -139,7 +139,7 @@ onBeforeUnmount(() => {
             </div>
             <ul>
               <TransitionGroup name="line">
-                <li v-for="(l, i) in lines.slice(0, rows)" :key="l.n">
+                <li v-for="l in lines.slice(0, rows)" :key="l.n">
                   <span>{{ l.n }}</span><b>Rs. {{ l.p }}</b>
                 </li>
               </TransitionGroup>

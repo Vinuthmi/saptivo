@@ -91,11 +91,11 @@ defineOptions({ name: "ChannelsPanels" });
 // A missing file just shows the navy gradient, nothing breaks.
 const base = "/saptivo/images/features/";
 const channels = [
-  { name: "WhatsApp CRM", text: "A shared WhatsApp Business inbox with templates, bot triage and full chat history.", img: base + "smiling-woman-using-smartphone-in-front-of-green-w-2026-10-27-20-08-47-utc.jpg" },
-  { name: "3CX call integration", text: "Caller ID pop-ups, automatic call logs and click-to-call.", img: base + "smiling-man-with-headset-working-on-computer-2026-09-23-21-05-06-utc.JPG" },
-  { name: "Vodia integration and AI calls", text: "Vodia PBX call logging plus AI voice agents for reminders and follow-ups.", img: base + "professional-woman-during-online-meeting-in-modern-2026-09-21-18-23-13-utc.jpg" },
-  { name: "Customer portal", text: "A branded self-service portal for tickets, quotes, invoices and documents.", img: base + "man-using-point-of-sale-system-in-cafe-2026-09-23-07-53-09-utc.jpg" },
-  { name: "Mobile CRM", text: "iOS and Android access with offline mode and a business card scanner.", img: base + "confident-man-uses-cellphone-near-modern-city-buil-2026-09-24-03-29-45-utc.jpg" },
+  { name: "WhatsApp CRM", text: "A shared WhatsApp Business inbox with templates, bot triage and full chat history.", img: base + "15.webp" },
+  { name: "3CX call integration", text: "Caller ID pop-ups, automatic call logs and click-to-call.", img: base + "3C.webp" },
+  { name: "Vodia integration and AI calls", text: "Vodia PBX call logging plus AI voice agents for reminders and follow-ups.", img: base + "aii.webp" },
+  { name: "Customer portal", text: "A branded self-service portal for tickets, quotes, invoices and documents.", img: base + "mob.webp" },
+  { name: "Mobile CRM", text: "iOS and Android access with offline mode and a business card scanner.", img: base + "CMSA.webp" },
 ];
 const ok = ref(channels.map(() => true));
 

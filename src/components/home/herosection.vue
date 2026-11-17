@@ -18,6 +18,7 @@
     <span class="shade" aria-hidden="true"></span>
 
     <div class="wrap">
+     <div class="hero-copy">
       <h1 id="hh-title">
         Manage and automate your
         <span class="accent">CRM, your way.</span>
@@ -32,6 +33,7 @@
         <a href="mailto:hello@saptivo.com?subject=Book%20a%20Saptivo%20demo" class="btn btn-outline">Book a demo</a>
       </div>
       <p class="support">No setup fee · No upgrade fees · No credit card required</p>
+     </div>
     </div>
    </div>
   </section>
@@ -109,6 +111,7 @@ onBeforeUnmount(() => io?.disconnect());
   width: min(980px, calc(100% - 40px)); margin: 0 auto;
   padding: clamp(136px, 12vw, 168px) 0 clamp(48px, 5vw, 72px); /* top clears the floating navbar */
 }
+.hero-copy { text-align: center; }
 h1 {
   margin: 0;
   font-size: clamp(38px, 5vw, 68px);

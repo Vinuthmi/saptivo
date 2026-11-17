@@ -33,6 +33,26 @@ const routes = [
         }
       },
       {
+        path: 'features/inventory-management/',
+        name: 'inventory-management',
+        component: () => import('../views/Inventory&Multi-Warehouse.vue'),
+        meta: {
+          title: 'Inventory & Multi-Warehouse Management | Saptivo',
+          description:
+            'Keep inventory accurate across branches and warehouses, with stock visibility in one Saptivo system.'
+        }
+      },
+      {
+        path: 'features/service-maintenance-management/',
+        name: 'service-maintenance-management',
+        component: () => import('../views/service-maintenance-management.vue'),
+        meta: {
+          title: 'Service & AMC Management Software | Saptivo',
+          description:
+            'Manage service contracts, scheduled visits and after-sales work with Saptivo service and AMC management software.'
+        }
+      },
+      {
         path: 'features/sales-pipeline/',
         name: 'sales-pipeline',
         component: () => import('../views/SalesPipelineView.vue')
