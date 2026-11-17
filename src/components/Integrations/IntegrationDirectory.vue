@@ -1,128 +1,91 @@
 <template>
-  <section ref="root" class="su" :class="{ 'su-arm': armed, 'su-in': shown }" aria-label="WordPress and Facebook lead integrations">
-    <div class="su-wrap">
-      <div class="su-grid">
-        <!-- ============ 1 · WordPress website inquiry sync ============ -->
-        <article class="su-col" style="--i: 0">
-          <div class="su-card su-grad">
-            <span class="su-grain" aria-hidden="true"></span>
+  <section ref="root" class="ilc" :class="{ 'ilc-arm': armed, 'ilc-in': shown }" aria-label="WordPress and Facebook Lead Ads integrations">
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true" focusable="false">
+      <symbol id="ilc-check" viewBox="0 0 24 24"><path d="m6 12.5 4 4 8-9" /></symbol>
+    </svg>
 
-            <div class="su-panel" aria-hidden="true">
-              <div class="pn-h">
-                <img class="pn-logo" :src="logoSrc" alt="" draggable="false" />
-                <b>New inquiry</b>
-                <em class="chip" :class="wpStage.cls">
-                  <svg v-if="tick >= 4" viewBox="0 0 24 24"><path d="m6 12.500 4 4 8-9" /></svg>
-                  <i v-else></i>
-                  {{ wpStage.t }}
-                </em>
-              </div>
+    <div class="ilc-wrap">
+      <div v-for="(b, bi) in blocks" :key="b.key" class="ilc-blk">
+      <h2 class="d-h rv" :style="{ '--i': bi * 3 }">{{ b.title }}</h2>
+      <div class="ilc-row" :class="{ flip: b.flip }">
+        <!-- ================= card 1: main visual ================= -->
+        <div class="card c1" :class="'t-' + b.key" :style="{ '--i': bi * 3 }" aria-hidden="true">
+          <span class="orb o1"></span>
+          <span class="orb o2"></span>
 
-              <div class="pn-rows">
-                <div class="pn-r">
-                  <span>Customer</span>
-                  <b>John Smith</b>
-                </div>
-                <div class="pn-r">
-                  <span>Came from</span>
-                  <b class="from"><i class="wp" v-html="brand.wp"></i>/contact-us</b>
-                </div>
-                <div class="pn-r">
-                  <span>Assigned to</span>
-                  <b :key="ind" class="by swap"><i>{{ rep.i }}</i>{{ rep.n }}<u>{{ rep.m }}</u></b>
-                </div>
-              </div>
-
-              <div class="pn-ev">
-                <small>Timeline</small>
-                <ol>
-                  <li v-for="(e, k) in events" :key="e[0]" :class="{ show: tick >= 1 + k * 2 }">
-                    <span><i class="ev-ic"><svg viewBox="0 0 24 24" v-html="icons[e[2]]"></svg></i>{{ e[0] }}</span>
-                    <b>{{ e[1] }}</b>
-                  </li>
-                </ol>
-                <div class="timer">
-                  <span><i></i>Response time</span>
-                  <b>{{ clock }}</b>
-                </div>
+          <template v-if="b.key === 'wp'">
+            <div class="win float" style="--d: 0s">
+              <div class="win-bar"><i></i><i></i><i></i><span class="url">yourwebsite.com/contact</span></div>
+              <div class="win-body">
+                <b class="f-title">Contact us</b>
+                <div class="field"><small>Name</small><u></u></div>
+                <div class="field"><small>Email</small><u></u></div>
+                <div class="field"><small>Message</small><u class="tall"></u></div>
+                <span class="btn-or">Send message</span>
               </div>
             </div>
-          </div>
+            <span class="mk mk-wp float" style="--d: 0.8s">W</span>
+            <div class="glass g-sub float" style="--d: 1.6s"><i class="dot"></i>Form submitted</div>
+            <div class="cap"><span>Website contact form</span><span>WordPress</span></div>
+          </template>
 
-          <div class="su-txt">
-          <h2 class="su-ct">WordPress website inquiry sync</h2>
-          <p class="su-cd">
-            Your website is often the first place a customer reaches out. With Saptivo's WordPress CRM integration,
-            every contact-form submission arrives in your CRM as a new inquiry within moments, with the customer's
-            details, message and the page they came from.
-          </p>
-          <ul class="su-list">
-            <li v-for="b in wpBullets" :key="b"><i><svg viewBox="0 0 24 24"><path d="m6 12.500 4 4 8-9" /></svg></i>{{ b }}</li>
+          <template v-else>
+            <div class="phone float" style="--d: 0s">
+              <div class="ph-screen">
+                <div class="fb-top"><i class="fbc">f</i><div><b>Your Facebook Page</b><small>Instant Form</small></div></div>
+                <div class="field"><small>Full name</small><u></u></div>
+                <div class="field"><small>Email</small><u></u></div>
+                <div class="field"><small>Phone</small><u></u></div>
+                <span class="btn-fb">Submit</span>
+              </div>
+            </div>
+            <span class="mk mk-fb float" style="--d: 0.8s">f</span>
+            <div class="glass g-sub g-sub-fb float" style="--d: 1.6s"><i class="dot"></i>Instant Form submitted</div>
+          </template>
+        </div>
+
+        <!-- ================= card 2: glass CRM panel ================= -->
+        <div class="card c2" :class="'t-' + b.key" :style="{ '--i': bi * 3 + 1 }" aria-hidden="true">
+          <span class="orb o1"></span>
+          <span class="orb o2"></span>
+
+          <template v-if="b.key === 'wp'">
+            <div class="glass g-main float" style="--d: 0.3s">
+              <div class="g-h"><img class="lg" :src="logoSrc" alt="" draggable="false" /><b>New inquiry</b><em class="chip ok">just now</em></div>
+              <div class="rw"><small>Customer</small><u></u></div>
+              <div class="rw"><small>Message</small><u class="s"></u></div>
+              <div class="rw"><small>From page</small><u class="m"></u></div>
+              <div class="rw"><small>Assigned</small><span class="av">AS</span><b>Round-robin</b></div>
+              <div class="rw"><small>Status</small><em class="chip wip">New</em></div>
+            </div>
+            <div class="glass g-time float" style="--d: 1.8s">
+              <span class="ring"><i></i></span>
+              <div class="ic-t"><small>Response time</small><b class="tm">{{ clock }}</b></div>
+            </div>
+            <div class="cap dark"><span>Inquiry</span><span>Assigned automatically</span></div>
+          </template>
+
+          <template v-else>
+            <div class="glass g-main float" style="--d: 0.3s">
+              <div class="g-h"><img class="lg" :src="logoSrc" alt="" draggable="false" /><b>New lead</b><em class="chip ok">just now</em></div>
+              <div class="rw"><small>Campaign</small><u></u></div>
+              <div class="rw"><small>Form name</small><u class="m"></u></div>
+              <div class="rw"><small>Lead score</small><span class="meter"><i></i></span></div>
+              <div class="rw"><small>Routed to</small><span class="av">SP</span><b>Salesperson</b></div>
+            </div>
+            <div class="glass g-ack float" style="--d: 1.8s"><i class="dot"></i>WhatsApp or SMS acknowledgement</div>
+            <div class="cap dark"><span>Lead</span><span>One pipeline</span></div>
+          </template>
+        </div>
+
+        <!-- ================= card 3: description ================= -->
+        <div class="txt rv" :style="{ '--i': bi * 3 + 2 }">
+          <p class="d-p">{{ b.text }}</p>
+          <ul class="d-ul">
+            <li v-for="p in b.points" :key="p">{{ p }}</li>
           </ul>
-          </div>
-        </article>
-
-        <!-- ============ 2 · Facebook Lead Ads integration ============ -->
-        <article class="su-col" style="--i: 1">
-          <div class="su-card su-photo">
-            <img v-if="photo && !photoFail" class="su-img" :src="photo" alt="" loading="lazy" decoding="async" draggable="false" @error="photoFail = true" />
-            <span class="su-grain" aria-hidden="true"></span>
-            <span class="su-sky" aria-hidden="true"></span>
-
-            <!-- illustrated Instant Form on a phone (shown when no photo is supplied) -->
-            <div v-if="!photo || photoFail" class="su-phone" aria-hidden="true">
-              <div class="ph-in">
-                <div class="ph-top">
-                  <i class="fbp" v-html="brand.fb"></i>
-                  <span><b>Your Page</b><small>Sponsored</small></span>
-                </div>
-                <div class="ph-ad"></div>
-                <b class="ph-h">Book a test drive</b>
-                <div class="ph-f"><small>Full name</small><u></u></div>
-                <div class="ph-f"><small>Phone number</small><u></u></div>
-                <span class="ph-b" :class="{ press: tick === 2 }">Submit</span>
-                <i v-if="tick === 2" :key="'ping' + tick" class="ph-ping"></i>
-              </div>
-            </div>
-
-            <div class="su-over" aria-hidden="true">
-              <div class="pn-h">
-                <i class="fbp sm" v-html="brand.fb"></i>
-                <b>Instant Form lead</b>
-                <em class="chip" :class="tick >= 3 ? 'blue' : 'wip'">
-                  <svg v-if="tick >= 3" viewBox="0 0 24 24"><path d="m6 12.500 4 4 8-9" /></svg>
-                  <i v-else></i>
-                  {{ tick >= 3 ? 'New lead' : 'Submitted' }}
-                </em>
-              </div>
-              <div class="ov-g">
-                <div><small>Lead</small><b>Kasun Perera</b></div>
-                <div><small>Form</small><b>SUV test drive</b></div>
-              </div>
-              <div class="ov-c"><small>Campaign</small><b>Q3 launch · Colombo</b></div>
-              <div class="ov-t">
-                <span><small>Lead score</small><b>{{ score }} · Hot</b></span>
-                <i class="bar"><u :style="{ width: score + '%' }"></u></i>
-              </div>
-              <div class="ov-f">
-                <span class="by" :class="{ off: tick < 5 }"><i>KK</i>Routed to Kavindu K.</span>
-                <em class="chip ok" :class="{ off: tick < 7 }"><svg viewBox="0 0 24 24"><path d="m6 12.500 4 4 8-9" /></svg>WhatsApp sent</em>
-              </div>
-            </div>
-          </div>
-
-          <div class="su-txt">
-          <h2 class="su-ct">Facebook Lead Ads integration</h2>
-          <p class="su-cd">
-            Paid social campaigns only pay off if leads are called back quickly. Saptivo's Facebook Lead Ads CRM
-            integration creates a lead the moment someone submits an Instant Form on your Facebook Page, scores it
-            and routes it to a salesperson.
-          </p>
-          <ul class="su-list">
-            <li v-for="b in fbBullets" :key="b"><i><svg viewBox="0 0 24 24"><path d="m6 12.500 4 4 8-9" /></svg></i>{{ b }}</li>
-          </ul>
-          </div>
-        </article>
+        </div>
+      </div>
       </div>
     </div>
   </section>
@@ -130,96 +93,78 @@
 
 <script setup>
 /**
- * SectionLeadSources.vue — "WordPress website inquiry sync" + "Facebook Lead Ads integration" (Vue 3, <script setup>)
+ * SectionInquiryLeadCards.vue — WordPress inquiry sync and Facebook Lead Ads, laid out like the "Why choose us" reference:
+ * two visual cards plus the plain description text in a row, with the H2 above, and the same again for the second integration.
+ * Vue 3, <script setup>, scoped CSS, no external animation libraries.
  *
- * Same design as the "How industry setup works" section: two large cards, each with a white UI panel, and the
- * H2, paragraph and three points underneath.
- * • Left card: a soft gradient with a panel that plays the inquiry journey — form submitted, inquiry created,
- *   assigned (round-robin / territory) — with a running response timer.
- * • Right card: a Facebook Instant Form on a phone, with an overlay card showing the lead arriving, scored,
- *   routed to a salesperson and acknowledged on WhatsApp. Pass `photo` to use a real image instead of the phone.
- * • Loops while on screen; respects prefers-reduced-motion (static, finished state).
- *
- * Names, scores and times on the cards are sample data. Prop: photo. SSR / Nuxt safe (browser APIs only in onMounted).
+ * Content: both blocks live in the `blocks` array below, word for word. Mockup labels are illustrative and nothing
+ * statistical is invented. Each description card carries the H2. The two brand marks (W, f) are simple stand-ins:
+ * swap in the official, permitted assets before launch. The Saptivo logo is read from `saptivo-logo.png` in /public,
+ * shown in black.
+ * Desktop: three cards per row (the second row is mirrored). Tablet: two visual cards, then the description full width.
+ * Mobile: single column. Floating motion and the entrance reveal switch off for prefers-reduced-motion.
+ * New file: it does not touch SectionLeadSync.vue or any other component.
  */
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
-defineOptions({ name: 'LeadSourcesSection' })
+import { ref, onMounted, onBeforeUnmount } from 'vue'
+defineOptions({ name: 'SectionInquiryLeadCards' })
 
-// Saptivo logo (public/saptivo-logo.png, same file the footer uses), shown in black
 const logoSrc = `${import.meta.env.BASE_URL}saptivo-logo.png`
 
-defineProps({
-  photo: { type: String, default: '' }, // optional photo for the Facebook card (e.g. a phone in hand)
-})
-
-const wpBullets = [
-  'No plugins to maintain on the CRM side',
-  'Inquiries are assigned automatically by round-robin or territory',
-  'Response time is tracked from the moment the form is submitted',
-]
-const fbBullets = [
-  'Leads from every connected Page in one pipeline',
-  'Campaign and form name recorded for ROI reporting',
-  'Automatic WhatsApp or SMS acknowledgement to the new lead',
-]
-
-const brand = {
-  wp: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#21759b"/><text x="12" y="16.800" text-anchor="middle" font-family="Georgia,serif" font-size="13.500" font-weight="700" fill="#fff">W</text></svg>',
-  fb: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#1877f2"/><text x="12.800" y="18" text-anchor="middle" font-family="Poppins,sans-serif" font-size="16" font-weight="700" fill="#fff">f</text></svg>',
-}
-const icons = {
-  send: '<path d="M4 12 20 4l-4 16-4.500-6.500z"/><path d="m11.500 13.500 4-5"/>',
-  inbox: '<path d="M4 13.500 6.500 5h11L20 13.500V19H4z"/><path d="M4 13.500h4.500l1 2h5l1-2H20"/>',
-  user: '<circle cx="12" cy="8.500" r="3.500"/><path d="M5 20c0-3.800 3.100-6 7-6s7 2.200 7 6"/>',
-}
-const events = [
-  ['Form submitted', '10:58:02', 'send'],
-  ['Inquiry created', '10:58:04', 'inbox'],
-  ['Assigned', '10:58:05', 'user'],
-]
-const reps = [
-  { i: 'YA', n: 'Yasasi Anjana', m: 'Round-robin' },
-  { i: 'KK', n: 'Kavindu K.', m: 'Territory' },
+const blocks = [
+  {
+    key: 'wp',
+    flip: false,
+    title: 'WordPress website inquiry sync',
+    text: "Your website is often the first place a customer reaches out. With Saptivo's WordPress CRM integration, every contact-form submission arrives in your CRM as a new inquiry within moments, with the customer's details, message and the page they came from.",
+    points: [
+      'No plugins to maintain on the CRM side',
+      'Inquiries are assigned automatically by round-robin or territory',
+      'Response time is tracked from the moment the form is submitted',
+    ],
+  },
+  {
+    key: 'fb',
+    flip: true,
+    title: 'Facebook Lead Ads integration',
+    text: "Paid social campaigns only pay off if leads are called back quickly. Saptivo's Facebook Lead Ads CRM integration creates a lead the moment someone submits an Instant Form on your Facebook Page, scores it and routes it to a salesperson.",
+    points: [
+      'Leads from every connected Page in one pipeline',
+      'Campaign and form name recorded for ROI reporting',
+      'Automatic WhatsApp or SMS acknowledgement to the new lead',
+    ],
+  },
 ]
 
 const root = ref(null)
 const armed = ref(false)
 const shown = ref(false)
-const photoFail = ref(false)
-const tick = ref(0) // demo clock 0..9
-const ind = ref(0)
-const LOOP = 10
-const rep = computed(() => reps[ind.value])
-const wpStage = computed(() => (tick.value < 2 ? { t: 'Submitting', cls: 'wip' } : tick.value < 4 ? { t: 'New inquiry', cls: 'blue' } : { t: 'Assigned', cls: 'ok' }))
-const clock = computed(() => `0:${String(2 + tick.value * 6).padStart(2, '0')}`)
-const score = computed(() => (tick.value >= 3 ? 82 : 0))
-
+const clock = ref('00:00')
 let io = null
 let timer = null
-let inView = false
+let sec = 0
 
 onMounted(() => {
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
   if (reduce) {
-    tick.value = LOOP - 1
     shown.value = true
     return
   }
   armed.value = true
   io = new IntersectionObserver(
     ([e]) => {
-      inView = e.isIntersecting
-      if (e.isIntersecting) shown.value = true
+      if (e.isIntersecting) {
+        shown.value = true
+        io.disconnect()
+      }
     },
-    { threshold: 0.2 },
+    { threshold: 0.12 },
   )
   io.observe(root.value)
   timer = setInterval(() => {
-    if (!inView || document.hidden) return
-    const n = (tick.value + 1) % LOOP
-    if (n === 0) ind.value = (ind.value + 1) % reps.length
-    tick.value = n
-  }, 1100)
+    if (document.hidden) return
+    sec = (sec + 1) % 60
+    clock.value = `00:${String(sec).padStart(2, '0')}`
+  }, 1000)
 })
 onBeforeUnmount(() => {
   io?.disconnect()
@@ -232,700 +177,189 @@ onBeforeUnmount(() => {
 </style>
 
 <style scoped>
-.su {
-  --ink: #0f172a;
-  --mute: #6b7280;
-  --sky: #c0e6fd;
-  --sky-2: #80aad3;
-  --sky-3: #5b86b6;
-  --sand: #d4c4a8;
-  --ivory: #f4f1de;
-  --o: #f2540c;
+.ilc {
+  --navy: #14243a;
+  --orange: #ff6b16;
+  --ivory: #f9f8f4;
+  --beige: #f4f1de;
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
-  margin: clamp(10px, 1.6vw, 28px); /* gap around the rounded box */
-  border-radius: clamp(28px, 3.4vw, 48px);
-  overflow: hidden;
-  padding: clamp(36px, 5vw, 72px) clamp(14px, 3vw, 32px);
+  --gap: clamp(12px, 1.5vw, 20px);
+  box-sizing: border-box;
+  width: 100%;
+  padding: clamp(28px, 4vw, 64px) clamp(14px, 3vw, 40px);
   background: #fff;
-  color: var(--ink);
+  color: var(--navy);
   font-family: 'Poppins', system-ui, sans-serif;
+  overflow-x: clip;
 }
-.su *,
-.su *::before,
-.su *::after {
+.ilc *,
+.ilc *::before,
+.ilc *::after {
   box-sizing: border-box;
 }
-.su svg {
+.ilc svg {
   display: block;
 }
-.su-wrap {
-  max-width: 1240px;
+.ilc-wrap {
+  display: grid;
+  gap: clamp(56px, 7vw, 104px);
+  max-width: 1400px;
   margin: 0 auto;
 }
+.ilc-blk { display: grid; gap: clamp(22px, 2.6vw, 36px); }
+.ilc-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.12fr) minmax(0, 1.12fr) minmax(0, 1fr);
+  gap: var(--gap);
+}
+.ilc-row.flip { grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr) minmax(0, 1.12fr); }
+.ilc-row.flip .txt { order: -1; }
 
-/* ============ grid ============ */
-.su-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: clamp(48px, 6vw, 88px);
-}
-/* each row: card + description side by side; the second row flips (description left, card right) */
-.su-col {
-  display: grid;
-  grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr);
-  gap: clamp(28px, 5vw, 76px);
-  align-items: center;
-}
-.su-col:nth-child(even) {
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr);
-}
-.su-col:nth-child(even) .su-card {
-  order: 2;
-}
-.su-txt {
-  min-width: 0;
-}
-.su-card {
+/* ---------- shared card ---------- */
+.card {
   position: relative;
-  height: clamp(420px, 41vw, 574px);
-  border-radius: clamp(22px, 2.4vw, 30px);
+  container-type: inline-size;
+  border: 1px solid rgba(20, 36, 58, 0.08);
+  border-radius: 20px;
   overflow: hidden;
   isolation: isolate;
+  transition: transform 0.5s var(--ease);
 }
-.su-ct {
-  margin: 0;
-  font-family: 'Urbanist', system-ui, sans-serif;
-  font-size: clamp(26px, 2.6vw, 36px);
-  font-weight: 600;
-  line-height: 1.15;
-  letter-spacing: -0.035em;
-  color: #0a0a0a;
-}
-.su-cd {
-  max-width: 560px;
-  margin: 10px 0 0;
-  font-family: 'Urbanist', system-ui, sans-serif;
-  font-size: clamp(15px, 1.1vw, 17px);
-  font-weight: 500;
-  line-height: 1.6;
-  letter-spacing: -0.01em;
-  color: #475569;
-}
-.su-list {
-  list-style: none;
-  margin: 16px 0 0;
-  padding: 0;
-  display: grid;
-  gap: 11px;
-}
-.su-list li {
-  display: flex;
-  align-items: flex-start;
-  gap: 11px;
-  font-family: 'Urbanist', system-ui, sans-serif;
-  font-size: clamp(15px, 1.1vw, 17px);
-  font-weight: 600;
-  line-height: 1.45;
-  letter-spacing: -0.01em;
-  color: #0a0a0a;
-}
-.su-list i {
-  flex: none;
-  display: grid;
-  place-items: center;
-  width: 22px;
-  height: 22px;
-  margin-top: 1px;
-  border-radius: 50%;
-  background: #e4edf7;
-  color: #3f6593;
-}
-.su-list svg {
-  width: 13px;
-  height: 13px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
+.card:hover { transform: translateY(-4px); }
+.c1, .c2 { aspect-ratio: 4 / 5; }
+.orb { position: absolute; z-index: -1; border-radius: 50%; filter: blur(34px); }
+.c1 > :not(.orb), .c2 > :not(.orb) { position: absolute; }
 
-/* ---------- left: gradient card ---------- */
-.su-grad {
-  background:
-    radial-gradient(72% 56% at 18% -6%, var(--sky) 0%, rgba(192, 230, 253, 0) 70%),
-    radial-gradient(60% 50% at 104% 14%, #e5edf6 0%, rgba(229, 237, 246, 0) 72%),
-    radial-gradient(90% 46% at 22% 54%, rgba(91, 134, 182, 0.95) 0%, rgba(91, 134, 182, 0) 70%),
-    radial-gradient(78% 56% at 86% 106%, rgba(255, 160, 126, 0.85) 0%, rgba(255, 160, 126, 0) 70%),
-    radial-gradient(70% 56% at 6% 104%, rgba(226, 140, 158, 0.9) 0%, rgba(226, 140, 158, 0) 70%),
-    linear-gradient(165deg, #a9d3ef 0%, #8fb5da 48%, #d6b9c9 100%);
-}
-.su-grain {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.18;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
+/* tones: navy, beige, warm grey, muted blue; orange stays a small accent */
+.t-wp.c1 { background: linear-gradient(165deg, #243d5e 0%, #14243a 62%, #0f1c2e 100%); }
+.t-wp.c1 .o1 { right: -18%; bottom: -16%; width: 80%; aspect-ratio: 1; background: #4d79b3; opacity: 0.4; }
+.t-wp.c1 .o2 { left: -22%; top: -18%; width: 70%; aspect-ratio: 1; background: #3d5f8f; opacity: 0.4; }
+.t-wp.c2 { background: linear-gradient(160deg, #f4f1de 0%, #dfe5d0 100%); }
+.t-wp.c2 .o1 { left: -16%; top: -14%; width: 70%; aspect-ratio: 1; background: #fff; opacity: 0.8; }
+.t-wp.c2 .o2 { right: -18%; bottom: -14%; width: 76%; aspect-ratio: 1; background: #c4d4b4; opacity: 0.6; }
+.t-fb.c1 { background: linear-gradient(165deg, #f1e6dc 0%, #dccabc 100%); }
+.t-fb.c1 .o1 { left: -20%; top: -16%; width: 74%; aspect-ratio: 1; background: #fff; opacity: 0.8; }
+.t-fb.c1 .o2 { right: -22%; bottom: -18%; width: 80%; aspect-ratio: 1; background: #c9b3a2; opacity: 0.6; }
+.t-fb.c2 { background: linear-gradient(165deg, #dce8f8 0%, #b6cbe8 100%); }
+.t-fb.c2 .o1 { right: -16%; top: -14%; width: 70%; aspect-ratio: 1; background: #fff; opacity: 0.8; }
+.t-fb.c2 .o2 { left: -20%; bottom: -16%; width: 76%; aspect-ratio: 1; background: #7f9fcf; opacity: 0.5; }
 
-/* white UI panels (shared look) */
-.su-panel,
-.su-over {
-  border-radius: 18px;
-  background: #fff;
-  box-shadow: 0 34px 60px -30px rgba(23, 50, 90, 0.45), 0 2px 8px rgba(23, 50, 90, 0.06);
-  font-family: 'Poppins', system-ui, sans-serif;
-}
-.su-panel {
-  position: absolute;
-  z-index: 1;
-  left: 50%;
-  top: 50%;
-  width: min(66%, 410px);
-  min-width: 300px;
-  padding: 22px 24px 20px;
-  transform: translate(-50%, -52%);
-}
-.pn-h {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding-bottom: 14px;
-  border-bottom: 1px solid #f0f1f4;
-}
-.pn-h b {
-  flex: 1;
-  min-width: 0;
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.pn-logo {
-  flex: none;
-  display: block;
-  width: auto;
-  height: 17px;
-  max-width: 80px;
-  object-fit: contain;
-  filter: brightness(0); /* logo in black */
-}
-.pn-rows {
-  padding: 4px 0 6px;
-  border-bottom: 1px solid #f0f1f4;
-}
-.pn-r {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 10px 0;
-  font-size: 14px;
-  color: var(--mute);
-}
-.pn-r b {
-  font-size: 14.5px;
-  font-weight: 600;
-  color: var(--ink);
-  letter-spacing: -0.01em;
-}
-.swap {
-  animation: su-swap 0.5s var(--ease);
-}
-.by {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  transition: opacity 0.5s;
-}
-.by.off {
-  opacity: 0.2;
-}
-.by i {
-  display: grid;
-  place-items: center;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: #0f172a;
-  color: #fff;
-  font-style: normal;
-  font-size: 9.5px;
-  font-weight: 600;
-}
-.by u {
-  text-decoration: none;
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: #eef3f9;
-  color: #3f6593;
-  font-size: 10.5px;
-  font-weight: 600;
-}
-.from {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-.wp,
-.fbp {
-  display: block;
-  flex: none;
-  width: 20px;
-  height: 20px;
-}
-.wp svg,
-.fbp svg {
-  width: 100%;
-  height: 100%;
-}
-.fbp.sm {
-  width: 24px;
-  height: 24px;
-}
-.chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 11px;
-  border-radius: 8px;
-  font-style: normal;
-  font-size: 12.5px;
-  font-weight: 500;
-  white-space: nowrap;
-  transition: background 0.4s, color 0.4s, opacity 0.5s;
-}
-.chip svg {
-  width: 13px;
-  height: 13px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2.6;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.chip.ok {
-  background: #e6f8ef;
-  color: #16a05a;
-}
-.chip.off {
-  opacity: 0.2;
-}
-.chip.wip {
-  background: #fff1d6;
-  color: #b7740b;
-}
-.chip.wip i {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: currentColor;
-  animation: su-blink 1.2s ease-in-out infinite;
-}
-.chip.blue {
-  background: #e4edff;
-  color: #3f63d8;
-}
-.pn-ev {
-  padding-top: 12px;
-}
-.pn-ev small {
-  font-size: 13px;
-  color: var(--mute);
-}
-.pn-ev ol {
-  position: relative;
-  list-style: none;
-  margin: 10px 0 0;
-  padding: 0;
-  display: grid;
-  gap: 13px;
-}
-.pn-ev ol::before {
-  content: '';
-  position: absolute;
-  left: 10px;
-  top: 14px;
-  bottom: 14px;
-  width: 1px;
-  background: #e7e9ee;
-}
-.pn-ev li {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  opacity: 0.25;
-  transform: translateX(-6px);
-  transition: opacity 0.5s ease, transform 0.6s var(--ease);
-}
-.pn-ev li.show {
-  opacity: 1;
-  transform: none;
-}
-.pn-ev li > span {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 13.5px;
-  color: var(--mute);
-  white-space: nowrap;
-}
-.pn-ev li > b {
-  font-size: 13.5px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  font-variant-numeric: tabular-nums;
-}
-.ev-ic {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  place-items: center;
-  width: 21px;
-  height: 21px;
-  border-radius: 50%;
-  background: #fff;
-  color: #16a05a;
-}
-.ev-ic svg {
-  width: 15px;
-  height: 15px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.9;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.timer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 14px;
-  padding: 9px 12px;
-  border-radius: 12px;
-  background: #f4f7fb;
-}
-.timer span {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  color: var(--mute);
-}
-.timer i {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #f2540c;
-  animation: su-blink 1.2s ease-in-out infinite;
-}
-.timer b {
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  font-variant-numeric: tabular-nums;
-}
+/* small helpers */
+.ilc u { display: block; height: 2.2cqw; min-height: 6px; border-radius: 6px; background: rgba(20, 36, 58, 0.1); text-decoration: none; }
+.ilc small { font-size: clamp(9px, 2.7cqw, 11px); color: #6b7685; }
+.ilc b { font-weight: 600; }
 
-/* ---------- right: phone / photo card ---------- */
-.su-photo {
-  background:
-    radial-gradient(70% 50% at 20% -4%, var(--sky) 0%, rgba(192, 230, 253, 0) 70%),
-    radial-gradient(70% 56% at 90% 104%, rgba(212, 196, 168, 0.95) 0%, rgba(212, 196, 168, 0) 72%),
-    radial-gradient(60% 46% at 8% 100%, rgba(255, 170, 140, 0.7) 0%, rgba(255, 170, 140, 0) 70%),
-    linear-gradient(170deg, #b9dcf3 0%, #8fb5da 52%, #e6d9c4 100%);
+/* glass */
+.glass {
+  padding: 3.4cqw 3.8cqw;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: clamp(12px, 4cqw, 18px);
+  background: rgba(255, 255, 255, 0.5);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  backdrop-filter: blur(20px) saturate(140%);
+  box-shadow: 0 20px 40px -22px rgba(20, 36, 58, 0.45);
+  font-size: clamp(10px, 3cqw, 12.5px);
+  color: var(--navy);
 }
-.su-img {
-  position: absolute;
-  inset: 0;
-  z-index: -2;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: 50% 28%;
-  transition: transform 1.4s var(--ease);
-}
-.su-photo:hover .su-img {
-  transform: scale(1.04);
-}
-.su-sky {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background:
-    linear-gradient(180deg, rgba(192, 230, 253, 0.2) 0%, rgba(192, 230, 253, 0) 38%),
-    linear-gradient(0deg, rgba(13, 27, 42, 0.18) 0%, rgba(13, 27, 42, 0) 42%);
-}
+.g-h { display: flex; align-items: center; gap: 2.4cqw; margin-bottom: 2.4cqw; }
+.g-h b { flex: 1; min-width: 0; font-size: clamp(11px, 3.4cqw, 13.5px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lg { display: block; width: auto; height: clamp(10px, 3cqw, 13px); filter: brightness(0); }
+.chip { display: inline-flex; align-items: center; padding: 0.6cqw 2.4cqw; border-radius: 8px; font-style: normal; font-size: clamp(9px, 2.6cqw, 11px); font-weight: 500; white-space: nowrap; }
+.chip.ok { background: #e1f5ea; color: #16a05a; }
+.chip.wip { background: #fff0d3; color: #b7740b; }
+.rw { display: flex; align-items: center; gap: 2.4cqw; padding: 1.5cqw 0; }
+.rw small { flex: none; min-width: 19cqw; }
+.rw u { flex: 1; }
+.rw u.s { width: 70%; flex: none; }
+.rw u.m { width: 52%; flex: none; }
+.rw b { font-size: clamp(10px, 3cqw, 12px); }
+.av { flex: none; display: grid; place-items: center; width: 7cqw; min-width: 22px; aspect-ratio: 1; border-radius: 50%; background: linear-gradient(145deg, #2a4263, #14243a); color: #fff; font-size: clamp(7px, 2.1cqw, 9px); font-weight: 600; }
+.dot { flex: none; width: 2.4cqw; min-width: 8px; aspect-ratio: 1; border-radius: 50%; background: #25d366; }
+.meter { flex: 1; height: 2.2cqw; min-height: 7px; border-radius: 6px; background: rgba(20, 36, 58, 0.12); overflow: hidden; }
+.meter i { display: block; width: 80%; height: 100%; border-radius: 6px; background: var(--orange); transform-origin: left; animation: ilc-meter 4s ease-in-out infinite alternate; }
+@keyframes ilc-meter { from { transform: scaleX(0.55); } to { transform: scaleX(1); } }
 
-/* illustrated phone */
-.su-phone {
-  position: absolute;
-  z-index: 0;
-  right: clamp(14px, 6%, 56px);
-  top: clamp(20px, 5%, 40px);
-  width: clamp(168px, 34%, 214px);
-  padding: 7px;
-  border-radius: 34px;
-  background: #0f1420;
-  box-shadow: 0 40px 60px -26px rgba(13, 27, 42, 0.65);
-  rotate: 5deg;
-  animation: su-bob 7s ease-in-out infinite;
-}
-.ph-in {
-  position: relative;
-  padding: 18px 12px 14px;
-  border-radius: 28px;
-  background: #fff;
-  display: grid;
-  gap: 9px;
-}
-.ph-in::before {
-  content: '';
-  position: absolute;
-  top: 7px;
-  left: 50%;
-  width: 46px;
-  height: 11px;
-  margin-left: -23px;
-  border-radius: 8px;
-  background: #0f1420;
-}
-.ph-top {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 8px;
-}
-.ph-top .fbp {
-  width: 24px;
-  height: 24px;
-}
-.ph-top span {
-  display: grid;
-  line-height: 1.2;
-}
-.ph-top b {
-  font-size: 11px;
-  font-weight: 600;
-}
-.ph-top small {
-  font-size: 9px;
-  color: var(--mute);
-}
-.ph-ad {
-  height: 66px;
-  border-radius: 12px;
-  background: linear-gradient(140deg, #c0e6fd 0%, #80aad3 55%, #d4c4a8 100%);
-}
-.ph-h {
-  font-size: 12.5px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-}
-.ph-f {
-  display: grid;
-  gap: 3px;
-}
-.ph-f small {
-  font-size: 9px;
-  color: var(--mute);
-}
-.ph-f u {
-  display: block;
-  height: 20px;
-  border-radius: 7px;
-  background: #f1f4f8;
-  border: 1px solid #e6ebf2;
-}
-.ph-b {
-  position: relative;
-  display: grid;
-  place-items: center;
-  height: 30px;
-  margin-top: 3px;
-  border-radius: 9px;
-  background: #1877f2;
-  color: #fff;
-  font-size: 12px;
-  font-weight: 600;
-  transition: transform 0.25s;
-}
-.ph-b.press {
-  transform: scale(0.94);
-  background: #1563cc;
-}
-.ph-ping {
-  position: absolute;
-  right: 24px;
-  bottom: 10px;
-  width: 30px;
-  height: 30px;
-  margin: 0 -15px -15px 0;
-  border-radius: 50%;
-  border: 2px solid #1877f2;
-  animation: su-ping 0.9s ease-out both;
-}
+/* captions (bottom of visual cards) */
+.cap { left: 6cqw; right: 6cqw; bottom: 5cqw; display: flex; justify-content: space-between; gap: 12px; font-size: clamp(11px, 3.3cqw, 13.5px); font-weight: 500; color: #fff; }
+.cap.dark { color: var(--navy); }
 
-/* overlay card */
-.su-over {
-  position: absolute;
-  z-index: 2;
-  left: clamp(16px, 2.6vw, 32px);
-  bottom: clamp(16px, 2.6vw, 32px);
-  width: min(92%, 430px);
-  padding: 18px 20px 18px;
-}
-.su-over .pn-h {
-  padding-bottom: 12px;
-}
-.su-over .chip {
-  padding: 3px 10px;
-  font-size: 12px;
-}
-.ov-g {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  padding: 12px 0 10px;
-}
-.ov-g small,
-.ov-c small,
-.ov-t small {
-  display: block;
-  font-size: 12.5px;
-  color: var(--mute);
-}
-.ov-g b {
-  display: block;
-  margin-top: 3px;
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-}
-.ov-c {
-  padding: 0 0 12px;
-  border-bottom: 1px solid #f0f1f4;
-}
-.ov-c b {
-  display: block;
-  margin-top: 3px;
-  font-size: 14.5px;
-  font-weight: 600;
-}
-.ov-t {
-  padding-top: 12px;
-}
-.ov-t span {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-}
-.ov-t b {
-  font-size: 13.5px;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-}
-.bar {
-  display: block;
-  height: 6px;
-  margin-top: 8px;
-  border-radius: 6px;
-  background: #eceef3;
-  overflow: hidden;
-}
-.bar u {
-  display: block;
-  height: 100%;
-  border-radius: inherit;
-  background: linear-gradient(90deg, #80aad3, #3f6593);
-  transition: width 1.2s var(--ease);
-}
-.ov-f {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  margin-top: 14px;
-  padding-top: 12px;
-  border-top: 1px solid #f0f1f4;
-  font-size: 13px;
-  font-weight: 500;
-}
+/* floating */
+.float { animation: ilc-float 6s ease-in-out infinite; animation-delay: var(--d, 0s); }
+@keyframes ilc-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-1.8cqw); } }
 
-/* ============ motion ============ */
-.su-arm .su-col {
-  opacity: 0;
-  transform: translateY(34px);
-}
-.su-arm.su-in .su-col {
-  opacity: 1;
-  transform: none;
-  transition: opacity 0.9s var(--ease), transform 1.1s var(--ease);
-  transition-delay: calc(var(--i) * 0.14s);
-}
-.su-arm .su-panel,
-.su-arm .su-over {
-  opacity: 0;
-}
-.su-arm.su-in .su-panel {
-  opacity: 1;
-  transition: opacity 0.8s ease 0.4s;
-}
-.su-arm.su-in .su-over {
-  opacity: 1;
-  transition: opacity 0.8s ease 0.6s;
-}
-@keyframes su-swap { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-@keyframes su-blink { 50% { opacity: 0.3; } }
-@keyframes su-bob { 50% { transform: translateY(-8px); } }
-@keyframes su-ping { from { opacity: 0.9; transform: scale(0.4); } to { opacity: 0; transform: scale(1.8); } }
+/* browser window + forms */
+.win { overflow: hidden; border-radius: clamp(10px, 3.4cqw, 16px); background: #fff; box-shadow: 0 30px 50px -28px rgba(0, 0, 0, 0.55); }
+.win-bar { display: flex; align-items: center; gap: 1.4cqw; padding: 2.8cqw 3.4cqw; background: #f3f4f7; }
+.win-bar i { width: 2cqw; min-width: 6px; aspect-ratio: 1; border-radius: 50%; background: #d5d9e1; }
+.url { flex: 1; margin-left: 2cqw; padding: 0.8cqw 2.6cqw; border-radius: 6px; background: #fff; font-size: clamp(8.5px, 2.5cqw, 10.5px); color: #8a93a1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.win-body { padding: 4cqw; }
+.f-title { display: block; margin-bottom: 2.6cqw; font-family: Urbanist, sans-serif; font-size: clamp(12px, 4cqw, 16px); letter-spacing: -0.02em; }
+.field { margin-bottom: 2.4cqw; }
+.field small { display: block; margin-bottom: 0.8cqw; }
+.field u { height: 5.2cqw; min-height: 16px; border: 1px solid #e3e6ec; background: #fff; border-radius: 6px; }
+.field u.tall { height: 9cqw; }
+.btn-or { display: inline-block; margin-top: 1cqw; padding: 2cqw 4.4cqw; border-radius: 8px; background: var(--orange); font-size: clamp(9px, 2.7cqw, 11px); font-weight: 600; color: #fff; }
 
-/* ============ responsive ============ */
-@media (max-width: 860px) {
-  .su-grid {
-    gap: 52px;
-  }
-  .su-col,
-  .su-col:nth-child(even) {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 22px;
-    align-items: start;
-  }
-  .su-col:nth-child(even) .su-card {
-    order: 0;
-  }
-  .su-card {
-    height: clamp(440px, 100vw, 540px);
-  }
-  .su-panel {
-    width: min(90%, 410px);
-  }
-  .su-over {
-    width: calc(100% - 32px);
-  }
-  .su-phone {
-    right: 14px;
-    width: clamp(150px, 38%, 200px);
-  }
+.win { left: 9%; top: 11%; width: 82%; }
+.g-sub { left: 14%; bottom: 17%; display: flex; align-items: center; gap: 2.4cqw; padding: 2.6cqw 4cqw; font-weight: 500; }
+.g-sub-fb { left: 9%; right: 9%; bottom: 6%; }
+
+/* brand marks (stand-ins) */
+.mk { display: grid; place-items: center; width: 11cqw; min-width: 36px; aspect-ratio: 1; border-radius: 50%; right: 7%; top: 5%; background: #fff; box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.5); font-weight: 700; z-index: 2; }
+.mk-wp { font-family: Georgia, serif; font-size: clamp(16px, 5.4cqw, 22px); color: #21759b; }
+.mk-fb { font-family: Arial, sans-serif; font-size: clamp(18px, 6.4cqw, 26px); color: #fff; background: #1877f2; }
+
+/* phone */
+.phone { left: 17%; top: 13%; width: 66%; height: 100%; padding: 1.2cqw; border-radius: 9cqw 9cqw 0 0; background: #111317; box-shadow: 0 34px 54px -28px rgba(20, 36, 58, 0.7); }
+.ph-screen { height: 100%; overflow: hidden; padding: 5cqw 4.4cqw; border-radius: 8cqw 8cqw 0 0; background: #fff; }
+.fb-top { display: flex; align-items: center; gap: 2.4cqw; margin-bottom: 3.6cqw; }
+.fb-top b { display: block; font-size: clamp(9px, 2.8cqw, 11.5px); line-height: 1.2; }
+.fb-top small { display: block; font-size: clamp(8px, 2.3cqw, 10px); }
+.fbc { display: grid; place-items: center; flex: none; width: 7.6cqw; min-width: 22px; aspect-ratio: 1; border-radius: 50%; background: #1877f2; font-style: normal; font-weight: 700; font-family: Arial, sans-serif; font-size: clamp(11px, 4cqw, 16px); color: #fff; }
+.btn-fb { display: block; margin-top: 2.6cqw; padding: 2.4cqw 0; border-radius: 8px; background: #1877f2; text-align: center; font-size: clamp(9px, 2.8cqw, 11.5px); font-weight: 600; color: #fff; }
+
+/* card 2 panels */
+.g-main { left: 7%; right: 7%; top: 8%; }
+.g-time { left: 24%; right: 7%; top: 63%; display: flex; align-items: center; gap: 3cqw; }
+.g-ack { left: 7%; right: 7%; top: 63%; display: flex; align-items: center; gap: 2.6cqw; font-weight: 500; }
+.ring { flex: none; display: block; width: 10cqw; min-width: 32px; aspect-ratio: 1; border-radius: 50%; border: 0.9cqw solid rgba(20, 36, 58, 0.12); position: relative; }
+.ring i { position: absolute; inset: -0.9cqw; border-radius: 50%; border: 0.9cqw solid transparent; border-top-color: var(--orange); border-right-color: var(--orange); animation: ilc-spin 3s linear infinite; }
+@keyframes ilc-spin { to { transform: rotate(360deg); } }
+.ic-t { display: grid; gap: 0.4cqw; }
+.ic-t b { font-size: clamp(13px, 4.4cqw, 18px); font-variant-numeric: tabular-nums; }
+
+/* ---------- heading + plain description (no card) ---------- */
+.d-h {
+  margin: 0 !important;
+  font-family: Urbanist, 'Urbanist Placeholder', sans-serif !important;
+  font-size: clamp(32px, 4vw, 54px) !important;
+  font-weight: 600 !important;
+  line-height: 1.08 !important;
+  letter-spacing: -0.045em !important;
+  color: var(--navy) !important;
+}
+.txt { align-self: center; padding: 0 clamp(4px, 1vw, 14px); }
+.d-p { margin: 0; font-size: clamp(14.5px, 1.15vw, 16.5px); line-height: 1.7; color: #556070; }
+.d-ul { margin: clamp(20px, 2vw, 30px) 0 0; padding: 0; list-style: none; }
+.d-ul li { padding: 14px 0; border-top: 1px solid rgba(20, 36, 58, 0.12); font-size: clamp(14px, 1.1vw, 16px); font-weight: 500; line-height: 1.5; color: var(--navy); }
+.d-ul li:last-child { border-bottom: 1px solid rgba(20, 36, 58, 0.12); }
+
+/* ---------- entrance ---------- */
+.ilc-arm .card, .ilc-arm .rv { opacity: 0; transform: translateY(30px); }
+.ilc-arm.ilc-in .card, .ilc-arm.ilc-in .rv { opacity: 1; transform: none; transition: opacity 0.9s ease, transform 1s var(--ease); transition-delay: calc(var(--i) * 0.08s); }
+.ilc-arm.ilc-in .card:hover { transform: translateY(-4px); transition-delay: 0s; }
+
+/* ---------- responsive ---------- */
+@media (max-width: 1000px) {
+  .ilc-row, .ilc-row.flip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ilc-row .txt, .ilc-row.flip .txt { grid-column: 1 / -1; order: 3; padding: 4px 0 0; }
+}
+@media (max-width: 640px) {
+  .ilc-row, .ilc-row.flip { grid-template-columns: minmax(0, 1fr); }
+  .c1, .c2 { aspect-ratio: 5 / 6; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .su *,
-  .su *::before,
-  .su *::after {
-    animation: none !important;
-    transition: none !important;
-  }
-  .su-arm .su-col,
-  .su-arm .su-panel,
-  .su-arm .su-over {
-    opacity: 1;
-    transform: none;
-  }
+  .ilc *, .ilc *::before, .ilc *::after { animation: none !important; transition: none !important; }
+  .ilc-arm .card, .ilc-arm .rv { opacity: 1; transform: none; }
 }
 </style>

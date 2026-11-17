@@ -8,8 +8,10 @@ import Whatsapp from '@/components/Integrations/whatsapp.vue'
 <template>
   <main class="integrations-page">
     <Integrationshero />
-    <WhyIntegrations />
+
     <IntegrationDirectory />
     <Whatsapp />
+    
+    <WhyIntegrations />
   </main>
 </template>

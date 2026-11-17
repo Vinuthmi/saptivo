@@ -69,7 +69,7 @@ onBeforeUnmount(() => io?.disconnect());
   --ink: #17191d;
   --edge: 8px; /* gap around the video panel (top and sides) */
   position: relative;
-  padding: var(--edge) var(--edge) 0;
+  padding: var(--edge); /* same gap on top, sides and bottom */
   text-align: center;
   color: var(--ink);
   background: #fff;
@@ -85,9 +85,10 @@ onBeforeUnmount(() => io?.disconnect());
   align-items: center;
   justify-content: center;
   width: 100%;
-  min-height: clamp(560px, 82svh, 780px);
+  min-height: calc(100vh - var(--edge) * 2); /* fallback */
+  min-height: calc(100svh - var(--edge) * 2); /* fills the screen, equal gap on every side */
   margin: 0 auto;
-  border-radius: clamp(12px, 1.4vw, 20px);
+  border-radius: clamp(24px, 2.6vw, 36px);
   background: #0b0c0e; /* shows until the video loads */
 }
 .ih *, .ih *::before, .ih *::after { box-sizing: border-box; }
