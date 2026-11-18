@@ -11,7 +11,7 @@ const clients = [
     src: `${baseUrl}images/clients/autosale.png`,
     width: 1694,
     height: 255,
-    displayWidth: 125,
+    displayWidth: 140,
   },
   {
     name: 'Cartinno',
@@ -25,7 +25,7 @@ const clients = [
     src: `${baseUrl}images/clients/saasbeds.png`,
     width: 2048,
     height: 462,
-    displayWidth: 115,
+    displayWidth: 94,
   },
   {
     name: 'Ipsova',
@@ -46,7 +46,7 @@ const clients = [
     src: `${baseUrl}images/clients/sepova.png`,
     width: 2048,
     height: 283,
-    displayWidth: 130,
+    displayWidth: 102,
   },
   {
     name: 'Veyogo',
@@ -67,26 +67,35 @@ const clients = [
     src: `${baseUrl}images/clients/smardove.png`,
     width: 727,
     height: 275,
-    displayWidth: 115,
+    displayWidth: 136,
   },
 ]
 
-const featureLinks = [
-  { label: 'Lead & Contact Management', href: '/features/lead-management/' },
-  { label: 'Sales Pipeline & Deals', href: '/features/sales-pipeline/' },
-  { label: 'Quotations & Invoicing', href: '/features/quotations-invoicing/' },
-  { label: 'WhatsApp CRM', href: '/features/whatsapp-crm/' },
-  { label: '3CX Call Integration', href: '/features/3cx-crm-integration/' },
-  { label: 'Workflow Automation', href: '/features/workflow-automation/' },
-  { label: 'Multi-Branch Management', href: '/features/multi-branch-management/' },
-  { label: 'Inventory & Multi-Warehouse', href: '/features/inventory-management/' },
-  { label: 'Service & AMC Management', href: '/features/service-maintenance-management/' },
-  { label: 'Help Desk & Ticketing', href: '/features/help-desk/' },
-  { label: 'Marketing Campaigns', href: '/features/marketing-campaigns/' },
-  { label: 'Reports & Analytics', href: '/features/reports-analytics/' },
-  { label: 'AI CRM', href: '/features/ai-crm/' },
-  { label: 'Customer Portal', href: '/features/customer-portal/' },
-  { label: 'Mobile CRM', href: '/features/mobile-crm/' },
+const featureGroups = [
+  { title: 'Sales & CRM', links: [
+    { label: 'Lead & Contact Management', href: '/features/lead-management/' },
+    { label: 'Sales Pipeline & Deals', href: '/features/sales-pipeline/' },
+    { label: 'Quotations & Invoicing', href: '/features/quotations-invoicing/' },
+    { label: 'Customer Portal', href: '/features/customer-portal/' },
+  ] },
+  { title: 'Communication & Marketing', links: [
+    { label: 'WhatsApp CRM', href: '/features/whatsapp-crm/' },
+    { label: '3CX Call Integration', href: '/features/3cx-crm-integration/' },
+    { label: 'Vodia Integration & AI Calls', href: '/features/vodia-integration/' },
+    { label: 'Marketing Campaigns', href: '/features/marketing-campaigns/' },
+  ] },
+  { title: 'Operations & Service', links: [
+    { label: 'Multi-Branch Management', href: '/features/multi-branch-management/' },
+    { label: 'Inventory & Multi-Warehouse', href: '/features/inventory-management/' },
+    { label: 'Service & AMC Management', href: '/features/service-maintenance-management/' },
+    { label: 'Help Desk & Ticketing', href: '/features/help-desk/' },
+  ] },
+  { title: 'Automation & Intelligence', links: [
+    { label: 'Workflow Automation', href: '/features/workflow-automation/' },
+    { label: 'Reports & Analytics', href: '/features/reports-analytics/' },
+    { label: 'AI CRM', href: '/features/ai-crm/' },
+    { label: 'Mobile CRM', href: '/features/mobile-crm/' },
+  ] },
 ]
 
 const industryLinks = [
@@ -103,8 +112,6 @@ const companyLinks = [
   { label: 'About', href: '/about/' },
   { label: 'Contact', href: '/contact/' },
   { label: 'Blog', href: '/blog/' },
-  { label: 'Privacy Policy', href: '/privacy-policy/' },
-  { label: 'Terms of Service', href: '/terms-of-service/' },
 ]
 
 const conversionLinks = [
@@ -115,91 +122,56 @@ const conversionLinks = [
   { label: 'Reseller Signup', href: '/reseller/signup/' },
 ]
 
-const footerGroups = [
-  { title: 'Features', href: '/features/', links: featureLinks },
-  { title: 'Industries', href: '/industries/', links: industryLinks },
-  { title: 'Company & Trust', links: companyLinks },
-  { title: 'Conversion', links: conversionLinks },
-]
 </script>
 
 <template>
   <footer class="site-footer">
     <div class="footer-card">
-      <div class="footer-dots" aria-hidden="true"></div>
-
-      <div class="footer-main">
-        <!-- Brand -->
-        <div class="footer-brand-block">
-          <router-link to="/" class="footer-brand" aria-label="Saptivo home">
-            <img :src="logoSrc" alt="Saptivo" />
-          </router-link>
-
-          <p>
-            One connected workspace for customers, sales, and every store you run.
-          </p>
+      <!-- Row 1: four equally spaced feature groups -->
+      <section class="feature-section" aria-label="CRM features">
+        <div class="feature-grid">
+          <nav v-for="group in featureGroups" :key="group.title" class="feature-group" :aria-label="group.title">
+            <h2 class="footer-heading">{{ group.title }}</h2>
+            <div class="footer-link-list">
+              <router-link v-for="link in group.links" :key="link.href" :to="link.href">{{ link.label }}</router-link>
+            </div>
+          </nav>
         </div>
+      </section>
 
-        <!-- Sitemap columns -->
-        <nav
-          v-for="group in footerGroups"
-          :key="group.title"
-          class="footer-links"
-          :aria-label="group.title"
-        >
-          <router-link
-            v-if="group.href"
-            :to="group.href"
-            class="footer-heading"
-          >
-            {{ group.title }}
-          </router-link>
-
-          <b v-else class="footer-heading">{{ group.title }}</b>
-
-          <router-link
-            v-for="link in group.links"
-            :key="link.href"
-            :to="link.href"
-          >
-            {{ link.label }}
-          </router-link>
+      <!-- Row 2: industries, company and conversion -->
+      <section class="footer-middle" aria-label="Explore Saptivo">
+        <nav class="footer-links" aria-label="Industries">
+          <router-link class="footer-heading" to="/industries/">Industries</router-link>
+          <div class="footer-link-list"><router-link v-for="link in industryLinks" :key="link.href" :to="link.href">{{ link.label }}</router-link></div>
         </nav>
-      </div>
+        <nav class="footer-links" aria-label="Company and trust">
+          <h2 class="footer-heading">Company &amp; Trust</h2>
+          <div class="footer-link-list"><router-link v-for="link in companyLinks" :key="link.href" :to="link.href">{{ link.label }}</router-link></div>
+        </nav>
+        <nav class="footer-links" aria-label="Conversion">
+          <h2 class="footer-heading">Conversion</h2>
+          <div class="footer-link-list"><router-link v-for="link in conversionLinks" :key="link.href" :to="link.href">{{ link.label }}</router-link></div>
+        </nav>
+      </section>
 
-      <!-- Trusted businesses -->
-      <section class="trusted-brands" aria-label="Trusted businesses">
+      <!-- Row 3: brand and client logos -->
+      <section class="trusted-brands" aria-label="Saptivo and trusted businesses">
+        <div class="footer-brand-block">
+          <router-link to="/" class="footer-brand" aria-label="Saptivo home"><img :src="logoSrc" alt="Saptivo" /></router-link>
+          <p>One connected workspace for customers, sales, and every store you run.</p>
+        </div>
         <ul class="trusted-logos">
-          <li v-for="client in clients" :key="client.name">
-            <component
-              :is="client.href ? 'a' : 'span'"
-              :href="client.href"
-              :aria-label="client.href ? `Visit ${client.name} website` : client.name"
-              :target="client.href ? '_blank' : null"
-              :rel="client.href ? 'noopener noreferrer' : null"
-            >
-              <img
-                :src="client.src"
-                :alt="client.name"
-                :width="client.width"
-                :height="client.height"
-                :style="{ '--dw': `${client.displayWidth}px` }"
-                loading="lazy"
-                draggable="false"
-              />
-            </component>
+          <li v-for="client in clients" :key="client.name" :class="{ 'logo-emphasis': client.name === 'AutoSale.lk' || client.name === 'Smardove', 'logo-smardove': client.name === 'Smardove', 'logo-voxinnova': client.name === 'Voxinnova' }">
+            <span :aria-label="client.name"><img :src="client.src" :alt="client.name" :width="client.width" :height="client.height" :style="{ '--dw': `${client.displayWidth}px` }" loading="lazy" draggable="false" /></span>
           </li>
         </ul>
       </section>
 
+      <!-- Row 4: bottom content -->
       <div class="footer-bottom">
         <span>© {{ year }} Saptivo. All rights reserved.</span>
-
-        <div class="footer-legal">
-          <router-link to="/privacy-policy/">Privacy Policy</router-link>
-          <router-link to="/terms-of-service/">Terms of Service</router-link>
-          <a href="#top">Back to top ↑</a>
-        </div>
+        <a href="#top">Back to top ↑</a>
       </div>
     </div>
   </footer>
@@ -211,324 +183,105 @@ const footerGroups = [
 
 <style scoped>
 .site-footer {
-  --orange: #ff6818;
-
-  position: relative;
-  z-index: 2;
+  --footer-ink: #171717;
+  --footer-muted: #65615e;
+  --footer-rule: rgba(38, 32, 27, .13);
+  --footer-columns: repeat(4, minmax(0, 1fr));
+  --footer-gap: clamp(28px, 4.4vw, 88px);
   width: 100%;
-  /* white behind the rounded top corners of the dark card */
-  background: #fff;
-  color: #fff;
-  font-family: 'Outfit', 'Urbanist', Arial, sans-serif;
+  background: #F2E9E0;
+  color: var(--footer-ink);
+  font-family: 'Outfit', sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
-
-/* Footer card */
-
-.footer-card {
-  position: relative;
-  box-sizing: border-box;
-  width: 100%;
-  padding: 44px max(clamp(20px, 5vw, 80px), calc((100% - 1560px) / 2 + 80px)) 26px;
-  overflow: hidden;
-  border-radius: 50px 50px 0 0;
-  background: #17191d;
-  color: #fff;
-  box-shadow: 0 30px 60px rgba(23, 25, 29, 0.25);
-}
-
-.footer-dots {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 50%;
-  background-image: radial-gradient(
-    circle,
-    rgba(148, 153, 163, 0.42) 1px,
-    transparent 1.4px
-  );
-  background-size: 22px 22px;
-  -webkit-mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.6) 55%, transparent 100%);
-  mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.6) 55%, transparent 100%);
-  pointer-events: none;
-}
-
-/* Main footer sitemap */
-
-.footer-main {
-  position: relative;
+.site-footer *, .site-footer *::before, .site-footer *::after { box-sizing: border-box; }
+.footer-card { width: 100%; max-width: 1920px; margin: 0 auto; padding: 64px clamp(28px, 4.5vw, 86px) 25px; }
+.feature-grid, .footer-middle {
   display: grid;
-  /* brand column + four link columns sized to their content and spread evenly:
-     equal gaps between columns, first column on the left edge, last column ending on the right edge */
-  grid-template-columns: minmax(200px, 280px) repeat(4, max-content);
-  justify-content: space-between;
+  grid-template-columns: var(--footer-columns);
+  column-gap: var(--footer-gap);
   align-items: start;
-  column-gap: clamp(22px, 3vw, 42px);
-  row-gap: 30px;
-  padding-bottom: 44px;
 }
-
-.footer-brand {
-  display: inline-flex;
-  align-items: center;
-}
-
-.footer-brand img {
+.feature-section { padding: 0 0 53px; }
+.feature-group, .footer-links { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; }
+/* Shared typography for all footer headings. */
+.site-footer :is(.feature-group, .footer-links) .footer-heading {
   display: block;
-  width: 160px;
-  max-width: 100%;
-  height: auto;
-  filter: brightness(0) invert(1);
-}
-
-.footer-brand-block p {
-  max-width: 280px;
-  margin: 15px 0 18px;
-  color: #9a9ba3;
-  font-size: 13px;
-  line-height: 1.8;
-}
-
-.footer-links {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 12px;
-}
-
-.footer-heading {
-  display: inline-block;
-  margin-bottom: 5px;
-  line-height: 1.3;
-  color: #fff;
-  font-size: 15px;
-  font-weight: 700;
-  text-decoration: none;
-}
-
-.footer-links a:not(.footer-heading) {
-  color: #a4a5ac;
-  font-size: 13px;
-  line-height: 1.4;
-  text-decoration: none;
-  transition: color 0.2s ease, transform 0.2s ease;
-}
-
-.footer-links a:hover {
-  color: #ff7a3a;
-  transform: translateX(3px);
-}
-
-.footer-heading:hover {
-  color: #ff7a3a;
-}
-
-/* Trusted businesses */
-
-.trusted-brands {
-  position: relative;
-  z-index: 1;
   width: 100%;
-  overflow-x: auto;
-  margin: 0 auto;
-  padding: 30px 0 34px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  scrollbar-width: none;
-}
-
-.trusted-brands::-webkit-scrollbar {
-  display: none;
-}
-
-.trusted-logos {
-  display: flex;
-  width: 100%;
-  min-width: 0;
-  flex-wrap: nowrap;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 8px clamp(6px, 0.7vw, 10px);
-  margin: 0;
+  min-height: 25px;
+  margin: 0 0 26px;
   padding: 0;
-  list-style: none;
-}
-
-.trusted-logos li {
-  display: grid;
-  flex: 1 1 0;
-  min-width: 0;
-  height: 72px;
-  place-items: center;
-}
-
-.trusted-logos li > :is(a, span) {
-  display: grid;
-  width: 100%;
-  height: 100%;
-  padding: 8px 2px;
-  place-items: center;
-}
-
-.trusted-logos img {
-  display: block;
-  width: min(var(--dw), calc((100vw - 132px) / 9));
-  max-width: 100%;
-  height: auto;
-  object-fit: contain;
-  user-select: none;
-  filter: brightness(0) invert(0.7);
-  transition: filter 0.3s ease, transform 0.3s ease;
-}
-
-.trusted-logos li > :is(a, span):hover img {
-  filter: brightness(0);
-  transform: scale(1.04);
-}
-
-.trusted-logos a:focus-visible {
-  outline: 2px solid var(--orange);
-  outline-offset: 5px;
-  border-radius: 5px;
-}
-
-/* Bottom bar */
-
-.footer-bottom {
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 15px;
-  padding-top: 19px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  color: #7f8088;
-  font-size: 12px;
-}
-
-.footer-legal {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 22px;
-}
-
-.footer-bottom a {
-  color: #a4a5ac;
+  font-family: 'Outfit', sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  line-height: 1.5 !important;
+  letter-spacing: -.015em !important;
+  color: #171717 !important;
   text-decoration: none;
-  transition: color 0.2s ease;
+  text-transform: none;
 }
-
-.footer-bottom a:hover {
-  color: #ff7a3a;
+.footer-link-list { display: flex; flex-direction: column; align-items: flex-start; gap: 17px; width: 100%; }
+.site-footer .footer-link-list a {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  color: #292624;
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.55;
+  text-decoration: none;
+  overflow-wrap: break-word;
+  transition: color .2s ease, transform .2s ease;
 }
-
-/* Responsive */
-
-@media (max-width: 1100px) {
-  .trusted-brands {
-    width: calc(100% + 160px);
-    margin-left: -80px;
-    padding-right: 16px;
-    padding-left: 16px;
-    box-sizing: border-box;
-  }
-
-  .footer-main {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    justify-content: normal;
-  }
-
-  .footer-brand-block {
-    grid-column: 1 / -1;
-  }
+.site-footer .footer-link-list a:hover { color: #e55a13; transform: translateX(3px); }
+.footer-middle {
+  padding: 47px 0 57px;
+  border-top: 1px solid var(--footer-rule);
 }
-
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+.trusted-brands { display: grid; grid-template-columns: minmax(210px, 1fr) minmax(0, 4fr); gap: clamp(32px, 4.5vw, 84px); align-items: center; padding: 35px 0 39px; border-top: 1px solid var(--footer-rule); }
+.footer-brand-block { min-width: 0; }
+.footer-brand { display: inline-flex; align-items: center; }
+.footer-brand img { display: block; width: 160px; max-width: 100%; height: auto; filter: brightness(0); }
+.footer-brand-block p { max-width: 280px; margin: 15px 0 0; color: var(--footer-muted); font-size: 13px; line-height: 1.75; }
+/* Equal-width logo slots and a real gap prevent logos from crowding neighbours. */
+.trusted-logos { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); align-items: center; column-gap: clamp(18px, 1.65vw, 32px); row-gap: 22px; min-width: 0; margin: 0; padding: 0; list-style: none; }
+.trusted-logos li { display: flex; min-width: 0; min-height: 60px; align-items: center; justify-content: center; }
+.trusted-logos li span { display: flex; width: 100%; min-width: 0; align-items: center; justify-content: center; }
+.trusted-logos img { display: block; width: min(var(--dw), 100%); max-width: 100%; max-height: 34px; height: auto; object-fit: contain; object-position: center; filter: brightness(0); transition: opacity .2s ease; }
+/* Preserve the individually balanced sizes without transforms that overlap the gaps. */
+.trusted-logos li.logo-emphasis img { max-height: 40px; }
+.trusted-logos li.logo-smardove img { width: min(136px, 100%); max-height: 44px; transform: translateY(-4px); }
+.trusted-logos li.logo-voxinnova img { width: min(104px, 100%); max-height: 32px; }
+.trusted-logos li:hover img { opacity: .8; }
+.footer-bottom { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding-top: 22px; border-top: 1px solid var(--footer-rule); color: #625d59; font-size: 12px; }
+.footer-bottom a { color: #282522; text-decoration: none; }
+.footer-bottom a:hover { text-decoration: underline; }
+@media (max-width: 1250px) {
+  .site-footer { --footer-gap: 32px; }
+  .trusted-brands { grid-template-columns: minmax(190px, 1fr) minmax(0, 3fr); gap: 35px; }
+  .trusted-logos { grid-template-columns: repeat(5, minmax(0,1fr)); gap: 18px 24px; }
+}
 @media (max-width: 900px) {
-  .trusted-logos li {
-    height: 64px;
-  }
-
-  .footer-main {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    justify-content: normal;
-  }
-
-  .footer-brand-block {
-    grid-column: 1 / -1;
-  }
+  .site-footer { --footer-columns: repeat(2, minmax(0,1fr)); }
+  .footer-card { padding-top: 45px; }
+  .feature-grid, .footer-middle { row-gap: 38px; }
+  .trusted-brands { grid-template-columns: 1fr; gap: 25px; }
+  .trusted-logos { grid-template-columns: repeat(5, minmax(0,1fr)); }
 }
-
-@media (max-width: 640px) {
-  .footer-card {
-    padding: 32px 20px 22px;
-    border-radius: 22px 22px 0 0;
-  }
-
-  .trusted-brands {
-    width: calc(100% + 40px);
-    margin-left: -20px;
-    padding: 24px 0 26px;
-    padding-right: 8px;
-    padding-left: 8px;
-  }
-
-  .trusted-logos li {
-    flex: 0 0 auto;
-    height: 56px;
-  }
-
-  .trusted-logos {
-    width: max-content;
-    min-width: 100%;
-  }
-
-  .trusted-logos li > :is(a, span) {
-    width: auto;
-    padding: 6px 2px;
-  }
-
-  .trusted-logos img {
-    width: calc(var(--dw) * 0.62);
-  }
-
-  .footer-main {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 30px 20px;
-    padding-bottom: 32px;
-  }
-
-  .footer-links a {
-    overflow-wrap: anywhere;
-  }
-
-  .footer-brand-block {
-    grid-column: 1 / -1;
-  }
-
-  .footer-bottom {
-    align-items: flex-start;
-    flex-direction: column;
-    font-size: 11px;
-  }
-
-  .footer-legal {
-    gap: 14px;
-  }
+@media (max-width: 540px) {
+  .site-footer { --footer-gap: 20px; }
+  .footer-card { padding: 35px 20px 22px; }
+  .feature-section { padding-bottom: 35px; }
+  .footer-middle { padding: 35px 0 39px; }
+  .feature-grid, .footer-middle { row-gap: 31px; }
+  .site-footer :is(.feature-group, .footer-links) .footer-heading { margin-bottom: 17px; font-size: 15px !important; }
+  .footer-link-list { gap: 13px; }
+  .site-footer .footer-link-list a { font-size: 13px; }
+  .trusted-logos { grid-template-columns: repeat(3, minmax(0,1fr)); gap: 18px 24px; }
+  .footer-bottom { flex-direction: column; align-items: flex-start; font-size: 11px; }
 }
-
-@media (max-width: 400px) {
-  .footer-main {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .footer-bottom a,
-  .footer-legal {
-    gap: 12px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .trusted-logos img {
-    transition: none;
-  }
-}
+@media (max-width: 365px) { .site-footer { --footer-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { .footer-link-list a, .trusted-logos img { transition: none; } }
 </style>

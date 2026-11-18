@@ -2,11 +2,7 @@
 
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 
-
-
 defineOptions({ name: 'IpsovaNavbar' })
-
-
 
 /**
 
@@ -22,11 +18,7 @@ defineOptions({ name: 'IpsovaNavbar' })
 
  */
 
-
-
 const logoSrc = `${import.meta.env.BASE_URL}saptivo-logo.png`
-
-
 
 /* dummy numbers: replace with the real Saptivo lines */
 
@@ -38,8 +30,6 @@ const phones = [
 
 ]
 
-
-
 const menuOpen = ref(false)
 
 const openMenu = ref(null) // 'features' | 'industries' | 'reseller' | null (desktop dropdowns)
@@ -49,8 +39,6 @@ const mobileSection = ref(null) // open accordion in the mobile menu
 const activeGroup = ref(0) // active tab in the Features mega menu
 
 const scrolled = ref(false)
-
-
 
 /* ---------------- ICONS (24px outline set, drawn inline so no icon package is needed) ---------------- */
 
@@ -102,94 +90,56 @@ const ICONS = {
 
 }
 
-
-
 /* ---------------- FEATURES (all 16 pages, grouped like the /features/ hub) ---------------- */
 
 const featureGroups = [
-
   {
-
-    title: 'Win more customers',
-
+    title: 'Sales & CRM',
+    description: 'Manage customers and close deals.',
     items: [
-
       { title: 'Lead & Contact Management', href: '/features/lead-management/', icon: 'users' },
-
       { title: 'Sales Pipeline & Deals', href: '/features/sales-pipeline/', icon: 'pipeline' },
-
       { title: 'Quotations & Invoicing', href: '/features/quotations-invoicing/', icon: 'file' },
-
-      { title: 'Marketing Campaigns', href: '/features/marketing-campaigns/', icon: 'megaphone' }
-
+      { title: 'Customer Portal', href: '/features/customer-portal/', icon: 'globe' }
     ]
-
   },
-
   {
-
-    title: 'Talk to customers on every channel',
-
+    title: 'Communication & Marketing',
+    description: 'Connect and engage with customers.',
     items: [
-
       { title: 'WhatsApp CRM', href: '/features/whatsapp-crm/', icon: 'chat' },
-
       { title: '3CX Call Integration', href: '/features/3cx-crm-integration/', icon: 'phone' },
-
       { title: 'Vodia Integration & AI Calls', href: '/features/vodia-integration/', icon: 'sparkles' },
-
-      { title: 'Customer Portal', href: '/features/customer-portal/', icon: 'globe' },
-
-      { title: 'Mobile CRM', href: '/features/mobile-crm/', icon: 'mobile' }
-
+      { title: 'Marketing Campaigns', href: '/features/marketing-campaigns/', icon: 'megaphone' }
     ]
-
   },
-
   {
-
-    title: 'Run operations and after-sales service',
-
+    title: 'Operations & Service',
+    description: 'Streamline everyday business operations.',
     items: [
-
-      { title: 'Service & AMC Management', href: '/features/service-maintenance-management/', icon: 'wrench' },
-
-      { title: 'Help Desk & Ticketing', href: '/features/help-desk/', icon: 'lifebuoy' },
-
+      { title: 'Multi-Branch Management', href: '/features/multi-branch-management/', icon: 'store' },
       { title: 'Inventory & Multi-Warehouse', href: '/features/inventory-management/', icon: 'box' },
-
-      { title: 'Multi-Branch Management', href: '/features/multi-branch-management/', icon: 'store' }
-
+      { title: 'Service & AMC Management', href: '/features/service-maintenance-management/', icon: 'wrench' },
+      { title: 'Help Desk & Ticketing', href: '/features/help-desk/', icon: 'lifebuoy' }
     ]
-
   },
-
   {
-
-    title: 'Work smarter',
-
+    title: 'Automation & Intelligence',
+    description: 'Work smarter with data and automation.',
     items: [
-
       { title: 'Workflow Automation', href: '/features/workflow-automation/', icon: 'zap' },
-
       { title: 'Reports & Analytics', href: '/features/reports-analytics/', icon: 'chart' },
-
-      { title: 'AI CRM', href: '/features/ai-crm/', icon: 'sparkles' }
-
+      { title: 'AI CRM', href: '/features/ai-crm/', icon: 'sparkles' },
+      { title: 'Mobile CRM', href: '/features/mobile-crm/', icon: 'mobile' }
     ]
-
   }
-
 ]
-
-
 
 /* flat list for the mobile menu */
 
 const features = featureGroups.flatMap((g) => g.items)
-const featureColumns = [features.slice(0, 4), features.slice(4, 8), features.slice(8, 12), features.slice(12, 16)]
 
-
+const featureColumns = featureGroups
 
 /* ---------------- INDUSTRIES (names, URLs and copy from the /industries/ hub) ---------------- */
 
@@ -267,8 +217,6 @@ const industries = [
 
 ]
 
-
-
 const industryColumns = [industries.slice(0, 3), industries.slice(3, 5)]
 
 /* photos on the right-hand card of each mega menu (swap freely) */
@@ -278,11 +226,10 @@ const menuPhotos = {
   features: 'https://images.unsplash.com/photo-1742836531271-98fd8151d257?w=900&q=80&auto=format&fit=crop',
 
   industries: 'https://images.unsplash.com/photo-1753354868616-544973e405c9?w=900&q=80&auto=format&fit=crop',
+
   industriesSecond: 'https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=900&q=80&auto=format&fit=crop'
 
 }
-
-
 
 /* ---------------- SIMPLE DROPDOWNS ---------------- */
 
@@ -306,8 +253,6 @@ const simpleMenus = [
 
 ]
 
-
-
 const plainLinks = [
 
   { label: 'Integrations', href: '/integrations/' },
@@ -317,8 +262,6 @@ const plainLinks = [
   { label: 'Pricing', href: '/pricing/' }
 
 ]
-
-
 
 /* shown after the Reseller dropdown — names and URLs as in the doc's sitemap */
 
@@ -332,21 +275,15 @@ const trailingLinks = [
 
 ]
 
-
-
 /* ---------------- behaviour ---------------- */
 
 let closeTimer = 0
-
-
 
 function handleScroll() {
 
   scrolled.value = window.scrollY > 24
 
 }
-
-
 
 function openOn(key, event) {
 
@@ -357,8 +294,6 @@ function openOn(key, event) {
   openMenu.value = key
 
 }
-
-
 
 function closeSoon(event) {
 
@@ -374,8 +309,6 @@ function closeSoon(event) {
 
 }
 
-
-
 function toggleMenu(key) {
 
   clearTimeout(closeTimer)
@@ -383,8 +316,6 @@ function toggleMenu(key) {
   openMenu.value = openMenu.value === key ? null : key
 
 }
-
-
 
 /* Features / Industries are links to their hub pages; on touch screens the first tap opens the menu instead */
 
@@ -404,15 +335,11 @@ function onHubClick(key, event) {
 
 }
 
-
-
 function toggleMobile(key) {
 
   mobileSection.value = mobileSection.value === key ? null : key
 
 }
-
-
 
 function closeAll() {
 
@@ -428,23 +355,17 @@ function closeAll() {
 
 }
 
-
-
 function handleDocumentClick(event) {
 
   if (!event.target.closest('.nav-dd')) openMenu.value = null
 
 }
 
-
-
 function handleKeydown(event) {
 
   if (event.key === 'Escape') closeAll()
 
 }
-
-
 
 onMounted(() => {
 
@@ -457,8 +378,6 @@ onMounted(() => {
   document.addEventListener('keydown', handleKeydown)
 
 })
-
-
 
 onBeforeUnmount(() => {
 
@@ -473,8 +392,6 @@ onBeforeUnmount(() => {
 })
 
 </script>
-
-
 
 <template>
 
@@ -500,8 +417,6 @@ onBeforeUnmount(() => {
 
     </div>
 
-
-
     <nav class="main-bar" aria-label="Main navigation">
 
      <div class="bar-in">
@@ -513,8 +428,6 @@ onBeforeUnmount(() => {
         <span class="brand-logo" role="img" aria-label="Saptivo CRM" :style="{ '--logo': `url(${logoSrc})` }"></span>
 
       </router-link>
-
-
 
       <!-- =================================================== DESKTOP LINKS -->
 
@@ -548,37 +461,55 @@ onBeforeUnmount(() => {
 
           </router-link>
 
-
-
           <Transition name="mega">
 
                           <div v-if="openMenu === 'features'" class="mega-menu mm mm-features">
+
                 <div class="mm-grid mm-features-grid">
+
                   <div class="mm-tabs mm-hub-only">
+
                     <router-link to="/features/" class="mm-hub-link" @click="closeAll">All CRM Features</router-link>
+
                   </div>
+
                   <div class="mm-feature-columns">
+
                     <div v-for="(column, ci) in featureColumns" :key="ci" class="mm-feature-column">
-                      <router-link v-for="item in column" :key="item.href" :to="item.href" class="mm-it" @click="closeAll">
+                        <p class="mm-h mm-feature-group-heading">{{ column.title }}</p>
+                        <router-link v-for="item in column.items" :key="item.href" :to="item.href" class="mm-it" @click="closeAll">
+
                         <svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path v-for="(d, i) in ICONS[item.icon]" :key="i" :d="d" /></svg>
+
                         <span class="mm-it-t"><strong>{{ item.title }}</strong></span>
+
                       </router-link>
+
                     </div>
+
                   </div>
+
                   <div class="mm-card mm-feature-card">
+
                     <img :src="menuPhotos.features" alt="Saptivo CRM features" loading="lazy" decoding="async" @error="$event.target.style.display = 'none'" />
+
                     <div class="mm-card-ov">
+
                       <strong>Can't find the feature you need?</strong>
+
                       <router-link to="/demo/" class="mm-go" aria-label="Book a Demo" @click="closeAll"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></svg></router-link>
+
                     </div>
+
                   </div>
+
                 </div>
+
               </div>
+
 </Transition>
 
         </div>
-
-
 
         <!-- INDUSTRIES (mega) -->
 
@@ -608,43 +539,67 @@ onBeforeUnmount(() => {
 
           </router-link>
 
-
-
           <Transition name="mega">
 
                           <div v-if="openMenu === 'industries'" class="mega-menu mm mm-industries">
+
                 <div class="mm-grid mm-industries-grid">
+
                   <div class="mm-tabs mm-hub-only">
+
                     <router-link to="/industries/" class="mm-hub-link" @click="closeAll">All Industries</router-link>
+
                   </div>
+
                   <div class="mm-industry-columns">
+
                     <div v-for="(column, ci) in industryColumns" :key="ci" class="mm-industry-column">
+
                       <router-link v-for="industry in column" :key="industry.href" :to="industry.href" class="mm-it" @click="closeAll">
+
                         <svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path v-for="(d, i) in ICONS[industry.icon]" :key="i" :d="d" /></svg>
+
                         <span class="mm-it-t"><strong>{{ industry.title }}</strong><small>{{ industry.blurb }}</small></span>
+
                       </router-link>
+
                     </div>
+
                   </div>
+
                   <div class="mm-industry-cards">
+
                     <div class="mm-card">
+
                       <img :src="menuPhotos.industries" alt="Retail business owners" loading="lazy" decoding="async" @error="$event.target.style.display = 'none'" />
+
                       <div class="mm-card-ov mm-industry-feature-copy">
+
                         <strong>Built for<br />your industry</strong>
+
                         <span class="mm-industry-feature-subtitle">One powerful CRM, tailored to the way you work.</span>
+
                       </div>
+
                     </div>
+
                     <div class="mm-card">
+
                       <img :src="menuPhotos.industriesSecond" alt="Business team working together" loading="lazy" decoding="async" @error="$event.target.style.display = 'none'" />
+
                       <div class="mm-card-ov"><strong>Don't see your industry?</strong><router-link to="/contact/" class="mm-go" aria-label="Contact us" @click="closeAll"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></svg></router-link></div>
+
                     </div>
+
                   </div>
+
                 </div>
+
               </div>
+
 </Transition>
 
         </div>
-
-
 
         <!-- PLAIN LINKS -->
 
@@ -653,8 +608,6 @@ onBeforeUnmount(() => {
           {{ item.label }}
 
         </router-link>
-
-
 
         <!-- RESELLER (mega) -->
 
@@ -693,8 +646,6 @@ onBeforeUnmount(() => {
             <svg viewBox="0 0 16 16" class="chevron" fill="none" aria-hidden="true" :class="{ rotate: openMenu === menu.key }"><path d="m4 6 4 4 4-4" /></svg>
 
           </button>
-
-
 
           <Transition name="mega">
 
@@ -754,8 +705,6 @@ onBeforeUnmount(() => {
 
         </div>
 
-
-
         <!-- ABOUT · BLOG · CONTACT -->
 
         <router-link v-for="item in trailingLinks" :key="item.href" :to="item.href" class="nav-link" @click="closeAll">
@@ -766,25 +715,17 @@ onBeforeUnmount(() => {
 
       </div>
 
-
-
       <!-- =================================================== DESKTOP ACTIONS -->
 
       <div class="desktop-actions">
 
         <router-link to="/reseller/signup/" class="reseller-btn" @click="closeAll">Reseller Signup</router-link>
 
-
-
         <router-link to="/demo/" class="demo-btn" @click="closeAll">Book a Demo</router-link>
-
-
 
         <router-link to="/free-trial/" class="start-btn" @click="closeAll">Free Trial</router-link>
 
       </div>
-
-
 
       <!-- =================================================== MOBILE TOGGLE -->
 
@@ -811,8 +752,6 @@ onBeforeUnmount(() => {
       </button>
 
      </div>
-
-
 
       <!-- =================================================== MOBILE MENU -->
 
@@ -852,8 +791,6 @@ onBeforeUnmount(() => {
 
           </div>
 
-
-
           <!-- Industries -->
 
           <div class="mobile-group">
@@ -892,8 +829,6 @@ onBeforeUnmount(() => {
 
           </div>
 
-
-
           <!-- Plain links -->
 
           <router-link v-for="item in plainLinks" :key="item.href" :to="item.href" class="mobile-link" @click="closeAll">
@@ -903,8 +838,6 @@ onBeforeUnmount(() => {
             <svg viewBox="0 0 20 20" fill="none"><path d="M4 10h12m-5-5 5 5-5 5" /></svg>
 
           </router-link>
-
-
 
           <!-- Reseller -->
 
@@ -942,8 +875,6 @@ onBeforeUnmount(() => {
 
           </div>
 
-
-
           <!-- About · Blog · Contact -->
 
           <router-link v-for="item in trailingLinks" :key="item.href" :to="item.href" class="mobile-link" @click="closeAll">
@@ -953,8 +884,6 @@ onBeforeUnmount(() => {
             <svg viewBox="0 0 20 20" fill="none"><path d="M4 10h12m-5-5 5 5-5 5" /></svg>
 
           </router-link>
-
-
 
           <!-- Actions -->
 
@@ -978,13 +907,9 @@ onBeforeUnmount(() => {
 
 </template>
 
-
-
 <style scoped>
 
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Urbanist:wght@500;600&display=swap');
-
-
 
 /* =========================================================
 
@@ -992,15 +917,11 @@ onBeforeUnmount(() => {
 
 ========================================================= */
 
-
-
 * {
 
   box-sizing: border-box;
 
 }
-
-
 
 .nav-shell {
 
@@ -1024,8 +945,6 @@ onBeforeUnmount(() => {
 
   --white: #ffffff;
 
-
-
   position: fixed;
 
   top: 0;
@@ -1042,15 +961,11 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 /* =========================================================
 
    TOP ROW (ash) + MAIN BAR (white, full width)
 
 ========================================================= */
-
-
 
 .topbar {
 
@@ -1063,8 +978,6 @@ onBeforeUnmount(() => {
   transition: max-height 0.3s ease, opacity 0.25s ease;
 
 }
-
-
 
 .topbar-in {
 
@@ -1081,8 +994,6 @@ onBeforeUnmount(() => {
   padding: 0 16px;
 
 }
-
-
 
 .tb-phone {
 
@@ -1108,8 +1019,6 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 .tb-phone svg {
 
   width: 14px;
@@ -1126,23 +1035,17 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 .tb-label {
 
   color: var(--muted);
 
 }
 
-
-
 .tb-phone:hover {
 
   color: var(--accent);
 
 }
-
-
 
 /* the ash row folds away once the page scrolls, the white bar stays */
 
@@ -1153,8 +1056,6 @@ onBeforeUnmount(() => {
   opacity: 0;
 
 }
-
-
 
 .main-bar {
 
@@ -1168,15 +1069,11 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 .scrolled .main-bar {
 
   box-shadow: 0 10px 28px -14px rgba(15, 23, 42, 0.2);
 
 }
-
-
 
 .bar-in {
 
@@ -1200,15 +1097,11 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 /* =========================================================
 
    BRAND
 
 ========================================================= */
-
-
 
 .brand {
 
@@ -1223,8 +1116,6 @@ onBeforeUnmount(() => {
   text-decoration: none;
 
 }
-
-
 
 .brand-logo {
 
@@ -1242,15 +1133,11 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 /* =========================================================
 
    DESKTOP LINKS
 
 ========================================================= */
-
-
 
 .desktop-links {
 
@@ -1267,8 +1154,6 @@ onBeforeUnmount(() => {
   flex: 0 1 auto;
 
 }
-
-
 
 .nav-link {
 
@@ -1308,8 +1193,6 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 .nav-link:hover,
 
 .nav-link.active,
@@ -1322,8 +1205,6 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 .nav-link:focus-visible {
 
   outline: none;
@@ -1331,8 +1212,6 @@ onBeforeUnmount(() => {
   color: var(--accent);
 
 }
-
-
 
 .chevron {
 
@@ -1348,23 +1227,17 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 .chevron.rotate {
 
   transform: rotate(180deg);
 
 }
 
-
-
 /* =========================================================
 
    DROPDOWN WRAPPERS
 
 ========================================================= */
-
-
 
 .nav-dd {
 
@@ -1378,15 +1251,11 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 /* =========================================================
 
    MEGA MENU  (groups | links with icons)
 
 ========================================================= */
-
-
 
 .mega-menu {
 
@@ -1410,8 +1279,6 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 .mm-grid {
 
   display: grid;
@@ -1426,15 +1293,11 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 .mm-grid-3 {
 
   grid-template-columns: 240px minmax(0, 1fr) 300px;
 
 }
-
-
 
 .mm-grid-sm {
 
@@ -1444,11 +1307,7 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 /* ---------- 1 · groups ---------- */
-
-
 
 .mm-tabs {
 
@@ -1465,8 +1324,6 @@ onBeforeUnmount(() => {
   border-right: 1px solid #ececef;
 
 }
-
-
 
 .mm-tab {
 
@@ -1502,8 +1359,6 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 .mm-tab:hover {
 
   color: var(--navy);
@@ -1512,8 +1367,6 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 .mm-tab.on {
 
   color: var(--navy);
@@ -1521,8 +1374,6 @@ onBeforeUnmount(() => {
   background: #f1f1f4;
 
 }
-
-
 
 .mm-all {
 
@@ -1540,27 +1391,19 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 .mm-all:hover {
 
   text-decoration: underline;
 
 }
 
-
-
 /* ---------- 2 · links ---------- */
-
-
 
 .mm-body {
 
   padding: 0;
 
 }
-
-
 
 .mm-h {
 
@@ -1576,8 +1419,6 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 .mm-items {
 
   display: grid;
@@ -1588,8 +1429,6 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 .mm-items-2 {
 
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1597,8 +1436,6 @@ onBeforeUnmount(() => {
   column-gap: 10px;
 
 }
-
-
 
 .mm-it {
 
@@ -1619,8 +1456,6 @@ onBeforeUnmount(() => {
   transition: background 0.2s ease, color 0.2s ease;
 
 }
-
-
 
 .mm-it .ic {
 
@@ -1644,8 +1479,6 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 .mm-it-t strong {
 
   display: block;
@@ -1657,8 +1490,6 @@ onBeforeUnmount(() => {
   line-height: 1.3;
 
 }
-
-
 
 .mm-it-t small {
 
@@ -1676,15 +1507,11 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 .mm-it:hover {
 
   background: #f3f3f5;
 
 }
-
-
 
 .mm-it:hover .ic {
 
@@ -1693,8 +1520,6 @@ onBeforeUnmount(() => {
   transform: scale(1.1);
 
 }
-
-
 
 .mm-tab:focus-visible,
 
@@ -1708,11 +1533,7 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 /* ---------- 3 · photo card ---------- */
-
-
 
 .mm-card { position: relative; min-height: 280px; overflow: hidden; border-radius: 16px; background: linear-gradient(160deg, #3a3a40, #0b0c0e); }
 
@@ -1730,15 +1551,11 @@ onBeforeUnmount(() => {
 
 .mm-go:hover { background: var(--accent); color: #fff; transform: translateX(2px); }
 
-
-
 /* =========================================================
 
    MENU ANIMATION
 
 ========================================================= */
-
-
 
 .mega-enter-active,
 
@@ -1751,8 +1568,6 @@ onBeforeUnmount(() => {
   transition: opacity 0.22s ease, transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
 
 }
-
-
 
 .mega-enter-from,
 
@@ -1768,15 +1583,11 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 /* =========================================================
 
    DESKTOP ACTIONS
 
 ========================================================= */
-
-
 
 .desktop-actions {
 
@@ -1791,8 +1602,6 @@ onBeforeUnmount(() => {
   margin-left: auto;
 
 }
-
-
 
 .demo-btn,
 
@@ -1827,8 +1636,6 @@ onBeforeUnmount(() => {
   transition: transform 0.2s ease, background 0.2s ease;
 
 }
-
-
 
 /* Reseller Signup: outlined, so Book a Demo and Free Trial stay the main actions */
 
@@ -1868,8 +1675,6 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 .reseller-btn:hover {
 
   background: #f3f3f5;
@@ -1877,8 +1682,6 @@ onBeforeUnmount(() => {
   transform: translateY(-2px);
 
 }
-
-
 
 /* Same colours as the hero buttons: black for the demo, orange gradient for the trial, no shadows. */
 
@@ -1892,8 +1695,6 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 .start-btn {
 
   color: #fff;
@@ -1904,8 +1705,6 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 .demo-btn:hover,
 
 .start-btn:hover {
@@ -1914,15 +1713,11 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 .demo-btn:hover {
 
   background: #1a1a1a;
 
 }
-
-
 
 .start-btn:hover {
 
@@ -1932,15 +1727,11 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 /* =========================================================
 
    MOBILE BUTTON
 
 ========================================================= */
-
-
 
 .menu-toggle {
 
@@ -1970,8 +1761,6 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 .menu-toggle span {
 
   width: 18px;
@@ -1986,15 +1775,11 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 .menu-toggle .first {
 
   transform: translateY(7px) rotate(45deg);
 
 }
-
-
 
 .menu-toggle .second {
 
@@ -2002,23 +1787,17 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 .menu-toggle .third {
 
   transform: translateY(-7px) rotate(-45deg);
 
 }
 
-
-
 /* =========================================================
 
    MOBILE MENU
 
 ========================================================= */
-
-
 
 .mobile-menu {
 
@@ -2049,8 +1828,6 @@ onBeforeUnmount(() => {
   box-shadow: 0 30px 50px -24px rgba(11, 12, 14, 0.25);
 
 }
-
-
 
 .mobile-link,
 
@@ -2086,8 +1863,6 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 .mobile-link:hover,
 
 .mobile-trigger:hover {
@@ -2095,8 +1870,6 @@ onBeforeUnmount(() => {
   color: var(--accent);
 
 }
-
-
 
 .mobile-link svg {
 
@@ -2109,8 +1882,6 @@ onBeforeUnmount(() => {
   stroke-width: 1.6;
 
 }
-
-
 
 .mobile-trigger svg {
 
@@ -2126,23 +1897,17 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 .mobile-trigger svg.rotate {
 
   transform: rotate(180deg);
 
 }
 
-
-
 .mobile-sub {
 
   padding: 5px 0 8px;
 
 }
-
-
 
 .mobile-sub a {
 
@@ -2164,8 +1929,6 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 .mobile-sub a.mobile-all {
 
   color: var(--accent);
@@ -2176,8 +1939,6 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 .mobile-sub strong {
 
   display: block;
@@ -2185,8 +1946,6 @@ onBeforeUnmount(() => {
   font-size: 11.5px;
 
 }
-
-
 
 .mobile-sub small {
 
@@ -2204,8 +1963,6 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 .mobile-sub svg {
 
   width: 15px;
@@ -2220,8 +1977,6 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 .mobile-industry-enter-active,
 
 .mobile-industry-leave-active {
@@ -2229,8 +1984,6 @@ onBeforeUnmount(() => {
   transition: opacity 0.2s ease, transform 0.2s ease;
 
 }
-
-
 
 .mobile-industry-enter-from,
 
@@ -2241,8 +1994,6 @@ onBeforeUnmount(() => {
   transform: translateY(-5px);
 
 }
-
-
 
 .mobile-actions {
 
@@ -2256,8 +2007,6 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 .mobile-actions .demo-btn,
 
 .mobile-actions .start-btn {
@@ -2270,8 +2019,6 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 .dropdown-enter-active,
 
 .dropdown-leave-active {
@@ -2279,8 +2026,6 @@ onBeforeUnmount(() => {
   transition: opacity 0.2s ease, transform 0.2s ease;
 
 }
-
-
 
 .dropdown-enter-from,
 
@@ -2292,15 +2037,11 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 /* =========================================================
 
    RESPONSIVE
 
 ========================================================= */
-
-
 
 @media (max-width: 1480px) {
 
@@ -2310,15 +2051,11 @@ onBeforeUnmount(() => {
 
   }
 
-
-
   .desktop-actions {
 
     gap: 7px;
 
   }
-
-
 
   .reseller-btn,
 
@@ -2336,8 +2073,6 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 @media (max-width: 1300px) {
 
   .nav-link {
@@ -2345,8 +2080,6 @@ onBeforeUnmount(() => {
     font-size: 13px;
 
   }
-
-
 
   .brand-logo {
 
@@ -2356,8 +2089,6 @@ onBeforeUnmount(() => {
 
   }
 
-
-
   .mm-grid-3,
 
   .mm-grid-sm {
@@ -2366,8 +2097,6 @@ onBeforeUnmount(() => {
 
   }
 
-
-
   .mm-items-2 {
 
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2375,8 +2104,6 @@ onBeforeUnmount(() => {
   }
 
 }
-
-
 
 @media (max-width: 1340px) {
 
@@ -2388,8 +2115,6 @@ onBeforeUnmount(() => {
 
   }
 
-
-
   .desktop-links,
 
   .desktop-actions {
@@ -2398,8 +2123,6 @@ onBeforeUnmount(() => {
 
   }
 
-
-
   .menu-toggle {
 
     display: flex;
@@ -2407,8 +2130,6 @@ onBeforeUnmount(() => {
   }
 
 }
-
-
 
 @media (max-width: 480px) {
 
@@ -2420,8 +2141,6 @@ onBeforeUnmount(() => {
 
   }
 
-
-
   .tb-phone {
 
     gap: 5px;
@@ -2430,15 +2149,11 @@ onBeforeUnmount(() => {
 
   }
 
-
-
   .tb-label {
 
     display: none;
 
   }
-
-
 
   .brand-logo {
 
@@ -2448,15 +2163,11 @@ onBeforeUnmount(() => {
 
   }
 
-
-
   .mobile-actions {
 
     grid-template-columns: 1fr;
 
   }
-
-
 
   .mobile-actions .reseller-btn,
 
@@ -2472,8 +2183,6 @@ onBeforeUnmount(() => {
 
 }
 
-
-
 .mobile-actions .reseller-btn {
 
   grid-column: 1 / -1;
@@ -2485,8 +2194,6 @@ onBeforeUnmount(() => {
   font-size: 11px;
 
 }
-
-
 
 @media (prefers-reduced-motion: reduce) {
 
@@ -2504,141 +2211,279 @@ onBeforeUnmount(() => {
 
 }
 
-
 /* Targeted desktop mega-menu layout updates */
+
 .mm-features,
+
 .mm-industries,
+
 .mm-reseller {
+
   height: 330px;
+
   min-height: 330px;
+
 }
+
 .mm-features {
+
   left: 50%;
+
   right: auto;
+
   width: min(1320px, calc(100vw - 112px));
+
   max-width: calc(100vw - 112px);
+
   transform: translateX(-50%);
+
 }
+
 .mm-features.mega-enter-from,
+
 .mm-features.mega-leave-to,
+
 .mm-industries.mega-enter-from,
+
 .mm-industries.mega-leave-to {
+
   transform: translate(-50%, -8px);
+
 }
+
 .mm-features-grid {
+
   grid-template-columns: 175px minmax(0, 1fr) 180px;
+
   height: 100%;
+
   gap: 12px;
+
 }
+
 .mm-hub-only { height: 100%; padding-right: 18px; min-width: 0; }
+
 .mm-hub-link {
+
   display: block;
+
   width: 100%;
+
   padding: 11px 10px;
+
   border-radius: 10px;
+
   color: var(--ink);
+
   font-size: 14px;
+
   font-weight: 500;
+
   text-decoration: none;
+
   white-space: nowrap;
+
   transition: background .2s ease, color .2s ease;
+
 }
+
 .mm-hub-link:hover,
+
 .mm-hub-link:focus-visible { background: #f1f1f4; color: var(--ink); }
+
 .mm-feature-columns { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: 8px; align-content: start; }
+
 .mm-feature-column { display: flex; flex-direction: column; gap: 19px; min-width: 0; }
+
 .mm-feature-column .mm-it { padding: 12px 4px; gap: 10px; }
+
 .mm-feature-column .mm-it-t strong { font-size: 14px; }
+
 .mm-feature-card { min-width: 0; min-height: 280px; }
+
 .mm-feature-card .mm-card-ov strong { font-size: 15px; }
+
 .mm-feature-column .mm-it-t strong { white-space: nowrap; }
+
 .mm-industries {
+
   left: 50%;
+
   right: auto;
+
   width: min(1320px, calc(100vw - 112px));
+
   max-width: calc(100vw - 112px);
+
   transform: translateX(-50%);
+
 }
+
 .mm-industries-grid { grid-template-columns: 145px minmax(0, 450px) minmax(0, 1fr); height: 100%; gap: 14px; }
+
 .mm-industry-columns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 14px; align-content: start; }
+
 .mm-industry-column { display: flex; flex-direction: column; gap: 19px; min-width: 0; }
+
 .mm-industry-column .mm-it { padding: 12px 5px; gap: 11px; }
+
 .mm-industry-column .mm-it-t strong { white-space: nowrap; }
+
 .mm-industry-cards { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 14px; min-width: 0; }
+
 .mm-industry-cards .mm-card { min-height: 280px; }
+
 .mm-industry-cards .mm-card-ov { left: 12px; right: 10px; bottom: 13px; gap: 6px; }
+
 .mm-industry-cards .mm-card-ov strong { font-size: 14px; }
+
 .mm-industry-cards .mm-go { width: 32px; height: 32px; }
 
 /* Industry hero image: richer editorial caption, without an action button. */
+
 .mm-industry-cards .mm-industry-feature-copy {
+
   display: flex;
+
   flex-direction: column;
+
   align-items: flex-start;
+
   justify-content: flex-end;
+
   gap: 7px;
+
   left: 22px;
+
   right: 20px;
+
   bottom: 22px;
+
 }
+
 .mm-industry-cards .mm-industry-feature-copy strong {
+
   color: #fff;
+
   font-size: clamp(27px, 2vw, 36px);
+
   font-weight: 600;
+
   line-height: 1.12;
+
   letter-spacing: -0.6px;
+
 }
+
 .mm-industry-feature-subtitle {
+
   max-width: 240px;
+
   color: rgba(255,255,255,.87);
+
   font-size: 12px;
+
   font-weight: 400;
+
   line-height: 1.4;
+
 }
 
 .mm-reseller { left: auto; right: clamp(24px, 9vw, 180px); width: min(1000px, calc(100% - 48px)); }
+
 .mm-reseller .mm-grid-sm { height: 100%; }
+
 @media (max-width: 1530px) and (min-width: 1341px) {
+
   .mm-features, .mm-industries { left: 50%; right: auto; width: calc(100vw - 112px); max-width: calc(100vw - 112px); }
+
   .mm-features-grid { grid-template-columns: 170px minmax(0, 1fr) 160px; gap: 8px; }
+
   .mm-feature-columns { column-gap: 8px; }
+
   .mm-feature-column .mm-it { padding-inline: 2px; gap: 8px; }
+
   .mm-feature-column .mm-it-t strong { font-size: 14px; }
+
   .mm-feature-column .ic { width: 18px; height: 18px; }
+
   .mm-industries-grid { grid-template-columns: 170px minmax(0, 410px) minmax(0, 1fr); gap: 10px; }
+
   .mm-industry-column .mm-it { padding-inline: 4px; gap: 7px; }
+
   .mm-industry-cards { gap: 8px; }
+
   .mm-reseller { right: 24px; }
+
 }
 
-
 /* Large desktop refinement: laptop sizing above remains unchanged. */
+
 @media (min-width: 1700px) {
+
   .mm-features,
+
   .mm-industries {
+
     width: min(1540px, calc(100vw - 160px));
+
     max-width: calc(100vw - 160px);
+
   }
 
   .mm-features-grid {
+
     grid-template-columns: 185px minmax(0, 1fr) 230px;
+
     gap: 20px;
+
   }
+
   .mm-feature-columns { column-gap: 18px; }
+
   .mm-feature-column .mm-it { padding-inline: 5px; gap: 11px; }
 
   .mm-industries-grid {
+
     grid-template-columns: 175px minmax(0, 500px) minmax(0, 1fr);
+
     gap: 20px;
+
   }
+
   .mm-industry-columns { column-gap: 20px; }
+
   .mm-industry-cards { gap: 14px; }
 
   /* Keep Reseller aligned to the right, but balanced on wide monitors. */
+
   .mm-reseller {
+
     width: min(1100px, calc(100vw - 160px));
+
     right: max(80px, calc((100vw - 1540px) / 2));
+
   }
+
 }
 
+/* Group labels for the four Features mega-menu columns. */
+.mm-feature-group-heading {
+  /* Same typography and muted tone as the Reseller .mm-h caption. */
+  margin: 0 0 10px;
+  padding: 0 4px;
+  color: #98a2b3;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.4;
+  min-height: 36px;
+  display: flex;
+  align-items: flex-start;
+}
+/* Remove flex gap around the caption; apply spacing only to feature links. */
+.mm-feature-column { gap: 0; }
+.mm-feature-column .mm-it { padding-block: 11px; margin-bottom: 12px; }
+.mm-feature-column .mm-it:last-child { margin-bottom: 0; }
 </style>
