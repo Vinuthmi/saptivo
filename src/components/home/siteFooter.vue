@@ -171,7 +171,11 @@ const conversionLinks = [
       <!-- Row 4: bottom content -->
       <div class="footer-bottom">
         <span>© {{ year }} Saptivo. All rights reserved.</span>
-        <a href="#top">Back to top ↑</a>
+        <a class="footer-back-to-top" href="#top">Back to top ↑</a>
+        <nav class="footer-legal" aria-label="Legal links">
+          <router-link to="/terms-and-services/">Terms &amp; Services</router-link>
+          <router-link to="/privacy-policy/">Privacy Policy</router-link>
+        </nav>
       </div>
     </div>
   </footer>
@@ -190,12 +194,14 @@ const conversionLinks = [
   --footer-gap: clamp(28px, 4.4vw, 88px);
   width: 100%;
   background: #F2E9E0;
+  border-radius: 56px 56px 0 0;
+  overflow: hidden;
   color: var(--footer-ink);
   font-family: 'Outfit', sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 .site-footer *, .site-footer *::before, .site-footer *::after { box-sizing: border-box; }
-.footer-card { width: 100%; max-width: 1920px; margin: 0 auto; padding: 64px clamp(28px, 4.5vw, 86px) 25px; }
+.footer-card { width: 100%; max-width: 1920px; margin: 0 auto; padding: 52px clamp(28px, 4.5vw, 86px) 25px; }
 .feature-grid, .footer-middle {
   display: grid;
   grid-template-columns: var(--footer-columns);
@@ -255,8 +261,10 @@ const conversionLinks = [
 .trusted-logos li.logo-smardove img { width: min(136px, 100%); max-height: 44px; transform: translateY(-4px); }
 .trusted-logos li.logo-voxinnova img { width: min(104px, 100%); max-height: 32px; }
 .trusted-logos li:hover img { opacity: .8; }
-.footer-bottom { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding-top: 22px; border-top: 1px solid var(--footer-rule); color: #625d59; font-size: 12px; }
+.footer-bottom { display: flex; justify-content: flex-start; align-items: center; gap: 20px; padding-top: 22px; border-top: 1px solid var(--footer-rule); color: #625d59; font-size: 12px; }
 .footer-bottom a { color: #282522; text-decoration: none; }
+.footer-legal { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 12px 28px; margin-left: auto; }
+.footer-back-to-top { margin-left: auto; }
 .footer-bottom a:hover { text-decoration: underline; }
 @media (max-width: 1250px) {
   .site-footer { --footer-gap: 32px; }
@@ -265,14 +273,14 @@ const conversionLinks = [
 }
 @media (max-width: 900px) {
   .site-footer { --footer-columns: repeat(2, minmax(0,1fr)); }
-  .footer-card { padding-top: 45px; }
+  .footer-card { padding-top: 38px; }
   .feature-grid, .footer-middle { row-gap: 38px; }
   .trusted-brands { grid-template-columns: 1fr; gap: 25px; }
   .trusted-logos { grid-template-columns: repeat(5, minmax(0,1fr)); }
 }
 @media (max-width: 540px) {
   .site-footer { --footer-gap: 20px; }
-  .footer-card { padding: 35px 20px 22px; }
+  .footer-card { padding: 30px 20px 22px; }
   .feature-section { padding-bottom: 35px; }
   .footer-middle { padding: 35px 0 39px; }
   .feature-grid, .footer-middle { row-gap: 31px; }
@@ -281,6 +289,9 @@ const conversionLinks = [
   .site-footer .footer-link-list a { font-size: 13px; }
   .trusted-logos { grid-template-columns: repeat(3, minmax(0,1fr)); gap: 18px 24px; }
   .footer-bottom { flex-direction: column; align-items: flex-start; font-size: 11px; }
+  .footer-legal { justify-content: flex-start; margin-left: 0; }
+  .footer-back-to-top { margin-left: 0; }
+  .site-footer { border-radius: 34px 34px 0 0; }
 }
 @media (max-width: 365px) { .site-footer { --footer-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { .footer-link-list a, .trusted-logos img { transition: none; } }
