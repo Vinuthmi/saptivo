@@ -10,7 +10,9 @@
       muted
       loop
       playsinline
-      preload="metadata"
+      preload="auto"
+      @loadeddata="onLoaded"
+      @canplay="onCanPlay"
       aria-hidden="true"
       tabindex="-1"
     ></video>
@@ -49,15 +51,29 @@ const root = ref(null);
 const vid = ref(null);
 let io = null;
 
+let inView = true;
+const reduce = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+// show a frame as soon as the file is ready, even if playback is paused (reduced motion)
+function onLoaded() {
+  const v = vid.value;
+  if (v && v.paused && v.currentTime === 0) v.currentTime = 0.05;
+}
+// browsers sometimes skip autoplay on the first load: start it once the video can play
+function onCanPlay() {
+  if (!reduce() && inView) vid.value?.play().catch(() => {});
+}
+
 onMounted(() => {
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  if (reduce()) {
     vid.value?.pause();
     return;
   }
+  vid.value?.play().catch(() => {});
   // play only while the section is on screen (saves battery / CPU)
   io = new IntersectionObserver(([e]) => {
     const v = vid.value;
     if (!v) return;
+    inView = e.isIntersecting;
     if (e.isIntersecting) v.play().catch(() => {});
     else v.pause();
   }, { threshold: 0.1 });
@@ -69,16 +85,18 @@ onBeforeUnmount(() => io?.disconnect());
 <style scoped>
 .ih {
   --ink: #17191d;
-  --edge: 8px; /* gap around the video panel (top and sides) */
+  --edge: clamp(10px, 1.3vw, 24px); /* gap left, right and below the video */
+  --hdr: 110px; /* height of the fixed header: 38px phone row + 72px white bar */
+  --gap-top: 2px; /* space between the header and the video */
   position: relative;
-  padding: var(--edge); /* same gap on top, sides and bottom */
+  padding: calc(var(--hdr) + var(--gap-top)) var(--edge) var(--edge);
   text-align: center;
   color: var(--ink);
   background: #fff;
   font-family: 'Urbanist', system-ui, sans-serif;
 }
 
-/* the video panel: fills the page width, the navbar floats on top of it */
+/* the video panel: fills the page width, the header sits on top of it */
 .card {
   position: relative;
   isolation: isolate;
@@ -87,10 +105,11 @@ onBeforeUnmount(() => io?.disconnect());
   align-items: center;
   justify-content: center;
   width: 100%;
-  min-height: calc(100vh - var(--edge) * 2); /* fallback */
-  min-height: calc(100svh - var(--edge) * 2); /* fills the screen, equal gap on every side */
+  /* about 84% of the screen height, so the next section peeks in under the video */
+  min-height: 66vh; /* fallback */
+  min-height: 66svh;
   margin: 0 auto;
-  border-radius: clamp(24px, 2.6vw, 36px);
+  border-radius: clamp(18px, 2.4vw, 36px);
   background: #0b0c0e; /* shows until the video loads */
 }
 .ih *, .ih *::before, .ih *::after { box-sizing: border-box; }
@@ -109,7 +128,7 @@ onBeforeUnmount(() => io?.disconnect());
   position: relative; z-index: 3;
   display: flex; flex-direction: column; align-items: center;
   width: min(980px, calc(100% - 40px)); margin: 0 auto;
-  padding: clamp(136px, 12vw, 168px) 0 clamp(48px, 5vw, 72px); /* top clears the floating navbar */
+  padding: clamp(36px, 4.5vw, 72px) 0 clamp(32px, 3vw, 48px); /* the header now sits above the video, so no extra top space is needed */
 }
 .hero-copy { text-align: center; }
 h1 {
@@ -178,6 +197,9 @@ h1 {
 
 @keyframes rise { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
 
+@media (max-width: 1340px) {
+  .ih { --hdr: 102px; } /* 38px phone row + 64px bar */
+}
 @media (max-width: 760px) {
   .wrap { width: calc(100% - 32px); }
   .btn { min-height: 50px; padding: 0 20px; font-size: 14px; }

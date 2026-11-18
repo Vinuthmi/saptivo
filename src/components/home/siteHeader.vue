@@ -7,10 +7,17 @@ defineOptions({ name: 'IpsovaNavbar' })
  * Saptivo header — navigation follows the sitemap in "Saptivo Website Content & SEO Copy" (v1.0):
  *   Features (hub + 16 feature pages) · Industries (hub + 5 industry pages) · Integrations · Security · Pricing
  *   Reseller (program, signup) · About · Blog · Contact (separate links)
- *   CTAs: Book a Demo (/demo/) and Free Trial (/free-trial/)
+ *   CTAs: Reseller Signup (/reseller/signup/), Book a Demo (/demo/) and Free Trial (/free-trial/)
+ *   Layout: full-width white header with an ash top row (dummy phone numbers) and full-width white mega menus
  */
 
 const logoSrc = `${import.meta.env.BASE_URL}saptivo-logo.png`
+
+/* dummy numbers: replace with the real Saptivo lines */
+const phones = [
+  { label: 'Sales', number: '+94 11 234 5678', href: 'tel:+94112345678' },
+  { label: 'Support', number: '+94 77 123 4567', href: 'tel:+94771234567' }
+]
 
 const menuOpen = ref(false)
 const openMenu = ref(null) // 'features' | 'industries' | 'reseller' | null (desktop dropdowns)
@@ -237,7 +244,19 @@ onBeforeUnmount(() => {
 
 <template>
   <header class="nav-shell" :class="{ scrolled, expanded: menuOpen }">
-    <nav class="glass-nav" aria-label="Main navigation">
+    <!-- ASH TOP ROW: phone numbers (dummy) -->
+    <div class="topbar">
+      <div class="topbar-in">
+        <a v-for="ph in phones" :key="ph.href" :href="ph.href" class="tb-phone">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" /></svg>
+          <span class="tb-label">{{ ph.label }}:</span>
+          <span>{{ ph.number }}</span>
+        </a>
+      </div>
+    </div>
+
+    <nav class="main-bar" aria-label="Main navigation">
+     <div class="bar-in">
       <!-- BRAND (original logo, painted with a black to orange gradient through a mask, so any transparent PNG works) -->
       <router-link to="/" class="brand" aria-label="Saptivo CRM home" @click="closeAll">
         <span class="brand-logo" role="img" aria-label="Saptivo CRM" :style="{ '--logo': `url(${logoSrc})` }"></span>
@@ -336,6 +355,7 @@ onBeforeUnmount(() => {
                       </span>
                     </router-link>
                   </div>
+
                 </div>
                 <div class="mm-card">
                   <img :src="menuPhotos.industries" alt="" loading="lazy" decoding="async" @error="$event.target.style.display = 'none'" />
@@ -412,6 +432,8 @@ onBeforeUnmount(() => {
 
       <!-- =================================================== DESKTOP ACTIONS -->
       <div class="desktop-actions">
+        <router-link to="/reseller/signup/" class="reseller-btn" @click="closeAll">Reseller Signup</router-link>
+
         <router-link to="/demo/" class="demo-btn" @click="closeAll">Book a Demo</router-link>
 
         <router-link to="/free-trial/" class="start-btn" @click="closeAll">Free Trial</router-link>
@@ -429,6 +451,7 @@ onBeforeUnmount(() => {
         <span :class="{ second: menuOpen }"></span>
         <span :class="{ third: menuOpen }"></span>
       </button>
+     </div>
 
       <!-- =================================================== MOBILE MENU -->
       <Transition name="dropdown">
@@ -503,6 +526,7 @@ onBeforeUnmount(() => {
 
           <!-- Actions -->
           <div class="mobile-actions">
+            <router-link to="/reseller/signup/" class="reseller-btn" @click="closeAll">Reseller Signup</router-link>
             <router-link to="/demo/" class="demo-btn" @click="closeAll">Book a Demo</router-link>
             <router-link to="/free-trial/" class="start-btn" @click="closeAll">Free Trial</router-link>
           </div>
@@ -540,38 +564,87 @@ onBeforeUnmount(() => {
   left: 0;
   width: 100%;
   z-index: 99999;
-  padding: 0 24px;
+  padding: 0;
   font-family: 'Outfit', system-ui, sans-serif;
 }
 
 /* =========================================================
-   NAVBAR  (no border, soft shadow around)
+   TOP ROW (ash) + MAIN BAR (white, full width)
 ========================================================= */
 
-.glass-nav {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  width: min(1390px, 100%);
-  min-height: 72px;
-  margin: 20px auto 0; /* space above the header, so it sits inside the hero panel */
-  padding: 11px 13px 11px 25px;
-  /* glass effect: translucent white and a strong blur, no edge line */
-  border: 0;
-  border-radius: 22px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.46) 0%, rgba(255, 255, 255, 0.24) 100%);
-  backdrop-filter: blur(34px) saturate(240%) brightness(1.08);
-  -webkit-backdrop-filter: blur(34px) saturate(240%) brightness(1.08);
-  box-shadow: 0 12px 38px -6px rgba(15, 23, 42, 0.28), 0 2px 8px rgba(15, 23, 42, 0.1);
-  transition: background 0.3s ease, box-shadow 0.3s ease, border-radius 0.3s ease, transform 0.3s ease;
+.topbar {
+  background: var(--ash);
+  max-height: 44px;
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.25s ease;
 }
 
-/* a little more opaque once the page scrolls, so it stays readable over any section */
-.scrolled .glass-nav {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.74) 0%, rgba(255, 255, 255, 0.62) 100%);
-  box-shadow: 0 16px 44px -4px rgba(15, 23, 42, 0.22), 0 3px 10px rgba(15, 23, 42, 0.08);
+.topbar-in {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(18px, 3vw, 44px);
+  min-height: 38px;
+  padding: 0 16px;
+}
+
+.tb-phone {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--navy);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+
+.tb-phone svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.tb-label {
+  color: var(--muted);
+}
+
+.tb-phone:hover {
+  color: var(--accent);
+}
+
+/* the ash row folds away once the page scrolls, the white bar stays */
+.scrolled .topbar {
+  max-height: 0;
+  opacity: 0;
+}
+
+.main-bar {
+  position: relative;
+  background: #fff;
+  border-bottom: 0; /* no line under the header */
+  transition: box-shadow 0.3s ease;
+}
+
+.scrolled .main-bar {
+  box-shadow: 0 10px 28px -14px rgba(15, 23, 42, 0.2);
+}
+
+.bar-in {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* logo, then the menus right after it; buttons are pushed to the far right */
+  gap: clamp(20px, 2vw, 32px);
+  width: 100%;
+  max-width: none;
+  min-height: 72px;
+  margin: 0 auto;
+  padding: 0 clamp(20px, 4vw, 96px); /* breathing room left and right */
 }
 
 /* =========================================================
@@ -588,9 +661,9 @@ onBeforeUnmount(() => {
 
 .brand-logo {
   display: block;
-  width: 156px;
-  height: 38px;
-  background: linear-gradient(90deg, #0b0c0e 0%, #0b0c0e 45%, #f2531f 82%, #ff7a45 100%);
+  width: 132px;
+  height: 32px;
+  background: #000; /* logo in solid black */
   -webkit-mask: var(--logo) left center / contain no-repeat;
   mask: var(--logo) left center / contain no-repeat;
 }
@@ -601,10 +674,11 @@ onBeforeUnmount(() => {
 
 .desktop-links {
   display: flex;
+  align-self: stretch;
   align-items: center;
   justify-content: center;
   gap: 2px;
-  flex: 1;
+  flex: 0 1 auto;
 }
 
 .nav-link {
@@ -612,7 +686,7 @@ onBeforeUnmount(() => {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 9px 12px;
+  padding: 9px clamp(7px, 0.75vw, 16px); /* space between Features, Industries and the other links grows with the screen */
   border: 0;
   border-radius: 10px;
   color: var(--navy);
@@ -656,7 +730,10 @@ onBeforeUnmount(() => {
 ========================================================= */
 
 .nav-dd {
-  position: static; /* mega menus are positioned against the nav bar */
+  position: static; /* mega menus are positioned against the white bar, full width */
+  display: flex;
+  align-items: center;
+  align-self: stretch;
 }
 
 /* =========================================================
@@ -665,48 +742,31 @@ onBeforeUnmount(() => {
 
 .mega-menu {
   position: absolute;
-  top: calc(100% + 10px);
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(900px, calc(100vw - 48px));
-  padding: 14px;
-  border: 0;
-  border-radius: 22px;
+  top: calc(100% + 8px);
+  left: clamp(24px, 9vw, 180px);
+  right: clamp(24px, 9vw, 180px);
+  padding: 24px;
+  border: 1px solid #e4e4e9;
+  border-radius: 18px;
   background: #fff;
-  box-shadow: 0 24px 60px -12px rgba(15, 23, 42, 0.18), 0 4px 14px rgba(15, 23, 42, 0.06);
-}
-
-.mm-wide {
-  width: min(1020px, calc(100vw - 48px));
-}
-
-.mm-mid {
-  width: min(780px, calc(100vw - 48px));
-}
-
-/* invisible bridge so the menu stays open while the pointer crosses the gap */
-.mega-menu::before {
-  position: absolute;
-  top: -18px;
-  left: 0;
-  right: 0;
-  height: 18px;
-  content: '';
+  box-shadow: 0 30px 60px -24px rgba(15, 23, 42, 0.28), 0 2px 6px rgba(15, 23, 42, 0.04);
 }
 
 .mm-grid {
   display: grid;
-  gap: 14px;
-  min-height: 300px;
+  gap: 24px;
+  min-height: 0;
+  max-width: none;
+  margin: 0;
 }
 
 .mm-grid-3 {
-  grid-template-columns: 210px minmax(0, 1fr) 270px;
+  grid-template-columns: 240px minmax(0, 1fr) 300px;
 }
 
 .mm-grid-sm {
-  grid-template-columns: 150px minmax(0, 1fr) 240px;
-  min-height: 280px;
+  grid-template-columns: 240px minmax(0, 1fr) 300px;
+  min-height: 0;
 }
 
 /* ---------- 1 · groups ---------- */
@@ -716,16 +776,16 @@ onBeforeUnmount(() => {
   flex-direction: column;
   align-items: flex-start;
   gap: 4px;
-  padding: 10px 6px 10px 10px;
+  padding: 0 24px 0 0;
   border-right: 1px solid #ececef;
 }
 
 .mm-tab {
   position: relative;
   width: 100%;
-  padding: 10px 0 11px;
+  padding: 11px 14px;
   border: 0;
-  border-bottom: 2px solid transparent;
+  border-radius: 10px;
   background: none;
   color: #7b879b;
   font-family: inherit;
@@ -735,21 +795,22 @@ onBeforeUnmount(() => {
   text-align: left;
   text-decoration: none;
   cursor: pointer;
-  transition: color 0.2s ease, border-color 0.2s ease;
+  transition: color 0.2s ease, background 0.2s ease;
 }
 
 .mm-tab:hover {
   color: var(--navy);
+  background: #f6f6f8;
 }
 
 .mm-tab.on {
   color: var(--navy);
-  border-bottom-color: var(--accent);
+  background: #f1f1f4;
 }
 
 .mm-all {
   margin-top: auto;
-  padding: 10px 0 4px;
+  padding: 10px 14px 4px;
   color: var(--accent);
   font-size: 13px;
   font-weight: 600;
@@ -763,12 +824,12 @@ onBeforeUnmount(() => {
 /* ---------- 2 · links ---------- */
 
 .mm-body {
-  padding: 10px 6px 8px 8px;
+  padding: 0;
 }
 
 .mm-h {
   margin: 0 0 10px;
-  padding: 0 12px;
+  padding: 0 14px;
   color: #98a2b3;
   font-size: 12.5px;
   font-weight: 500;
@@ -781,14 +842,15 @@ onBeforeUnmount(() => {
 }
 
 .mm-items-2 {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: 10px;
 }
 
 .mm-it {
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  padding: 11px 12px;
+  padding: 12px 14px;
   border-radius: 12px;
   color: var(--navy);
   text-decoration: none;
@@ -841,7 +903,7 @@ onBeforeUnmount(() => {
 
 /* ---------- 3 · photo card ---------- */
 
-.mm-card { position: relative; overflow: hidden; border-radius: 16px; background: linear-gradient(160deg, #3a3a40, #0b0c0e); }
+.mm-card { position: relative; min-height: 280px; overflow: hidden; border-radius: 16px; background: linear-gradient(160deg, #3a3a40, #0b0c0e); }
 .mm-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .mm-card::after { position: absolute; inset: 0; content: ''; background: linear-gradient(to top, rgba(11, 12, 14, 0.88) 8%, rgba(11, 12, 14, 0.1) 62%); }
 .mm-card-ov { position: absolute; z-index: 1; left: 16px; right: 14px; bottom: 16px; display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
@@ -866,7 +928,7 @@ onBeforeUnmount(() => {
 .drop-enter-from,
 .drop-leave-to {
   opacity: 0;
-  transform: translateX(-50%) translateY(-10px) scale(0.98);
+  transform: translateY(-8px);
 }
 
 /* =========================================================
@@ -876,8 +938,9 @@ onBeforeUnmount(() => {
 .desktop-actions {
   display: flex;
   align-items: center;
-  gap: 9px;
+  gap: 10px;
   flex-shrink: 0;
+  margin-left: auto;
 }
 
 .demo-btn,
@@ -896,6 +959,31 @@ onBeforeUnmount(() => {
   font-weight: 600;
   letter-spacing: -0.01em;
   transition: transform 0.2s ease, background 0.2s ease;
+}
+
+/* Reseller Signup: outlined, so Book a Demo and Free Trial stay the main actions */
+.reseller-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 43px;
+  padding: 0 19px;
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink);
+  text-decoration: none;
+  white-space: nowrap;
+  font-family: 'Urbanist', system-ui, sans-serif;
+  font-size: 14.5px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.reseller-btn:hover {
+  background: #f3f3f5;
+  transform: translateY(-2px);
 }
 
 /* Same colours as the hero buttons: black for the demo, orange gradient for the trial, no shadows. */
@@ -970,19 +1058,18 @@ onBeforeUnmount(() => {
 
 .mobile-menu {
   position: absolute;
-  top: calc(100% + 10px);
+  top: 100%;
   left: 0;
   right: 0;
-  max-height: calc(100vh - 100px);
+  max-height: calc(100vh - 120px);
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: 13px 20px 20px;
+  padding: 10px clamp(20px, 4vw, 32px) 22px;
   border: 0;
-  border-radius: 22px;
-  background: rgba(255, 255, 255, 0.98);
-  backdrop-filter: blur(25px);
-  -webkit-backdrop-filter: blur(25px);
-  box-shadow: 0 25px 65px rgba(11, 12, 14, 0.15);
+  border-top: 1px solid #ececef;
+  border-radius: 0;
+  background: #fff;
+  box-shadow: 0 30px 50px -24px rgba(11, 12, 14, 0.25);
 }
 
 .mobile-link,
@@ -1110,49 +1197,48 @@ onBeforeUnmount(() => {
    RESPONSIVE
 ========================================================= */
 
-@media (max-width: 1180px) {
-  .glass-nav {
-    gap: 18px;
-    padding-left: 20px;
-  }
-
-  .desktop-links {
-    gap: 0;
-  }
-
+@media (max-width: 1480px) {
   .nav-link {
-    padding-inline: 9px;
+    font-size: 13.5px;
+  }
+
+  .desktop-actions {
+    gap: 7px;
+  }
+
+  .reseller-btn,
+  .demo-btn,
+  .start-btn {
+    min-height: 41px;
+    padding-inline: 15px;
+    font-size: 13.5px;
+  }
+}
+
+@media (max-width: 1300px) {
+  .nav-link {
     font-size: 13px;
   }
 
-  .demo-btn,
-  .start-btn {
-    padding-inline: 14px;
-    font-size: 11px;
+  .brand-logo {
+    width: 120px;
+    height: 29px;
   }
 
-  .mm-grid-3 {
-    grid-template-columns: 180px minmax(0, 1fr) 230px;
-  }
-
+  .mm-grid-3,
   .mm-grid-sm {
-    grid-template-columns: 140px minmax(0, 1fr) 210px;
+    grid-template-columns: 210px minmax(0, 1fr) 270px;
   }
 
-  .mm-wide { width: min(940px, calc(100vw - 30px)); }
-  .mm-mid { width: min(740px, calc(100vw - 30px)); }
+  .mm-items-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
-@media (max-width: 1040px) {
-  .nav-shell {
-    padding-inline: 16px;
-  }
-
-  .glass-nav {
-    min-height: 66px;
-    margin-top: 16px;
-    padding: 10px 14px 10px 20px;
-    border-radius: 19px;
+@media (max-width: 1340px) {
+  .bar-in {
+    justify-content: space-between;
+    min-height: 64px;
   }
 
   .desktop-links,
@@ -1166,34 +1252,42 @@ onBeforeUnmount(() => {
 }
 
 @media (max-width: 480px) {
-  .nav-shell {
-    padding-inline: 10px;
+  .topbar-in {
+    gap: 14px;
+    padding: 0 10px;
   }
 
-  .glass-nav {
-    min-height: 61px;
-    padding: 8px 10px 8px 17px;
-    border-radius: 17px;
+  .tb-phone {
+    gap: 5px;
+    font-size: 12px;
+  }
+
+  .tb-label {
+    display: none;
   }
 
   .brand-logo {
-    width: 135px;
-  }
-
-  .mobile-menu {
-    border-radius: 18px;
-    padding-inline: 16px;
+    width: 112px;
+    height: 27px;
   }
 
   .mobile-actions {
     grid-template-columns: 1fr;
   }
 
+  .mobile-actions .reseller-btn,
   .mobile-actions .demo-btn,
   .mobile-actions .start-btn {
     min-height: 43px;
     font-size: 12px;
   }
+}
+
+.mobile-actions .reseller-btn {
+  grid-column: 1 / -1;
+  min-width: 0;
+  padding: 0 10px;
+  font-size: 11px;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1203,11 +1297,5 @@ onBeforeUnmount(() => {
     transition: none !important;
     animation: none !important;
   }
-}
-
-.glass-nav {
-  background: rgba(255, 255, 255, 0.55) !important;
-  -webkit-backdrop-filter: blur(14px) saturate(140%) !important;
-  backdrop-filter: blur(14px) saturate(140%) !important;
 }
 </style>
