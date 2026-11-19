@@ -1,75 +1,70 @@
 <template>
   <section class="ih" aria-labelledby="hh-title">
-   <div ref="root" class="card">
-    <!-- background video -->
-    <video
-      ref="vid"
-      class="bg-video"
-      :src="videoSrc"
-      autoplay
-      muted
-      loop
-      playsinline
-      preload="auto"
-      @loadeddata="onLoaded"
-      @canplay="onCanPlay"
-      aria-hidden="true"
-      tabindex="-1"
-    ></video>
-    <!-- dark overlay so the white text is easy to read -->
-    <span class="shade" aria-hidden="true"></span>
+    <div ref="root" class="card">
+      <!-- Background video -->
+      <video
+        ref="vid"
+        class="bg-video"
+        :src="videoSrc"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="auto"
+        @loadeddata="onLoaded"
+        @canplay="onCanPlay"
+        aria-hidden="true"
+        tabindex="-1"
+      ></video>
+      <span class="shade" aria-hidden="true"></span>
 
-    <div class="wrap">
-     <div class="hero-copy">
-      <h1 id="hh-title">
-        Manage and automate your
-        <span class="accent">CRM, your way.</span>
-      </h1>
+      <div class="wrap">
+        <div class="hero-copy">
+          <h1 id="hh-title">
+            Manage and automate your
+            <span class="accent">CRM, your way.</span>
+          </h1>
 
-      <p class="lead">
-        Saptivo is an all-in-one cloud CRM and reliable CRM software Sri Lanka businesses use to manage customers, conversations and sales in one connected workspace.
-      </p>
+          <p class="lead">
+            Saptivo is an all-in-one cloud CRM and reliable CRM software Sri Lanka businesses use to manage customers, conversations and sales in one connected workspace.
+          </p>
 
-      <div class="actions">
-        <a href="mailto:hello@saptivo.com?subject=Start%20my%2014-day%20free%20trial" class="btn btn-primary">Start free for 14 days</a>
-        <a href="mailto:hello@saptivo.com?subject=Book%20a%20Saptivo%20demo" class="btn btn-outline">Book a demo</a>
+          <div class="actions">
+            <a href="mailto:hello@saptivo.com?subject=Start%20my%2014-day%20free%20trial" class="btn btn-primary">Start free for 14 days</a>
+            <a href="mailto:hello@saptivo.com?subject=Book%20a%20Saptivo%20demo" class="btn btn-outline">Book a demo</a>
+          </div>
+          <p class="support">No setup fee · No upgrade fees · No credit card required</p>
+        </div>
       </div>
-      <p class="support">No setup fee · No upgrade fees · No credit card required</p>
-     </div>
     </div>
-   </div>
   </section>
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from "vue";
-defineOptions({ name: "HomeHeroSimple" });
+import { ref, onMounted, onBeforeUnmount } from 'vue';
+defineOptions({ name: 'HomeHeroSimple' });
 
-const videoSrc = "https://public-assets.content-platform.envatousercontent.com/b988f3ac-00c7-49e0-947e-5f2743e6ea8d/d47db0a7-fe33-45c5-b831-412229fb0b2e/b988f3ac-00c7-49e0-947e-5f2743e6ea8d/preview_540p_crf22_higher_quality.mp4";
+const videoSrc = 'https://public-assets.content-platform.envatousercontent.com/b988f3ac-00c7-49e0-947e-5f2743e6ea8d/d47db0a7-fe33-45c5-b831-412229fb0b2e/b988f3ac-00c7-49e0-947e-5f2743e6ea8d/preview_540p_crf22_higher_quality.mp4';
 
 const root = ref(null);
 const vid = ref(null);
 let io = null;
-
 let inView = true;
-const reduce = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-// show a frame as soon as the file is ready, even if playback is paused (reduced motion)
+const reduce = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 function onLoaded() {
   const v = vid.value;
   if (v && v.paused && v.currentTime === 0) v.currentTime = 0.05;
 }
-// browsers sometimes skip autoplay on the first load: start it once the video can play
 function onCanPlay() {
   if (!reduce() && inView) vid.value?.play().catch(() => {});
 }
-
 onMounted(() => {
   if (reduce()) {
     vid.value?.pause();
     return;
   }
   vid.value?.play().catch(() => {});
-  // play only while the section is on screen (saves battery / CPU)
   io = new IntersectionObserver(([e]) => {
     const v = vid.value;
     if (!v) return;
@@ -85,9 +80,9 @@ onBeforeUnmount(() => io?.disconnect());
 <style scoped>
 .ih {
   --ink: #17191d;
-  --edge: clamp(10px, 1.3vw, 24px); /* gap left, right and below the video */
-  --hdr: 110px; /* height of the fixed header: 38px phone row + 72px white bar */
-  --gap-top: 2px; /* space between the header and the video */
+  --edge: clamp(10px, 1.3vw, 24px);
+  --hdr: 114px; /* 42px contact bar + 72px navigation */
+  --gap-top: 2px;
   position: relative;
   padding: calc(var(--hdr) + var(--gap-top)) var(--edge) var(--edge);
   text-align: center;
@@ -95,8 +90,7 @@ onBeforeUnmount(() => io?.disconnect());
   background: #fff;
   font-family: 'Urbanist', system-ui, sans-serif;
 }
-
-/* the video panel: fills the page width, the header sits on top of it */
+.ih *, .ih *::before, .ih *::after { box-sizing: border-box; }
 .card {
   position: relative;
   isolation: isolate;
@@ -105,30 +99,40 @@ onBeforeUnmount(() => io?.disconnect());
   align-items: center;
   justify-content: center;
   width: 100%;
-  /* about 84% of the screen height, so the next section peeks in under the video */
-  min-height: 66vh; /* fallback */
+  min-height: 66vh;
   min-height: 66svh;
   margin: 0 auto;
   border-radius: clamp(18px, 2.4vw, 36px);
-  background: #0b0c0e; /* shows until the video loads */
+  background: #0b0c0e;
 }
-.ih *, .ih *::before, .ih *::after { box-sizing: border-box; }
-
 .bg-video {
-  position: absolute; inset: 0; z-index: 0;
-  display: block; width: 100%; height: 100%;
-  object-fit: cover; pointer-events: none; user-select: none;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  pointer-events: none;
+  user-select: none;
 }
 .shade {
-  position: absolute; inset: 0; z-index: 1; pointer-events: none;
-  background: linear-gradient(180deg, rgba(8, 10, 14, 0.55) 0%, rgba(8, 10, 14, 0.48) 50%, rgba(8, 10, 14, 0.6) 100%);
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(8, 10, 14, .55) 0%, rgba(8, 10, 14, .48) 50%, rgba(8, 10, 14, .6) 100%);
 }
-
 .wrap {
-  position: relative; z-index: 3;
-  display: flex; flex-direction: column; align-items: center;
-  width: min(980px, calc(100% - 40px)); margin: 0 auto;
-  padding: clamp(36px, 4.5vw, 72px) 0 clamp(32px, 3vw, 48px); /* the header now sits above the video, so no extra top space is needed */
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(980px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: clamp(36px, 4.5vw, 72px) 0 clamp(32px, 3vw, 48px);
 }
 .hero-copy { text-align: center; }
 h1 {
@@ -136,70 +140,86 @@ h1 {
   font-size: clamp(38px, 5vw, 68px);
   font-weight: 600;
   line-height: 1.08;
-  letter-spacing: -0.05em;
+  letter-spacing: -.05em;
   color: #fff;
   text-wrap: balance;
-  animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation: rise .9s cubic-bezier(.2,.7,.2,1) both;
 }
 .accent { display: block; color: #fff; }
-/* keep the white even if a global heading style exists on the site */
-.ih h1#hh-title {
+.ih h1#hh-title,
+.ih h1#hh-title .accent {
   color: #fff !important;
   -webkit-text-fill-color: #fff !important;
   background: none !important;
   opacity: 1 !important;
 }
-.ih h1#hh-title .accent {
-  color: #fff !important;
-  -webkit-text-fill-color: #fff !important;
-  background: none !important;
-}
 .lead {
-  max-width: 760px; margin: 26px 0 0;
-  font-size: clamp(15px, 1.25vw, 17px); line-height: 1.75; color: #fff;
+  max-width: 760px;
+  margin: 26px 0 0;
+  font-size: clamp(15px, 1.25vw, 17px);
+  line-height: 1.75;
+  color: #fff;
   text-wrap: pretty;
-  animation: rise 0.9s 0.1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation: rise .9s .1s cubic-bezier(.2,.7,.2,1) both;
 }
 .actions {
-  display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 34px;
-  animation: rise 0.9s 0.2s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 34px;
+  animation: rise .9s .2s cubic-bezier(.2,.7,.2,1) both;
 }
 .support {
-  margin: 18px 0 0; font-size: 13.5px; line-height: 1.5; color: #fff;
-  animation: rise 0.9s 0.3s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  margin: 18px 0 0;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: #fff;
+  animation: rise .9s .3s cubic-bezier(.2,.7,.2,1) both;
 }
 .btn {
-  display: inline-flex; align-items: center; justify-content: center; gap: 12px;
-  min-height: 54px; padding: 0 24px; border-radius: 12px;
-  text-decoration: none; font-size: 15px; font-weight: 600;
-  transition: transform 0.2s, background 0.2s, border-color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 54px;
+  padding: 0 24px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 600;
+  transition: transform .2s, background .2s, border-color .2s;
 }
 .btn:hover { transform: translateY(-2px); }
-.ih .actions .btn-primary {
-  color: #fff !important;
-  background: linear-gradient(135deg, #f26a1b 0%, #cf440a 100%) !important;
-  border: 1px solid transparent !important;
-  box-shadow: none !important;
-}
+/* Primary CTA: solid black, no orange gradient */
+.ih .actions .btn-primary,
 .ih .actions .btn-primary:hover {
-  background: linear-gradient(135deg, #f97b2d 0%, #dc4c0d 100%) !important;
-}
-.ih .actions .btn-outline {
   color: #fff !important;
   background: #000 !important;
+  background-image: none !important;
   border: 1px solid #000 !important;
   box-shadow: none !important;
 }
+/* Secondary CTA: transparent glass effect, white text */
+.ih .actions .btn-outline {
+  color: #fff !important;
+  background: rgba(255, 255, 255, .08) !important;
+  background-image: none !important;
+  border: 1px solid rgba(255, 255, 255, .45) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: none !important;
+}
 .ih .actions .btn-outline:hover {
-  background: #1a1a1a !important;
-  border-color: #1a1a1a !important;
+  color: #fff !important;
+  background: rgba(255, 255, 255, .16) !important;
+  border-color: rgba(255, 255, 255, .7) !important;
 }
-
-@keyframes rise { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
-
-@media (max-width: 1340px) {
-  .ih { --hdr: 102px; } /* 38px phone row + 64px bar */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(22px); }
+  to { opacity: 1; transform: none; }
 }
+@media (max-width: 1340px) { .ih { --hdr: 106px; /* 42px contact bar + 64px navigation */ } }
 @media (max-width: 760px) {
   .wrap { width: calc(100% - 32px); }
   .btn { min-height: 50px; padding: 0 20px; font-size: 14px; }

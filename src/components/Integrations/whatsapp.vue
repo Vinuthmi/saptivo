@@ -39,8 +39,53 @@
           <span class="blob b1"></span>
           <span class="blob b2"></span>
 
+          <!-- 01 · WordPress -->
+          <template v-if="c.key === 'wordpress'">
+            <div class="win w-wp">
+              <div class="win-bar"><i></i><i></i><i></i><span class="url">yourwebsite.com/contact</span></div>
+              <div class="win-body">
+                <b class="f-title">Contact us</b>
+                <div class="field"><small>Name</small><u></u></div>
+                <div class="field"><small>Email</small><u></u></div>
+                <div class="field"><small>Message</small><u class="tall"></u></div>
+                <span class="btn-navy">Send message</span>
+              </div>
+            </div>
+            <span class="mk mk-wp float" style="--d: 0s; right: 7%; top: 6%">W</span>
+            <div class="glass g-wp-note float" style="--d: 1.2s">
+              <div class="g-h"><img class="lg" :src="logoSrc" alt="" draggable="false" /><b>New inquiry</b><em class="chip ok">just now</em></div>
+              <div class="chips"><span>Customer details</span><span>Message</span><span>Page they came from</span></div>
+            </div>
+            <div class="glass g-wp-side float" style="--d: 2.4s">
+              <div class="rw"><small>Customer</small><u></u></div>
+              <div class="rw"><small>Assigned to</small><span class="av"></span><b>Round-robin</b></div>
+              <div class="rw"><small>Status</small><em class="chip wip">New</em></div>
+            </div>
+          </template>
+
+          <!-- 02 · Facebook -->
+          <template v-else-if="c.key === 'facebook'">
+            <div class="photo"></div>
+            <div class="phone ph-fb float" style="--d: 0s">
+              <div class="ph-screen">
+                <div class="fb-top"><i class="fbc">f</i><div><b>Your Facebook Page</b><small>Instant Form</small></div></div>
+                <div class="field"><small>Full name</small><u></u></div>
+                <div class="field"><small>Email</small><u></u></div>
+                <div class="field"><small>Phone</small><u></u></div>
+                <span class="btn-fb">Submit</span>
+              </div>
+            </div>
+            <span class="mk mk-fb float" style="--d: 0.8s; right: 7%; top: 6%">f</span>
+            <div class="glass g-fb-lead float" style="--d: 1.4s">
+              <div class="g-h"><img class="lg" :src="logoSrc" alt="" draggable="false" /><b>New lead</b></div>
+              <div class="rw"><small>Lead score</small><span class="meter"><i></i></span></div>
+              <div class="rw"><small>Routed to</small><span class="av"></span><b>Salesperson</b></div>
+            </div>
+            <div class="glass g-fb-sent float" style="--d: 2.6s"><i class="dot"></i>WhatsApp or SMS acknowledgement</div>
+          </template>
+
           <!-- 03 · WhatsApp -->
-          <template v-if="c.key === 'whatsapp'">
+          <template v-else-if="c.key === 'whatsapp'">
             <div class="phone ph-wa float" style="--d: 0s">
               <div class="ph-screen wa">
                 <div class="wa-top"><span class="av">NR</span><div><b>Nuwan R.</b><small>online</small></div></div>
@@ -211,6 +256,16 @@ const logos = {
 }
 
 const cards = [
+  {
+    key: 'wordpress',
+    title: 'WordPress website inquiry sync',
+    text: "Your website is often the first place a customer reaches out. With Saptivo's WordPress CRM integration, every contact-form submission arrives in your CRM as a new inquiry within moments, with the customer's details, message and the page they came from.",
+  },
+  {
+    key: 'facebook',
+    title: 'Facebook Lead Ads integration',
+    text: "Paid social campaigns only pay off if leads are called back quickly. Saptivo's Facebook Lead Ads CRM integration creates a lead the moment someone submits an Instant Form on your Facebook Page, scores it and routes it to a salesperson.",
+  },
   {
     key: 'whatsapp',
     title: 'WhatsApp Business API',
@@ -575,7 +630,7 @@ onBeforeUnmount(() => {
   transform: translateY(-6px);
 }
 .k-wordpress { --tone: #e8decb; }
-.k-facebook { --tone: #ebd3c8; }
+.k-facebook { --tone: #d9e6fb; }
 .k-whatsapp { --tone: #d4dec9; }
 .k-3cx { --tone: #c5d9f1; }
 .k-vodia { --tone: #dad4ee; }
@@ -595,8 +650,11 @@ onBeforeUnmount(() => {
   height: var(--vhgt);
   overflow: hidden;
 }
-@container (min-width: 700px) {
+/* the card switches to side-by-side only when the section is wide enough for 2 cards of 700px+ (the card cannot query its own width) */
+@container (min-width: 1465px) {
   .isc-card { flex-direction: row; }
+}
+@container (min-width: 700px) {
   .visw { flex: 0 0 46%; min-height: 400px; }
   .visw { --vpos: absolute; --vhgt: 100%; }
   .txt { justify-content: flex-end; padding: 28px 30px 30px; }
@@ -610,7 +668,7 @@ onBeforeUnmount(() => {
 .b1 { left: -14%; bottom: -10%; width: 62%; aspect-ratio: 1; background: #fff; opacity: 0.4; }
 .b2 { right: -16%; top: -10%; width: 58%; aspect-ratio: 1; background: var(--blob, #fff); opacity: 0.55; }
 .k-wordpress { --blob: #d3c3b9; }
-.k-facebook { --blob: #f3b9a6; }
+.k-facebook { --blob: #1877f2; }
 .k-whatsapp { --blob: #f6f1e4; }
 .k-3cx { --blob: #14243a; }
 .k-vodia { --blob: #b9c6ee; }
@@ -739,16 +797,29 @@ onBeforeUnmount(() => {
 
 /* 01 WordPress */
 .w-wp { left: 8%; top: 9%; width: 66%; }
-.g-wp-note { left: 26%; top: 60%; width: 68%; }
-.g-wp-side { right: 4%; top: 34%; width: 40%; }
+.g-wp-note { left: 26%; top: 67%; width: 68%; }
+.g-wp-side { right: 4%; top: 30%; width: 40%; }
 
 /* 02 Facebook */
 .photo { inset: 0; background: linear-gradient(160deg, #f0c9b8, #e6ad98); }
 .photo img { width: 100%; height: 100%; object-fit: cover; object-position: 60% 25%; opacity: 0.92; }
 .photo::after { content: ''; position: absolute; inset: 0; background: rgba(235, 211, 200, 0.28); }
-.ph-fb { left: 9%; top: 12%; width: 40%; height: 100%; }
-.g-fb-lead { right: 4%; top: 30%; width: 50%; }
-.g-fb-sent { left: 20%; top: 80%; width: 74%; display: flex; align-items: center; gap: 2cqw; font-weight: 500; }
+.ph-fb { left: 7%; top: 12%; width: 40%; height: 76%; border-radius: 8cqw; }
+.ph-fb .ph-screen { border-radius: 7cqw; }
+.g-fb-lead { right: 4%; top: 24%; width: 46%; }
+.g-fb-lead .rw small { min-width: 0; }
+.g-fb-lead .rw b { white-space: nowrap; }
+.g-fb-sent { right: 4%; top: 60%; width: 46%; display: flex; align-items: center; gap: 2cqw; font-weight: 500; line-height: 1.35; }
+/* Facebook card: real photo under a Facebook-blue wash, white panels on top */
+.k-facebook .photo { background: linear-gradient(170deg, #2a7ef0 0%, #0f4aa8 100%); }
+.k-facebook .photo img { opacity: 1; object-position: 50% 30%; }
+.k-facebook .blob { display: none; }
+.k-facebook .glass { background: rgba(255, 255, 255, 0.93); border-color: rgba(255, 255, 255, 0.9); }
+.k-facebook .mk-fb { background: #fff; color: #1877f2; box-shadow: 0 12px 24px -10px rgba(5, 30, 80, 0.55); }
+.ph-fb .ph-screen { padding: 4cqw 3.6cqw; }
+.ph-fb .field { margin-bottom: 3.4cqw; }
+.ph-fb .field u { height: 6.4cqw; }
+.ph-fb .btn-fb { margin-top: 4cqw; padding: 2.6cqw 0; }
 .dot { width: 2.2cqw; min-width: 8px; aspect-ratio: 1; border-radius: 50%; background: #25d366; }
 .meter { flex: 1; height: 1.8cqw; min-height: 6px; border-radius: 6px; background: rgba(20, 36, 58, 0.1); overflow: hidden; }
 .meter i { display: block; width: 78%; height: 100%; border-radius: 6px; background: var(--orange); transform-origin: left; animation: isc-meter 4s ease-in-out infinite alternate; }
@@ -878,4 +949,4 @@ onBeforeUnmount(() => {
   .isc *, .isc *::before, .isc *::after { animation: none !important; transition: none !important; }
   .isc-arm .isc-card, .isc-arm .isc-nav, .isc-arm .isc-arrows { opacity: 1; transform: none; }
 }
-</style>
+</style>  
