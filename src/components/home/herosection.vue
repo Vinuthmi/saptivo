@@ -122,7 +122,15 @@ onBeforeUnmount(() => io?.disconnect());
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  background: linear-gradient(180deg, rgba(8, 10, 14, .55) 0%, rgba(8, 10, 14, .48) 50%, rgba(8, 10, 14, .6) 100%);
+  background:
+    radial-gradient(
+      ellipse 58% 68% at 50% 50%,
+      rgba(8, 10, 14, 0.48) 0%,
+      rgba(8, 10, 14, 0.30) 38%,
+      rgba(8, 10, 14, 0.12) 68%,
+      rgba(8, 10, 14, 0) 100%
+    ),
+    rgba(8, 10, 14, 0.18);
 }
 .wrap {
   position: relative;
@@ -140,7 +148,7 @@ h1 {
   font-size: clamp(38px, 5vw, 68px);
   font-weight: 600;
   line-height: 1.08;
-  letter-spacing: -.05em;
+  letter-spacing: -0.025em;
   color: #fff;
   text-wrap: balance;
   animation: rise .9s cubic-bezier(.2,.7,.2,1) both;
@@ -191,29 +199,34 @@ h1 {
   transition: transform .2s, background .2s, border-color .2s;
 }
 .btn:hover { transform: translateY(-2px); }
-/* Primary CTA: solid black, no orange gradient */
-.ih .actions .btn-primary,
+/* Primary CTA: orange */
+.ih .actions .btn-primary {
+  color: #fff !important;
+  background: linear-gradient(135deg, #ff8126 0%, #ff6b00 55%, #d94d00 100%) !important;
+  background-image: linear-gradient(135deg, #ff8126 0%, #ff6b00 55%, #d94d00 100%) !important;
+  border: 1px solid #f66a0a !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15) !important;
+}
 .ih .actions .btn-primary:hover {
+  color: #fff !important;
+  background: linear-gradient(135deg, #ff8c36 0%, #f76500 50%, #c94500 100%) !important;
+  background-image: linear-gradient(135deg, #ff8c36 0%, #f76500 50%, #c94500 100%) !important;
+  border-color: #f66a0a !important;
+}
+/* Secondary CTA: black */
+.ih .actions .btn-outline {
   color: #fff !important;
   background: #000 !important;
   background-image: none !important;
   border: 1px solid #000 !important;
-  box-shadow: none !important;
-}
-/* Secondary CTA: transparent glass effect, white text */
-.ih .actions .btn-outline {
-  color: #fff !important;
-  background: rgba(255, 255, 255, .08) !important;
-  background-image: none !important;
-  border: 1px solid rgba(255, 255, 255, .45) !important;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
   box-shadow: none !important;
 }
 .ih .actions .btn-outline:hover {
   color: #fff !important;
-  background: rgba(255, 255, 255, .16) !important;
-  border-color: rgba(255, 255, 255, .7) !important;
+  background: #1c1c1c !important;
+  border-color: #1c1c1c !important;
 }
 @keyframes rise {
   from { opacity: 0; transform: translateY(22px); }

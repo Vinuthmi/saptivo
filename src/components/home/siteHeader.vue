@@ -23,9 +23,13 @@ const logoSrc = `${import.meta.env.BASE_URL}saptivo-logo.png`
 /* Regional contact numbers in international format */
 
 const phones = [
+
   { label: 'Sri Lanka', flag: '🇱🇰', number: '+94 11 200 0569', href: 'tel:+94112000569' },
+
   { label: 'Australia', flag: '🇦🇺', number: '+61 2 8880 0333', href: 'tel:+61288800333' },
+
   { label: 'Canada', flag: '🇨🇦', number: '+1 403 800 0111', href: 'tel:+14038000111' }
+
 ]
 
 const menuOpen = ref(false)
@@ -447,6 +451,7 @@ onBeforeUnmount(() => {
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" /></svg>
 
           <span class="tb-flag" aria-hidden="true">{{ ph.flag }}</span>
+
             <span class="tb-label">{{ ph.label }}:</span>
 
           <span class="tb-number">{{ ph.number }}</span>
@@ -454,6 +459,7 @@ onBeforeUnmount(() => {
         </a>
 
         <router-link to="/reseller/signup/" class="topbar-reseller" @click="closeAll">Reseller Signup</router-link>
+
       </div>
 
     </div>
@@ -761,8 +767,6 @@ onBeforeUnmount(() => {
       <!-- =================================================== DESKTOP ACTIONS -->
 
       <div class="desktop-actions">
-
-        
 
         <router-link to="/demo/" class="demo-btn" @click="closeAll">Book a Demo</router-link>
 
@@ -1729,36 +1733,33 @@ onBeforeUnmount(() => {
 /* Refined header CTAs: glass-effect demo and solid black Get Started. */
 
 .demo-btn {
-  color: #111;
-  background: rgba(255, 255, 255, 0.38);
-  border: 1px solid rgba(0, 0, 0, 0.75);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-  box-shadow: none;
-}
-
-.start-btn {
-  color: #fff;
+  color: #fff !important;
   background: #000 !important;
-  border: 1px solid #000;
+  border: 1px solid #000 !important;
   box-shadow: none !important;
 }
 
-.demo-btn:hover,
-.start-btn:hover {
+.start-btn {
+  color: #fff !important;
+  background: linear-gradient(135deg, #ff8126 0%, #ff6b00 55%, #d94d00 100%) !important;
+  border: 1px solid #f66a0a !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15) !important;
+}
+
+.demo-btn:hover, .start-btn:hover {
   transform: translateY(-2px);
 }
 
 .demo-btn:hover {
-  color: #111;
-  background: rgba(245, 245, 245, 0.68);
-  border-color: #000;
+  color: #fff !important;
+  background: #1c1c1c !important;
+  border-color: #1c1c1c !important;
 }
 
 .start-btn:hover {
-  background: #000 !important;
-  border-color: #000;
-  box-shadow: none !important;
+  color: #fff !important;
+  background: linear-gradient(135deg, #ff8c36 0%, #f76500 50%, #c94500 100%) !important;
+  border-color: #f66a0a !important;
 }
 
 /* =========================================================
@@ -2539,93 +2540,148 @@ onBeforeUnmount(() => {
 
 .mm-feature-column .mm-it:last-child { margin-bottom: 0; }
 
-
 /* Top strip uses the same horizontal gutters as the main navigation. */
+
 .topbar-in {
+
   width: 100%;
+
   max-width: none;
+
   margin-inline: auto;
+
   padding-inline: clamp(20px, 4vw, 96px);
+
   justify-content: flex-start;
-}
-.tb-flag { font-size: 16px; line-height: 1; }
-/* Phone numbers underline on hover without changing color. */
-.tb-phone, .tb-phone:hover { color: var(--navy); }
-.tb-number { text-decoration: none; text-underline-offset: 3px; }
-.tb-phone:hover .tb-number, .tb-phone:focus-visible .tb-number {
-  text-decoration: underline;
-}
-/* Plain underlined text link rather than a pill-shaped button. */
-.topbar-reseller {
-  display: inline-flex;
-  align-items: center;
-  margin-left: auto;
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  color: var(--navy);
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1.4;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  white-space: nowrap;
-}
-.topbar-reseller:hover { color: var(--navy); background: transparent; }
-.topbar-reseller:focus-visible { outline: 2px solid var(--navy); outline-offset: 3px; }
-@media (max-width: 760px) {
-  .topbar-in {
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    gap: 8px 16px;
-    padding-block: 9px;
-  }
-  .topbar-reseller { margin-left: auto; }
-  .tb-phone { font-size: 11px; }
-  .topbar { max-height: 180px; }
-}
-/* Keep all top-row items on a shared baseline with consistent spacing. */
-.topbar-in { gap: clamp(18px, 2.2vw, 36px); min-height: 42px; }
-.tb-phone { display: inline-flex; align-items: center; gap: 6px; line-height: 1.4; }
-.tb-phone svg { flex: 0 0 14px; display: block; }
-.tb-flag { display: inline-flex; align-items: center; justify-content: center; width: 20px; flex: 0 0 20px; }
-.tb-label, .tb-number { display: inline-block; line-height: 1.4; }
-.topbar-reseller { align-self: center; font-size: 14px; line-height: 1.4; }
-@media (max-width: 760px) {
-  .topbar-in { gap: 10px 18px; }
-  .topbar-reseller { font-size: 13px; }
+
 }
 
-/* Final CTA overrides: prevent inherited theme gradients from replacing black. */
+.tb-flag { font-size: 16px; line-height: 1; }
+
+/* Phone numbers underline on hover without changing color. */
+
+.tb-phone, .tb-phone:hover { color: var(--navy); }
+
+.tb-number { text-decoration: none; text-underline-offset: 3px; }
+
+.tb-phone:hover .tb-number, .tb-phone:focus-visible .tb-number {
+
+  text-decoration: underline;
+
+}
+
+/* Plain underlined text link rather than a pill-shaped button. */
+
+.topbar-reseller {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  margin-left: auto;
+
+  padding: 0;
+
+  border: 0;
+
+  border-radius: 0;
+
+  background: transparent;
+
+  color: var(--navy);
+
+  font-family: inherit;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  line-height: 1.4;
+
+  text-decoration: underline;
+
+  text-underline-offset: 3px;
+
+  white-space: nowrap;
+
+}
+
+.topbar-reseller:hover { color: var(--navy); background: transparent; }
+
+.topbar-reseller:focus-visible { outline: 2px solid var(--navy); outline-offset: 3px; }
+
+@media (max-width: 760px) {
+
+  .topbar-in {
+
+    flex-wrap: wrap;
+
+    justify-content: flex-start;
+
+    gap: 8px 16px;
+
+    padding-block: 9px;
+
+  }
+
+  .topbar-reseller { margin-left: auto; }
+
+  .tb-phone { font-size: 11px; }
+
+  .topbar { max-height: 180px; }
+
+}
+
+/* Keep all top-row items on a shared baseline with consistent spacing. */
+
+.topbar-in { gap: clamp(18px, 2.2vw, 36px); min-height: 42px; }
+
+.tb-phone { display: inline-flex; align-items: center; gap: 6px; line-height: 1.4; }
+
+.tb-phone svg { flex: 0 0 14px; display: block; }
+
+.tb-flag { display: inline-flex; align-items: center; justify-content: center; width: 20px; flex: 0 0 20px; }
+
+.tb-label, .tb-number { display: inline-block; line-height: 1.4; }
+
+.topbar-reseller { align-self: center; font-size: 14px; line-height: 1.4; }
+
+@media (max-width: 760px) {
+
+  .topbar-in { gap: 10px 18px; }
+
+  .topbar-reseller { font-size: 13px; }
+
+}
+
+/* Header CTAs — hero orange gradient and solid black demo button */
 .nav-shell .desktop-actions a.start-btn,
-.nav-shell .mobile-actions a.start-btn,
+.nav-shell .mobile-actions a.start-btn {
+  color: #fff !important;
+  background: linear-gradient(135deg, #ff8126 0%, #ff6b00 55%, #d94d00 100%) !important;
+  border: 1px solid #f66a0a !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15) !important;
+}
 .nav-shell .desktop-actions a.start-btn:hover,
-.nav-shell .mobile-actions a.start-btn:hover,
-.nav-shell .desktop-actions a.start-btn:focus-visible,
-.nav-shell .mobile-actions a.start-btn:focus-visible {
-  background: #000000 !important;
-  background-color: #000000 !important;
-  background-image: none !important;
-  color: #ffffff !important;
-  border: 1px solid #000000 !important;
-  box-shadow: none !important;
-  opacity: 1;
+.nav-shell .mobile-actions a.start-btn:hover {
+  color: #fff !important;
+  background: linear-gradient(135deg, #ff8c36 0%, #f76500 50%, #c94500 100%) !important;
+  border-color: #f66a0a !important;
 }
 .nav-shell .desktop-actions a.demo-btn,
 .nav-shell .mobile-actions a.demo-btn {
-  background: rgba(255,255,255,.48) !important;
-  background-image: none !important;
-  color: #111111 !important;
-  border: 1px solid #111111 !important;
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
+  color: #fff !important;
+  background: #000 !important;
+  border: 1px solid #000 !important;
   box-shadow: none !important;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 .nav-shell .desktop-actions a.demo-btn:hover,
 .nav-shell .mobile-actions a.demo-btn:hover {
-  background: rgba(255,255,255,.68) !important;
-  color: #111111 !important;
+  color: #fff !important;
+  background: #1c1c1c !important;
+  border-color: #1c1c1c !important;
+  transform: translateY(-2px);
 }
 </style>
