@@ -29,12 +29,7 @@
 </template>
 
 <script setup>
-defineOptions({ name: 'HomeMultiBranchSection' })
-/**
- * SectionMultiBranch.vue — "Built for businesses with more than one branch, counter or crew"
- * Vue 3, <script setup>. Mixed bento: light colour cards, a dark card and photo cards.
- * Photos fall back to a gradient if a URL fails. Swap the `img` URLs below for your own. SSR / Nuxt safe.
- */
+defineOptions({ name: 'HomeSection3' })
 import { ref, reactive, onMounted, onBeforeUnmount } from 'vue'
 
 const cards = [

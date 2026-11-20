@@ -53,6 +53,16 @@ const routes = [
         },
       },
       {
+        path: 'features/help-desk/',
+        name: 'help-desk',
+        component: () => import('../views/HelpDesk&Ticketing.vue'),
+        meta: {
+          title: 'Help Desk & Ticketing Software | Saptivo',
+          description:
+            'Resolve customer issues faster with Saptivo help desk ticketing, complete customer context and support history.'
+        }
+      },
+      {
         path: 'features/sales-pipeline/',
         name: 'sales-pipeline',
         component: () => import('../views/SalesPipelineView.vue'),
@@ -86,6 +96,36 @@ const routes = [
         path: 'features/workflow-automation/',
         name: 'Workflow Automation',
         component: () => import('../views/WorkflowAutomationView.vue'),
+      },
+      {
+        path: 'features/marketing-campaigns/',
+        name: 'Marketing Campaigns',
+        component: () => import('../views/marketing-campaigns.vue')
+      },
+      {
+        path: 'features/ai-crm/',
+        name: 'AI CRM',
+        component: () => import('../views/AICRM.vue')
+      },
+      {
+        path: 'features/customer-portal/',
+        name: 'Customer Portal',
+        component: () => import('../views/customer-portal.vue')
+      },
+      {
+        path: 'features/mobile-crm/',
+        name: 'Mobile CRM',
+        component: () => import('../views/MobileCRM.vue')
+      },
+      {
+        path: 'features/reports-analytics/',
+        name: 'reports-analytics',
+        component: () => import('../views/reports-analytics.vue'),
+        meta: {
+          title: 'Reports & Analytics | Saptivo',
+          description:
+            'Turn sales, marketing and service data into clear reports that help your team make better decisions.'
+        }
       },
       {
         path: 'integrations/',
