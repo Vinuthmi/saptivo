@@ -12,6 +12,7 @@ let io = null;
 let reduce = false;
 
 const base = "/saptivo/images/features/";
+const teamPhoto = base + "smiling-coworkers-reviewing-photos-on-computer-scr-2026-09-21-14-07-13-utc.webp";
 
 const menu = [
   { k: "dash", t: "Dashboard", ic: "M4 13h6V4H4zM14 20h6V4h-6zM4 20h6v-4H4z" },
@@ -139,6 +140,10 @@ onBeforeUnmount(() => {
         </p>
       </header>
 
+      <figure class="team-photo">
+        <img :src="teamPhoto" alt="Coworkers reviewing photos together at a computer" />
+      </figure>
+
       <div class="board">
         <!-- roles -->
         <ul class="roles" role="tablist">
@@ -232,6 +237,8 @@ onBeforeUnmount(() => {
 }
 .wrap { max-width: 1120px; margin: 0 auto; }
 .head { text-align: center; max-width: 780px; margin: 0 auto 44px; }
+.team-photo { height: 240px; margin: 0 0 28px; overflow: hidden; border-radius: 26px; background: #f3f1f8; }
+.team-photo img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 44%; }
 .eyebrow { display: inline-block; font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; background: var(--lav); color: var(--lav-i); padding: 6px 14px; border-radius: 99px; margin-bottom: 16px; }
 h2 { margin: 0 0 18px; font-size: clamp(34px, 3.8vw, 56px); font-weight: 500; line-height: 1.12; letter-spacing: -0.035em; text-wrap: balance; }
 h2 span { display: block; }
@@ -328,6 +335,7 @@ h2 span { display: block; }
 }
 @media (max-width: 640px) {
   .bp { padding: 64px 16px; }
+  .team-photo { height: 180px; border-radius: 20px; }
   .roles { grid-template-columns: 1fr; }
   .body { grid-template-columns: 1fr; }
   .menu { flex-direction: row; flex-wrap: wrap; border-right: 0; border-bottom: 1px solid var(--line); }
