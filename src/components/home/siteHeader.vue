@@ -2684,4 +2684,75 @@ onBeforeUnmount(() => {
   border-color: #1c1c1c !important;
   transform: translateY(-2px);
 }
+
+/* =========================================================
+   RESPONSIVE LAYOUT FOR ALL SCREEN SIZES (incl. large monitors)
+   One shared gutter (--gut) is used by the top row, the main bar AND the mega
+   menus, so the menus always line up with the logo on the left and the buttons
+   on the right. Above 1760px of content width the header stays centred instead
+   of stretching edge to edge (mega menus used to be centred on the window
+   while the logo and links sat further left).
+========================================================= */
+.nav-shell {
+  --gut: max(clamp(20px, 4vw, 96px), calc((100% - 1760px) / 2));
+}
+
+.topbar-in,
+.bar-in {
+  max-width: none;
+  padding-inline: var(--gut);
+}
+
+/* mega menus: same left and right edges as the header content */
+.mm-features,
+.mm-industries {
+  left: var(--gut);
+  right: var(--gut);
+  width: auto;
+  max-width: none;
+  transform: none;
+}
+
+.mm-features.mega-enter-from,
+.mm-features.mega-leave-to,
+.mm-industries.mega-enter-from,
+.mm-industries.mega-leave-to {
+  transform: translateY(-8px);
+}
+
+/* Reseller menu hugs the right edge of the content */
+.mm-reseller {
+  left: auto;
+  right: var(--gut);
+  width: min(1100px, calc(100% - 2 * var(--gut)));
+  max-width: none;
+}
+
+/* the Features / Industries grids keep their proportions as the menu widens */
+@media (min-width: 1700px) {
+  .mm-features,
+  .mm-industries {
+    width: auto;
+    max-width: none;
+  }
+}
+
+/* very large monitors: slightly bigger type and logo so the header does not look tiny */
+@media (min-width: 2200px) {
+  .bar-in { min-height: 80px; }
+  .brand-logo { width: 150px; height: 36px; }
+  .nav-link { font-size: 15.5px; padding-inline: 16px; }
+  .tb-phone, .topbar-reseller { font-size: 14.5px; }
+  .demo-btn, .start-btn { min-height: 47px; padding: 0 24px; font-size: 16px; }
+  .mm-features, .mm-industries, .mm-reseller { height: 360px; min-height: 360px; }
+  .mm-hub-link, .mm-feature-column .mm-it-t strong, .mm-industry-column .mm-it-t strong { font-size: 15.5px; }
+  .mm-feature-group-heading, .mm-h { font-size: 13.5px; }
+  .mm-it-t small { font-size: 13px; }
+  .mm-feature-card .mm-card-ov strong, .mm-industry-cards .mm-card-ov strong { font-size: 17px; }
+}
+@media (min-width: 3000px) {
+  .nav-shell { --gut: max(clamp(20px, 4vw, 96px), calc((100% - 2000px) / 2)); }
+  .nav-link { font-size: 17px; }
+  .brand-logo { width: 170px; height: 41px; }
+}
 </style>
