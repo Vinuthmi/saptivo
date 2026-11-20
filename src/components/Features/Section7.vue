@@ -1,83 +1,59 @@
 <template>
-  <section id="who-uses" ref="root" class="who" :class="{ in: seen, live }" aria-labelledby="who-title">
-    <h2 id="who-title" class="title">
-      <span>Who uses</span>
-      <span class="soft">Saptivo's CRM features</span>
+  <section id="faq" ref="root" class="faq" :class="{ in: seen, live }" aria-labelledby="faq-title">
+    <h2 id="faq-title" class="title">
+      <span>Frequently</span>
+      <span class="soft">asked questions</span>
     </h2>
 
     <div class="grid">
-      <!-- animated panel: what each team sees + one-click handover -->
-      <div class="panel" :style="panelStyle">
-        <div class="win">
-          <div class="win-head">
-            <span class="badge">{{ roles[active].name }}</span>
-            <span class="same"><i class="pulse" aria-hidden="true"></i>Same system</span>
-          </div>
-          <div class="rows" aria-live="polite">
-            <ul v-for="(r, i) in roles" :key="r.key" class="list" :class="{ show: i === active }" :aria-hidden="i !== active">
-              <li v-for="row in r.rows" :key="row.t">
-                <span class="dotk" aria-hidden="true"></span>
-                <div>
-                  <b>{{ row.t }}</b>
-                  <small>{{ row.m }}</small>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="hand" :key="active">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></svg>
-          <span>Handover to <b>{{ roles[(active + 1) % roles.length].name }}</b></span>
-          <em>1 click</em>
-        </div>
-
-        <div class="chain" :class="{ snap }" :style="{ '--p': active / 3 }">
-          <div class="track" aria-hidden="true"><i class="fill"></i><i class="dot"></i></div>
-          <ol class="nodes">
-            <li v-for="(r, i) in roles" :key="r.key" class="node" :class="{ on: i === active, done: i < active }">
-              <span class="ic" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path v-for="(d, k) in r.icon" :key="k" :d="d" /></svg>
+      <!-- accordion -->
+      <div class="list">
+        <div v-for="(f, i) in faqs" :key="f.q" class="item" :class="{ open: open === i }">
+          <h3>
+            <button
+              type="button"
+              class="q"
+              :id="`faq-q-${i}`"
+              :aria-expanded="open === i"
+              :aria-controls="`faq-a-${i}`"
+              @click="toggle(i)"
+            >
+              <span class="num" aria-hidden="true">0{{ i + 1 }}</span>
+              <span class="qt">{{ f.q }}</span>
+              <span class="pm" aria-hidden="true"><i></i><i></i></span>
+            </button>
+          </h3>
+          <div class="a" :id="`faq-a-${i}`" role="region" :aria-labelledby="`faq-q-${i}`">
+            <div class="a-in">
+              <p>{{ f.a }}</p>
+              <span class="chip">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10" /></svg>
+                {{ f.chip }}
               </span>
-              <b>{{ r.short }}</b>
-            </li>
-          </ol>
-        </div>
-
-        <div class="db">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5.5" rx="8" ry="3" /><path d="M4 5.5v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6" /><path d="M4 11.5v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6" /></svg>
-          Everyone works from one system
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- text + role picker -->
-      <div class="copy">
-        <p>
-          Sales teams use the pipeline, quotations and WhatsApp inbox every day. Support teams live in the help desk and
-          customer portal. Service managers plan technicians and contracts. Owners and directors watch reports and the HQ dashboard.
-        </p>
-        <p>Because everyone works from the same system, handovers between teams happen in one click rather than one email at a time.</p>
-
-        <div class="roles" role="group" aria-label="Teams that use Saptivo CRM">
-          <button
-            v-for="(r, i) in roles"
-            :key="r.key"
-            type="button"
-            class="role"
-            :class="{ on: i === active }"
-            :aria-pressed="i === active"
-            @click="pick(i)"
-          >
-            <span class="rico" aria-hidden="true">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path v-for="(d, k) in r.icon" :key="k" :d="d" /></svg>
-            </span>
-            <span class="rtxt">
-              <b>{{ r.name }}</b>
-              <small>{{ r.uses }}</small>
-            </span>
-          </button>
+      <!-- call to action (photo background) -->
+      <aside class="cta" :style="ctaStyle" aria-label="Get started">
+        <span class="glow" aria-hidden="true"></span>
+        <div class="cta-body">
+          <span class="trial">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>
+            14-day free trial
+          </span>
+          <h3>Ready to run everything from one system?</h3>
+          <p>Switch on the modules you need today and add the rest whenever you grow.</p>
+          <div class="btns">
+            <a class="btn primary" href="#signup">
+              Start free for 14 days
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></svg>
+            </a>
+            <a class="btn ghost" href="#demo">Book a demo</a>
+          </div>
         </div>
-      </div>
+      </aside>
     </div>
   </section>
 </template>
@@ -85,84 +61,41 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from "vue";
 
-defineOptions({ name: "FeaturesSection6" });
+defineOptions({ name: "FeaturesSection8" });
 
-// Optional background photo for the animated panel. Put a picture in public/images/who-uses/
-// and change the path, or set it to "" to use a flat colour.
-const bgImage = "/images/who-uses/bg.jpg";
-const panelStyle = bgImage ? { backgroundImage: `url(${bgImage})` } : {};
+// Background photo for the CTA card. Keep the asset in public/images/features/.
+// Make sure this file name matches the real file exactly (it is case sensitive).
+const bgImage = `${import.meta.env.BASE_URL}images/features/threecolleagues-.jpg`;
+// Dark gradient on top keeps the text readable: strongest on the left where the text sits,
+// lighter on the right so the photo still shows through.
+const ctaStyle = bgImage
+  ? {
+      backgroundImage: `linear-gradient(100deg, rgba(20, 18, 15, 0.9) 0%, rgba(20, 18, 15, 0.72) 55%, rgba(20, 18, 15, 0.5) 100%), url("${bgImage}")`,
+    }
+  : {};
 
-const roles = [
+const faqs = [
   {
-    key: "sales", name: "Sales teams", short: "Sales", uses: "Pipeline · Quotations · WhatsApp inbox",
-    icon: ["M3 17l6-6 4 4 8-8", "M14 7h7v7"],
-    rows: [
-      { t: "DL-0412 · Proposal sent", m: "Rs. 385,000 · expected close 30 Nov" },
-      { t: "QT-0142 · Quotation PDF", m: "Sent on WhatsApp, awaiting reply" },
-      { t: "WhatsApp · Nimal Perera", m: "Asked about the installation date" },
-    ],
+    q: "Do I have to pay for every module?",
+    a: "No. You choose the modules you need, and you can add more at any time with no upgrade fee.",
+    chip: "Pay only for what you use",
   },
   {
-    key: "support", name: "Support teams", short: "Support", uses: "Help desk · Customer portal",
-    icon: ["M4 14v-2a8 8 0 0 1 16 0v2", "M4 14h3v5H5a1 1 0 0 1-1-1z", "M20 14h-3v5h2a1 1 0 0 0 1-1z"],
-    rows: [
-      { t: "TK-318 · Inverter not starting", m: "Priority high · due today" },
-      { t: "Portal request · Kamal S.", m: "Warranty claim submitted" },
-      { t: "TK-321 · Reply sent", m: "Waiting on customer" },
-    ],
-  },
-  {
-    key: "service", name: "Service managers", short: "Service", uses: "Technician planning · Contracts",
-    icon: ["M14.7 6.3a4 4 0 0 0-5.4 5.4L3.5 17.5a1.8 1.8 0 0 0 2.5 2.5l5.8-5.8a4 4 0 0 0 5.4-5.4l-2.4 2.4-2.1-.5-.5-2.1z"],
-    rows: [
-      { t: "AMC-2041 · First visit", m: "14 Mar 2027 · technician Ruwan" },
-      { t: "Job J-118 · Assigned", m: "Kandy route · 10:30" },
-      { t: "AMC-1987 · Renewal due", m: "In 12 days" },
-    ],
-  },
-  {
-    key: "owners", name: "Owners and directors", short: "Owners", uses: "Reports · HQ dashboard",
-    icon: ["M4 20V10", "M10 20V4", "M16 20v-7", "M22 20H2"],
-    rows: [
-      { t: "Revenue this month", m: "Rs. 4.2M · up 12%" },
-      { t: "Open deals", m: "38 deals · Rs. 9.6M in pipeline" },
-      { t: "Branch performance", m: "Colombo leads · 5 branches" },
-    ],
+    q: "Do all modules share the same customer data?",
+    a: "Yes. Every module works from one customer record, so nothing is entered twice.",
+    chip: "One record, zero retyping",
   },
 ];
+
+const open = ref(0);
+function toggle(i) {
+  open.value = open.value === i ? -1 : i;
+}
 
 const root = ref(null);
 const seen = ref(false);
 const live = ref(false);
-const active = ref(0);
-const snap = ref(false);
-const manual = ref(false); // once someone clicks a team, the demo stops rotating
-
-function pick(i) {
-  manual.value = true;
-  active.value = i;
-}
-
-const st = { timer: null, io: null, fallback: null };
-
-function step() {
-  if (manual.value) return;
-  const next = (active.value + 1) % roles.length;
-  if (next === 0) {
-    snap.value = true; // let the dot jump back without sliding
-    window.setTimeout(() => { snap.value = false; }, 80);
-  }
-  active.value = next;
-}
-function start() {
-  seen.value = true;
-  live.value = true;
-  if (st.timer === null) st.timer = window.setInterval(step, 3200);
-}
-function stop() {
-  live.value = false;
-  if (st.timer !== null) { window.clearInterval(st.timer); st.timer = null; }
-}
+const st = { io: null, fallback: null };
 
 onMounted(() => {
   const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -173,8 +106,8 @@ onMounted(() => {
   st.io = new IntersectionObserver(
     (entries) => {
       const e = entries[entries.length - 1];
-      if (e && e.isIntersecting) start();
-      else stop();
+      if (e && e.isIntersecting) { seen.value = true; live.value = true; }
+      else live.value = false;
     },
     { threshold: 0, rootMargin: "0px 0px -8% 0px" }
   );
@@ -185,34 +118,29 @@ onMounted(() => {
 onBeforeUnmount(() => {
   if (st.io) st.io.disconnect();
   window.clearTimeout(st.fallback);
-  stop();
 });
 </script>
 
 <style scoped>
-.who {
+.faq {
   --orange: #33485d;
   --orange-soft: #edf1f4;
-  --ink: #14120f;
+  --ink: #000000;
   --muted: #6a6560;
   --line: #e4e9ed;
   position: relative;
   overflow: clip;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   scroll-margin-top: 100px;
   padding: 112px 0;
   color: var(--ink);
   background: #fff;
   font-family: 'Urbanist', system-ui, sans-serif;
 }
-.who *, .who *::before, .who *::after { box-sizing: border-box; }
-.who button:focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
+.faq *, .faq *::before, .faq *::after { box-sizing: border-box; }
+.faq a:focus-visible, .faq button:focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
 
 .title {
-  display: flex; flex-direction: column; align-items: center;
-  margin: 0 auto; width: min(960px, calc(100% - 40px)); text-align: center; text-wrap: balance;
+  margin: 0 auto; width: min(900px, calc(100% - 40px)); text-align: center; text-wrap: balance;
   font-size: clamp(34px, 3.6vw, 56px); font-weight: 500; line-height: 1.15;
   letter-spacing: -0.03em; color: var(--ink);
 }
@@ -220,112 +148,97 @@ onBeforeUnmount(() => {
 .title .soft { color: var(--muted); }
 
 .grid {
-  width: min(1000px, calc(100% - 40px)); margin: 64px auto 0;
-  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px; align-items: start;
-  justify-items: center;
+  width: min(1180px, calc(100% - 40px)); margin: 64px auto 0;
+  display: grid; grid-template-columns: 1.15fr 1fr; gap: 56px; align-items: stretch;
 }
-.panel { order: -1; width: 100%; max-width: 460px; }
 
-/* ---------- copy ---------- */
-.copy { width: 100%; max-width: 460px; }
-.copy p { margin: 0 0 18px; font-size: 16px; line-height: 1.75; color: var(--muted); max-width: 56ch; }
-.copy p:nth-of-type(2) { color: var(--ink); font-weight: 500; }
-.roles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 26px; }
-.role {
-  display: flex; align-items: center; gap: 12px; min-width: 0;
-  padding: 13px 14px; border: 1px solid var(--line); border-radius: 14px; background: #fff;
-  font-family: "Poppins", system-ui, sans-serif; color: #8a857f; text-align: left; cursor: pointer;
-  transition: border-color 0.3s, background 0.3s, color 0.3s;
+/* ---------- accordion ---------- */
+.list { display: grid; gap: 14px; align-content: start; min-width: 0; }
+.item { border: 1px solid var(--line); border-radius: 20px; background: #fff; transition: border-color 0.3s, background 0.3s, box-shadow 0.4s; }
+.item.open { border-color: rgba(51, 72, 93, 0.35); background: #f5f7f8; box-shadow: 0 16px 36px rgba(51, 72, 93, 0.1); }
+.item h3 { margin: 0; font: inherit; }
+.q {
+  width: 100%; display: flex; align-items: center; gap: 16px; padding: 22px 24px;
+  border: 0; background: none; cursor: pointer; text-align: left; color: var(--ink);
+  font-family: "Poppins", system-ui, sans-serif;
 }
-.role.on { color: var(--ink); border-color: rgba(51, 72, 93, 0.35); background: #f5f7f8; }
-.rico { flex: none; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: #f4efec; color: #9a948d; transition: background 0.3s, color 0.3s; }
-.role.on .rico { background: var(--orange); color: #fff; }
-.rtxt { min-width: 0; }
-.rtxt b { display: block; font-size: 13.5px; font-weight: 500; }
-.rtxt small { display: block; margin-top: 2px; font-size: 11.5px; line-height: 1.4; color: var(--muted); }
+.num { flex: none; font-size: 12.5px; font-weight: 600; color: var(--orange); letter-spacing: 0.04em; }
+.qt { flex: 1; min-width: 0; font-size: 17px; font-weight: 500; line-height: 1.4; letter-spacing: -0.01em; }
+.pm { position: relative; flex: none; width: 34px; height: 34px; border-radius: 50%; background: #f4efec; transition: background 0.3s, transform 0.5s cubic-bezier(0.3, 1.4, 0.5, 1); }
+.pm i { position: absolute; top: 50%; left: 50%; width: 12px; height: 2px; border-radius: 2px; background: var(--ink); transform: translate(-50%, -50%); transition: transform 0.4s, background 0.3s; }
+.pm i:last-child { transform: translate(-50%, -50%) rotate(90deg); }
+.item.open .pm { background: var(--orange); transform: rotate(180deg); }
+.item.open .pm i { background: #fff; }
+.item.open .pm i:last-child { transform: translate(-50%, -50%) rotate(0deg); }
 
-/* ---------- animated panel ---------- */
-.panel {
-  position: relative; display: flex; flex-direction: column; padding: 26px;
-  border-radius: 28px; background-color: #dce5eb; background-size: cover; background-position: center;
-  overflow: hidden; min-width: 0;
+.a { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.5s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.item.open .a { grid-template-rows: 1fr; }
+.a-in { overflow: hidden; min-height: 0; padding: 0 24px 0 58px; opacity: 0; transition: opacity 0.35s ease, padding 0.5s; }
+.item.open .a-in { opacity: 1; padding-bottom: 24px; transition-delay: 0.1s, 0s; }
+.a-in p { margin: 0 0 14px; font-size: 15.5px; line-height: 1.75; color: var(--muted); max-width: 52ch; }
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 99px; background: #e6f6ec; color: #15803d; font-size: 12px; font-weight: 600; }
+
+/* ---------- CTA ---------- */
+.cta {
+  position: relative; overflow: hidden; display: flex; align-items: center;
+  min-height: 380px; padding: 44px 40px; border-radius: 28px;
+  background-color: var(--ink); background-size: cover; background-position: center; background-repeat: no-repeat;
+  color: #fff; min-width: 0; box-shadow: 0 24px 50px rgba(20, 18, 15, 0.25);
 }
-.win { padding: 14px 16px 16px; border-radius: 18px; background: #fff; box-shadow: 0 18px 40px rgba(120, 50, 20, 0.2); }
-.win-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-.badge { padding: 5px 12px; border-radius: 99px; background: var(--orange); color: #fff; font-size: 12px; font-weight: 600; white-space: nowrap; }
-.same { display: inline-flex; align-items: center; gap: 7px; padding: 5px 10px; border-radius: 99px; background: #e6f6ec; color: #15803d; font-size: 11px; font-weight: 600; white-space: nowrap; }
-.pulse { flex: none; width: 8px; height: 8px; border-radius: 50%; background: #22a55a; box-shadow: 0 0 0 3px rgba(34, 165, 90, 0.16); }
-.rows { position: relative; height: 170px; margin-top: 12px; padding-top: 6px; border-top: 1px dashed var(--line); }
-.list { position: absolute; inset: 6px 0 0 0; margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; align-content: start; opacity: 0; transform: translateY(8px); transition: opacity 0.45s ease, transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1); pointer-events: none; }
-.list.show { opacity: 1; transform: none; pointer-events: auto; }
-.list li { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 12px; background: #f5f7f8; }
-.dotk { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--orange); }
-.list b { display: block; font-size: 13px; font-weight: 500; }
-.list small { display: block; color: var(--muted); font-size: 11.5px; }
-
-.hand {
-  align-self: center; display: inline-flex; align-items: center; gap: 9px; margin-top: 18px; padding: 9px 16px;
-  border-radius: 99px; background: #fff; color: var(--ink); font-size: 12.5px; box-shadow: 0 10px 24px rgba(120, 50, 20, 0.18);
-  animation: press 0.9s cubic-bezier(0.3, 1.4, 0.5, 1) both;
+/* decorative glow: stays absolutely positioned, behind the content */
+.glow {
+  position: absolute; right: -90px; top: -90px; z-index: 0; width: 320px; height: 320px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(51, 72, 93, 0.24), rgba(51, 72, 93, 0) 68%);
+  animation: drift 7s ease-in-out infinite; pointer-events: none;
 }
-.hand svg { color: var(--orange); }
-.hand b { font-weight: 600; }
-.hand em { font-style: normal; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 99px; background: var(--orange-soft); color: var(--orange); }
-
-.chain { position: relative; margin-top: 22px; }
-.track { position: absolute; left: 12.5%; right: 12.5%; top: 19px; height: 3px; border-radius: 3px; background: rgba(255, 255, 255, 0.75); }
-.fill { position: absolute; inset: 0 auto 0 0; width: calc(var(--p) * 100%); border-radius: 3px; background: var(--orange); transition: width 0.8s cubic-bezier(0.3, 0.9, 0.3, 1); }
-.dot { position: absolute; top: 50%; left: calc(var(--p) * 100%); width: 14px; height: 14px; border-radius: 50%; background: #fff; border: 3px solid var(--orange); transform: translate(-50%, -50%); transition: left 0.8s cubic-bezier(0.3, 0.9, 0.3, 1); }
-.snap .fill, .snap .dot { transition: none; }
-.nodes { position: relative; list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); }
-.node { display: grid; justify-items: center; gap: 7px; }
-.node b { font-size: 11.5px; font-weight: 500; color: #7a4a36; transition: color 0.3s; }
-.ic { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: #fff; color: #9a948d; box-shadow: 0 6px 16px rgba(120, 50, 20, 0.15); transition: background 0.35s, color 0.35s, transform 0.5s cubic-bezier(0.3, 1.5, 0.5, 1); }
-.node.done .ic { color: var(--orange); }
-.node.on .ic { background: var(--orange); color: #fff; transform: scale(1.14); animation: ping 1.6s ease-out infinite; }
-.node.on b { color: var(--ink); }
-
-.db {
-  position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; gap: 10px;
-  margin-top: 20px; padding: 15px; border-radius: 16px; background: var(--ink); color: #fff; font-size: 13.5px; font-weight: 500;
-  box-shadow: 0 14px 30px rgba(20, 18, 15, 0.3);
+.cta-body { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; }
+.trial { display: inline-flex; align-items: center; gap: 7px; padding: 6px 12px; border-radius: 99px; background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.2); backdrop-filter: blur(6px); font-size: 12px; font-weight: 500; }
+.trial svg { color: var(--orange); }
+.cta h3 { margin: 20px 0 12px; font-size: clamp(24px, 2.4vw, 32px); font-weight: 500; line-height: 1.22; letter-spacing: -0.025em; text-wrap: balance; }
+.cta p { margin: 0; max-width: 40ch; font-size: 15px; line-height: 1.7; color: rgba(255, 255, 255, 0.78); }
+.btns { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+.btn {
+  position: relative; overflow: hidden; display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+  padding: 14px 24px; border-radius: 99px; font-size: 14.5px; font-weight: 500; text-decoration: none; white-space: nowrap;
+  transition: transform 0.35s cubic-bezier(0.3, 1.4, 0.5, 1), background 0.3s, border-color 0.3s, box-shadow 0.3s;
 }
-.db svg { color: var(--orange); }
-.db::after { content: ""; position: absolute; inset: 0; background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, 0.12) 50%, transparent 70%); transform: translateX(-100%); animation: sheen 3.2s ease-in-out infinite; }
+.btn svg { transition: transform 0.35s cubic-bezier(0.3, 1.4, 0.5, 1); }
+.btn.primary { background: #33485d; color: #fff; box-shadow: 0 12px 28px rgba(51, 72, 93, 0.24); }
+.btn.primary:hover { transform: translateY(-2px); box-shadow: 0 16px 34px rgba(51, 72, 93, 0.32); }
+.btn.primary:hover svg { transform: translateX(4px); }
+.btn.primary::after { content: ""; position: absolute; inset: 0; background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, 0.28) 50%, transparent 70%); transform: translateX(-100%); animation: sheen 3.6s ease-in-out infinite; }
+.btn.ghost { color: #fff; border: 1px solid rgba(255, 255, 255, 0.35); background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(6px); }
+.btn.ghost:hover { background: rgba(255, 255, 255, 0.14); border-color: rgba(255, 255, 255, 0.6); transform: translateY(-2px); }
 
 /* ---------- entrance (runs once) + pause when off screen ---------- */
-.who:not(.in) .copy, .who:not(.in) .panel { opacity: 0; }
-.who.in .title span { animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) backwards; }
-.who.in .title .soft { animation-delay: 0.1s; }
-.who.in .copy { animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) 0.15s backwards; }
-.who.in .panel { animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) 0.3s backwards; }
-.who:not(.live) .node.on .ic, .who:not(.live) .db::after, .who:not(.live) .pulse { animation-play-state: paused; }
+.faq:not(.in) .list, .faq:not(.in) .cta { opacity: 0; }
+.faq.in .title span { animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) backwards; }
+.faq.in .title .soft { animation-delay: 0.1s; }
+.faq.in .list { animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) 0.15s backwards; }
+.faq.in .cta { animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) 0.3s backwards; }
+.faq:not(.live) .glow, .faq:not(.live) .btn.primary::after { animation-play-state: paused; }
 
 @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
-@keyframes ping { 0% { box-shadow: 0 0 0 0 rgba(51, 72, 93, 0.5), 0 6px 16px rgba(23, 25, 29, 0.15); } 100% { box-shadow: 0 0 0 14px rgba(51, 72, 93, 0), 0 6px 16px rgba(23, 25, 29, 0.15); } }
-@keyframes sheen { 0%, 40% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
-@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
-@keyframes press { 0% { opacity: 0; transform: translateY(10px) scale(0.94); } 60% { opacity: 1; transform: scale(1.04); } 100% { opacity: 1; transform: none; } }
+@keyframes sheen { 0%, 45% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+@keyframes drift { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-30px, 24px); } }
 
 /* ---------- responsive ---------- */
 @media (max-width: 960px) {
-  .grid { grid-template-columns: minmax(0, 1fr); gap: 48px; }
-  .panel, .copy { max-width: 560px; }
-  .panel { order: 0; }
-  .copy p { max-width: none; }
+  .grid { grid-template-columns: minmax(0, 1fr); gap: 36px; }
+  .cta { min-height: 340px; }
 }
 @media (max-width: 760px) {
-  .who { padding: 72px 0; }
+  .faq { padding: 72px 0; }
   .grid { width: calc(100% - 32px); margin-top: 40px; }
-  .panel { padding: 16px; border-radius: 22px; }
-  .roles { grid-template-columns: minmax(0, 1fr); }
-  .node b { font-size: 10.5px; }
-  .ic { width: 34px; height: 34px; }
-  .track { top: 17px; }
-  .same { display: none; }
+  .q { padding: 18px 16px; gap: 12px; }
+  .qt { font-size: 15.5px; }
+  .a-in { padding-left: 16px; padding-right: 16px; }
+  .cta { padding: 32px 22px; border-radius: 22px; background-position: 70% center; }
+  .cta-body { width: 100%; }
+  .btns { flex-direction: column; align-items: stretch; width: 100%; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .who *, .who *::before, .who *::after { animation: none !important; transition: none !important; }
-  .who:not(.in) .copy, .who:not(.in) .panel { opacity: 1; }
+  .faq *, .faq *::before, .faq *::after { animation: none !important; transition: none !important; }
+  .faq:not(.in) .list, .faq:not(.in) .cta { opacity: 1; }
 }
 </style>
