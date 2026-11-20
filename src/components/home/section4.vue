@@ -405,7 +405,6 @@
 </template>
 
 <script setup>
-<<<<<<< Updated upstream
 defineOptions({ name: 'HomeIntegrationsSection' })
 /**
  * IntegrationsShowcase.vue — "Built-in integrations that work for you 24/7" (Vue 3, <script setup>)
@@ -461,73 +460,26 @@ const webKpis = [
   { v: '3', l: 'New today', d: '+2' },
   { v: '4 min', l: 'Avg first reply', d: '−38%' },
   { v: '12', l: 'Won this month', d: '+4' },
-=======
-import { onBeforeUnmount, onMounted, ref } from 'vue'
-
-defineOptions({ name: 'HomeSection4' })
-
-const props = defineProps({ partnerHubUrl: { type: String, default: '#' } })
-const hubUrl = props.partnerHubUrl
-const rootEl = ref(null)
-const stageEl = ref(null)
-const active = ref(0)
-const paused = ref(false)
-const revealed = ref(false)
-const scale = ref(1)
-const compact = ref(false)
-const motion = ref(true)
-const SCENE_W = 1160
-const SCENE_H = 490
-const COMPACT_W = 700
-const AUTOPLAY_MS = 6500
-const monthDays = Array.from({ length: 30 }, (_, i) => i + 1)
-const hours = ['8 AM', '9 AM', '10 AM', '11 AM', '12 PM', '1 PM', '2 PM', '3 PM', '4 PM']
-
-const slides = [
-  { id: 'wordpress', tab: 'WordPress', icon: 'globe' },
-  { id: 'facebook', tab: 'Facebook Leads', icon: 'bolt' },
-  { id: '3cx', tab: '3CX Calls', icon: 'phone' },
-  { id: 'calendar', tab: 'Google Calendar', icon: 'calendar' },
 ]
-
-const icon = {
-  globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/>',
-  chat: '<path d="M4 5h16v11H9l-5 4z"/>',
-  bolt: '<path d="m13 2-9 12h7l-1 8 10-13h-7z"/>',
-  pin: '<path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/>',
-  phone: '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/>',
-  wa: '<path d="M20 11.5a8.5 8.5 0 0 1-12.6 7.4L3 20l1.1-4.2A8.5 8.5 0 1 1 20 11.5Z"/><path d="M8 8c1.3 3.2 2.8 4.7 6 6"/>',
-  refresh: '<path d="M20 7v5h-5M4 17v-5h5"/><path d="M5.6 9A7 7 0 0 1 18 6l2 2M4 16l2 2a7 7 0 0 0 12.4-3"/>',
-  calendar: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/>',
-}
-const art = {
-  wp: '<circle cx="24" cy="24" r="22" fill="#21759b"/><text x="24" y="34" text-anchor="middle" font-family="Georgia,serif" font-size="31" font-weight="700" fill="#fff">W</text>',
-  fb: '<circle cx="24" cy="24" r="22" fill="#1877f2"/><path d="M27 41V26h5l1-6h-6v-3c0-2 1-3 3-3h3V9c-1 0-3-.3-5-.3-5 0-8 3-8 8v3h-5v6h5v15z" fill="#fff"/>',
-  gcal: '<rect x="4" y="4" width="40" height="40" rx="7" fill="#4285f4"/><path d="M4 11h40v8H4z" fill="#34a853"/><path d="M4 11V8a4 4 0 0 1 4-4h4v7z" fill="#ea4335"/><path d="M36 4h4a4 4 0 0 1 4 4v3h-8z" fill="#fbbc04"/><rect x="12" y="19" width="24" height="19" rx="2" fill="#fff"/><text x="24" y="34" text-anchor="middle" font-family="Arial,sans-serif" font-size="13" font-weight="700" fill="#4285f4">31</text>',
-  g: '<path fill="#4285f4" d="M43 24c0-1.4-.1-2.8-.4-4H24v8h10.7a9.2 9.2 0 0 1-4 6v5h6.5c3.8-3.5 5.8-8.6 5.8-15Z"/><path fill="#34a853" d="M24 44c5.4 0 9.9-1.8 13.2-5l-6.5-5c-1.8 1.2-4 1.9-6.7 1.9-5.2 0-9.5-3.5-11.1-8.2H6.2v5.2A20 20 0 0 0 24 44Z"/><path fill="#fbbc05" d="M12.9 27.7a12 12 0 0 1 0-7.4v-5.2H6.2a20 20 0 0 0 0 17.8z"/><path fill="#ea4335" d="M24 12.1c3 0 5.6 1 7.7 3l5.8-5.8C34 5.9 29.5 4 24 4A20 20 0 0 0 6.2 15.1l6.7 5.2c1.6-4.7 5.9-8.2 11.1-8.2Z"/>',
-}
-const sides = [
-  { title: 'Website inquiries', tag: 'LIVE SYNC', area: 'M0 74 C35 61 54 69 83 43 S130 30 160 17 L160 100 L0 100Z', line: 'M0 74 C35 61 54 69 83 43 S130 30 160 17', stats: [{ v: '28', l: 'New leads' }, { v: '4m', l: 'Avg reply' }] },
-  { title: 'Lead campaigns', tag: 'CONNECTED', area: 'M0 78 C28 67 54 71 78 48 S122 39 160 15 L160 100 L0 100Z', line: 'M0 78 C28 67 54 71 78 48 S122 39 160 15', stats: [{ v: '126', l: 'Leads' }, { v: '34%', l: 'Converted' }] },
-  { title: '3CX call journal', tag: 'CALL LOGGING', area: 'M0 72 C30 77 45 55 70 61 S110 37 130 40 145 22 160 14 L160 100 L0 100Z', line: 'M0 72 C30 77 45 55 70 61 S110 37 130 40 145 22 160 14', stats: [{ v: '84', l: 'Calls today' }, { v: '12', l: 'Missed' }] },
-  { title: 'Calendar tasks', tag: '2-WAY SYNC', area: 'M0 82 C32 70 48 70 74 53 S120 34 160 18 L160 100 L0 100Z', line: 'M0 82 C32 70 48 70 74 53 S120 34 160 18', stats: [{ v: '16', l: 'Tasks today' }, { v: '9', l: 'Synced' }] },
->>>>>>> Stashed changes
-]
-const webKpis = [{ v: '3', l: 'New today', d: '+2' }, { v: '4 min', l: 'Avg first reply', d: '−38%' }, { v: '12', l: 'Won this month', d: '+4' }]
 const inquiries = [
-  { i: 'JS', n: 'John Smith', no: 'Inquiry #28', e: 'john@example.com', s: 'PENDING', cls: '', t: '2 min ago' },
-  { i: 'KP', n: 'Kasun Perera', no: 'Inquiry #27', e: 'kasun@example.com', s: 'PENDING', cls: '', t: '1 h ago' },
-  { i: 'NF', n: 'Nadeesha F.', no: 'Inquiry #12', e: 'nadeesha@example.com', s: 'REPLIED', cls: 'blue', t: 'Yesterday' },
-  { i: 'DP', n: 'Daniel Perera', no: 'Inquiry #1', e: 'daniel@example.com', s: 'PENDING', cls: '', t: '3 d ago' },
+  { i: 'JS', n: 'John Smith', no: 'Inquiry #28', e: 'john.uk.test@example.com', s: 'PENDING', cls: '', t: '2 min ago' },
+  { i: 'KP', n: 'Kasun Perera', no: 'Inquiry #27', e: 'kasun.phone.test@example.com', s: 'PENDING', cls: '', t: '1 h ago' },
+  { i: 'NF', n: 'Nadeesha F.', no: 'Inquiry #12', e: 'nadeesha.f@example.com', s: 'REPLIED', cls: 'blue', t: 'Yesterday' },
+  { i: 'DP', n: 'Daniel Perera', no: 'Inquiry #1', e: 'daniel.perera@example.com', s: 'PENDING', cls: '', t: '3 d ago' },
 ]
-const pipeline = [{ n: 'Pending', v: 6, p: '100%', c: 'a' }, { n: 'Replied', v: 2, p: '33%', c: 'a' }, { n: 'Active', v: 2, p: '33%', c: 'a' }, { n: 'Leads', v: 3, p: '50%', c: 'a' }, { n: 'Failed', v: 0, p: '—', c: 'x' }]
+const pipeline = [
+  { n: 'Pending', v: 6, p: '100%', c: 'a' },
+  { n: 'Replied', v: 2, p: '33%', c: 'a' },
+  { n: 'Active', v: 2, p: '33%', c: 'a' },
+  { n: 'Leads', v: 3, p: '50%', c: 'a' },
+  { n: 'Failed', v: 0, p: '—', c: 'x' },
+]
 const leads = [
   { i: 'AS', n: 'Amal Silva', camp: 'Q3 SUV Promotion', s: 'NEW LEAD', cls: 'lead', t: '1 min ago' },
   { i: 'RJ', n: 'Ruwan Jayasinghe', camp: 'Hybrid Weekend Offer', s: 'CONTACTED', cls: 'blue', t: '22 min ago' },
   { i: 'TW', n: 'Tharushi Wickrama', camp: 'Q3 SUV Promotion', s: 'NEW LEAD', cls: 'lead', t: '2 h ago' },
 ]
 const calls = [
-<<<<<<< Updated upstream
   { i: 'DP', n: 'Daniel Perera', p: '755 322 689', t: 'Missed', x: '8001', d: '0:56', at: '2026-10-16 08:49', wa: true },
   { i: 'KP', n: 'Kasun Perera', p: '+94 71 234 5098', t: 'Answered', x: '1032', d: '2:05', at: '2026-10-16 08:12', wa: true },
   { i: 'YA', n: 'Yasasi Alwis', p: '+94 70 397 0813', t: 'AI call', x: 'Vodia', d: '1:12', at: '2026-10-15 16:39', wa: false },
@@ -591,33 +543,38 @@ watch(active, () => nextTick(() => {
 let timer = null
 let ro = null
 let io = null
-=======
-  { i: 'UC', n: 'Unknown customer', p: '755322689', t: 'Missed', x: '8001', d: '0:56', at: 'Oct 07, 6:49 AM' },
-  { i: 'UC', n: 'Unknown customer', p: '770629341', t: 'Answered', x: '1032', d: '1:40', at: 'Sep 30, 10:29 AM' },
-  { i: 'Y', n: 'Yasasi', p: '94703970813', t: 'Outbound', x: '1001', d: '2:12', at: 'Sep 17, 4:39 AM' },
-  { i: 'N', n: 'Nadeesha', p: '94771234567', t: 'Answered', x: '1001', d: '3:12', at: 'Sep 15, 2:11 AM' },
-  { i: 'KP', n: 'Kasun Perera', p: '94712345098', t: 'Answered', x: '1032', d: '2:05', at: 'Sep 12, 11:42 AM' },
-]
-
-let timer
-let observer
-let resizeObserver
->>>>>>> Stashed changes
 let touchX = 0
-function goTo(index) { active.value = (index + slides.length) % slides.length }
-function step(direction) { goTo(active.value + direction) }
-function onKey(event) {
-  if (event.key === 'ArrowRight') { event.preventDefault(); step(1) }
-  if (event.key === 'ArrowLeft') { event.preventDefault(); step(-1) }
+
+function goTo(i, restart = true) {
+  active.value = (i + slides.length) % slides.length
+  if (restart) startTimer()
 }
-function onTouchStart(event) { touchX = event.changedTouches[0].clientX }
-function onTouchEnd(event) {
-  const delta = event.changedTouches[0].clientX - touchX
-  if (Math.abs(delta) > 48) step(delta < 0 ? 1 : -1)
+const step = (d) => goTo(active.value + d)
+
+function startTimer() {
+  stopTimer()
+  if (!motion.value) return
+  timer = setInterval(() => {
+    if (!paused.value && inView.value && !document.hidden) goTo(active.value + 1, false)
+  }, AUTOPLAY_MS)
 }
+function stopTimer() {
+  if (timer) clearInterval(timer)
+  timer = null
+}
+
+function onKey(e) {
+  if (e.key === 'ArrowRight') { e.preventDefault(); step(1) }
+  else if (e.key === 'ArrowLeft') { e.preventDefault(); step(-1) }
+}
+const onTouchStart = (e) => { touchX = e.changedTouches[0].clientX }
+function onTouchEnd(e) {
+  const dx = e.changedTouches[0].clientX - touchX
+  if (Math.abs(dx) > 48) step(dx < 0 ? 1 : -1)
+}
+
 function fit() {
   if (!stageEl.value) return
-<<<<<<< Updated upstream
   const cs = getComputedStyle(stageEl.value)
   const w = stageEl.value.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight)
   compact.value = w < 900 // tablets + phones: CRM window only, so text stays readable
@@ -632,14 +589,9 @@ function fit() {
     sc = Math.min(sc, Math.max(hs, 0.42))
   }
   scale.value = +sc.toFixed(3) || 1
-=======
-  const width = stageEl.value.clientWidth
-  compact.value = width < 820
-  scale.value = Math.min(1, width / (compact.value ? COMPACT_W : SCENE_W)) || 1
->>>>>>> Stashed changes
 }
+
 onMounted(() => {
-<<<<<<< Updated upstream
   motion.value = !(typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches)
   fit()
   window.addEventListener('resize', fit)
@@ -657,29 +609,6 @@ onBeforeUnmount(() => {
   window.removeEventListener('resize', fit)
   ro?.disconnect()
   io?.disconnect()
-=======
-  motion.value = !window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  fit()
-  resizeObserver = new ResizeObserver(fit)
-  if (stageEl.value) resizeObserver.observe(stageEl.value)
-  observer = new IntersectionObserver(([entry]) => {
-    revealed.value = entry.isIntersecting
-    if (entry.isIntersecting && motion.value && !timer) {
-      timer = window.setInterval(() => {
-        if (!paused.value) step(1)
-      }, AUTOPLAY_MS)
-    } else if (!entry.isIntersecting && timer) {
-      clearInterval(timer)
-      timer = undefined
-    }
-  }, { threshold: 0.15 })
-  if (rootEl.value) observer.observe(rootEl.value)
-})
-onBeforeUnmount(() => {
-  if (timer) clearInterval(timer)
-  observer?.disconnect()
-  resizeObserver?.disconnect()
->>>>>>> Stashed changes
 })
 </script>
 

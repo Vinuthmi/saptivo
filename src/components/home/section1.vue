@@ -151,15 +151,8 @@
 </template>
 
 <script setup>
-<<<<<<< Updated upstream
 defineOptions({ name: 'FeatureScroll' })
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
-=======
-defineOptions({ name: 'HomeSection1' })
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
-
-const SW = 1160
->>>>>>> Stashed changes
 
 /* Same six features as your tabbed section.
    `bg` is the colour behind each card and `glow` the two soft blobs on it.
