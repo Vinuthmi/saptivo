@@ -106,7 +106,18 @@ const routes = [
           description:
             'Saptivo adapts to your industry: retail chains, wholesale distributors, contractors, field service companies and fast-growing startups.'
         }
+      },
+      {
+        path: '/security/',
+        name: 'security',
+        component: () => import('../views/securityView.vue'),
+        meta: {
+          title: 'CRM Security | Data Protection | Saptivo',
+          description:
+            'Your customer data is protected. Saptivo is secure CRM software hardened at every layer, from login to export, so your business data is never left unguarded.'
+        }
       }
+
     ]
   }
 ]
