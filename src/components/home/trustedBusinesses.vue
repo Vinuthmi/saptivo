@@ -4,7 +4,11 @@
       Trusted by Businesses That <span>Move Forward</span>
     </h2>
     <ul class="trusted-logos">
-      <li v-for="client in clients" :key="client.name">
+      <li
+        v-for="client in clients"
+        :key="client.name"
+        :class="{ 'trusted-logo-autosale': client.name === 'AutoSale.lk' }"
+      >
         <span>
           <img
             :src="client.src"
@@ -23,7 +27,7 @@
 
 <script setup>
 const clients = [
-  { name: 'AutoSale.lk', src: `${import.meta.env.BASE_URL}images/clients/autosale.png`, w: 1694, h: 255, dw: 125 },
+  { name: 'AutoSale.lk', src: `${import.meta.env.BASE_URL}images/clients/autosale-monochrome.png`, w: 1694, h: 255, dw: 132 },
   { name: 'Cartinno', src: `${import.meta.env.BASE_URL}images/clients/cartinno.webp`, w: 800, h: 226, dw: 100 },
   { name: 'SaaSBeds', src: `${import.meta.env.BASE_URL}images/clients/saasbeds.png`, w: 2048, h: 462, dw: 115 },
   { name: 'Ipsova', src: `${import.meta.env.BASE_URL}images/clients/ipsova.png`, w: 1000, h: 284, dw: 110 },
@@ -87,6 +91,10 @@ const clients = [
   padding: 0 6px;
 }
 
+.trusted-logos li.trusted-logo-autosale {
+  flex: 0 0 132px;
+}
+
 .trusted-logos li > span {
   display: grid;
   max-width: 100%;
@@ -113,6 +121,10 @@ const clients = [
   transform: scale(1.04);
 }
 
+.trusted-logos li.trusted-logo-autosale img {
+  width: min(var(--dw), 100%);
+}
+
 @media (max-width: 900px) {
   .trusted-logos li {
     height: 68px;
@@ -126,6 +138,10 @@ const clients = [
   }
 
   .trusted-logos img {
+    width: calc(var(--dw) * 0.7);
+  }
+
+  .trusted-logos li.trusted-logo-autosale img {
     width: calc(var(--dw) * 0.7);
   }
 }

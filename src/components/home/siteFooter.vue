@@ -8,10 +8,10 @@ const logoSrc = `${baseUrl}saptivo-logo.png`
 const clients = [
   {
     name: 'AutoSale.lk',
-    src: `${baseUrl}images/clients/autosale.png`,
+    src: `${baseUrl}images/clients/autosale-monochrome.png`,
     width: 1694,
     height: 255,
-    displayWidth: 140,
+    displayWidth: 142,
   },
   {
     name: 'Cartinno',
@@ -162,7 +162,7 @@ const conversionLinks = [
           <p>One connected workspace for customers, sales, and every store you run.</p>
         </div>
         <ul class="trusted-logos">
-          <li v-for="client in clients" :key="client.name" :class="{ 'logo-emphasis': client.name === 'AutoSale.lk' || client.name === 'Smardove', 'logo-smardove': client.name === 'Smardove', 'logo-voxinnova': client.name === 'Voxinnova' }">
+          <li v-for="client in clients" :key="client.name" :class="{ 'logo-emphasis': client.name === 'AutoSale.lk' || client.name === 'Smardove', 'logo-autosale': client.name === 'AutoSale.lk', 'logo-smardove': client.name === 'Smardove', 'logo-voxinnova': client.name === 'Voxinnova' }">
             <span :aria-label="client.name"><img :src="client.src" :alt="client.name" :width="client.width" :height="client.height" :style="{ '--dw': `${client.displayWidth}px` }" loading="lazy" draggable="false" /></span>
           </li>
         </ul>
@@ -252,12 +252,13 @@ const conversionLinks = [
 .footer-brand img { display: block; width: 160px; max-width: 100%; height: auto; filter: brightness(0); }
 .footer-brand-block p { max-width: 280px; margin: 15px 0 0; color: var(--footer-muted); font-size: 13px; line-height: 1.75; }
 /* Equal-width logo slots and a real gap prevent logos from crowding neighbours. */
-.trusted-logos { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); align-items: center; column-gap: clamp(18px, 1.65vw, 32px); row-gap: 22px; min-width: 0; margin: 0; padding: 0; list-style: none; }
+.trusted-logos { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); align-items: center; column-gap: clamp(18px, 1.65vw, 32px); row-gap: 22px; min-width: 0; margin: 0; padding: 0; list-style: none; }
 .trusted-logos li { display: flex; min-width: 0; min-height: 60px; align-items: center; justify-content: center; }
 .trusted-logos li span { display: flex; width: 100%; min-width: 0; align-items: center; justify-content: center; }
 .trusted-logos img { display: block; width: min(var(--dw), 100%); max-width: 100%; max-height: 34px; height: auto; object-fit: contain; object-position: center; filter: brightness(0); transition: opacity .2s ease; }
 /* Preserve the individually balanced sizes without transforms that overlap the gaps. */
 .trusted-logos li.logo-emphasis img { max-height: 40px; }
+.trusted-logos li.logo-autosale img { width: min(var(--dw), calc(100% + 10px)); max-width: none; max-height: 46px; flex: 0 0 auto; }
 .trusted-logos li.logo-smardove img { width: min(136px, 100%); max-height: 44px; transform: translateY(-4px); }
 .trusted-logos li.logo-voxinnova img { width: min(104px, 100%); max-height: 32px; }
 .trusted-logos li:hover img { opacity: .8; }
