@@ -14,7 +14,7 @@ let io = null;
 const items = [
   "View every quotation and accept it with a digital signature",
   "Download invoices as PDFs and see payment status",
-  "Pay online through",
+  "Pay online through PayHere, Stripe or PayPal",
   "Set up automatic recurring payments with a saved card for subscriptions, retainers and AMC contracts",
   "View upcoming recurring charges and update the card on file",
   "Download receipts and filter by date, status or amount",
@@ -24,11 +24,7 @@ const titles = ["Quotation", "Invoices", "Pay online", "Auto-pay", "Upcoming cha
 const idx = computed(() => (manual.value >= 0 ? manual.value : Math.floor(n.value / 5) % 6));
 const sub = computed(() => (still.value ? 4 : n.value % 5));
 const method = computed(() => (still.value ? 0 : Math.min(Math.max(sub.value - 1, 0), 2)));
-const methods = [
-  { name: "PayHere", key: "payhere" },
-  { name: "Stripe", key: "stripe" },
-  { name: "PayPal", key: "paypal" },
-];
+const methods = ["PayHere", "Stripe", "PayPal"];
 
 const invoices = [
   { id: "INV-2041", a: "LKR 120,000", s: "Paid", c: "mint" },
@@ -94,9 +90,7 @@ onBeforeUnmount(() => {
           <li v-for="(t, i) in items" :key="i" :class="{ on: i === idx }">
             <button type="button" :aria-current="i === idx" @click="pick(i)">
               <span class="no">{{ i + 1 }}</span>
-              <span class="tx">{{ t }}<span v-if="i === 2" class="provider-logos" aria-label="PayHere, Stripe and PayPal">
-                <span v-for="provider in methods" :key="provider.key" class="provider-logo" :class="provider.key" role="img" :aria-label="provider.name">{{ provider.name }}</span>
-              </span></span>
+              <span class="tx">{{ t }}</span>
             </button>
           </li>
         </ol>
@@ -142,9 +136,7 @@ onBeforeUnmount(() => {
             <div v-else-if="idx === 2" class="v">
               <div class="vh"><b>Pay INV-2056</b><span class="pill butter">LKR 45,000</span></div>
               <div class="meth">
-                <span v-for="(provider, i) in methods" :key="provider.key" class="method-option" :class="[{ on: i === method }, provider.key]" :aria-label="provider.name">
-                  <span class="provider-logo" :class="provider.key" role="img" :aria-label="provider.name">{{ provider.name }}</span>
-                </span>
+                <span v-for="(m, i) in methods" :key="m" :class="{ on: i === method }">{{ m }}</span>
               </div>
               <div class="btn" :class="{ ok: sub >= 4 }">{{ sub >= 4 ? "Payment received" : "Pay LKR 45,000" }}</div>
             </div>
@@ -211,18 +203,6 @@ h2 span { display: block; }
 .pp h2 .l1 { color: #111111 !important; opacity: 1; }
 .pp h2 .l2 { color: #8a8f97 !important; opacity: 1; }
 
-.provider-logos { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; margin-top: 9px; }
-.provider-logo { display: inline-flex; align-items: center; justify-content: center; min-height: 27px; padding: 4px 9px; border: 1px solid #e5e7eb; border-radius: 7px; background: #fff; font-size: 12px; font-weight: 700; line-height: 1; white-space: nowrap; }
-.provider-logo.payhere { color: #25364a; letter-spacing: -.04em; }
-.provider-logo.stripe { color: #635bff; letter-spacing: -.04em; }
-.provider-logo.paypal { color: #003087; font-style: italic; letter-spacing: -.05em; }
-.method-option { display: flex; align-items: center; justify-content: center; min-height: 66px; padding: 10px 6px; border: 1.5px solid var(--line); border-radius: 14px; background: #fff; transition: all .3s; }
-.method-option.on { border-color: var(--ink); background: #fafafb; box-shadow: 0 0 0 2px rgba(20, 18, 15, .06); }
-.method-option .provider-logo { border: 0; padding: 0; font-size: 14px; }
-.method-option.payhere .provider-logo { color: #25364a; }
-.method-option.stripe .provider-logo { color: #635bff; }
-.method-option.paypal .provider-logo { color: #003087; }
-
 .list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
 .list li { border-bottom: 1px solid var(--line); position: relative; }
 .list li::before { content: ""; position: absolute; left: 0; top: -1px; height: 2px; width: 0; background: var(--ink); transition: width .45s ease; }
@@ -276,6 +256,8 @@ h2 span { display: block; }
 .btn.ok { background: var(--mint); color: var(--mint-i); border-color: transparent; }
 
 .meth { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.meth span { text-align: center; font-size: 13.5px; font-weight: 500; padding: 22px 8px; border: 1.5px solid var(--line); border-radius: 14px; color: var(--muted); transition: all .3s; }
+.meth span.on { border-color: var(--ink); color: var(--ink); background: #fafafb; }
 
 .card { background: var(--ink); color: #fff; border-radius: 16px; padding: 18px; display: flex; flex-direction: column; gap: 10px; }
 .chip { width: 32px; height: 22px; border-radius: 5px; background: #d8b13a; }

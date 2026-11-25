@@ -24,7 +24,7 @@
         </header>
 
         <figure class="card-photo" aria-hidden="true">
-          <img :src="imageBase + '13.jpg'" alt="" loading="lazy" decoding="async" />
+          <img :src="imageBase + 'bn.jpg'" alt="" loading="lazy" decoding="async" />
         </figure>
 
         <div class="svc">
@@ -179,7 +179,7 @@
         </header>
 
         <figure class="card-photo" aria-hidden="true">
-          <img :src="imageBase + 'young.jpg'" alt="" loading="lazy" decoding="async" />
+          <img :src="imageBase + 'colorful-people-connection-network-on-light-green-2026-09-24-05-30-30-utc.webp'" alt="" loading="lazy" decoding="async" />
         </figure>
 
         <div class="hq">

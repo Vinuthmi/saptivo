@@ -187,29 +187,30 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .one {
-  --orange: #33485d;
-  --orange-soft: #edf1f4;
+  --orange: #6a59d6;
+  --orange-soft: #eeeafd;
   --ink: #14120f;
-  --muted: #6a6560;
-  --line: #e4e9ed;
+  --muted: #666b73;
+  --line: rgba(20, 18, 15, 0.1);
   position: relative;
   overflow: clip;
   scroll-margin-top: 100px;
   padding: 112px 0;
   color: var(--ink);
   background: #fff;
-  font-family: 'Urbanist', system-ui, sans-serif;
+  font-family: "Poppins", system-ui, sans-serif;
 }
 .one *, .one *::before, .one *::after { box-sizing: border-box; }
-.one button:focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
+.one button:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 
 .title {
   margin: 0 auto; width: min(900px, calc(100% - 40px)); text-align: center; text-wrap: balance;
-  font-size: clamp(34px, 3.6vw, 56px); font-weight: 500; line-height: 1.15;
-  letter-spacing: -0.03em; color: var(--ink);
+  font-size: clamp(34px, 3.8vw, 56px); font-weight: 500; line-height: 1.12;
+  letter-spacing: -0.035em; color: var(--ink);
 }
 .title span { display: block; }
-.title .soft { color: var(--muted); }
+.one .title span { color: #111111 !important; opacity: 1; }
+.one .title .soft { color: #8a8f97 !important; }
 
 .grid {
   width: min(1180px, calc(100% - 40px)); margin: 64px auto 0;
@@ -226,14 +227,14 @@ onBeforeUnmount(() => {
   font: 500 13.5px "Poppins", system-ui, sans-serif; color: #8a857f; text-align: left; cursor: pointer;
   transition: border-color 0.3s, background 0.3s, color 0.3s;
 }
-.mod.on { color: var(--ink); border-color: rgba(51, 72, 93, 0.35); background: #f5f7f8; }
-.sw { position: relative; flex: none; width: 34px; height: 20px; border-radius: 99px; background: #e6dcd7; transition: background 0.3s; }
+.mod.on { color: var(--ink); border-color: rgba(106, 89, 214, 0.35); background: #f6f4ff; }
+.sw { position: relative; flex: none; width: 34px; height: 20px; border-radius: 99px; background: #d9dce0; transition: background 0.3s; }
 .sw::after { content: ""; position: absolute; top: 3px; left: 3px; width: 14px; height: 14px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25); transition: left 0.3s cubic-bezier(0.3, 1.4, 0.5, 1); }
-.mod.on .sw { background: var(--orange); }
+.mod.on .sw { background: var(--ink); }
 .mod.on .sw::after { left: 17px; }
 .fee {
   display: inline-flex; align-items: center; gap: 8px; margin-top: 16px; padding: 9px 14px;
-  border-radius: 99px; background: #e6f6ec; color: #15803d; font-size: 13px; font-weight: 500;
+  border-radius: 99px; background: #dff3e8; color: #2c7a56; font-size: 13px; font-weight: 500;
   opacity: 0; transform: translateY(8px) scale(0.96);
   transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.3, 1.4, 0.5, 1);
 }
@@ -242,20 +243,20 @@ onBeforeUnmount(() => {
 /* ---------- animated panel ---------- */
 .panel {
   position: relative; display: flex; flex-direction: column; gap: 0; padding: 26px;
-  border-radius: 28px; background-color: #dce5eb; background-size: cover; background-position: center;
+  border-radius: 28px; background-color: #eeeafd; background-size: cover; background-position: center;
   overflow: hidden; min-width: 0;
 }
-.rec { padding: 14px 16px 16px; border-radius: 18px; background: #fff; box-shadow: 0 18px 40px rgba(120, 50, 20, 0.2); }
+.rec { padding: 14px 16px 16px; border-radius: 18px; background: #fff; box-shadow: 0 18px 40px rgba(20, 18, 15, 0.12); }
 .rec-head { display: flex; align-items: center; gap: 12px; }
 .av { flex: none; display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: var(--orange-soft); color: var(--orange); font-size: 13px; font-weight: 600; }
 .who { min-width: 0; flex: 1; }
 .who b { display: block; font-size: 14px; font-weight: 600; }
 .who small { display: block; color: var(--muted); font-size: 11.5px; }
-.zero { display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 99px; background: #e6f6ec; color: #15803d; font-size: 11px; font-weight: 600; white-space: nowrap; }
+.zero { display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 99px; background: #dff3e8; color: #2c7a56; font-size: 11px; font-weight: 600; white-space: nowrap; }
 .layers { position: relative; height: 52px; margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--line); }
 .layer { position: absolute; inset: 12px 0 0 0; display: flex; align-items: center; gap: 12px; opacity: 0; transform: translateY(8px); transition: opacity 0.45s ease, transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1); }
 .layer.show { opacity: 1; transform: none; }
-.tag { flex: none; padding: 5px 10px; border-radius: 99px; background: var(--orange); color: #fff; font-size: 11px; font-weight: 600; white-space: nowrap; }
+.tag { flex: none; padding: 5px 10px; border-radius: 99px; background: var(--ink); color: #fff; font-size: 11px; font-weight: 600; white-space: nowrap; }
 .layer b { display: block; font-size: 13px; font-weight: 500; }
 .layer small { display: block; color: var(--muted); font-size: 11.5px; }
 
@@ -266,10 +267,10 @@ onBeforeUnmount(() => {
 .snap .fill, .snap .dot { transition: none; }
 .nodes { position: relative; list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); }
 .node { display: grid; justify-items: center; gap: 7px; }
-.node b { font-size: 11.5px; font-weight: 500; color: #7a4a36; transition: color 0.3s; }
-.ic { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: #fff; color: #9a948d; box-shadow: 0 6px 16px rgba(120, 50, 20, 0.15); transition: background 0.35s, color 0.35s, transform 0.5s cubic-bezier(0.3, 1.5, 0.5, 1); }
+.node b { font-size: 11.5px; font-weight: 500; color: var(--muted); transition: color 0.3s; }
+.ic { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: #fff; color: #9a948d; box-shadow: 0 6px 16px rgba(20, 18, 15, 0.1); transition: background 0.35s, color 0.35s, transform 0.5s cubic-bezier(0.3, 1.5, 0.5, 1); }
 .node.done .ic { color: var(--orange); }
-.node.on .ic { background: var(--orange); color: #fff; transform: scale(1.14); animation: ping 1.6s ease-out infinite; }
+.node.on .ic { background: var(--ink); color: #fff; transform: scale(1.14); animation: ping 1.6s ease-out infinite; }
 .node.on b { color: var(--ink); }
 
 .links { display: grid; grid-template-columns: repeat(5, 1fr); margin-top: 6px; }
@@ -283,7 +284,7 @@ onBeforeUnmount(() => {
   padding: 15px; border-radius: 16px; background: var(--ink); color: #fff; font-size: 13.5px; font-weight: 500;
   box-shadow: 0 14px 30px rgba(20, 18, 15, 0.3);
 }
-.db svg { color: var(--orange); }
+.db svg { color: #b7acf3; }
 .db::after { content: ""; position: absolute; inset: 0; background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, 0.12) 50%, transparent 70%); transform: translateX(-100%); animation: sheen 3.2s ease-in-out infinite; }
 .ripple { position: absolute; top: 50%; left: calc(10% + var(--k) * 20%); width: 12px; height: 12px; border-radius: 50%; background: var(--orange); transform: translate(-50%, -50%); animation: ripple 1s ease-out both; }
 
@@ -296,7 +297,7 @@ onBeforeUnmount(() => {
 .one:not(.live) .node.on .ic, .one:not(.live) .vl.on b, .one:not(.live) .db::after, .one:not(.live) .ripple { animation-play-state: paused; }
 
 @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
-@keyframes ping { 0% { box-shadow: 0 0 0 0 rgba(51, 72, 93, 0.5), 0 6px 16px rgba(23, 25, 29, 0.15); } 100% { box-shadow: 0 0 0 14px rgba(51, 72, 93, 0), 0 6px 16px rgba(23, 25, 29, 0.15); } }
+@keyframes ping { 0% { box-shadow: 0 0 0 0 rgba(106, 89, 214, 0.45), 0 6px 16px rgba(20, 18, 15, 0.1); } 100% { box-shadow: 0 0 0 14px rgba(106, 89, 214, 0), 0 6px 16px rgba(20, 18, 15, 0.1); } }
 @keyframes drop { from { top: -45%; } to { top: 100%; } }
 @keyframes sheen { 0%, 40% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
 @keyframes ripple { from { opacity: 0.9; transform: translate(-50%, -50%) scale(1); } to { opacity: 0; transform: translate(-50%, -50%) scale(14); } }

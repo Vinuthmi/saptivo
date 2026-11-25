@@ -1,364 +1,282 @@
+<script setup>
+import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+
+defineOptions({ name: "WinMoreCustomersSection" });
+
+const root = ref(null);
+const shown = ref(false);
+const ok = ref(true);
+const photo = "/saptivo/images/features/team-selection-or-recruitment-process-concept-2026-09-24-05-18-17-utc.webp";
+const still = ref(false);
+const n = ref(0);
+const manual = ref(-1);
+let timer = null;
+let io = null;
+
+const items = [
+  {
+    t: "Lead and contact management",
+    d: "Capture leads from your website, Facebook and WhatsApp, score them and route them automatically.",
+    c: "lav",
+  },
+  {
+    t: "Sales pipeline and deals",
+    d: "Drag-and-drop pipelines, follow-up reminders and weighted forecasting.",
+    c: "sky",
+  },
+  {
+    t: "Quotations and invoicing",
+    d: "Branded PDF quotes in seconds and one-click conversion to tax invoices.",
+    c: "butter",
+  },
+  {
+    t: "Marketing campaigns",
+    d: "Segmented email and WhatsApp campaigns, drip sequences and campaign analytics.",
+    c: "mint",
+  },
+];
+
+const leads = [
+  { n: "Dilani Perera", s: "Website", sc: 92, to: "Kasun" },
+  { n: "Saman Silva", s: "Facebook", sc: 71, to: "Ayesha" },
+  { n: "Nimal Fernando", s: "WhatsApp", sc: 48, to: "Kasun" },
+];
+const cols = ["Qualified", "Proposal", "Won"];
+const stats = [
+  { k: "Opened", v: 64 },
+  { k: "Clicked", v: 31 },
+  { k: "Replied", v: 12 },
+];
+
+const idx = computed(() => (manual.value >= 0 ? manual.value : still.value ? 0 : Math.floor(n.value / 6) % 4));
+const sub = computed(() => (still.value ? 5 : n.value % 6));
+const col = computed(() => (sub.value >= 3 ? 2 : 1));
+
+function tick() {
+  n.value += 1;
+}
+function start() {
+  if (timer || still.value) return;
+  timer = setInterval(tick, 900);
+}
+function stop() {
+  clearInterval(timer);
+  timer = null;
+}
+function pick(i) {
+  manual.value = i;
+  n.value = 0;
+}
+
+onMounted(() => {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    still.value = true;
+    shown.value = true;
+    return;
+  }
+  io = new IntersectionObserver(
+    ([e]) => {
+      if (e.isIntersecting) {
+        shown.value = true;
+        start();
+      } else stop();
+    },
+    { threshold: 0.2 }
+  );
+  io.observe(root.value);
+});
+onBeforeUnmount(() => {
+  stop();
+  if (io) io.disconnect();
+});
+</script>
+
 <template>
-  <section id="features" ref="root" class="wmc" :class="{ in: seen, live }" aria-labelledby="wmc-title">
-    <h2 id="wmc-title" class="title">
-      <span>Win more customers</span>
-    </h2>
+  <section ref="root" class="wm" :class="{ in: shown }">
+    <div class="wrap">
+      <div class="left">
+        <h2><span class="l1">Win More</span> <span class="l2">Customers</span></h2>
+        <ul class="acc">
+          <li v-for="(it, i) in items" :key="it.t" :class="[it.c, { on: i === idx }]">
+            <button type="button" :aria-expanded="i === idx" @click="pick(i)">
+              <span class="no">{{ i + 1 }}</span>
+              <span class="ti">{{ it.t }}</span>
+            </button>
+            <div class="bd"><p>{{ it.d }}</p></div>
+          </li>
+        </ul>
+      </div>
 
-    <div class="grid">
-      <!-- left: sliding visuals -->
-      <div class="visual">
-        <div class="track" :style="{ transform: `translateX(-${active * 100}%)` }">
-          <div
-            v-for="(t, i) in tabs"
-            :key="t.title"
-            class="slide"
-            :class="{ on: i === active }"
-            :style="slideStyle(t, i)"
-            :aria-hidden="i !== active"
-          >
-            <img v-if="t.image" class="shot" :src="t.image" :alt="t.title" />
-            <div v-else class="window" aria-hidden="true">
-              <div class="bar"><i></i><i></i><i></i></div>
-              <div class="mock" v-html="t.mock"></div>
+      <div class="stage" :class="items[idx].c">
+        <img v-if="ok" class="photo" :src="photo" alt="" @error="ok = false" />
+        <div class="view" :key="idx">
+          <!-- 0 leads -->
+          <div v-if="idx === 0" class="v">
+            <div class="src"><span>Website</span><span>Facebook</span><span>WhatsApp</span></div>
+            <div v-for="(l, i) in leads" :key="l.n" class="ld" :class="{ vis: sub >= i + 1 }">
+              <span class="av">{{ l.n.charAt(0) }}</span>
+              <span class="nm"><b>{{ l.n }}</b><small>{{ l.s }}</small></span>
+              <span class="sc" :class="l.sc >= 70 ? 'hot' : 'warm'">{{ l.sc }}</span>
+              <em :class="{ vis: sub >= i + 2 || sub >= 4 }">to {{ l.to }}</em>
             </div>
+          </div>
 
-            <div class="floats" aria-hidden="true">
-              <div v-for="(c, ci) in t.cards" :key="c.k" class="float" :class="'f' + (ci + 1)" :style="{ '--n': ci }">
-                <span class="k">{{ c.k }}</span>
-                <span class="v">{{ c.v }}</span>
+          <!-- 1 pipeline -->
+          <div v-else-if="idx === 1" class="v">
+            <div class="kb">
+              <div v-for="(c, i) in cols" :key="c" class="kc">
+                <small>{{ c }}</small>
+                <i v-if="i === 0" class="kd"></i>
+                <i v-if="i === 1 && col !== 1" class="kd"></i>
+                <i v-if="i === col" class="kd mv"><b>Colombo Hotels</b><em>LKR 1.8M</em></i>
               </div>
             </div>
+            <div class="fc"><small>Weighted forecast</small><b>LKR 2.4M</b></div>
+            <div class="rm" :class="{ vis: sub >= 4 }">Reminder: follow up with Dilani tomorrow</div>
+          </div>
+
+          <!-- 2 quote -->
+          <div v-else-if="idx === 2" class="v">
+            <div class="doc" :class="{ done: sub >= 3 }">
+              <div class="dh"><b>{{ sub >= 3 ? "Tax invoice INV-2056" : "Quotation QT-1042" }}</b><span class="pdf">PDF</span></div>
+              <div class="r"><span>AC servicing, 12 units</span><em>96,000</em></div>
+              <div class="r"><span>Maintenance plan</span><em>54,000</em></div>
+              <div class="r t"><span>Total (LKR)</span><em>150,000</em></div>
+            </div>
+            <div class="btn" :class="{ ok: sub >= 3 }">{{ sub >= 3 ? "Converted to tax invoice" : "Convert to invoice" }}</div>
+          </div>
+
+          <!-- 3 campaigns -->
+          <div v-else class="v">
+            <div class="seg"><span>Segment: VIP customers</span><span class="ch">Email</span><span class="ch">WhatsApp</span></div>
+            <div class="an">
+              <div v-for="s in stats" :key="s.k" class="ar">
+                <span>{{ s.k }}</span>
+                <span class="bar"><i :style="{ width: sub >= 1 ? s.v + '%' : '0%' }"></i></span>
+                <b>{{ s.v }}%</b>
+              </div>
+            </div>
+            <div class="dr"><span :class="{ on: sub >= 2 }">Day 0</span><i></i><span :class="{ on: sub >= 3 }">Day 3</span><i></i><span :class="{ on: sub >= 4 }">Day 7</span></div>
           </div>
         </div>
       </div>
-
-      <!-- right: feature tabs -->
-      <ul class="tabs" @mouseenter="paused = true" @mouseleave="paused = false" @focusin="paused = true" @focusout="paused = false">
-        <li v-for="(t, i) in tabs" :key="t.title">
-          <button
-            type="button"
-            class="tab"
-            :class="{ on: i === active }"
-            :aria-expanded="i === active"
-            :aria-controls="'wmc-d' + i"
-            @click="active = i"
-          >
-            <span class="head">
-              <span class="icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <path v-for="(d, k) in t.icon" :key="k" :d="d" />
-                </svg>
-              </span>
-              <span class="name">{{ t.title }}</span>
-              <span class="num" aria-hidden="true">0{{ i + 1 }}</span>
-            </span>
-            <span :id="'wmc-d' + i" class="desc"><span><span class="desc-text">{{ t.text }}</span></span></span>
-            <span class="line" aria-hidden="true">
-              <span class="fill" :style="{ animationPlayState: running ? 'running' : 'paused' }" @animationend="next"></span>
-            </span>
-          </button>
-        </li>
-      </ul>
     </div>
   </section>
 </template>
 
-<script setup>
-import { ref, computed, onMounted, onBeforeUnmount } from "vue";
-defineOptions({ name: "WinMoreCustomers" });
-
-// Background photo behind every slide (set to "" for flat colour).
-// Override per tab with `bg`, or replace the mockup with a screenshot using `image`.
-const bgImage = "/images/features/win-bg.jpg";
-
-const tabs = [
-  {
-    title: "Lead and contact management",
-    text: "Capture leads from your website, Facebook and WhatsApp, score them and route them automatically.",
-    icon: ["M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2", "M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z", "M22 21v-2a4 4 0 0 0-3-3.9", "M16 3.1a4 4 0 0 1 0 7.8"],
-    bg: "/saptivo/images/features/smiling.jpg",
-    mock: `<div class="m-top rv" style="--i:0"><b>Leads</b><span class="pill live">+12 today</span></div>
-<div class="m-row hot rv" style="--i:1"><i class="av" style="background:#ffd9c9"></i><div class="m-lines"><b>Nimal Perera</b><small>Asked for a CRM demo</small></div><span class="src wa">WhatsApp</span><span class="sc">86</span></div>
-<div class="m-row rv" style="--i:2"><i class="av" style="background:#d9e6ff"></i><div class="m-lines"><b>Ayesha Fernando</b><small>Clicked a Facebook ad</small></div><span class="src fb">Facebook</span><span class="sc">72</span></div>
-<div class="m-row rv" style="--i:3"><i class="av" style="background:#ffe9b8"></i><div class="m-lines"><b>Kasun Silva</b><small>Filled the website form</small></div><span class="src web">Website</span><span class="sc">64</span></div>
-<div class="m-row rv" style="--i:4"><i class="av" style="background:#d4f2e0"></i><div class="m-lines"><b>Dilini Jayasinghe</b><small>Asked about pricing</small></div><span class="src wa">WhatsApp</span><span class="sc">58</span></div>`,
-    cards: [{ k: "New lead", v: "Nimal P. · WhatsApp" }, { k: "Lead score", v: "86 · Hot" }, { k: "Routed to", v: "Sales team, Colombo" }],
-  },
-  {
-    title: "Sales pipeline and deals",
-    text: "Drag-and-drop pipelines, follow-up reminders and weighted forecasting.",
-    icon: ["M3 17l6-6 4 4 8-8", "M14 7h7v7"],
-    bg: "/saptivo/images/features/young.jpg",
-    mock: `<div class="m-top rv" style="--i:0"><b>Sales pipeline</b><span class="pill live">Rs. 4.2M open</span></div>
-<div class="m-cols">
-<div class="m-col rv" style="--i:1"><h5>New</h5><div class="m-card"><b>ABC Traders</b><small>Rs. 450K</small></div><div class="m-card"><b>Lanka Foods</b><small>Rs. 220K</small></div></div>
-<div class="m-col rv" style="--i:2"><h5>Proposal</h5><div class="m-card drag"><b>Ceylon Motors</b><small>Rs. 1.8M</small></div><div class="m-card"><b>Blue Wave</b><small>Rs. 640K</small></div></div>
-<div class="m-col won rv" style="--i:3"><h5>Won</h5><div class="m-card"><b>Green Leaf</b><small>Rs. 385K</small></div><div class="m-card"><b>City Dental</b><small>Rs. 120K</small></div></div>
-</div>`,
-    cards: [{ k: "Deal stage", v: "Proposal sent" }, { k: "Follow-up", v: "Tomorrow, 10:00 AM" }, { k: "Weighted forecast", v: "Rs. 1.8M" }],
-  },
-  {
-    title: "Quotations and invoicing",
-    text: "Branded PDF quotes in seconds and one-click conversion to tax invoices.",
-    icon: ["M6 3h9l4 4v14H6z", "M14 3v5h5", "M9 13h6", "M9 17h6"],
-    bg: "/saptivo/images/features/employees.jpg",
-    mock: `<div class="m-top rv" style="--i:0"><b>Quotation QT-0142</b><span class="pill">Accepted</span></div>
-<div class="m-line rv" style="--i:1"><span>CRM licence · 10 users</span><b>Rs. 300,000</b></div>
-<div class="m-line rv" style="--i:2"><span>WhatsApp integration</span><b>Rs. 60,000</b></div>
-<div class="m-line rv" style="--i:3"><span>Onboarding and training</span><b>Rs. 25,000</b></div>
-<div class="m-total rv" style="--i:4"><span>Total</span><span>Rs. 385,000</span></div>
-<span class="m-btn rv" style="--i:5">Convert to tax invoice</span>`,
-    cards: [{ k: "Quotation", v: "QT-0142 · PDF ready" }, { k: "Status", v: "Accepted" }, { k: "Tax invoice", v: "INV-0087 created" }],
-  },
-  {
-    title: "Marketing campaigns",
-    text: "Segmented email and WhatsApp campaigns, drip sequences and campaign analytics.",
-    icon: ["M3 11v2a1 1 0 0 0 1 1h3l5 4V6L7 10H4a1 1 0 0 0-1 1z", "M16 8a5 5 0 0 1 0 8", "M19 5a9 9 0 0 1 0 14"],
-    bg: "/saptivo/images/features/threecolleagues-.jpg",
-    mock: `<div class="m-top rv" style="--i:0"><b>Festive offer</b><span class="pill live">Sending</span></div>
-<div class="m-camp">
-<div class="m-bubble rv" style="--i:1">Hi! Enjoy 15% off all plans this week. Reply YES to claim your offer.</div>
-<div class="m-stats">
-<div class="m-stat rv" style="--i:2"><span>Sent</span><b>1,240</b><i style="--w:100%"></i></div>
-<div class="m-stat rv" style="--i:3"><span>Opened</span><b>64%</b><i style="--w:64%"></i></div>
-<div class="m-stat rv" style="--i:4"><span>Replied</span><b>18%</b><i style="--w:18%"></i></div>
-</div></div>`,
-    cards: [{ k: "Campaign", v: "Festive offer · WhatsApp" }, { k: "Segment", v: "Active customers · 1,240" }, { k: "Open rate", v: "64%" }],
-  },
-];
-
-const tints = ["#dce5eb", "#e7edf1", "#d4e0e8", "#e1e9ee"];
-const slideStyle = (t, i) => {
-  const bg = t.bg ?? bgImage;
-  return {
-    backgroundColor: tints[i % tints.length],
-    ...(bg ? { backgroundImage: `url("${bg}")` } : {}),
-  };
-};
-
-const root = ref(null);
-const seen = ref(false);
-const live = ref(false);
-const active = ref(0);
-const paused = ref(false);
-const running = computed(() => live.value && !paused.value);
-const next = () => { active.value = (active.value + 1) % tabs.length; };
-
-const st = { io: null, fallback: null };
-onMounted(() => {
-  const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (reduce || !("IntersectionObserver" in window) || !root.value) {
-    seen.value = true;
-    live.value = !reduce; // no observer: keep autoplay on; reduced motion: no autoplay
-    return;
-  }
-  st.io = new IntersectionObserver(
-    (entries) => {
-      const e = entries[entries.length - 1];
-      if (e && e.isIntersecting) { seen.value = true; live.value = true; }
-      else live.value = false;
-    },
-    { threshold: 0, rootMargin: "0px 0px -8% 0px" }
-  );
-  st.io.observe(root.value);
-  // safety net so the content can never stay invisible
-  st.fallback = window.setTimeout(() => { if (!seen.value) seen.value = true; }, 2500);
-});
-onBeforeUnmount(() => {
-  if (st.io) st.io.disconnect();
-  window.clearTimeout(st.fallback);
-});
-</script>
-
 <style scoped>
-.wmc {
-  --orange: #33485d;
-  --orange-soft: #edf1f4;
-  --ink: #14120f;
-  --muted: #6a6560;
-  --line: #e4e9ed;
-  --dur: 6s;
-  position: relative;
-  overflow: clip;
-  scroll-margin-top: 100px;
-  padding: 112px 0;
+.wm {
+  --ink: #14120f; --muted: #666b73; --line: rgba(20, 18, 15, .1);
+  --lav: #eeeafd; --lav-i: #6a59d6;
+  --sky: #e4f0fb; --sky-i: #3a7fbd;
+  --mint: #dff3e8; --mint-i: #2c7a56;
+  --butter: #fff4d2; --butter-i: #94700a;
+  --rose: #fde7ed; --rose-i: #c94b73;
+  font-family: "Poppins", system-ui, sans-serif;
   color: var(--ink);
   background: #fff;
-  font-family: 'Urbanist', system-ui, sans-serif;
+  padding: 96px 16px;
 }
-.wmc *, .wmc *::before, .wmc *::after { box-sizing: border-box; }
-.wmc button:focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
+.wm *, .wm *::before, .wm *::after { box-sizing: border-box; }
+.wrap { max-width: 1160px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 56px; align-items: center; }
+.left, .stage { opacity: 0; transform: translateY(14px); transition: opacity .6s ease, transform .6s ease; }
+.in .left, .in .stage { opacity: 1; transform: none; }
+.in .stage { transition-delay: .1s; }
 
-.title {
-  margin: 0 auto; width: min(900px, calc(100% - 40px)); text-align: center; text-wrap: balance;
-  font-size: clamp(34px, 3.6vw, 56px); font-weight: 500; line-height: 1.15;
-  letter-spacing: -0.03em; color: var(--ink);
-}
-.title span { display: block; }
-.title .soft { color: var(--muted); }
+h2 { margin: 0 0 32px; font-size: clamp(34px, 3.8vw, 56px); font-weight: 500; line-height: 1.12; letter-spacing: -0.035em; text-wrap: balance; }
+h2 span { display: block; }
+.wm h2 .l1 { color: #111111 !important; opacity: 1; }
+.wm h2 .l2 { color: #8a8f97 !important; opacity: 1; }
 
-.grid {
-  width: min(1180px, calc(100% - 40px)); margin: 64px auto 0;
-  display: grid; grid-template-columns: 1.15fr 1fr; gap: 72px; align-items: center;
-}
+.acc { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.acc li { border-bottom: 1px solid var(--line); position: relative; }
+.acc li::before { content: ""; position: absolute; left: 0; top: -1px; height: 2px; width: 0; background: var(--ink); transition: width .45s ease; }
+.acc li.on::before { width: 100%; }
+.acc button { all: unset; box-sizing: border-box; cursor: pointer; width: 100%; display: flex; align-items: center; gap: 16px; padding: 20px 4px; }
+.acc button:focus-visible { outline: 2px solid var(--ink); outline-offset: -2px; }
+.no { width: 28px; height: 28px; border-radius: 50%; background: #f1f2f4; color: var(--muted); display: grid; place-items: center; font-size: 12.5px; font-weight: 600; flex: none; transition: all .3s; }
+.ti { font-size: 17px; font-weight: 500; color: var(--muted); transition: color .3s; line-height: 1.4; }
+.acc li.on .no { background: var(--ink); color: #fff; }
+.acc li.on .ti { color: var(--ink); }
+.bd { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .4s ease; }
+.acc li.on .bd { grid-template-rows: 1fr; }
+.bd > p { overflow: hidden; margin: 0; padding: 0 4px 0 48px; font-size: 15px; line-height: 1.75; color: var(--muted); }
+.acc li.on .bd > p { padding-bottom: 22px; }
 
-/* ---------- visual: sliding panels ---------- */
-.visual { position: relative; aspect-ratio: 4 / 3.4; overflow: hidden; border-radius: 28px; min-width: 0; background: #dce5eb; }
-.track { display: flex; height: 100%; transition: transform 0.7s cubic-bezier(0.65, 0, 0.35, 1); will-change: transform; }
-.slide { position: relative; flex: none; width: 100%; height: 100%; background-size: cover; background-position: center; }
+.stage { position: relative; overflow: hidden; isolation: isolate; border-radius: 28px; padding: 16px; min-height: 680px; display: flex; transition: background .5s; }
+.photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 18%; z-index: -1; }
+.stage.lav { background: var(--lav); } .stage.sky { background: var(--sky); } .stage.butter { background: var(--butter); } .stage.mint { background: var(--mint); }
+.view { flex: 1; background: #fff; border-radius: 20px; padding: 20px; animation: vin .45s ease both; display: flex; margin-top: 220px; box-shadow: 0 18px 40px -18px rgba(20, 18, 15, .35); }
+@keyframes vin { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.v { flex: 1; display: flex; flex-direction: column; gap: 10px; justify-content: center; min-width: 0; }
 
-.window {
-  position: absolute; right: 6%; top: 10%; width: 66%; height: 72%;
-  padding: 14px; background: #fff; border-radius: 18px;
-  box-shadow: 0 18px 40px rgba(120, 50, 20, 0.2);
-  display: flex; flex-direction: column; gap: 12px; overflow: hidden;
-}
-.bar { display: flex; gap: 6px; flex: none; }
-.bar i { width: 8px; height: 8px; border-radius: 50%; background: rgba(20, 18, 15, 0.14); }
-.mock { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 8px; font-size: 11px; line-height: 1.35; text-align: left; }
-.mock :deep(.m-top) { display: flex; justify-content: space-between; align-items: center; }
-.mock :deep(.m-top b) { font-size: 13px; font-weight: 600; }
-.mock :deep(.pill) { display: inline-flex; align-items: center; padding: 3px 9px; border-radius: 99px; background: var(--orange-soft); color: #33485d; font-weight: 600; font-size: 11px; }
-.mock :deep(.pill.live::before) { content: ""; width: 6px; height: 6px; margin-right: 6px; border-radius: 50%; background: currentColor; animation: blink 1.4s ease-in-out infinite; }
-.mock :deep(.m-row) { display: flex; align-items: center; gap: 8px; padding: 7px 8px; border-radius: 10px; background: #faf8f6; }
-.mock :deep(.m-row.hot) { animation: flash 2.8s ease-in-out 1.6s infinite; }
-.mock :deep(.av) { flex: none; width: 26px; height: 26px; border-radius: 50%; }
-.mock :deep(.m-lines) { flex: 1; min-width: 0; display: grid; }
-.mock :deep(.m-lines b) { font-size: 12px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.mock :deep(.m-lines small) { color: #5d6068; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.mock :deep(.src) { padding: 2px 7px; border-radius: 99px; font-size: 10.5px; font-weight: 600; }
-.mock :deep(.wa) { background: #e6f9ee; color: #128a47; }
-.mock :deep(.fb) { background: #e7f0ff; color: #0b57d0; }
-.mock :deep(.web) { background: #fff0e8; color: #c4400f; }
-.mock :deep(.sc) { width: 26px; text-align: center; font-weight: 700; color: #33485d; }
-.mock :deep(.m-cols) { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-.mock :deep(.m-col) { background: #faf8f6; border-radius: 10px; padding: 8px; display: flex; flex-direction: column; gap: 6px; }
-.mock :deep(.m-col h5) { margin: 0; font-size: 11px; color: #5d6068; font-weight: 600; }
-.mock :deep(.m-card) { background: #fff; border-radius: 8px; padding: 7px; box-shadow: 0 1px 4px rgba(23, 25, 29, 0.08); display: grid; gap: 2px; }
-.mock :deep(.m-card.drag) { position: relative; z-index: 2; animation: drag 3.2s ease-in-out 1.4s infinite; }
-.mock :deep(.m-card b) { font-size: 11.5px; font-weight: 500; }
-.mock :deep(.m-card small) { color: #33485d; font-weight: 600; }
-.mock :deep(.won .m-card) { border-left: 3px solid #25b865; }
-.mock :deep(.m-line) { display: flex; justify-content: space-between; gap: 8px; padding: 7px 0; border-bottom: 1px solid rgba(23, 25, 29, 0.08); }
-.mock :deep(.m-total) { display: flex; justify-content: space-between; font-weight: 700; font-size: 13px; margin-top: auto; }
-.mock :deep(.m-btn) { align-self: flex-start; padding: 8px 13px; border-radius: 99px; color: #fff; font-weight: 600; background: var(--orange); animation: ring 2.2s ease-out 2s infinite; }
-.mock :deep(.m-camp) { flex: 1; min-height: 0; display: grid; grid-template-columns: 1.1fr 1fr; gap: 10px; }
-.mock :deep(.m-bubble) { align-self: start; background: #e6f9ee; border-radius: 12px 12px 12px 3px; padding: 10px; color: #17391f; }
-.mock :deep(.m-stats) { display: grid; gap: 8px; align-content: start; }
-.mock :deep(.m-stat) { background: #faf8f6; border-radius: 10px; padding: 8px; display: grid; gap: 4px; }
-.mock :deep(.m-stat b) { font-size: 14px; font-weight: 600; }
-.mock :deep(.m-stat i) { display: block; height: 4px; border-radius: 2px; background: rgba(136, 136, 136, 0.2); position: relative; overflow: hidden; }
-.mock :deep(.m-stat i::after) { content: ""; position: absolute; inset: 0 auto 0 0; width: 0; background: var(--orange); border-radius: 2px; transition: width 0s linear 0.75s; }
-.shot { position: absolute; right: 0; top: 0; width: 100%; height: 100%; object-fit: cover; object-position: right top; }
+.src { display: flex; gap: 6px; margin-bottom: 4px; }
+.src span { font-size: 11.5px; font-weight: 600; padding: 4px 12px; border-radius: 99px; background: var(--lav); color: var(--lav-i); }
+.ld { display: grid; grid-template-columns: 34px minmax(0, 1fr) 36px auto; gap: 10px; align-items: center; border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; opacity: .2; transform: translateX(-6px); transition: all .4s ease; }
+.ld.vis { opacity: 1; transform: none; }
+.av { width: 34px; height: 34px; border-radius: 50%; background: var(--lav); color: var(--lav-i); display: grid; place-items: center; font-weight: 700; font-size: 13px; }
+.nm { display: flex; flex-direction: column; min-width: 0; }
+.nm b { font-size: 13px; font-weight: 500; }
+.nm small { font-size: 11.5px; color: var(--muted); }
+.sc { font-size: 13px; font-weight: 600; text-align: center; padding: 3px 0; border-radius: 8px; }
+.sc.hot { background: var(--rose); color: var(--rose-i); } .sc.warm { background: var(--butter); color: var(--butter-i); }
+.ld em { font-style: normal; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 6px; background: var(--mint); color: var(--mint-i); opacity: 0; transition: opacity .4s; white-space: nowrap; }
+.ld em.vis { opacity: 1; }
 
-/* floating info cards */
-.floats { position: absolute; inset: 0; pointer-events: none; }
-.float {
-  position: absolute; display: grid; gap: 1px; padding: 10px 14px; min-width: 160px;
-  background: #fff; border-radius: 16px; box-shadow: 0 12px 28px rgba(120, 50, 20, 0.18);
-}
-.f1 { left: 5%; top: 12%; }
-.f2 { left: 36%; top: 47%; }
-.f3 { left: 6%; bottom: 9%; }
-.k { font-size: 11px; color: var(--muted); }
-.v { font-size: 13px; font-weight: 500; letter-spacing: -0.01em; }
+.kb { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.kc { background: #f6f6f8; border-radius: 14px; padding: 10px; display: flex; flex-direction: column; gap: 8px; min-height: 160px; }
+.kc small { font-size: 11px; font-weight: 600; color: var(--muted); }
+.kd { display: block; height: 30px; border-radius: 8px; background: #fff; border: 1px solid var(--line); }
+.kd.mv { height: auto; padding: 8px 10px; background: var(--ink); color: #fff; border-color: var(--ink); display: flex; flex-direction: column; gap: 1px; animation: vin .4s ease both; }
+.kd.mv b { font-size: 11.5px; font-weight: 500; }
+.kd.mv em { font-style: normal; font-size: 11px; color: rgba(255, 255, 255, .7); }
+.fc { display: flex; align-items: center; justify-content: space-between; background: var(--sky); border-radius: 14px; padding: 12px 16px; }
+.fc small { font-size: 12px; color: var(--muted); }
+.fc b { font-size: 16px; font-weight: 600; }
+.rm { font-size: 12.5px; padding: 10px 14px; border-radius: 12px; border: 1px dashed rgba(20, 18, 15, .25); color: var(--muted); opacity: .2; transition: opacity .4s; }
+.rm.vis { opacity: 1; color: var(--ink); }
 
-/* ---------- live animation: plays each time a slide becomes active ---------- */
-/* hidden state resets only after the slide has slid out of view (0.75s) */
-.window, .float, .mock :deep(.rv) {
-  opacity: 0; transform: translateY(14px);
-  transition: opacity 0s linear 0.75s, transform 0s linear 0.75s;
-}
-.window, .float { transform: translateY(14px) scale(0.97); }
-.wmc.in .slide.on .window {
-  opacity: 1; transform: none;
-  transition: opacity 0.6s ease 0.15s, transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) 0.15s;
-}
-.wmc.in .slide.on .float {
-  opacity: 1; transform: none;
-  transition: opacity 0.5s ease calc(0.7s + var(--n) * 0.2s), transform 0.7s cubic-bezier(0.3, 1.4, 0.5, 1) calc(0.7s + var(--n) * 0.2s);
-  animation: bob 5s ease-in-out calc(1.6s + var(--n) * 0.3s) infinite;
-}
-.wmc.in .slide.on .mock :deep(.rv) {
-  opacity: 1; transform: none;
-  transition: opacity 0.5s ease calc(var(--i) * 0.12s + 0.3s), transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) calc(var(--i) * 0.12s + 0.3s);
-}
-.wmc.in .slide.on .mock :deep(.m-stat i::after) { width: var(--w); transition: width 1.1s cubic-bezier(0.2, 0.7, 0.2, 1) 0.9s; }
+.doc { border: 1px solid var(--line); border-radius: 16px; overflow: hidden; transition: border-color .3s; }
+.doc.done { border-color: var(--mint-i); }
+.dh { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 12px 16px; background: #f6f6f8; }
+.doc.done .dh { background: var(--mint); }
+.dh b { font-size: 14px; font-weight: 600; }
+.pdf { font-size: 11px; font-weight: 600; border: 1px solid var(--line); border-radius: 6px; padding: 2px 8px; background: #fff; }
+.r { display: flex; justify-content: space-between; gap: 8px; padding: 11px 16px; border-top: 1px solid var(--line); font-size: 13px; }
+.r span { color: var(--muted); } .r em { font-style: normal; font-weight: 600; }
+.r.t { background: #fafafb; }
+.btn { text-align: center; font-size: 13.5px; font-weight: 500; padding: 12px; border-radius: 12px; background: var(--ink); color: #fff; transition: all .35s; }
+.btn.ok { background: var(--mint); color: var(--mint-i); }
 
-/* ---------- tabs ---------- */
-.tabs { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; min-width: 0; }
-.tab {
-  position: relative; display: block; width: 100%; overflow: hidden;
-  padding: 20px 22px 24px; text-align: left; font: inherit; color: inherit;
-  background: #fff; border: 1px solid var(--line); border-radius: 20px; cursor: pointer;
-  transition: border-color 0.3s, background 0.3s, box-shadow 0.4s;
+.seg { display: flex; flex-wrap: wrap; gap: 6px; }
+.seg span { font-size: 12px; font-weight: 500; padding: 5px 12px; border-radius: 99px; background: #f1f2f4; }
+.seg .ch { background: var(--mint); color: var(--mint-i); font-weight: 600; }
+.an { border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; display: flex; flex-direction: column; gap: 12px; }
+.ar { display: grid; grid-template-columns: 64px minmax(0, 1fr) 36px; gap: 10px; align-items: center; font-size: 12.5px; color: var(--muted); }
+.ar b { text-align: right; color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+.bar { height: 8px; border-radius: 4px; background: #eef1f4; overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--mint-i); border-radius: 4px; transition: width .9s cubic-bezier(.2, .8, .2, 1); }
+.dr { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+.dr span { padding: 5px 12px; border-radius: 99px; background: #f1f2f4; color: var(--muted); font-weight: 500; transition: all .3s; }
+.dr span.on { background: var(--ink); color: #fff; }
+.dr i { flex: 1; height: 1px; background: rgba(20, 18, 15, .2); }
+
+@media (max-width: 900px) {
+  .wrap { grid-template-columns: 1fr; gap: 36px; }
+  .stage { min-height: 640px; }
 }
-.tab:hover { border-color: rgba(51, 72, 93, 0.25); }
-.tab.on { border-color: rgba(51, 72, 93, 0.35); background: #f5f7f8; box-shadow: 0 16px 36px rgba(51, 72, 93, 0.1); }
-.head { display: flex; align-items: center; gap: 14px; }
-.icon {
-  flex: none; display: grid; place-items: center; width: 42px; height: 42px;
-  border-radius: 50%; color: #9a948d; background: #f4efec;
-  transition: background 0.3s, color 0.3s, transform 0.5s cubic-bezier(0.3, 1.5, 0.5, 1);
-}
-.tab.on .icon { color: #fff; background: var(--orange); transform: scale(1.08); }
-.name { flex: 1; min-width: 0; font-size: 17px; font-weight: 500; letter-spacing: -0.015em; line-height: 1.35; color: #8a857f; transition: color 0.3s; }
-.tab:hover .name, .tab.on .name { color: var(--ink); }
-.num { flex: none; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; color: #c9c2bc; transition: color 0.3s; }
-.tab.on .num { color: var(--orange); }
-
-.desc { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.45s cubic-bezier(0.2, 0.7, 0.2, 1); }
-.desc > span { overflow: hidden; }
-.desc-text { display: block; padding: 12px 0 0 56px; font-size: 14.5px; line-height: 1.7; color: var(--muted); }
-.tab.on .desc { grid-template-rows: 1fr; }
-
-.line { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: rgba(51, 72, 93, 0.12); overflow: hidden; opacity: 0; transition: opacity 0.3s; }
-.tab.on .line { opacity: 1; }
-.fill { position: absolute; inset: 0; width: 0; background: var(--orange); border-radius: 0 3px 3px 0; }
-.tab.on .fill { animation: fill var(--dur) linear forwards; }
-
-/* ---------- entrance (runs once) + pause loops when off screen ---------- */
-.wmc:not(.in) .visual, .wmc:not(.in) .tabs { opacity: 0; }
-.wmc.in .title span { animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) backwards; }
-.wmc.in .title .soft { animation-delay: 0.1s; }
-.wmc.in .visual { animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) 0.15s backwards; }
-.wmc.in .tabs { animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) 0.3s backwards; }
-.wmc:not(.live) .float,
-.wmc:not(.live) .mock :deep(.m-row.hot),
-.wmc:not(.live) .mock :deep(.m-card.drag),
-.wmc:not(.live) .mock :deep(.m-btn),
-.wmc:not(.live) .mock :deep(.pill.live::before) { animation-play-state: paused; }
-
-@keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
-@keyframes fill { from { width: 0; } to { width: 100%; } }
-@keyframes bob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -7px; } }
-@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-@keyframes flash { 0%, 100% { background: #faf8f6; } 45% { background: #edf1f4; } }
-@keyframes drag {
-  0%, 18%, 100% { translate: 0 0; rotate: 0deg; box-shadow: 0 1px 4px rgba(23, 25, 29, 0.08); }
-  50%, 68% { translate: 14px -6px; rotate: 2.5deg; box-shadow: 0 12px 22px rgba(51, 72, 93, 0.22); }
-}
-@keyframes ring { 0% { box-shadow: 0 0 0 0 rgba(51, 72, 93, 0.5); } 70%, 100% { box-shadow: 0 0 0 10px rgba(51, 72, 93, 0); } }
-
-/* ---------- responsive ---------- */
-@media (max-width: 960px) {
-  .grid { grid-template-columns: minmax(0, 1fr); gap: 40px; }
-}
-@media (max-width: 760px) {
-  .wmc { padding: 72px 0; }
-  .grid { width: calc(100% - 32px); margin-top: 40px; }
-  .visual { border-radius: 22px; }
-  .window { width: 74%; }
-  .float { min-width: 0; padding: 8px 12px; }
-  .tab { padding: 16px 16px 20px; border-radius: 18px; }
-  .name { font-size: 15.5px; }
-  .desc-text { padding-left: 0; }
+@media (max-width: 640px) {
+  .wm { padding: 64px 16px; }
+  .stage { padding: 10px; border-radius: 22px; }
+  .view { padding: 14px; margin-top: 160px; }
+  .stage { min-height: 600px; }
+  .bd > p { padding-left: 44px; }
+  .ld { grid-template-columns: 34px minmax(0, 1fr) 36px; }
+  .ld em { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .wmc *, .wmc *::before, .wmc *::after { animation: none !important; transition: none !important; }
-  .window, .float, .mock :deep(.rv) { opacity: 1; transform: none; }
-  .mock :deep(.m-stat i::after) { width: var(--w); }
-  .tab.on .fill { width: 100%; }
-  .wmc:not(.in) .visual, .wmc:not(.in) .tabs { opacity: 1; }
+  .left, .stage { opacity: 1; transform: none; transition: none; }
+  .view, .kd.mv { animation: none; }
+  * { transition-duration: 0s !important; }
 }
 </style>
