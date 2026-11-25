@@ -65,7 +65,6 @@ onBeforeUnmount(() => {
   <section ref="root" class="wa" :class="{ in: shown }">
     <div class="wrap">
       <header class="head">
-        <span class="eyebrow">Benefits</span>
         <h2><span class="l1">Why automate</span> <span class="l2">your CRM workflows</span></h2>
         <p>
           Manual processes break when people are busy, on leave or new to the job. Automations run the same way every

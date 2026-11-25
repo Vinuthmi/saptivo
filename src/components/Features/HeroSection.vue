@@ -9,7 +9,7 @@
 
       <p class="lead">
         Saptivo covers the full customer lifecycle, from the first enquiry to
-        the tenth service visit. Every module shares one customer record, so
+        the tenth service visit. Each feature shares one customer record, so
         sales, support and service teams always see the same history.<br>
         Below you'll find every one of Saptivo's CRM features, grouped by what
         your team needs to get done.

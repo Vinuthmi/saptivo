@@ -71,7 +71,6 @@ onBeforeUnmount(() => {
   <section ref="root" class="cp" :class="{ in: shown, solved: on }">
     <div class="wrap">
       <header class="head">
-        <span class="eyebrow">The problem</span>
         <h2><span class="l1">Common problems</span> <span class="l2">multi-branch businesses face</span></h2>
       </header>
 
@@ -197,7 +196,6 @@ onBeforeUnmount(() => {
   --rose: #fde3ea; --rose-i: #d8567f;
   font-family: "Poppins", system-ui, sans-serif;
   color: var(--ink);
-  background: #fff;
   padding: 96px 16px;
 }
 .wrap { max-width: 1120px; margin: 0 auto; }

@@ -200,7 +200,6 @@ onBeforeUnmount(() => {
   --butter: #fff1c9; --butter-i: #a77d00;
   font-family: "Poppins", system-ui, sans-serif;
   color: var(--ink);
-  background: #fff;
   padding: 96px 16px;
 }
 .wrap { max-width: 1120px; margin: 0 auto; }

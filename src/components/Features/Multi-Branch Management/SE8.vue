@@ -96,7 +96,6 @@ onBeforeUnmount(() => {
   <section ref="root" class="ob" :class="{ in: shown }">
     <div class="wrap">
       <header class="head">
-        <span class="eyebrow">Why it matters</span>
         <h2><span class="l1">Benefits for</span> <span class="l2">owners and managers</span></h2>
         <p>
           Owners see the whole business in real time, without waiting for reports from each branch. Branch managers
@@ -192,7 +191,6 @@ onBeforeUnmount(() => {
   --butter: #fff1c9; --butter-i: #a77d00;
   font-family: "Poppins", system-ui, sans-serif;
   color: var(--ink);
-  background: #fff;
   padding: 96px 16px;
 }
 .wrap { max-width: 1120px; margin: 0 auto; }

@@ -18,7 +18,7 @@ let lock = 0;
 const base = "/saptivo/images/features/";
 const man = base + "professional-man-reviewing-financial-pie-charts-on-2026-11-02-15-56-21-utc.webp";
 const woman = base + "business-professionals-working-with-laptops-in-off-2026-09-21-05-32-47-utc.webp";
-const photos = [woman, base + "confident-businessman-in-a-modern-office-setting-2026-09-22-06-17-01-utc.webp", base + "business-women-in-casual-meeting-at-work-cafe-2026-09-23-22-08-41-utc.webp", base + "smiling-women-discussing-documents-on-staircase-in-2026-09-24-06-33-04-utc.webp", man];
+const photos = [woman, base + "smiling-coworkers-reviewing-photos-on-computer-scr-2026-09-21-14-07-13-utc.webp", base + "business-women-in-casual-meeting-at-work-cafe-2026-09-23-22-08-41-utc.webp", base + "smiling-women-discussing-documents-on-staircase-in-2026-09-24-06-33-04-utc.webp", man];
 const pos = ["center 20%", "center 20%", "center", "center", "center 65%"];
 
 const roles = [

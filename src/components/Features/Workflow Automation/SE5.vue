@@ -85,7 +85,6 @@ onBeforeUnmount(() => {
   <section ref="root" class="sla" :class="{ in: shown }">
     <div class="wrap">
       <header class="head">
-        <span class="eyebrow">Service levels</span>
         <h2><span class="l1">SLA-based</span> <span class="l2">escalations</span></h2>
         <p>
           Set response and resolution targets for tickets, service jobs and deals. When a target is about to be

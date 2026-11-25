@@ -1,5 +1,5 @@
 <template>
-  <main class="help-desk-ticketing-page">
+  <main class="features-page help-desk-ticketing-page">
     <HeroSection />
     <SE1 />
     <SE2 />
@@ -26,3 +26,24 @@ import SE8 from '@/components/Features/Help Desk & Ticketing/SE8.vue'
 import SE9 from '@/components/Features/Help Desk & Ticketing/SE9.vue'
 
 </script>
+
+<style scoped>
+.help-desk-ticketing-page :deep(h2),
+.help-desk-ticketing-page :deep(h2 span) {
+  color: #111 !important;
+  -webkit-text-fill-color: #111 !important;
+  background: none !important;
+  background-image: none !important;
+}
+
+.help-desk-ticketing-page :deep(h2 .soft),
+.help-desk-ticketing-page :deep(h2 .l2),
+.help-desk-ticketing-page :deep(h2 .accent),
+.help-desk-ticketing-page :deep(h2 .blue),
+.help-desk-ticketing-page :deep(h2 .blue-text),
+.help-desk-ticketing-page :deep(h2 .primary),
+.help-desk-ticketing-page :deep(h2 .grad) {
+  color: #8a8f97 !important;
+  -webkit-text-fill-color: #8a8f97 !important;
+}
+</style>

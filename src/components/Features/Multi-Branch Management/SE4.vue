@@ -177,7 +177,6 @@ onBeforeUnmount(() => {
   --rose: #fde3ea; --rose-i: #d8567f;
   font-family: "Urbanist", system-ui, sans-serif;
   color: var(--ink);
-  background: #fff;
   padding: 96px 16px;
 }
 .wrap { max-width: 1120px; margin: 0 auto; }

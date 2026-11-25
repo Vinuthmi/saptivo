@@ -1,5 +1,5 @@
 <template>
-  <main class="service-amc-management-page">
+  <main class="features-page service-amc-management-page">
     <HeroSection />
     <SE1 />
     <SE2 />
@@ -36,5 +36,24 @@ import SE11 from '@/components/Features/Service & AMC Management/SE11.vue'
 .service-amc-management-page,
 .service-amc-management-page :deep(*) {
   font-family: 'Urbanist', sans-serif !important;
+}
+
+.service-amc-management-page :deep(h2),
+.service-amc-management-page :deep(h2 span) {
+  color: #111 !important;
+  -webkit-text-fill-color: #111 !important;
+  background: none !important;
+  background-image: none !important;
+}
+
+.service-amc-management-page :deep(h2 .soft),
+.service-amc-management-page :deep(h2 .l2),
+.service-amc-management-page :deep(h2 .accent),
+.service-amc-management-page :deep(h2 .blue),
+.service-amc-management-page :deep(h2 .blue-text),
+.service-amc-management-page :deep(h2 .primary),
+.service-amc-management-page :deep(h2 .grad) {
+  color: #8a8f97 !important;
+  -webkit-text-fill-color: #8a8f97 !important;
 }
 </style>

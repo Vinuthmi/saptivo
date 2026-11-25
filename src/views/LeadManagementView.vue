@@ -1,5 +1,5 @@
 <template>
-  <main class="lead-management-page">
+  <main class="features-page lead-management-page">
     <HeroSection />
     <SE1 />
     <SE2 />
@@ -29,3 +29,25 @@ import SE10 from '@/components/Features/Lead & Contact Management/SE10.vue';
 
 
 </script>
+
+<style scoped>
+.lead-management-page :deep(h1),
+.lead-management-page :deep(h2) {
+  color: #111111 !important;
+  -webkit-text-fill-color: #111111 !important;
+  background: none !important;
+  background-image: none !important;
+}
+.lead-management-page :deep(h1 span),
+.lead-management-page :deep(h2 span) {
+  color: #111111 !important;
+  -webkit-text-fill-color: #111111 !important;
+  background: none !important;
+  background-image: none !important;
+}
+.lead-management-page :deep(h1 .accent),
+.lead-management-page :deep(h2 .soft) {
+  color: #8a8f97 !important;
+  -webkit-text-fill-color: #8a8f97 !important;
+}
+</style>

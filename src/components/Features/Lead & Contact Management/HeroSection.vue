@@ -54,9 +54,11 @@ defineOptions({ name: "FeaturesHero" });
   -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 80px), transparent 100%);
   mask-image: linear-gradient(180deg, #000 calc(100% - 80px), transparent 100%);
   background:
+    radial-gradient(circle, rgba(23, 25, 29, 0.24) 1.2px, transparent 1.5px),
     radial-gradient(ellipse 52% 48% at 50% 38%, #fff 0%, rgba(255, 255, 255, 0.88) 44%, rgba(255, 255, 255, 0.5) 68%, transparent 100%),
     linear-gradient(180deg, transparent 0%, #fff clamp(240px, 32vh, 360px)),
     linear-gradient(90deg, #dce5eb 0%, #edf1f4 25%, #e4ebf0 50%, #edf1f4 75%, #dce5eb 100%);
+  background-size: 18px 18px, auto, auto, auto;
 }
 .bg::after {
   content: "";
@@ -113,10 +115,10 @@ h1 {
   text-decoration: none; font-size: 15px; font-weight: 600;
   transition: transform 0.2s, box-shadow 0.2s;
 }
-.btn-primary { color: #fff; background: #17191d; border: 1px solid #17191d; box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18); }
-.btn-primary:hover { transform: translateY(-2px); background: #000; border-color: #000; box-shadow: 0 16px 32px rgba(0, 0, 0, 0.24); }
-.btn-outline { color: #17191d; background: #fff; border: 1px solid #17191d; box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08); }
-.btn-outline:hover { transform: translateY(-2px); background: #f5f5f5; border-color: #000; box-shadow: 0 16px 32px rgba(0, 0, 0, 0.14); }
+.btn-primary { color: #fff; background: #000; border: 1px solid #000; box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18); }
+.btn-primary:hover { transform: translateY(-2px); background: #17191d; border-color: #17191d; box-shadow: 0 16px 32px rgba(0, 0, 0, 0.24); }
+.btn-outline { color: #000; background: #fff; border: 1px solid #000; box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08); }
+.btn-outline:hover { transform: translateY(-2px); background: #f5f5f5; border-color: #17191d; box-shadow: 0 16px 32px rgba(0, 0, 0, 0.14); }
 
 @keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
 
