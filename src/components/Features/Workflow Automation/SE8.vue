@@ -74,7 +74,6 @@ onBeforeUnmount(() => {
     <div class="wrap">
       <!-- steps -->
       <div class="copy">
-        <span class="eyebrow">Step by step</span>
         <h2><span class="l1">How to build</span> <span class="l2">a workflow</span></h2>
 
         <ol class="steps" :style="{ '--p': step / (steps.length - 1) }">

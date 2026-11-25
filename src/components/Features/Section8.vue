@@ -76,13 +76,13 @@ const ctaStyle = bgImage
 
 const faqs = [
   {
-    q: "Do I have to pay for every module?",
+    q: "Do I have to pay for each feature?",
     a: "No. You choose the modules you need, and you can add more at any time with no upgrade fee.",
     chip: "Pay only for what you use",
   },
   {
     q: "Do all modules share the same customer data?",
-    a: "Yes. Every module works from one customer record, so nothing is entered twice.",
+    a: "Yes. Each feature works from one customer record, so nothing is entered twice.",
     chip: "One record, zero retyping",
   },
 ];

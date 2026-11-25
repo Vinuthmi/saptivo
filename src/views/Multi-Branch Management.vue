@@ -1,5 +1,5 @@
 <template>
-  <main class="multi-branch-management-page">
+  <main class="features-page multi-branch-management-page">
     <HeroSection />
     <SE1 />
     <SE2 />
@@ -29,19 +29,3 @@ import SE9 from '@/components/Features/Multi-Branch Management/SE9.vue'
 import SE10 from '@/components/Features/Multi-Branch Management/SE10.vue'
 
 </script>
-
-<style scoped>
-.multi-branch-management-page :deep(.hq),
-.multi-branch-management-page :deep(.bp),
-.multi-branch-management-page :deep(.sc),
-.multi-branch-management-page :deep(.ss),
-.multi-branch-management-page :deep(.cr),
-.multi-branch-management-page :deep(.gc),
-.multi-branch-management-page :deep(.ms),
-.multi-branch-management-page :deep(.ob),
-.multi-branch-management-page :deep(.cp),
-.multi-branch-management-page :deep(.faq) {
-  background-image: radial-gradient(circle, rgba(51, 72, 93, 0.1) 1px, transparent 1.5px);
-  background-size: 22px 22px;
-}
-</style>

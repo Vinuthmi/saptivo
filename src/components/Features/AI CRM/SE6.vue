@@ -238,7 +238,7 @@ h2 span { display: block; }
   .tabs { position: static; max-width: none; margin-top: 14px; justify-content: center; }
   .tabs button { box-shadow: none; background: #f1eff8; }
   .tabs button.sel { background: var(--ink); }
-  .call { position: relative; right: auto; top: auto; transform: none; width: min(420px, 100%); margin: -64px auto 0; }
+  .call { position: relative; inset-inline: auto; right: auto; top: auto; left: auto; transform: none; width: min(420px, 100%); margin: -64px auto 0; }
 }
 @media (max-width: 640px) {
   .hw { padding: 64px 16px; }

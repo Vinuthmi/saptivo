@@ -1,5 +1,5 @@
 <template>
-  <main class="reports-analytics-page">
+  <main class="features-page reports-analytics-page">
     <SE1 />
     <SE2 />
     <SE3 />
@@ -28,3 +28,24 @@ import SE10 from '@/components/Features/Reports & Analytics/SE10.vue'
 
 
 </script>
+
+<style scoped>
+.features-page :deep(h2),
+.features-page :deep(h2 span) {
+  color: #111 !important;
+  -webkit-text-fill-color: #111 !important;
+  background: none !important;
+  background-image: none !important;
+}
+
+.features-page :deep(h2 .soft),
+.features-page :deep(h2 .l2),
+.features-page :deep(h2 .accent),
+.features-page :deep(h2 .blue),
+.features-page :deep(h2 .blue-text),
+.features-page :deep(h2 .primary),
+.features-page :deep(h2 .grad) {
+  color: #8a8f97 !important;
+  -webkit-text-fill-color: #8a8f97 !important;
+}
+</style>

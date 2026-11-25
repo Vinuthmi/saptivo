@@ -77,7 +77,6 @@ onBeforeUnmount(() => {
   <section ref="root" class="ac" :class="{ in: shown }">
     <div class="wrap">
       <header class="head">
-        <span class="eyebrow">Automation</span>
         <h2><span class="l1">Actions</span></h2>
       </header>
 

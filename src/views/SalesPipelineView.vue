@@ -1,5 +1,5 @@
 <template>
-  <main class="sales-pipeline-page">
+  <main class="features-page sales-pipeline-page">
     <HeroSection />
     <SE1 />
     <SE2 />

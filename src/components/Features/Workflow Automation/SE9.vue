@@ -93,12 +93,10 @@ onBeforeUnmount(() => {
   <section ref="root" class="am" :class="{ in: shown }">
     <div class="wrap">
       <header class="head">
-        <span class="eyebrow">Every module</span>
-        <h2><span class="l1">Workflow automation</span> <span class="l2">across every module</span></h2>
+        <h2><span class="l1">Workflow automation</span> <span class="l2">across your CRM</span></h2>
         <p>
           Automations aren't limited to sales. Support teams escalate tickets automatically, service teams send visit
-          reminders and renewal notices, finance chases overdue invoices and marketing nurtures new leads. Every
-          module in Saptivo can trigger and receive automated actions.
+          reminders and renewal notices, finance chases overdue invoices and marketing nurtures new leads. All features in Saptivo can trigger and receive automated actions.
         </p>
       </header>
 

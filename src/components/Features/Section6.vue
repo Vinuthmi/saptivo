@@ -51,7 +51,7 @@
         <p>
           Start with the problem that costs you the most today. If enquiries go unanswered, begin with lead management and
           WhatsApp CRM. If quotes are slow, start with quotations and invoicing. If you install and maintain equipment,
-          service and AMC management will pay for itself quickly. Every module can be switched on later without migrating data.
+          service and AMC management will pay for itself quickly. Each feature can be switched on later without migrating data.
         </p>
 
         <div class="later" aria-hidden="true">
