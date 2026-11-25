@@ -1,0 +1,51 @@
+<template>
+  <section class="ih" aria-labelledby="ih-title">
+    <div class="wrap">
+      <h1 id="ih-title">
+        Grow your business by
+        <span class="accent">reselling Saptivo CRM</span>
+      </h1>
+
+      <p class="lead">
+        Your clients need a CRM. Building one takes years. The Saptivo CRM reseller program lets IT
+        firms, consultants and agencies offer a complete, proven CRM under their own brand or ours,
+        with the provisioning, billing and commission tracking handled for you.
+      </p>
+
+      <div class="actions">
+        <slot>
+          <router-link :to="applyTo" class="btn">Apply to become a reseller</router-link>
+        </slot>
+      </div>
+    </div>
+  </section>
+</template>
+
+<script setup>
+defineOptions({ name: 'ResellerHero' })
+/** Hero for the reseller page, same format as InnerHeroPricing. Pass `apply-to` to change the CTA link. */
+defineProps({ applyTo: { type: String, default: '/reseller-signup/' } })
+</script>
+
+<style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap');
+
+.ih { --ink: #17191d; position: relative; isolation: isolate; overflow: clip; text-align: center; color: var(--ink); background: #fff; font-family: 'Urbanist', system-ui, sans-serif; }
+.ih *, .ih *::before, .ih *::after { box-sizing: border-box; }
+
+.wrap { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; width: min(980px, calc(100% - 40px)); margin: 0 auto; padding: clamp(104px, 11vw, 150px) 0 clamp(56px, 7vw, 96px); }
+
+h1 { margin: 0; font-size: clamp(38px, 5vw, 68px); font-weight: 600; line-height: 1.08; letter-spacing: -0.05em; color: #0a0a0a; text-wrap: balance; animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.accent { display: block; color: #6b6866; }
+
+.lead { max-width: 760px; margin: 26px 0 0; font-size: clamp(15px, 1.25vw, 17px); line-height: 1.75; color: #4a4d55; text-wrap: pretty; animation: rise 0.9s 0.1s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+
+.actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 34px; animation: rise 0.9s 0.2s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.btn { display: inline-flex; align-items: center; justify-content: center; padding: 15px 30px; border-radius: 999px; background: #0f172a; color: #fff !important; font-size: clamp(15px, 1.1vw, 16.5px); font-weight: 500; text-decoration: none; transition: background 0.3s, transform 0.3s; }
+.btn:hover { background: #ff6b16; transform: translateY(-2px); }
+.btn:focus-visible { outline: 2px solid #ff6b16; outline-offset: 3px; }
+
+@keyframes rise { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+@media (max-width: 760px) { .wrap { width: calc(100% - 32px); } }
+@media (prefers-reduced-motion: reduce) { h1, .lead, .actions { animation: none; } }
+</style>

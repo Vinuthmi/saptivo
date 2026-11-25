@@ -11,7 +11,7 @@
           :class="[`sb-${c.kind}`, `sb-c${i}`]"
           :style="{ '--i': i }"
         >
-          <!-- the only photo card -->
+          <!-- photo cards -->
           <img v-if="c.img && !failed[c.id]" class="sb-img" :src="c.img" alt="" loading="lazy" decoding="async" draggable="false" @error="failed[c.id] = true" />
           <span v-if="c.kind === 'photo'" class="sb-shade" aria-hidden="true"></span>
           <svg v-else class="sb-deco" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" v-html="c.icon"></svg>
@@ -30,7 +30,7 @@
 defineOptions({ name: 'SecurityBento' })
 /**
  * SectionSecurityBento.vue — "Security controls you manage" in the same bento style as the multi-branch section:
- * light colour cards and a dark card, with a photo on ONE card only (the tall one). Vue 3, <script setup>.
+ * light colour cards and a dark card, with two photo cards (the tall one and the wide one). Vue 3, <script setup>.
  * The photo falls back to a dark gradient if the URL fails — swap `img` for your own. SSR safe.
  */
 import { ref, reactive, onMounted, onBeforeUnmount } from 'vue'
@@ -54,12 +54,12 @@ const cards = [
   {
     id: 'audit', kind: 'photo', title: 'A full audit log',
     text: 'Review the audit log for any record or user.',
-    img: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&q=80&auto=format&fit=crop',
+    img: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1200&q=80&auto=format&fit=crop',
   },
   {
-    id: 'offboard', kind: 'dark', title: 'One-click offboarding',
+    id: 'offboard', kind: 'photo', title: 'One-click offboarding',
     text: "Remove a departing employee's access in one click.",
-    icon: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20v-1a5 5 0 0 1 5-5h3a5 5 0 0 1 5 5v1"/><path d="M17 11h5"/>',
+    img: 'https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=1200&q=80&auto=format&fit=crop',
   },
 ]
 
@@ -80,8 +80,8 @@ onBeforeUnmount(() => io?.disconnect())
 
 <style>
 .sb, .sb * { box-sizing: border-box; }
-.sb { --pad: clamp(20px, 4vw, 96px); font-family: 'Poppins', system-ui, sans-serif; color: #0f172a; background: #fff; }
-.sb-wrap { padding: clamp(56px, 8vw, 110px) var(--pad); }
+.sb { --pad: clamp(20px, 5vw, 80px); font-family: 'Poppins', system-ui, sans-serif; color: #0f172a; background: #fff; }
+.sb-wrap { max-width: 1240px; margin: 0 auto; padding: clamp(56px, 8vw, 110px) clamp(16px, 3vw, 32px); }
 
 .sb-title {
   max-width: 20em; margin: 0; padding-bottom: 0.12em;

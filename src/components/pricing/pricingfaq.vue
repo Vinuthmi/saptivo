@@ -1,7 +1,7 @@
 <template>
   <section class="pf" aria-labelledby="pf-title">
     <div class="pf-wrap">
-      <h2 id="pf-title" class="pf-title">Pricing <em>FAQ</em></h2>
+      <h2 id="pf-title" class="pf-title">Frequently <br> <em> Asked Questions</em></h2>
 
       <div class="pf-main">
         <ul class="pf-list">
@@ -101,8 +101,8 @@ const items = [
 
 .pf-a { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.45s var(--ease); }
 .pf-a > div { overflow: hidden; min-height: 0; }
-.pf-a p { margin: 0; padding: 0 24px 24px; max-width: 58ch; font-size: clamp(14.5px, 1.08vw, 16.5px); font-weight: 400; line-height: 1.65; opacity: 0; transition: opacity 0.3s ease; }
-.pf .pf-a p { color: #52586a; }
+.pf-a p { margin: 0; padding: 0 24px 24px; max-width: 58ch; font-family: 'Urbanist', system-ui, sans-serif; font-size: 16px; font-weight: 500; line-height: 1.6; opacity: 0; transition: opacity 0.3s ease; }
+.pf .pf-a p { color: #3b3f4a; }
 .pf-item.on .pf-a { grid-template-rows: 1fr; }
 .pf-item.on .pf-a p { opacity: 1; transition-delay: 0.1s; }
 

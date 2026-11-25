@@ -167,6 +167,17 @@ const routes = [
             'Saptivo is affordable CRM software with no setup fees. Start your 14-day free trial today and see how Saptivo can help your business grow.',
         },
       },
+      {
+        path: '/reseller-program/',
+        alias: '/reseller/',
+        name: 'reseller-program',
+        component: () => import('../views/ResellerProgramView.vue'),
+        meta: {
+          title: 'Reseller Program | Saptivo',
+          description:
+            'Join the Saptivo reseller program and grow your business by offering a complete, proven CRM under your own brand.',
+        },
+      }
     ],
   },
 ]
