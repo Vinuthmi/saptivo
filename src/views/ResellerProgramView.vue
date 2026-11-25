@@ -19,8 +19,7 @@ import resellerfaq from '@/components/reseller_program/resellerfaq.vue'
     <resellerwho />
     <resellerwhitelabel />    
     <resellertiers />
-    <resellerhub />
-    <resellersupport />
+    
     <resellersteps />
     <resellerwhy />
     <resellerclients />
