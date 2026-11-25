@@ -177,6 +177,17 @@ const routes = [
           description:
             'Join the Saptivo reseller program and grow your business by offering a complete, proven CRM under your own brand.',
         },
+      },
+      {
+        path: '/reseller/signup/',
+        alias: '/reseller-signup/',
+        name: 'reseller-signup',
+        component: () => import('../views/resellersignupView.vue'),
+        meta: {
+          title: 'Become a Saptivo Reseller | Saptivo',
+          description:
+            'Apply to become a Saptivo reseller. Tell us about your business and our partner team will contact you about the next steps.',
+        },
       }
     ],
   },
