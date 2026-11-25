@@ -278,7 +278,7 @@ onBeforeUnmount(() => {
 </Transition>
         </div>
         <!-- INDUSTRIES (mega) -->
-        <div class="nav-dd" @pointerenter="openOn('industries', $event)" @pointerleave="closeSoon($event)">
+        <div class="nav-dd dd-industries" @pointerenter="openOn('industries', $event)" @pointerleave="closeSoon($event)">
           <router-link
             to="/industries/"
             class="nav-link"
@@ -313,10 +313,6 @@ onBeforeUnmount(() => {
                         <span class="mm-industry-feature-subtitle">One powerful CRM, tailored to the way you work.</span>
                       </div>
                     </div>
-                    <div class="mm-card">
-                      <img :src="menuPhotos.industriesSecond" alt="Business team working together" loading="lazy" decoding="async" @error="$event.target.style.display = 'none'" />
-                      <div class="mm-card-ov"><strong>Don't see your industry?</strong><router-link to="/contact/" class="mm-go" aria-label="Contact us" @click="closeAll"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></svg></router-link></div>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -331,6 +327,7 @@ onBeforeUnmount(() => {
           v-for="menu in simpleMenus"
           :key="menu.key"
           class="nav-dd"
+          :class="'dd-' + menu.key"
           @pointerenter="openOn(menu.key, $event)"
           @pointerleave="closeSoon($event)"
         >
@@ -1438,4 +1435,51 @@ onBeforeUnmount(() => {
   border-radius: 2px;
 }
 .tb-phone { gap: 8px; }
+/* Reseller Signup: a pill button like Book a Demo / Get Started, with a grey background. */
+.nav-shell .topbar-reseller {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  margin-block: 5px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font-family: 'Urbanist', system-ui, sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  text-decoration: none;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.nav-shell .topbar-reseller:hover { color: var(--ink); background: transparent; text-decoration: underline; text-underline-offset: 3px; }
+.nav-shell .topbar-reseller:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+/* the same grey button inside the mobile menu */
+.nav-shell .mobile-actions .reseller-btn {
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+}
+.nav-shell .mobile-actions .reseller-btn:hover { background: transparent; text-decoration: underline; text-underline-offset: 3px; transform: none; }
+/* Reseller menu: no left label column, and a narrower box so the text sits close to the photo card */
+.nav-shell .mm-reseller { width: 742px; max-width: none; }
+.nav-shell .mm-reseller .mm-grid-sm { grid-template-columns: 150px 250px 260px; gap: 16px; }
+.nav-shell .mm-reseller .mm-tabs { padding-right: 16px; }
+/* Reseller menu opens right under the Reseller link, not at the far right edge */
+.nav-shell .dd-reseller { position: relative; }
+.nav-shell .mm-reseller { left: -12px; right: auto; top: calc(100% + 8px); }
+@media (max-width: 1560px) {
+  .nav-shell .mm-reseller { width: 640px; }
+  .nav-shell .mm-reseller .mm-grid-sm { grid-template-columns: 120px 230px 220px; gap: 14px; }
+}
+/* Industries menu: compact box under the Industries link, one photo card (same as the Reseller menu) */
+.nav-shell .dd-industries { position: relative; }
+.nav-shell .mm-industries { left: -12px; right: auto; width: 960px; max-width: none; transform: none; top: calc(100% + 8px); }
+.nav-shell .mm-industries .mm-industries-grid { grid-template-columns: 150px 450px 260px; gap: 16px; }
+.nav-shell .mm-industry-cards { grid-template-columns: minmax(0, 1fr); }
+.nav-shell .mm-industries .mm-industry-feature-copy strong { font-size: 26px; }
+.nav-shell .mm-reseller .mm-tab.on, .nav-shell .mm-reseller .mm-tab:hover { background: transparent; }
 </style>
