@@ -167,6 +167,26 @@ const routes = [
             'Saptivo is affordable CRM software with no setup fees. Start your 14-day free trial today and see how Saptivo can help your business grow.',
         },
       },
+      {
+        path: '/contact/',
+        name: 'contact',
+        component: () => import('../components/Contact/Section.vue'),
+        meta: {
+          title: 'Contact Saptivo | Talk to Our Team',
+          description:
+            'Questions about Saptivo features, pricing or partnerships? Contact our team in Colombo, Sri Lanka.',
+        },
+      },
+      {
+        path: '/about/',
+        name: 'about',
+        component: () => import('../views/About.vue'),
+        meta: {
+          title: 'About Saptivo | Weblook International',
+          description:
+            'Meet Saptivo, the CRM platform built by Weblook International, a Colombo software company serving businesses since 1997.',
+        },
+      },
     ],
   },
 ]
