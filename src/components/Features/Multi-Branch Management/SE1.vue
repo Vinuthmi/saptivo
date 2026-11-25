@@ -230,7 +230,6 @@ onBeforeUnmount(() => {
   scroll-margin-top: 100px;
   padding: 112px 0;
   color: var(--ink);
-  background: #fff;
   font-family: "Urbanist", system-ui, sans-serif;
 }
 .hq *, .hq *::before, .hq *::after { box-sizing: border-box; }

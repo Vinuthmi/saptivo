@@ -352,6 +352,8 @@ h2 { font-size: clamp(34px, 3.4vw, 56px); line-height: 1.08; font-weight: 500; m
 }
 @media (max-width: 560px) {
   .si { padding: 64px 16px; }
+  .wrap { width: 100%; grid-template-columns: minmax(0, 1fr); }
+  .copy, .stage { width: 100%; min-width: 0; }
   .stage { padding: 14px 14px 26px; border-radius: 22px; }
   .ph { border-radius: 22px 22px 0 0; height: 210px; }
   .glass { left: 26px; }

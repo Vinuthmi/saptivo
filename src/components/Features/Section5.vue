@@ -33,7 +33,7 @@
 
         <div class="fee" :class="{ show: allOn }" aria-live="polite">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10" /></svg>
-          Every module added later: no upgrade fee
+          Features added later: no upgrade fee
         </div>
       </div>
 

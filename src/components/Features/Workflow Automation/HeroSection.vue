@@ -33,7 +33,7 @@ defineOptions({ name: "FeaturesHero" });
 .hero {
   --orange: #7a7f86;
   --ink: #17191d;
-  --paper: #eef1f3;
+  --paper: #fff;
   --title: clamp(46px, 4.2vw, 104px);
 
   position: relative;
@@ -55,11 +55,7 @@ defineOptions({ name: "FeaturesHero" });
   z-index: -1;
   overflow: hidden;
   pointer-events: none;
-  background:
-    linear-gradient(180deg, transparent 45%, rgba(248,246,255,0.72) 78%, #f8f6ff 100%),
-    radial-gradient(ellipse 52% 48% at 50% 38%, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.3) 44%, rgba(255,255,255,0.14) 68%, transparent 100%),
-    linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.8) clamp(240px, 32vh, 360px)),
-    linear-gradient(90deg, #dfe5e8 0%, #edf0f2 25%, #e2e7eb 50%, #edf0f2 75%, #dfe5e8 100%);
+  background: #fff;
 }
 .bg::before {
   content: "";
@@ -89,6 +85,7 @@ defineOptions({ name: "FeaturesHero" });
   -webkit-backdrop-filter: blur(3px);
   backdrop-filter: blur(3px);
 }
+.bg::after { display: none; }
 
 .content {
   position: relative;

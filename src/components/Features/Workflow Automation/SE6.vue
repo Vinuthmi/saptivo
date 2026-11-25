@@ -160,7 +160,6 @@ onBeforeUnmount(() => {
   <section ref="root" class="rh" :class="{ in: shown }">
     <div class="wrap">
       <header class="head">
-        <span class="eyebrow">Transparency</span>
         <h2><span class="l1">Full run history</span> <span class="l2">and error log</span></h2>
         <p>
           Every workflow run is logged with what triggered it and what it did. If an action fails, the error log

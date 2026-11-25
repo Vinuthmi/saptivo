@@ -10,17 +10,17 @@ const routes = [
       {
         path: '',
         name: 'home',
-        component: () => import('../views/homeView.vue')
+        component: () => import('../views/homeView.vue'),
       },
       {
         path: 'features/',
         name: 'features',
-        component: () => import('../views/featuresView.vue')
+        component: () => import('../views/featuresView.vue'),
       },
       {
         path: 'features/lead-management/',
         name: 'lead-management',
-        component: () => import('../views/LeadManagementView.vue')
+        component: () => import('../views/LeadManagementView.vue'),
       },
       {
         path: 'features/multi-branch-management/',
@@ -29,8 +29,8 @@ const routes = [
         meta: {
           title: 'Multi-Branch Management CRM | Saptivo',
           description:
-            'Manage sales, staff and stock across every location from one central Saptivo dashboard.'
-        }
+            'Manage sales, staff and stock across every location from one central Saptivo dashboard.',
+        },
       },
       {
         path: 'features/inventory-management/',
@@ -39,8 +39,8 @@ const routes = [
         meta: {
           title: 'Inventory & Multi-Warehouse Management | Saptivo',
           description:
-            'Keep inventory accurate across branches and warehouses, with stock visibility in one Saptivo system.'
-        }
+            'Keep inventory accurate across branches and warehouses, with stock visibility in one Saptivo system.',
+        },
       },
       {
         path: 'features/service-maintenance-management/',
@@ -49,8 +49,8 @@ const routes = [
         meta: {
           title: 'Service & AMC Management Software | Saptivo',
           description:
-            'Manage service contracts, scheduled visits and after-sales work with Saptivo service and AMC management software.'
-        }
+            'Manage service contracts, scheduled visits and after-sales work with Saptivo service and AMC management software.',
+        },
       },
       {
         path: 'features/help-desk/',
@@ -65,37 +65,37 @@ const routes = [
       {
         path: 'features/sales-pipeline/',
         name: 'sales-pipeline',
-        component: () => import('../views/SalesPipelineView.vue')
+        component: () => import('../views/SalesPipelineView.vue'),
       },
       {
         path: 'features/quotations-invoicing/',
         name: 'quotations-invoicing',
-        component: () => import('../views/Quotations&Invoicing.vue')
+        component: () => import('../views/Quotations&Invoicing.vue'),
       },
       {
         path: 'features/whatsapp-crm/',
         name: 'whatsapp-crm',
-        component: () => import('../views/WhatsAppCRM.vue')
+        component: () => import('../views/WhatsAppCRM.vue'),
       },
       {
         path: 'features/3cx-crm-integration/',
         name: '3CX Call Integration',
-        component: () => import('../views/3CX_Call.vue')
+        component: () => import('../views/3CX_Call.vue'),
       },
       {
         path: 'features/3CX/',
         name: '3CX Call Integration Legacy',
-        component: () => import('../views/3CX_Call.vue')
+        component: () => import('../views/3CX_Call.vue'),
       },
       {
         path: 'features/vodia-integration/',
         name: 'Vodia Integration & AI Calls',
-        component: () => import('../views/VodiaIntegration&AiCalls.vue')
+        component: () => import('../views/VodiaIntegration&AiCalls.vue'),
       },
       {
         path: 'features/workflow-automation/',
         name: 'Workflow Automation',
-        component: () => import('../views/WorkflowAutomationView.vue')
+        component: () => import('../views/WorkflowAutomationView.vue'),
       },
       {
         path: 'features/marketing-campaigns/',
@@ -134,8 +134,8 @@ const routes = [
         meta: {
           title: 'CRM Integrations | WhatsApp, 3CX, Vodia & More | Saptivo',
           description:
-            'Connect Saptivo with WhatsApp Business, 3CX, Vodia, WordPress forms, Facebook Lead Ads, Google Calendar and your own tools.'
-        }
+            'Connect Saptivo with WhatsApp Business, 3CX, Vodia, WordPress forms, Facebook Lead Ads, Google Calendar and your own tools.',
+        },
       },
       {
         path: '/industries/',
@@ -144,8 +144,8 @@ const routes = [
         meta: {
           title: 'CRM Software by Industry | Retail, Distribution, Service',
           description:
-            'Saptivo adapts to your industry: retail chains, wholesale distributors, contractors, field service companies and fast-growing startups.'
-        }
+            'Saptivo adapts to your industry: retail chains, wholesale distributors, contractors, field service companies and fast-growing startups.',
+        },
       },
       {
         path: '/security/',
@@ -154,12 +154,21 @@ const routes = [
         meta: {
           title: 'CRM Security | Data Protection | Saptivo',
           description:
-            'Your customer data is protected. Saptivo is secure CRM software hardened at every layer, from login to export, so your business data is never left unguarded.'
-        }
-      }
-
-    ]
-  }
+            'Your customer data is protected. Saptivo is secure CRM software hardened at every layer, from login to export, so your business data is never left unguarded.',
+        },
+      },
+      {
+        path: '/pricing/',
+        name: 'pricing',
+        component: () => import('../views/pricingView.vue'),
+        meta: {
+          title: 'CRM Pricing | Saptivo',
+          description:
+            'Saptivo is affordable CRM software with no setup fees. Start your 14-day free trial today and see how Saptivo can help your business grow.',
+        },
+      },
+    ],
+  },
 ]
 
 const router = createRouter({

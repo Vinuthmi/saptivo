@@ -12,7 +12,7 @@ let io = null;
 let reduce = false;
 
 const base = "/saptivo/images/features/";
-const teamPhoto = base + "smiling-coworkers-reviewing-photos-on-computer-scr-2026-09-21-14-07-13-utc.webp";
+const teamPhoto = base + "email-security-verification-with-padlock-on-green-2026-09-24-16-41-10-utc (1).jpg";
 
 const menu = [
   { k: "dash", t: "Dashboard", ic: "M4 13h6V4H4zM14 20h6V4h-6zM4 20h6v-4H4z" },
@@ -232,7 +232,6 @@ onBeforeUnmount(() => {
   --rose: #fde3ea; --rose-i: #d8567f;
   font-family: "Urbanist", system-ui, sans-serif;
   color: var(--ink);
-  background: #fff;
   padding: 96px 16px;
 }
 .wrap { max-width: 1120px; margin: 0 auto; }

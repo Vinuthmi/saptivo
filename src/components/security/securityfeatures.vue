@@ -238,7 +238,7 @@ onBeforeUnmount(() => {
 
 .sc-card {
   position: relative; isolation: isolate; overflow: hidden; scroll-snap-align: start; min-width: 0;
-  display: flex; flex-direction: column; border-radius: clamp(22px, 2.2vw, 34px); color: #fff; background: #1c1b1a; height: clamp(430px, calc(100svh - 330px), 620px); outline: none; container-type: inline-size;
+  display: flex; flex-direction: column; border-radius: clamp(22px, 2.2vw, 34px); color: #fff; background: #1c1b1a; height: clamp(540px, calc(100svh - 220px), 600px); outline: none; container-type: inline-size;
 }
 .sc-bg, .sc-img { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; display: block; }
 .sc-img { z-index: -2; object-fit: cover; transition: scale 1.2s cubic-bezier(0.2, 0.8, 0.2, 1); }
@@ -259,8 +259,8 @@ onBeforeUnmount(() => {
 .sc-descin { min-height: 0; }
 .sc-card:hover .sc-desc, .sc-card:focus-visible .sc-desc { opacity: 1; translate: 0 0; }
 .sc-card:focus-visible { box-shadow: 0 0 0 3px #71717a; }
-.sc-p { margin: 0; font-size: clamp(13.5px, 1vw, 15.5px); line-height: 1.5; }
-.sc .sc-p { color: rgba(255, 255, 255, 0.9) !important; text-shadow: 0 1px 14px rgba(0, 0, 0, 0.55); }
+.sc-p { margin: 0; font-size: clamp(12px, 3.7cqw, 15.5px); line-height: 1.5; }
+.sc .sc-p { color: #fff !important; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6), 0 2px 18px rgba(0, 0, 0, 0.75); }
 .sc-p + .sc-p { margin-top: 8px; }
 
 /* ---------- floating UI ---------- */
@@ -327,6 +327,11 @@ onBeforeUnmount(() => {
 .sc-js .sc-card { opacity: 0; translate: 0 26px; }
 .sc-in .sc-card { opacity: 1; translate: 0 0; transition: opacity 0.8s ease, translate 0.9s cubic-bezier(0.2, 0.8, 0.2, 1); transition-delay: calc(var(--i) * 0.08s); }
 
+@media (max-height: 800px) {
+  .sc-vis { padding-top: 14px; padding-bottom: 58px; gap: 6px; }
+  .sc-u { padding: 10px 12px; }
+  .sc-pill { padding: 6px 12px; }
+}
 @media (hover: none) {
   .sc-card { height: auto; min-height: 560px; }
   .sc-desc { position: static; margin: 10px 0 0; padding: 0; background: none; -webkit-backdrop-filter: none; backdrop-filter: none; opacity: 1; translate: 0 0; pointer-events: auto; }

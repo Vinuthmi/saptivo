@@ -253,7 +253,6 @@ onBeforeUnmount(() => {
   scroll-margin-top: 100px;
   padding: 112px 0;
   color: var(--ink);
-  background: #fff;
   font-family: "Inter", system-ui, sans-serif;
 }
 
