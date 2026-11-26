@@ -104,7 +104,7 @@ onBeforeUnmount(() => {
   font-family: "Poppins", system-ui, sans-serif;
   color: var(--ink);
   background: linear-gradient(180deg, #faf9ff 0%, #fff 70%);
-  padding: 120px 16px 96px;
+  padding: 184px 16px 96px;
   overflow-x: clip;
 }
 .ah *, .ah *::before, .ah *::after { box-sizing: border-box; }
@@ -114,7 +114,7 @@ onBeforeUnmount(() => {
 .in .strip { transition-delay: .12s; }
 
 .copy { text-align: center; max-width: 860px; }
-.ah h1 { margin: 0 0 26px; font-size: clamp(40px, 3.8vw, 54px) !important; font-weight: 500; line-height: 1.12; letter-spacing: -0.035em; text-wrap: balance; }
+.ah h1 { margin: 0 0 26px; font-size: clamp(38px, 5vw, 68px) !important; font-weight: 600; line-height: 1.08; letter-spacing: -0.025em; text-wrap: balance; }
 h1 span { display: block; }
 .ah h1 .l1 { color: #111111 !important; opacity: 1; }
 .ah h1 .l2 { color: #8a8f97 !important; opacity: 1; }
@@ -137,13 +137,13 @@ h1 span { display: block; }
 .rail span:last-child { color: var(--ink); }
 
 @media (max-width: 900px) {
-  .ah { padding-top: 120px; }
+  .ah { padding-top: 184px; }
   .strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .stat:nth-child(3)::before { display: none; }
   .stat:nth-child(n+3) { border-top: 1px solid var(--line); }
 }
 @media (max-width: 640px) {
-  .ah { padding: 160px 16px 64px; }
+  .ah { padding: 224px 16px 64px; }
   .ah h1 { font-size: clamp(34px, 9vw, 42px) !important; }
   .wrap { gap: 40px; }
   .strip { border-radius: 24px; }

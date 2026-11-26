@@ -56,9 +56,8 @@ defineOptions({ name: "FeaturesHero" });
   background-color: #fff;
   background-image:
     radial-gradient(ellipse 68% 55% at 50% 42%, rgba(255, 255, 255, 0.92) 0%, rgba(255, 255, 255, 0.55) 55%, rgba(255, 255, 255, 0) 100%),
-    radial-gradient(circle, rgba(23, 25, 29, 0.24) 1.15px, transparent 1.35px),
     linear-gradient(180deg, #e6edf2 0%, #f4f7f9 50%, #ffffff 100%);
-  background-size: 100% 100%, 22px 22px, 100% 100%;
+  background-size: 100% 100%, 100% 100%;
   -webkit-mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.85) 55%, rgba(0, 0, 0, 0.35) 82%, transparent 100%);
   mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.85) 55%, rgba(0, 0, 0, 0.35) 82%, transparent 100%);
 }
