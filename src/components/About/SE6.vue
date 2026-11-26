@@ -7,7 +7,6 @@ const root = ref(null);
 const shown = ref(false);
 let io = null;
 
-// Customer logos. Put the files in public/images/customers/ (or change the paths below).
 const dir = "/saptivo/images/features/";
 const customers = [
   { n: "Tree of Life Nature Resort", logo: dir + "treeoflife.png" },

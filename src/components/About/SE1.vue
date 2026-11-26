@@ -122,7 +122,7 @@ onBeforeUnmount(() => {
 <style scoped>
 .wb {
   --ink: #14120f; --muted: #666b73; --line: rgba(20, 18, 15, .1);
-  --lav: #eeeafd; --lav-i: #6a59d6;
+  --lav: #fff0df; --lav-i: #c87532;
   --sky: #e4f0fb; --sky-i: #3a7fbd;
   --mint: #dff3e8; --mint-i: #2c7a56;
   --butter: #fff4d2; --butter-i: #94700a;
@@ -150,7 +150,7 @@ h2 span { display: block; }
 .before { background: #f4f4f6; }
 .after { background: var(--lav); }
 
-.pic { position: relative; height: 190px; border-radius: 18px; overflow: hidden; background: linear-gradient(160deg, #e4ddfb, #d6e8f8); flex: none; }
+.pic { position: relative; height: 190px; border-radius: 18px; overflow: hidden; background: linear-gradient(160deg, #ffe8d1, #fff2e5); flex: none; }
 .pic img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 22%; display: block; transition: filter .6s; }
 .pic.dim img { filter: grayscale(.85) contrast(.95); }
 .pile { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 14px; padding: 6px 10px; }
