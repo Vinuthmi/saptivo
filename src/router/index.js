@@ -192,7 +192,7 @@ const routes = [
       {
         path: '/contact/',
         name: 'contact',
-        component: () => import('../components/Contact/Section.vue'),
+        component: () => import('../views/contactView.vue'),
         meta: {
           title: 'Contact Saptivo | Talk to Our Team',
           description:
