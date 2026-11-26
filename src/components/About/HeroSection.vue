@@ -61,27 +61,32 @@ onBeforeUnmount(() => {
         </p>
       </div>
 
-      <div class="tiles">
-        <div class="tile lav">
+      <div class="strip">
+        <div class="stat">
+          <span class="dt lav"></span>
           <b>1997</b>
           <small>Year Weblook was founded</small>
         </div>
-        <div class="tile sky">
-          <b>{{ brands }}<span>+</span></b>
+        <div class="stat">
+          <span class="dt sky"></span>
+          <b>{{ brands }}<span class="pl">+</span></b>
           <small>Brands around the world</small>
         </div>
-        <div class="tile mint">
+        <div class="stat">
+          <span class="dt mint"></span>
           <b>{{ products }}</b>
           <small>In-house software products</small>
         </div>
-        <div class="tile butter">
+        <div class="stat">
+          <span class="dt butter"></span>
           <b class="sm">Colombo</b>
           <small>Headquarters, Sri Lanka</small>
         </div>
-        <div class="tile ink">
-          <span class="dot"></span>
-          <b class="sm">Weblook International (Pvt) Ltd.</b>
-          <small>The company behind Saptivo</small>
+
+        <div class="rail" aria-hidden="true">
+          <span>1997</span>
+          <i><u></u></i>
+          <span>Weblook International (Pvt) Ltd.</span>
         </div>
       </div>
     </div>
@@ -98,45 +103,55 @@ onBeforeUnmount(() => {
   --rose: #fde7ed; --rose-i: #c94b73;
   font-family: "Poppins", system-ui, sans-serif;
   color: var(--ink);
-  background: #fff;
+  background: linear-gradient(180deg, #faf9ff 0%, #fff 70%);
   padding: 120px 16px 96px;
   overflow-x: clip;
 }
 .ah *, .ah *::before, .ah *::after { box-sizing: border-box; }
-.wrap { width: min(1200px, 100%); min-width: 0; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 56px; align-items: center; }
-.copy, .tiles { min-width: 0; }
-.copy, .tiles { opacity: 0; transform: translateY(14px); transition: opacity .6s ease, transform .6s ease; }
-.in .copy, .in .tiles { opacity: 1; transform: none; }
-.in .tiles { transition-delay: .12s; }
+.wrap { width: min(1100px, 100%); min-width: 0; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 56px; }
+.copy, .strip { min-width: 0; width: 100%; opacity: 0; transform: translateY(14px); transition: opacity .6s ease, transform .6s ease; }
+.in .copy, .in .strip { opacity: 1; transform: none; }
+.in .strip { transition-delay: .12s; }
 
-.ah h1 { margin: 0 0 24px; font-size: clamp(40px, 3.8vw, 54px) !important; font-weight: 500; line-height: 1.12; letter-spacing: -0.035em; text-wrap: balance; }
+.copy { text-align: center; max-width: 860px; }
+.ah h1 { margin: 0 0 26px; font-size: clamp(40px, 3.8vw, 54px) !important; font-weight: 500; line-height: 1.12; letter-spacing: -0.035em; text-wrap: balance; }
 h1 span { display: block; }
 .ah h1 .l1 { color: #111111 !important; opacity: 1; }
 .ah h1 .l2 { color: #8a8f97 !important; opacity: 1; }
-.copy p { margin: 0; font-size: 16px; line-height: 1.8; color: var(--muted); max-width: 60ch; }
+.copy p { margin: 0 auto; font-size: 16px; line-height: 1.85; color: var(--muted); max-width: 70ch; }
 
-.tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-.tile { border-radius: 24px; padding: 22px; display: flex; flex-direction: column; gap: 6px; min-height: 150px; justify-content: flex-end; }
-.tile b { font-size: clamp(34px, 3.6vw, 48px); font-weight: 500; letter-spacing: -.04em; line-height: 1; font-variant-numeric: tabular-nums; }
-.tile b span { color: var(--sky-i); }
-.tile b.sm { font-size: clamp(22px, 2.2vw, 28px); letter-spacing: -.02em; line-height: 1.2; }
-.tile small { font-size: 13px; color: var(--muted); line-height: 1.5; }
-.tile.lav { background: var(--lav); } .tile.sky { background: var(--sky); } .tile.mint { background: var(--mint); } .tile.butter { background: var(--butter); }
-.tile.ink { grid-column: 1 / -1; background: var(--ink); color: #fff; min-height: 0; position: relative; }
-.tile.ink small { color: rgba(255, 255, 255, .65); }
-.tile.ink b.sm { font-size: 20px; }
-.dot { position: absolute; top: 22px; right: 22px; width: 9px; height: 9px; border-radius: 50%; background: #7be0ae; box-shadow: 0 0 0 4px rgba(123, 224, 174, .25); }
+.strip { background: #fff; border: 1px solid var(--line); border-radius: 32px; padding: 8px 8px 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); box-shadow: 0 24px 50px -30px rgba(20, 18, 15, .25); }
+.stat { position: relative; padding: 30px 28px 28px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.stat + .stat::before { content: ""; position: absolute; left: 0; top: 28px; bottom: 28px; width: 1px; background: var(--line); }
+.dt { width: 10px; height: 10px; border-radius: 50%; margin-bottom: 6px; }
+.dt.lav { background: var(--lav-i); } .dt.sky { background: var(--sky-i); } .dt.mint { background: var(--mint-i); } .dt.butter { background: #d8b13a; }
+.stat b { font-size: clamp(34px, 3.4vw, 46px); font-weight: 500; letter-spacing: -.04em; line-height: 1; font-variant-numeric: tabular-nums; }
+.stat b.sm { font-size: clamp(26px, 2.6vw, 34px); letter-spacing: -.03em; padding-top: 4px; }
+.stat b .pl { color: var(--sky-i); }
+.stat small { font-size: 13.5px; line-height: 1.5; color: var(--muted); }
+
+.rail { grid-column: 1 / -1; display: flex; align-items: center; gap: 16px; padding: 18px 26px 20px; border-top: 1px solid var(--line); font-size: 12.5px; font-weight: 500; color: var(--muted); }
+.rail i { flex: 1; height: 2px; border-radius: 2px; background: var(--line); overflow: hidden; }
+.rail u { display: block; height: 100%; width: 0; background: var(--ink); transition: width 1.8s cubic-bezier(.3, .8, .3, 1) .4s; }
+.in .rail u { width: 100%; }
+.rail span:last-child { color: var(--ink); }
 
 @media (max-width: 900px) {
-  .wrap { grid-template-columns: 1fr; gap: 40px; }
   .ah { padding-top: 120px; }
+  .strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stat:nth-child(3)::before { display: none; }
+  .stat:nth-child(n+3) { border-top: 1px solid var(--line); }
 }
 @media (max-width: 640px) {
   .ah { padding: 160px 16px 64px; }
   .ah h1 { font-size: clamp(34px, 9vw, 42px) !important; }
-  .tile { padding: 16px; min-height: 120px; border-radius: 20px; }
+  .wrap { gap: 40px; }
+  .strip { border-radius: 24px; }
+  .stat { padding: 22px 18px; }
+  .rail { padding: 14px 18px 16px; font-size: 11.5px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .copy, .tiles { opacity: 1; transform: none; transition: none; }
+  .copy, .strip { opacity: 1; transform: none; transition: none; }
+  .rail u { width: 100%; transition: none; }
 }
 </style>

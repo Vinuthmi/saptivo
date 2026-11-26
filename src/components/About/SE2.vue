@@ -122,7 +122,7 @@ const cur = computed(() => idx.value);
   --mint: #dff3e8; --mint-i: #2c7a56;
   --butter: #fff4d2; --butter-i: #94700a;
   --rose: #fde7ed; --rose-i: #c94b73;
-  font-family: "Poppins", system-ui, sans-serif;
+  font-family: "Urbanist", system-ui, sans-serif;
   color: var(--ink);
   background: #fff;
   padding: 96px 16px;
@@ -166,7 +166,7 @@ h2 span { display: block; }
 .list button { all: unset; box-sizing: border-box; cursor: pointer; display: flex; gap: 18px; align-items: flex-start; width: 100%; padding: 22px 4px; }
 .list button:focus-visible { outline: 2px solid var(--ink); outline-offset: -2px; }
 .no { width: 28px; height: 28px; border-radius: 50%; background: #f1f2f4; color: var(--muted); display: grid; place-items: center; font-size: 12.5px; font-weight: 600; flex: none; transition: all .3s; }
-.tx { font-size: clamp(17px, 1.6vw, 21px); line-height: 1.5; letter-spacing: -.01em; color: var(--muted); transition: color .3s; }
+.tx { font-size: 16px; line-height: 1.5; letter-spacing: -.01em; color: var(--muted); transition: color .3s; }
 .list li.on .no { background: var(--ink); color: #fff; }
 .list li.on .tx { color: var(--ink); font-weight: 500; }
 

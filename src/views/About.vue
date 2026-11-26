@@ -7,6 +7,7 @@
     <SE4/>
     <SE5/>
     <SE6/>
+    <SE7/>
   </main>
 </template>
 
@@ -18,7 +19,7 @@ import SE3 from '@/components/About/SE3.vue';
 import SE4 from '@/components/About/SE4.vue';
 import SE5 from '@/components/About/SE5.vue';
 import SE6 from '@/components/About/SE6.vue';
-
+import SE7 from '@/components/About/SE7.vue';
 </script>
 
 <style scoped>
