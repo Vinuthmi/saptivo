@@ -20,6 +20,7 @@ const openMenu = ref(null) // 'features' | 'industries' | 'reseller' | null (des
 const mobileSection = ref(null) // open accordion in the mobile menu
 const activeGroup = ref(0) // active tab in the Features mega menu
 const scrolled = ref(false)
+const menuX = ref(0) // left edge of the trigger that opened a compact menu (Industries / Reseller)
 /* ---------------- ICONS (24px outline set, drawn inline so no icon package is needed) ---------------- */
 const c = (x, y, r) => `M${x - r} ${y}a${r} ${r} 0 1 0 ${2 * r} 0a${r} ${r} 0 1 0 ${-2 * r} 0`
 const ICONS = {
@@ -163,9 +164,15 @@ let closeTimer = 0
 function handleScroll() {
   scrolled.value = window.scrollY > 24
 }
+/* compact menus open right under the link that triggered them */
+function anchor(event) {
+  const el = event && event.currentTarget && event.currentTarget.closest ? event.currentTarget.closest('.nav-dd') : null
+  if (el) menuX.value = Math.round(el.getBoundingClientRect().left)
+}
 function openOn(key, event) {
   if (event && event.pointerType && event.pointerType !== 'mouse') return
   clearTimeout(closeTimer)
+  anchor(event)
   openMenu.value = key
 }
 function closeSoon(event) {
@@ -175,15 +182,16 @@ function closeSoon(event) {
     openMenu.value = null
   }, 140)
 }
-function toggleMenu(key) {
+function toggleMenu(key, event) {
   clearTimeout(closeTimer)
+  anchor(event)
   openMenu.value = openMenu.value === key ? null : key
 }
 /* Features / Industries are links to their hub pages; on touch screens the first tap opens the menu instead */
 function onHubClick(key, event) {
   if (event.pointerType && event.pointerType !== 'mouse') {
     event.preventDefault()
-    toggleMenu(key)
+    toggleMenu(key, event)
     return
   }
   closeAll()
@@ -218,7 +226,7 @@ onBeforeUnmount(() => {
 })
 </script>
 <template>
-  <header class="nav-shell" :class="{ scrolled, expanded: menuOpen }">
+  <header class="nav-shell" :class="{ scrolled, expanded: menuOpen }" :style="{ '--x': menuX + 'px' }">
     <!-- ASH TOP ROW: regional contact numbers and reseller signup -->
     <div class="topbar">
       <div class="topbar-in">
@@ -231,7 +239,7 @@ onBeforeUnmount(() => {
     </div>
     <nav class="main-bar" aria-label="Main navigation">
      <div class="bar-in">
-      <!-- BRAND (original logo, painted with a black to orange gradient through a mask, so any transparent PNG works) -->
+      <!-- BRAND (original full-colour logo) -->
       <router-link to="/" class="brand" aria-label="Saptivo CRM home" @click="closeAll">
         <span class="brand-logo" role="img" aria-label="Saptivo CRM" :style="{ '--logo': `url(${logoSrc})` }"></span>
       </router-link>
@@ -285,7 +293,7 @@ onBeforeUnmount(() => {
             :class="{ active: openMenu === 'industries' }"
             :aria-expanded="openMenu === 'industries'"
             aria-haspopup="true"
-            @focus="openMenu = 'industries'"
+            @focus="openOn('industries', $event)"
             @click="onHubClick('industries', $event)"
           >
             Industries
@@ -313,6 +321,10 @@ onBeforeUnmount(() => {
                         <span class="mm-industry-feature-subtitle">One powerful CRM, tailored to the way you work.</span>
                       </div>
                     </div>
+                    <div class="mm-card">
+                      <img :src="menuPhotos.industriesSecond" alt="Business team working together" loading="lazy" decoding="async" @error="$event.target.style.display = 'none'" />
+                      <div class="mm-card-ov"><strong>Don't see your industry?</strong><router-link to="/contact/" class="mm-go" aria-label="Contact us" @click="closeAll"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></svg></router-link></div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -337,7 +349,7 @@ onBeforeUnmount(() => {
             :class="{ active: openMenu === menu.key }"
             :aria-expanded="openMenu === menu.key"
             aria-haspopup="true"
-            @click.stop="toggleMenu(menu.key)"
+            @click.stop="toggleMenu(menu.key, $event)"
           >
             {{ menu.label }}
             <svg viewBox="0 0 16 16" class="chevron" fill="none" aria-hidden="true" :class="{ rotate: openMenu === menu.key }"><path d="m4 6 4 4 4-4" /></svg>
@@ -580,9 +592,7 @@ onBeforeUnmount(() => {
   display: block;
   width: 132px;
   height: 32px;
-  background: #000; /* logo in solid black */
-  -webkit-mask: var(--logo) left center / contain no-repeat;
-  mask: var(--logo) left center / contain no-repeat;
+  background: var(--logo) left center / contain no-repeat; /* original Saptivo logo colours */
 }
 /* =========================================================
    DESKTOP LINKS
@@ -1464,22 +1474,41 @@ onBeforeUnmount(() => {
   color: var(--ink);
 }
 .nav-shell .mobile-actions .reseller-btn:hover { background: transparent; text-decoration: underline; text-underline-offset: 3px; transform: none; }
-/* Reseller menu: no left label column, and a narrower box so the text sits close to the photo card */
-.nav-shell .mm-reseller { width: 742px; max-width: none; }
-.nav-shell .mm-reseller .mm-grid-sm { grid-template-columns: 150px 250px 260px; gap: 16px; }
-.nav-shell .mm-reseller .mm-tabs { padding-right: 16px; }
-/* Reseller menu opens right under the Reseller link, not at the far right edge */
-.nav-shell .dd-reseller { position: relative; }
-.nav-shell .mm-reseller { left: -12px; right: auto; top: calc(100% + 8px); }
-@media (max-width: 1560px) {
-  .nav-shell .mm-reseller { width: 640px; }
-  .nav-shell .mm-reseller .mm-grid-sm { grid-template-columns: 120px 230px 220px; gap: 14px; }
+/* =========================================================
+   MEGA MENUS (final, consistent rules)
+   Features: full content width. Industries and Reseller: compact panels that open
+   right under their own link (--x is set from the link position) and never leave the page gutters.
+========================================================= */
+.nav-shell .mm-industries,
+.nav-shell .mm-reseller {
+  --w: 1100px;
+  left: clamp(var(--gut), calc(var(--x, 0px) - 16px), calc(100% - var(--gut) - var(--w)));
+  right: auto;
+  width: var(--w);
+  max-width: calc(100% - 2 * var(--gut));
+  transform: none;
+  top: calc(100% + 8px);
 }
-/* Industries menu: compact box under the Industries link, one photo card (same as the Reseller menu) */
-.nav-shell .dd-industries { position: relative; }
-.nav-shell .mm-industries { left: -12px; right: auto; width: 960px; max-width: none; transform: none; top: calc(100% + 8px); }
-.nav-shell .mm-industries .mm-industries-grid { grid-template-columns: 150px 450px 260px; gap: 16px; }
-.nav-shell .mm-industry-cards { grid-template-columns: minmax(0, 1fr); }
-.nav-shell .mm-industries .mm-industry-feature-copy strong { font-size: 26px; }
-.nav-shell .mm-reseller .mm-tab.on, .nav-shell .mm-reseller .mm-tab:hover { background: transparent; }
+.nav-shell .mm-reseller { --w: 700px; }
+.nav-shell .mm-industries .mm-industries-grid { grid-template-columns: 150px 480px minmax(0, 1fr); gap: 16px; }
+.nav-shell .mm-reseller .mm-grid-sm { grid-template-columns: 130px 250px minmax(0, 1fr); gap: 16px; }
+.nav-shell .mm-reseller .mm-tabs { padding-right: 16px; }
+.nav-shell .mm-reseller .mm-tab.on,
+.nav-shell .mm-reseller .mm-tab:hover { background: transparent; }
+.nav-shell .mm-industries .mm-industry-feature-copy strong { font-size: clamp(24px, 1.8vw, 30px); }
+.nav-shell .mm-industries.mega-enter-from,
+.nav-shell .mm-industries.mega-leave-to,
+.nav-shell .mm-reseller.mega-enter-from,
+.nav-shell .mm-reseller.mega-leave-to { transform: translateY(-8px); }
+/* invisible bridge so the pointer can travel from the link into the panel */
+.nav-shell .mm-features::before,
+.nav-shell .mm-industries::before,
+.nav-shell .mm-reseller::before { content: ''; position: absolute; left: 0; right: 0; top: -12px; height: 12px; }
+@media (max-width: 1560px) {
+  .nav-shell .mm-industries { --w: 1010px; }
+  .nav-shell .mm-reseller { --w: 640px; }
+  .nav-shell .mm-industries .mm-industries-grid { grid-template-columns: 130px 440px minmax(0, 1fr); gap: 12px; }
+  .nav-shell .mm-reseller .mm-grid-sm { grid-template-columns: 120px 230px minmax(0, 1fr); gap: 14px; }
+  .nav-shell .mm-industries .mm-industry-feature-copy strong { font-size: 22px; }
+}
 </style>
