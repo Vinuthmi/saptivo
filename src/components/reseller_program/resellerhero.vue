@@ -38,7 +38,18 @@ defineProps({ applyTo: { type: String, default: '/reseller-signup/' } })
 h1 { margin: 0; font-size: clamp(38px, 5vw, 68px); font-weight: 600; line-height: 1.08; letter-spacing: -0.05em; color: #0a0a0a; text-wrap: balance; animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
 .accent { display: block; color: #6b6866; }
 
-.lead { max-width: 760px; margin: 26px 0 0; font-size: clamp(15px, 1.25vw, 17px); line-height: 1.75; color: #4a4d55; text-wrap: pretty; animation: rise 0.9s 0.1s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.lead { 
+  max-width: 760px;
+  margin: 26px 0 0;
+  font-size: clamp(15px, 1.25vw, 17px);
+  font-weight: 500;
+  line-height: 1.75;
+  letter-spacing: 0.012em;
+  color: #3d4148;
+  text-wrap: pretty;
+  animation: rise 0.9s 0.1s
+    cubic-bezier(0.2, 0.7, 0.2, 1) both; 
+  }
 
 .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 34px; animation: rise 0.9s 0.2s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
 .btn { display: inline-flex; align-items: center; justify-content: center; padding: 15px 30px; border-radius: 999px; background: #0f172a; color: #fff !important; font-size: clamp(15px, 1.1vw, 16.5px); font-weight: 500; text-decoration: none; transition: background 0.3s, transform 0.3s; }

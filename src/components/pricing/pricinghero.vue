@@ -69,10 +69,13 @@ h1 {
   max-width: 760px;
   margin: 26px 0 0;
   font-size: clamp(15px, 1.25vw, 17px);
+  font-weight: 500;
   line-height: 1.75;
-  color: #4a4d55;
+  letter-spacing: 0.012em;
+  color: #3d4148;
   text-wrap: pretty;
-  animation: rise 0.9s 0.1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation: rise 0.9s 0.1s
+    cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
 
 .actions {

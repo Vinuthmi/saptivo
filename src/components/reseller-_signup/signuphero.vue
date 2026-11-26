@@ -222,7 +222,17 @@ onBeforeUnmount(() => io?.disconnect())
 .rs-hero-wrap { display: flex; flex-direction: column; align-items: center; width: min(980px, calc(100% - 40px)); margin: 0 auto; padding: clamp(104px, 11vw, 150px) 0 clamp(36px, 5vw, 64px); }
 .rs-hero h1 { margin: 0; font-size: clamp(38px, 5vw, 68px); font-weight: 600; line-height: 1.08; letter-spacing: -0.05em; color: #0a0a0a; text-wrap: balance; animation: rs-rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
 .rs-accent { display: block; color: #6b6866; }
-.rs-lead { max-width: 760px; margin: 26px 0 0; font-size: clamp(15px, 1.25vw, 17px); line-height: 1.75; color: #4a4d55; text-wrap: pretty; animation: rs-rise 0.9s 0.1s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.rs-lead {
+  max-width: 760px;
+  margin: 26px 0 0;
+  font-size: clamp(15px, 1.25vw, 17px);
+  font-weight: 500;
+  line-height: 1.75;
+  letter-spacing: 0.012em;
+  color: #3d4148;
+  text-wrap: pretty;
+  animation: rise 0.9s 0.1s
+    cubic-bezier(0.2, 0.7, 0.2, 1) both; }
 @keyframes rs-rise { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
 
 /* ---------- form card ---------- */

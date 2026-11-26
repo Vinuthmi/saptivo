@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import MainLayout from '../layouts/MainLayout.vue'
+import { patchProp } from 'vue'
 
 const routes = [
   {
@@ -207,6 +208,57 @@ const routes = [
           title: 'About Saptivo | Weblook International',
           description:
             'Meet Saptivo, the CRM platform built by Weblook International, a Colombo software company serving businesses since 1997.',
+        },
+      },
+      {
+        path: '/industries/retail/',
+        alias: '/retail/',
+        name: 'retail',
+        component: () => import('../views/retailView.vue'),
+        meta: {
+          title: 'Retail CRM Software | Saptivo',
+          description:
+            'Saptivo is the best CRM software for retail chains and supermarkets. Manage sales, stock, staff and customers in one cloud CRM.',
+        },
+      },
+      {
+        path: '/industries/wholesale-distribution/',
+        name: 'industry-wholesale-distribution',
+        component: () => import('../views/wholesaleDistributionView.vue'),
+        meta: {
+          title: 'Wholesale & Distribution CRM | Saptivo',
+          description:
+            'Manage dealer pricing, credit, outstanding balances and stock across warehouses with Saptivo CRM.',
+        },
+      },
+      {
+        path: '/industries/contractors-services/',
+        name: 'industry-contractors-services',
+        component: () => import('../views/contractorsServicesView.vue'),
+        meta: {
+          title: 'CRM for Contractors & Services | Saptivo',
+          description:
+            'Track contractor enquiries, site visits, estimates, job documents and payments in one Saptivo CRM.',
+        },
+      },
+      {
+        path: '/industries/field-service/',
+        name: 'industry-field-service',
+        component: () => import('../views/fieldServiceView.vue'),
+        meta: {
+          title: 'Field Service & Maintenance CRM | Saptivo',
+          description:
+            'Schedule service visits, dispatch technicians, manage assets and track maintenance contracts with Saptivo.',
+        },
+      },
+      {
+        path: '/industries/startups/',
+        name: 'industry-startups',
+        component: () => import('../views/startupsView.vue'),
+        meta: {
+          title: 'CRM for Startups & SMEs | Saptivo',
+          description:
+            'Manage leads, sales pipelines and customer follow-ups with a CRM that can grow with your business.',
         },
       },
     ],
