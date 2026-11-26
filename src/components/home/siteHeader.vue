@@ -665,6 +665,7 @@ onBeforeUnmount(() => {
   border: 1px solid #e4e4e9;
   border-radius: 18px;
   background: #fff;
+  font-family: 'Urbanist', system-ui, sans-serif;
   box-shadow: 0 30px 60px -24px rgba(15, 23, 42, 0.28), 0 2px 6px rgba(15, 23, 42, 0.04);
 }
 .mm-grid {

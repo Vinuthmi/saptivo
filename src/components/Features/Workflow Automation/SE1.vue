@@ -243,7 +243,7 @@ h4 { margin: 0 0 4px; font-size: 11px; font-weight: 700; letter-spacing: .08em; 
 .hint { margin: 6px 0 0; font-size: 11px; color: #9a9fa8; text-align: center; }
 
 /* canvas */
-.canvas { position: relative; padding: 26px 22px; background-color: #fff; background-image: radial-gradient(circle, #d9d6e8 1px, transparent 1.4px); background-size: 20px 20px; overflow: hidden; }
+.canvas { position: relative; padding: 26px 22px; background-color: #fff; overflow: hidden; }
 .grid { position: relative; display: grid; grid-template-columns: 1fr 1fr; grid-template-areas: "t t" "c c" "f f" "y1 n1" "l2 ." "y2 ." "l3 ." "y3 ."; row-gap: 22px; column-gap: 24px; max-width: 560px; margin: 0 auto; }
 .a-t { grid-area: t; justify-self: center; width: min(320px, 100%); }
 .a-c { grid-area: c; justify-self: center; width: min(320px, 100%); }

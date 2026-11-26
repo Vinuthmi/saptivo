@@ -55,7 +55,6 @@ defineOptions({ name: "FeaturesHero" });
   -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 80px), transparent 100%);
   mask-image: linear-gradient(180deg, #000 calc(100% - 80px), transparent 100%);
   background:
-    radial-gradient(circle, rgba(51, 72, 93, 0.11) 1px, transparent 1.25px) 0 0 / 24px 24px,
     radial-gradient(ellipse 58% 52% at 50% 36%, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.76) 48%, rgba(255, 255, 255, 0.24) 78%, transparent 100%),
     linear-gradient(180deg, transparent 0%, #fbfdff clamp(240px, 32vh, 360px)),
     linear-gradient(90deg, #eef5fa 0%, #f7fafc 25%, #edf4f8 50%, #f7fafc 75%, #eef5fa 100%);

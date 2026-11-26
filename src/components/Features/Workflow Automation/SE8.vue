@@ -229,7 +229,7 @@ h2 span { display: block; }
 .state.tested { background: var(--sky); color: var(--sky-i); }
 .state.on { background: var(--mint); color: var(--mint-i); }
 
-.flow { padding: 22px 20px 8px; display: flex; flex-direction: column; align-items: stretch; min-height: 330px; background-image: radial-gradient(circle, #e1deee 1px, transparent 1.4px); background-size: 20px 20px; }
+.flow { padding: 22px 20px 8px; display: flex; flex-direction: column; align-items: stretch; min-height: 330px; }
 .blk { display: flex; align-items: center; gap: 12px; background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 11px 14px; box-shadow: 0 8px 22px rgba(60, 50, 120, .08); transition: border-color .35s, box-shadow .35s; }
 .blk.fresh, .acts.fresh .blk { border-color: var(--ti); box-shadow: 0 0 0 3px var(--t), 0 12px 26px rgba(60, 50, 120, .12); }
 .acts.fresh .blk { --ti: var(--mint-i); --t: var(--mint); }

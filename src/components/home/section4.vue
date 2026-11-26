@@ -869,9 +869,7 @@ onBeforeUnmount(() => {
   padding: 14px 16px;
   border: 1px solid #ffab80;
   border-radius: 14px;
-  background:
-    radial-gradient(rgba(255, 87, 34, 0.1) 1px, transparent 1.2px) 0 0 / 8px 8px,
-    #fff;
+  background: #fff;
 }
 .hero small { display: block; font-size: 9px; font-weight: 600; letter-spacing: 0.08em; color: var(--o); }
 .hero h3 { margin: 1px 0 2px; font-size: 21px; font-weight: 600; letter-spacing: -0.01em; }

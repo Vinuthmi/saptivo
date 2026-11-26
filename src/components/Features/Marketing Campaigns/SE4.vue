@@ -211,7 +211,7 @@ h2 span { display: block; }
 .st.stopped i { background: var(--mint-i); }
 
 /* flow */
-.flow { border: 1px solid var(--line); border-radius: 28px; padding: 28px; display: flex; flex-direction: column; gap: 24px; justify-content: space-between; min-width: 0; background-image: radial-gradient(rgba(20, 18, 15, .08) 1px, transparent 1px); background-size: 18px 18px; }
+.flow { border: 1px solid var(--line); border-radius: 28px; padding: 28px; display: flex; flex-direction: column; gap: 24px; justify-content: space-between; min-width: 0; }
 .rail { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; padding-top: 6px; }
 .line { position: absolute; left: 12%; right: 12%; top: 40px; height: 1.5px; background: var(--line); }
 .line i { display: block; height: 100%; background: var(--ink); transition: width .7s ease; }

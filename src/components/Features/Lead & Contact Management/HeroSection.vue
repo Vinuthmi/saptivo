@@ -54,11 +54,10 @@ defineOptions({ name: "FeaturesHero" });
   -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 80px), transparent 100%);
   mask-image: linear-gradient(180deg, #000 calc(100% - 80px), transparent 100%);
   background:
-    radial-gradient(circle, rgba(23, 25, 29, 0.24) 1.2px, transparent 1.5px),
     radial-gradient(ellipse 52% 48% at 50% 38%, #fff 0%, rgba(255, 255, 255, 0.88) 44%, rgba(255, 255, 255, 0.5) 68%, transparent 100%),
     linear-gradient(180deg, transparent 0%, #fff clamp(240px, 32vh, 360px)),
     linear-gradient(90deg, #dce5eb 0%, #edf1f4 25%, #e4ebf0 50%, #edf1f4 75%, #dce5eb 100%);
-  background-size: 18px 18px, auto, auto, auto;
+  background-size: auto, auto, auto;
 }
 .bg::after {
   content: "";
