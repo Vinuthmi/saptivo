@@ -7,6 +7,8 @@ import RetailFeatures4 from '@/components/industries/Retail & Supermarkets/secti
 import RetailFeatures5 from '@/components/industries/Retail & Supermarkets/section5.vue'
 import RetailFeatures6 from '@/components/industries/Retail & Supermarkets/section6.vue'
 import RetailFeatures7 from '@/components/industries/Retail & Supermarkets/section7.vue'
+import retailfaq from '@/components/industries/Retail & Supermarkets/faq.vue'
+
 
 </script>
 
@@ -20,5 +22,6 @@ import RetailFeatures7 from '@/components/industries/Retail & Supermarkets/secti
     <RetailFeatures5 />
     <RetailFeatures6 />
     <RetailFeatures7 />
+    <retailfaq/>
   </main>
 </template>
