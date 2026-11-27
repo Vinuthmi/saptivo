@@ -633,8 +633,7 @@ h2 :is(.soft, .l2, .accent, .grad, em) {
   display: none !important;
 }
 
-/* Keep the first heading clear of the fixed mega menu on every main page. */
-.home-page > .ih,
+/* Keep the first heading clear of the fixed mega menu on pages with custom offsets. */
 .about-page > .ah,
 .contact-page {
   padding-top: 184px !important;
@@ -647,7 +646,6 @@ h2 :is(.soft, .l2, .accent, .grad, em) {
 }
 
 @media (max-width: 767px) {
-  .home-page > .ih,
   .about-page > .ah,
   .contact-page {
     padding-top: 224px !important;

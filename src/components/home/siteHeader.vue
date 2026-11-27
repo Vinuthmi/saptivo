@@ -234,7 +234,10 @@ onBeforeUnmount(() => {
           <img :src="ph.flag" class="tb-flag" alt="" width="22" height="15" draggable="false" />
           <span class="tb-number">{{ ph.number }}</span>
         </a>
-        <router-link to="/reseller/signup/" class="topbar-reseller" @click="closeAll">Reseller Signup</router-link>
+        <div class="topbar-actions">
+          <router-link to="/reseller/login/" class="topbar-reseller topbar-login" @click="closeAll">Reseller Login</router-link>
+          <router-link to="/reseller/signup/" class="topbar-reseller" @click="closeAll">Reseller Signup</router-link>
+        </div>
       </div>
     </div>
     <nav class="main-bar" aria-label="Main navigation">
@@ -474,6 +477,7 @@ onBeforeUnmount(() => {
           </router-link>
           <!-- Actions -->
           <div class="mobile-actions">
+            <router-link to="/reseller/login/" class="reseller-btn" @click="closeAll">Reseller Login</router-link>
             <router-link to="/reseller/signup/" class="reseller-btn" @click="closeAll">Reseller Signup</router-link>
             <router-link to="/demo/" class="demo-btn" @click="closeAll">Book a Demo</router-link>
             <router-link to="/free-trial/" class="start-btn" @click="closeAll">Get Started</router-link>
@@ -497,7 +501,7 @@ onBeforeUnmount(() => {
   --ink: #0b0c0e;
   --navy: #0b0c0e;
   --accent: #ed570b; /* orange used for hovers and highlights */
-  --ash: #e6e6e9;
+  --ash: #fff4ea; /* light orange top row */
   --muted: #5d6b82;
   --beige: #d4c4a8;
   --beige-soft: #f4efe4;
@@ -1512,4 +1516,10 @@ onBeforeUnmount(() => {
   .nav-shell .mm-reseller .mm-grid-sm { grid-template-columns: 120px 230px minmax(0, 1fr); gap: 14px; }
   .nav-shell .mm-industries .mm-industry-feature-copy strong { font-size: 22px; }
 }
+/* Reseller Login + Reseller Signup sit together on the right of the top row */
+.nav-shell .topbar-actions { display: flex; align-items: center; gap: 0; margin-left: auto; }
+.nav-shell .topbar-actions .topbar-reseller { margin-left: 0; }
+.nav-shell .topbar-login { position: relative; }
+.nav-shell .topbar-login::after { content: ''; position: absolute; top: 50%; right: 0; width: 1px; height: 14px; background: rgba(11, 12, 14, 0.22); transform: translateY(-50%); }
+.nav-shell .mobile-actions .reseller-btn { grid-column: auto; }
 </style>

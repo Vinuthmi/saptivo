@@ -48,8 +48,9 @@ defineOptions({ name: 'ContactHero' });
   align-items: center;
   width: min(980px, calc(100% - 40px));
   margin: 0 auto;
+  /* small bottom space only, so the section below sits close to the intro text */
   padding: clamp(104px, 11vw, 150px) 0
-           clamp(56px, 7vw, 96px);
+           0;
 }
 
 h1 {
@@ -90,6 +91,25 @@ h1 {
   margin-top: 34px;
   animation: rise 0.9s 0.2s
     cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.actions a {
+  padding: 13px 20px;
+  border-radius: 999px;
+  color: #fff;
+  background: #ff6818;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.actions a:hover {
+  background: #e9570c;
+}
+
+.actions a:focus-visible {
+  outline: 3px solid #17191d;
+  outline-offset: 3px;
 }
 
 @keyframes rise {

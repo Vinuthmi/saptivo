@@ -1,4 +1,3 @@
-
 <template>
   <main class="contact-page">
 
@@ -549,7 +548,7 @@ function sendMessage() {
   color: var(--contact-ink);
   overflow: hidden;
 
-  padding: 0 24px 120px;
+  padding: 0 24px 64px;
 
   font-family:
     'Urbanist',
@@ -710,7 +709,7 @@ p {
 ========================================= */
 
 .info-section {
-  padding-top: 20px;
+  padding-top: 8px;
 }
 
 .info-grid {
@@ -719,7 +718,7 @@ p {
   grid-template-columns:
     repeat(3, minmax(0, 1fr));
 
-  gap: 20px;
+  gap: 12px;
 }
 
 .info-card {
@@ -967,13 +966,13 @@ p {
 ========================================= */
 
 .contact-form-section {
-  padding-top: 120px;
+  padding-top: 20px;
 
   scroll-margin-top: 90px;
 }
 
 .form-heading {
-  margin-bottom: 32px;
+  margin-bottom: 20px;
 
   text-align: center;
 }
@@ -1248,11 +1247,11 @@ p {
 ========================================= */
 
 .team-section {
-  padding-top: 120px;
+  padding-top: 20px;
 }
 
 .team-heading {
-  margin-bottom: 30px;
+  margin-bottom: 18px;
 }
 
 .team-heading h2 {
@@ -1486,7 +1485,7 @@ p {
 
   .contact-form-section,
   .team-section {
-    padding-top: 78px;
+    padding-top: 16px;
   }
 
   .form-heading h2,
