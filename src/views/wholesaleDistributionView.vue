@@ -4,6 +4,7 @@ import WholesaleFeatures from '@/components/industries/Wholesale & Distribution/
 import WholesaleFeatures2 from '@/components/industries/Wholesale & Distribution/section2.vue'
 import WholesaleFeatures3 from '@/components/industries/Wholesale & Distribution/section3.vue'
 import WholesaleFeatures4 from '@/components/industries/Wholesale & Distribution/section4.vue'
+import wholesalefaq from '@/components/industries/Wholesale & Distribution/faq.vue'
 
 </script>
 
@@ -14,6 +15,7 @@ import WholesaleFeatures4 from '@/components/industries/Wholesale & Distribution
     <WholesaleFeatures2 />
     <WholesaleFeatures3 />
     <WholesaleFeatures4 />
+    <wholesalefaq/>
   
   </main>
 </template>
