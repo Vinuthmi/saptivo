@@ -1,5 +1,11 @@
- <template>
-  <section ref="root" class="cta" :class="{ in: visible }" aria-labelledby="cta-title">
+
+<template>
+  <section
+    ref="root"
+    class="cta"
+    :class="{ in: visible }"
+    aria-labelledby="cta-title"
+  >
     <div class="bg" aria-hidden="true"></div>
 
     <div
@@ -9,6 +15,9 @@
       @pointerleave="onLeave"
     >
       <div class="left">
+
+        <!-- App download badge -->
+
         <a href="#download" class="store">
           <img
             class="qr"
@@ -24,22 +33,49 @@
           </span>
         </a>
 
+        <!-- Main content -->
+
         <div class="copy">
-          
 
-          <h2 id="cta-title">Ready to get <span>started?</span></h2>
+          <h2 id="cta-title">
+            Ready to run <br />
+            <span>every store as one?</span>
+          </h2>
 
-          <p>Download Nexa CRM for free. No credit card required.</p>
+          <p class="lead">
+            One connected workspace for customers, sales, and every
+            store you run. Work smarter, move faster and make every
+            opportunity count.
+          </p>
 
-          <a href="#contact" class="btn">
-            Get Started
-          </a>
+          <!-- Homepage CTA buttons -->
+
+          <div class="actions">
+
+            <a
+              href="mailto:hello@saptivo.com?subject=Start%20my%2014-day%20free%20trial"
+              class="btn btn-primary"
+            >
+              Get Started
+            </a>
+
+            <a
+              href="mailto:hello@saptivo.com?subject=Book%20a%20Saptivo%20demo"
+              class="btn btn-outline"
+            >
+              Book a demo
+            </a>
+
+          </div>
 
           <span class="note">
             Free to start <span>·</span> Simple to use
           </span>
+
         </div>
       </div>
+
+      <!-- Dashboard preview -->
 
       <div class="shot">
         <div class="glow"></div>
@@ -47,20 +83,23 @@
         <img
           class="dash"
           src="/images/cta-dashboard.png"
-          alt="Nexa CRM dashboard preview"
+          alt="Saptivo CRM dashboard preview"
           width="1915"
           height="907"
           draggable="false"
         />
       </div>
+
     </div>
   </section>
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from "vue";
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 
-defineOptions({ name: "CtaSection" });
+defineOptions({
+  name: 'CtaSection'
+});
 
 const root = ref(null);
 const card = ref(null);
@@ -69,30 +108,35 @@ const visible = ref(false);
 let io = null;
 let reduce = false;
 
+/* Dashboard mouse movement */
+
 function onMove(e) {
   if (reduce || !card.value) return;
 
   const r = card.value.getBoundingClientRect();
+
   const x = ((e.clientX - r.left) / r.width) * 2 - 1;
   const y = ((e.clientY - r.top) / r.height) * 2 - 1;
 
-  card.value.style.setProperty("--mx", x.toFixed(2));
-  card.value.style.setProperty("--my", y.toFixed(2));
+  card.value.style.setProperty('--mx', x.toFixed(2));
+  card.value.style.setProperty('--my', y.toFixed(2));
 }
 
 function onLeave() {
   if (!card.value) return;
 
-  card.value.style.setProperty("--mx", "0");
-  card.value.style.setProperty("--my", "0");
+  card.value.style.setProperty('--mx', '0');
+  card.value.style.setProperty('--my', '0');
 }
+
+/* Entrance animation */
 
 onMounted(() => {
   reduce = window.matchMedia(
-    "(prefers-reduced-motion: reduce)"
+    '(prefers-reduced-motion: reduce)'
   ).matches;
 
-  if (reduce || !("IntersectionObserver" in window)) {
+  if (reduce || !('IntersectionObserver' in window)) {
     visible.value = true;
     return;
   }
@@ -104,16 +148,28 @@ onMounted(() => {
         io.disconnect();
       }
     },
-    { threshold: 0.15 }
+    {
+      threshold: 0.15
+    }
   );
 
-  if (root.value) io.observe(root.value);
+  if (root.value) {
+    io.observe(root.value);
+  }
 });
 
-onBeforeUnmount(() => io?.disconnect());
+onBeforeUnmount(() => {
+  io?.disconnect();
+});
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800&display=swap');
+
+/* =========================================
+   MAIN SECTION
+========================================= */
+
 .cta {
   --orange: #33485d;
   --ink: #17191d;
@@ -123,9 +179,12 @@ onBeforeUnmount(() => io?.disconnect());
   position: relative;
   isolation: isolate;
   overflow: hidden;
+
   padding-top: clamp(55px, 8vw, 130px);
+
   background: #fff;
   color: var(--ink);
+
   font-family: 'Urbanist', sans-serif;
 }
 
@@ -136,26 +195,30 @@ onBeforeUnmount(() => io?.disconnect());
 }
 
 .cta a:focus-visible {
-  outline: 2px solid var(--orange);
+  outline: 2px solid #ff6818;
   outline-offset: 4px;
 }
 
-/* Keep the CTA section on the hero's clean white background. */
+/* =========================================
+   BACKGROUND
+========================================= */
 
 .bg {
   position: absolute;
   inset: 0;
   z-index: -1;
+
   overflow: hidden;
   pointer-events: none;
 
   background: #fff;
 }
 
-/* Gradual white fluted-glass lines */
+/* Fluted glass lines */
 
 .bg::after {
-  content: "";
+  content: '';
+
   position: absolute;
   inset: 0;
 
@@ -202,25 +265,36 @@ onBeforeUnmount(() => io?.disconnect());
   backdrop-filter: blur(3px);
 }
 
-/* Main card */
+/* =========================================
+   MAIN CARD
+========================================= */
 
 .card {
   --mx: 0;
   --my: 0;
 
+  position: relative;
+
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  position: relative;
+
   width: calc(100% - var(--gutter) * 2);
   min-height: clamp(500px, 38vw, 690px);
+
   margin: 0 auto;
+
   overflow: hidden;
 
   background: #fff;
+
   border: 1px solid rgba(51, 72, 93, 0.12);
   border-bottom: 0;
-  border-radius: clamp(24px, 2.5vw, 42px)
-    clamp(24px, 2.5vw, 42px) 0 0;
+
+  border-radius:
+    clamp(24px, 2.5vw, 42px)
+    clamp(24px, 2.5vw, 42px)
+    0
+    0;
 
   box-shadow: 0 -10px 45px rgba(23, 25, 29, 0.05);
 
@@ -237,15 +311,19 @@ onBeforeUnmount(() => io?.disconnect());
   transform: translateY(0);
 }
 
-/* Left content */
+/* =========================================
+   LEFT CONTENT
+========================================= */
 
 .left {
   position: relative;
   z-index: 2;
+
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
+
   gap: 48px;
   min-width: 0;
 
@@ -256,22 +334,30 @@ onBeforeUnmount(() => io?.disconnect());
     clamp(24px, 4.5vw, 78px);
 }
 
-/* Glass download badge */
+/* =========================================
+   APP DOWNLOAD BADGE
+========================================= */
 
 .store {
   display: inline-flex;
   align-items: center;
+
   gap: 16px;
+
   max-width: 100%;
+
   padding: 12px 20px 12px 12px;
 
   color: inherit;
   text-decoration: none;
+
   background: rgba(255, 255, 255, 0.78);
+
   border: 1px solid rgba(0, 0, 0, 0.07);
   border-radius: 18px;
 
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.035);
+
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
 
@@ -283,22 +369,29 @@ onBeforeUnmount(() => io?.disconnect());
 
 .store:hover {
   transform: translateY(-3px);
+
   border-color: rgba(51, 72, 93, 0.25);
+
   box-shadow: 0 12px 30px rgba(23, 25, 29, 0.08);
 }
 
 .qr {
   display: block;
+
   width: clamp(58px, 5vw, 82px);
   height: auto;
+
   flex-shrink: 0;
+
   border-radius: 9px;
+
   image-rendering: pixelated;
 }
 
 .store-text {
   display: flex;
   flex-direction: column;
+
   gap: 7px;
 }
 
@@ -310,45 +403,33 @@ onBeforeUnmount(() => io?.disconnect());
 
 .store-text span {
   color: var(--muted);
+
   font-size: clamp(12px, 0.95vw, 15px);
 }
 
-/* Heading and copy */
+/* =========================================
+   HEADING AND DESCRIPTION
+========================================= */
 
 .copy {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+
   width: 100%;
+
   padding-right: 20px;
-}
-
-.eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  margin-bottom: 22px;
-
-  color: #747474;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.13em;
-}
-
-.dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--orange);
-  box-shadow: 0 0 0 5px rgba(51, 72, 93, 0.10);
 }
 
 .copy h2 {
   max-width: 570px;
+
   margin: 0;
 
   color: #0f172a;
+
   font-family: 'Urbanist', system-ui, sans-serif;
+
   font-size: clamp(46px, 4vw, 76px);
   font-weight: 500;
   line-height: 1.12;
@@ -356,138 +437,240 @@ onBeforeUnmount(() => io?.disconnect());
 }
 
 .copy h2 span {
-  /* negative letter-spacing shrinks the last glyph's box, so the clipped gradient cut off the "?" */
   padding: 0 0.12em 0.1em 0;
   margin-right: -0.12em;
+
   background: none;
   background-clip: text;
   -webkit-background-clip: text;
+
   color: #33485d;
   -webkit-text-fill-color: #33485d;
 }
 
-.copy p {
-  max-width: 390px;
-  margin: 20px 0 0;
+/* =========================================
+   DESCRIPTION — INTEGRATIONS HERO STYLE
+========================================= */
 
-  color: #475569;
+.cta .copy .lead {
+  max-width: 390px;
+
+  margin: 26px 0 0;
+
   font-family: 'Urbanist', system-ui, sans-serif;
-  font-size: clamp(15px, 1vw, 18px);
+
+  font-size: clamp(15px, 1.25vw, 17px);
   font-weight: 500;
-  line-height: 1.45;
-  letter-spacing: -0.02em;
+  line-height: 1.75;
+  letter-spacing: 0.012em;
+
+  color: #3d4148 !important;
+  -webkit-text-fill-color: #3d4148 !important;
+
+  text-align: left;
+  text-wrap: pretty;
 }
 
-/* CTA button */
+/* =========================================
+   HOMEPAGE CTA BUTTONS
+========================================= */
 
-.btn {
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+
+  gap: 12px;
+
+  width: 100%;
+
+  margin-top: 30px;
+}
+
+/* Shared button styles */
+
+.cta .actions .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+
   gap: 12px;
 
   min-height: 54px;
-  margin-top: 30px;
+
+  margin: 0;
   padding: 0 24px;
 
-  color: #fff;
-  background: #17191d;
-  border: 1px solid #17191d;
   border-radius: 12px;
+
+  font-family: 'Urbanist', system-ui, sans-serif;
 
   font-size: 15px;
   font-weight: 600;
+
   text-decoration: none;
+  white-space: nowrap;
 
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+  cursor: pointer;
 
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
 }
 
-.btn .arrow {
-  display: inline-block;
-  transition: transform 0.25s;
-}
-
-.btn:hover {
+.cta .actions .btn:hover {
   transform: translateY(-2px);
-  background: #000;
-  border-color: #000;
-  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.24);
 }
 
-.cta .btn,
-.cta .btn:hover {
-  background: #17191d !important;
-  border-color: #17191d !important;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18) !important;
+/* Primary button — orange gradient */
+
+.cta .actions .btn-primary {
+  color: #fff !important;
+
+  background: linear-gradient(
+    135deg,
+    #ff8126 0%,
+    #ff6b00 55%,
+    #d94d00 100%
+  ) !important;
+
+  background-image: linear-gradient(
+    135deg,
+    #ff8126 0%,
+    #ff6b00 55%,
+    #d94d00 100%
+  ) !important;
+
+  border: 1px solid #f66a0a !important;
+
+  box-shadow:
+    0 4px 14px rgba(0, 0, 0, 0.15) !important;
 }
 
-.cta .btn:hover {
-  background: #000 !important;
-  border-color: #000 !important;
-  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.24) !important;
+.cta .actions .btn-primary:hover {
+  color: #fff !important;
+
+  background: linear-gradient(
+    135deg,
+    #ff8c36 0%,
+    #f76500 50%,
+    #c94500 100%
+  ) !important;
+
+  background-image: linear-gradient(
+    135deg,
+    #ff8c36 0%,
+    #f76500 50%,
+    #c94500 100%
+  ) !important;
+
+  border-color: #f66a0a !important;
 }
 
-.btn:hover .arrow {
-  transform: rotate(45deg);
+/* Secondary button — black */
+
+.cta .actions .btn-outline {
+  color: #fff !important;
+
+  background: #000000 !important;
+  background-image: none !important;
+
+  border: 1px solid #000000 !important;
+
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+
+  box-shadow: none !important;
 }
+
+.cta .actions .btn-outline:hover {
+  color: #fff !important;
+
+  background: #1c1c1c !important;
+  border-color: #1c1c1c !important;
+}
+
+/* =========================================
+   SUPPORT NOTE
+========================================= */
 
 .note {
   margin-top: 20px;
+
   color: #8a8b91;
+
   font-size: 12px;
 }
 
 .note span {
   padding: 0 6px;
+
   color: var(--orange);
 }
 
-/* Dashboard presentation */
+/* =========================================
+   DASHBOARD PRESENTATION
+========================================= */
 
-/* Fades the card's bottom edge into the white footer */
+/* Fade into white footer */
+
 .card::after {
-  content: "";
+  content: '';
+
   position: absolute;
   inset: auto 0 0;
+
   z-index: 3;
+
   height: 9%;
+
   background: linear-gradient(
     180deg,
     rgba(255, 255, 255, 0) 0%,
     rgba(255, 255, 255, 0.45) 60%,
     #fff 100%
   );
+
   pointer-events: none;
 }
 
 .shot {
   position: relative;
+
   min-width: 0;
   min-height: 400px;
 }
 
 .glow {
   position: absolute;
+
   top: 18%;
   left: 15%;
+
   width: 75%;
   height: 60%;
 
   border-radius: 50%;
+
   background: rgba(51, 72, 93, 0.12);
+
   filter: blur(75px);
+
   pointer-events: none;
 }
 
 .dash {
   position: absolute;
+
   z-index: 1;
+
   top: 9%;
   left: 2%;
 
   display: block;
+
   width: 175%;
   max-width: none;
   height: auto;
@@ -522,22 +705,28 @@ onBeforeUnmount(() => io?.disconnect());
   transition: transform 0.2s ease-out;
 }
 
-/* Tablet */
+/* =========================================
+   TABLET
+========================================= */
 
 @media (max-width: 900px) {
+
   .cta {
     --gutter: 18px;
   }
 
   .card {
     grid-template-columns: 1fr;
+
     min-height: auto;
+
     border-bottom: 1px solid rgba(51, 72, 93, 0.12);
     border-radius: 26px;
   }
 
   .left {
     gap: 42px;
+
     padding: 30px 26px 10px;
   }
 
@@ -547,17 +736,20 @@ onBeforeUnmount(() => io?.disconnect());
 
   .copy h2 {
     max-width: 520px;
+
     font-size: clamp(46px, 7vw, 68px);
   }
 
   .shot {
     min-height: 0;
+
     height: clamp(260px, 55vw, 430px);
   }
 
   .dash {
     top: 12px;
     left: 7%;
+
     width: 120%;
 
     transform:
@@ -573,23 +765,52 @@ onBeforeUnmount(() => io?.disconnect());
       rotateY(7deg)
       rotateZ(-1deg);
   }
+
 }
 
-/* Mobile */
+/* =========================================
+   SMALL TABLET
+========================================= */
+
+@media (max-width: 760px) {
+
+  .actions {
+    gap: 10px;
+
+    margin-top: 24px;
+  }
+
+  .cta .actions .btn {
+    min-height: 50px;
+
+    padding: 0 20px;
+
+    font-size: 14px;
+  }
+
+}
+
+/* =========================================
+   MOBILE
+========================================= */
 
 @media (max-width: 480px) {
+
   .cta {
     padding-top: 45px;
   }
 
   .left {
     gap: 38px;
+
     padding: 22px 18px 8px;
   }
 
   .store {
     gap: 12px;
+
     padding: 10px;
+
     border-radius: 14px;
   }
 
@@ -605,24 +826,34 @@ onBeforeUnmount(() => io?.disconnect());
     font-size: 11px;
   }
 
-  .eyebrow {
-    margin-bottom: 18px;
-    font-size: 9px;
-  }
-
   .copy h2 {
     font-size: clamp(38px, 10vw, 48px);
   }
 
-  .copy p {
+  .cta .copy .lead {
     margin-top: 14px;
   }
 
-  .btn {
-    min-height: 50px;
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+
+    gap: 10px;
+
     margin-top: 24px;
+  }
+
+  .cta .actions .btn {
+    width: 100%;
+    min-height: 50px;
+
     padding: 0 20px;
+
     font-size: 14px;
+  }
+
+  .note {
+    margin-top: 16px;
   }
 
   .shot {
@@ -632,18 +863,22 @@ onBeforeUnmount(() => io?.disconnect());
   .dash {
     top: 20px;
     left: 4%;
+
     width: 135%;
   }
+
 }
 
-/* Accessibility */
+/* =========================================
+   REDUCED MOTION
+========================================= */
 
 @media (prefers-reduced-motion: reduce) {
+
   .card,
   .dash,
   .store,
-  .btn,
-  .btn .arrow {
+  .cta .actions .btn {
     transition: none !important;
   }
 
@@ -654,5 +889,11 @@ onBeforeUnmount(() => io?.disconnect());
     opacity: 1;
     transform: none;
   }
+
+  .cta .actions .btn:hover,
+  .store:hover {
+    transform: none;
+  }
+
 }
 </style>

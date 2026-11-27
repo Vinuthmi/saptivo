@@ -38,7 +38,7 @@ const isSection6Preview = computed(() => route.query.preview === 'section6')
       <Sectionwhy />
       <FAQ />
       <Section11 />
-      <FooterCta />
+    
     </template>
   </main>
 </template>
