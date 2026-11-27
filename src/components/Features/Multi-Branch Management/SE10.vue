@@ -191,10 +191,10 @@ onBeforeUnmount(() => {
 .title {
   margin: 0 auto; width: min(900px, calc(100% - 40px)); text-align: center; text-wrap: balance;
   font-size: clamp(34px, 3.6vw, 56px); font-weight: 500; line-height: 1.15;
-  letter-spacing: -0.03em; color: var(--ink);
+  letter-spacing: -0.03em; color: #000000;
 }
 .title span { display: block; }
-.title .soft { color: var(--muted); }
+.title .soft { color: #8a8f97; }
 
 .grid {
   width: min(1180px, calc(100% - 40px)); margin: 64px auto 0;

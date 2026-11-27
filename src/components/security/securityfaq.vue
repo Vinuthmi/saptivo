@@ -24,9 +24,12 @@
           </li>
         </ul>
 
-        <div class="pf-cta">
-          <router-link :to="contactTo" class="pf-btn pf-btn-d">Ask our team about security</router-link>
-        </div>
+        <FaqCallout
+          primary-label="Ask our team about security"
+          :primary-to="contactTo"
+          secondary-label="Start your free trial"
+          secondary-to="/demo/"
+        />
       </div>
     </div>
   </section>
@@ -40,6 +43,7 @@ defineOptions({ name: 'PricingFaq' })
 - The CTA link defaults to /contact/ — pass `contact-to` or edit the default. SSR safe.
  */
 import { ref } from 'vue'
+import FaqCallout from '@/components/shared/FaqCallout.vue'
 
 defineProps({
   contactTo: { type: String, default: '/contact/' },

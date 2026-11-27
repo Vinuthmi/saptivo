@@ -237,9 +237,9 @@ onBeforeUnmount(() => {
 .mono { font-variant-numeric: tabular-nums; }
 
 .head { width: min(780px, calc(100% - 40px)); margin: 0 auto; text-align: center; }
-.title { margin: 0 0 22px; font-size: clamp(36px, 4.6vw, 66px); font-weight: 500; line-height: 1.1; letter-spacing: -0.04em; text-wrap: balance; }
+.title { margin: 0 0 22px; font-size: clamp(36px, 4.6vw, 66px); font-weight: 500; line-height: 1.1; letter-spacing: -0.04em; text-wrap: balance; color: #000000; }
 .title span { display: block; }
-.title .soft { color: var(--muted); }
+.title .soft { color: #8a8f97; }
 .head p { margin: 0 auto; max-width: 62ch; font-size: 16.5px; line-height: 1.75; color: var(--muted); }
 
 /* ---------- window ---------- */

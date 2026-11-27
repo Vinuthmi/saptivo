@@ -24,9 +24,12 @@
           </li>
         </ul>
 
-        <div class="pf-cta">
-          <router-link :to="applyTo" class="pf-btn pf-btn-d">Apply to become a reseller</router-link>
-        </div>
+        <FaqCallout
+          primary-label="Apply to become a reseller"
+          :primary-to="applyTo"
+          secondary-label="Start your free trial"
+          secondary-to="/demo/"
+        />
       </div>
     </div>
   </section>
@@ -40,6 +43,7 @@ defineOptions({ name: 'PricingFaq' })
 - The CTA link defaults to /contact/ — pass `apply-to` or edit the default. SSR safe.
  */
 import { ref } from 'vue'
+import FaqCallout from '@/components/shared/FaqCallout.vue'
 
 defineProps({
   applyTo: { type: String, default: '/contact/' },

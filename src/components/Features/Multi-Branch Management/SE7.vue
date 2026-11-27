@@ -191,7 +191,7 @@ onBeforeUnmount(() => {
 .head { text-align: center; max-width: 780px; margin: 0 auto 44px; }
 h2 { margin: 0; font-size: clamp(34px, 3.8vw, 56px); font-weight: 500; line-height: 1.12; letter-spacing: -0.035em; text-wrap: balance; }
 h2 span { display: block; }
-.ms h2 .l1 { color: #111111 !important; opacity: 1; }
+.ms h2 .l1 { color: #000000 !important; opacity: 1; }
 .ms h2 .l2 { color: #8a8f97 !important; opacity: 1; }
 
 .head, .board { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s ease; }

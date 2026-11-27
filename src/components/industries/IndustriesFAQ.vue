@@ -35,7 +35,10 @@
           </li>
         </ul>
 
-        <a class="fq-cta" :href="ctaHref">Book an industry demo</a>
+        <FaqCallout
+          primary-label="Book an industry demo"
+          :primary-to="ctaHref"
+        />
       </div>
     </div>
   </section>
@@ -52,6 +55,7 @@ defineProps({
  * Matches SectionHero / SectionWhy: Poppins, orange accent, same heading style.
  */
 import { ref } from 'vue'
+import FaqCallout from '@/components/shared/FaqCallout.vue'
 
 const open = ref(0)
 const faqImage = `${import.meta.env.BASE_URL}images/features/threecolleagues-.jpg`

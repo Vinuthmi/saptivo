@@ -24,9 +24,10 @@
           </li>
         </ul>
 
-        <div class="pf-cta">
-          <router-link :to="demoTo" class="pf-btn pf-btn-d">See integrations in a live demo</router-link>
-        </div>
+        <FaqCallout
+          primary-label="See integrations in a live demo"
+          :primary-to="demoTo"
+        />
       </div>
     </div>
   </section>
@@ -40,6 +41,7 @@ defineOptions({ name: 'PricingFaq' })
 - The CTA link defaults to /demo/ — pass `demo-to` or edit the default. SSR safe.
  */
 import { ref } from 'vue'
+import FaqCallout from '@/components/shared/FaqCallout.vue'
 
 defineProps({
   demoTo: { type: String, default: '/demo/' },

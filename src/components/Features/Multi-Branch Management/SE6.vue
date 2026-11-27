@@ -192,7 +192,7 @@ onBeforeUnmount(() => {
 .head { text-align: center; max-width: 820px; margin: 0 auto 44px; }
 h2 { margin: 0 0 18px; font-size: clamp(34px, 3.8vw, 56px); font-weight: 500; line-height: 1.12; letter-spacing: -0.035em; text-wrap: balance; }
 h2 span { display: block; }
-.gc h2 .l1 { color: #111111 !important; opacity: 1; }
+.gc h2 .l1 { color: #000000 !important; opacity: 1; }
 .gc h2 .l2 { color: #8a8f97 !important; opacity: 1; }
 .head p { margin: 0; font-size: 16.5px; line-height: 1.75; color: var(--muted); }
 

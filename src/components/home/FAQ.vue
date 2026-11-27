@@ -24,10 +24,7 @@
           </li>
         </ul>
 
-        <div class="pf-cta">
-          <router-link :to="trialTo" class="pf-btn pf-btn-d">Start your free trial</router-link>
-          <a :href="phoneHref" class="pf-btn">Talk to our team: 0112 000 569</a>
-        </div>
+        <FaqCallout :primary-to="trialTo" />
       </div>
     </div>
   </section>
@@ -41,6 +38,7 @@ defineOptions({ name: 'PricingFaq' })
 - The trial CTA defaults to /demo/ and the phone CTA defaults to tel:0112000569 — pass `trial-to` / `phone-href` or edit the defaults. SSR safe.
  */
 import { ref } from 'vue'
+import FaqCallout from '@/components/shared/FaqCallout.vue'
 
 defineProps({
   trialTo: { type: String, default: '/demo/' },
