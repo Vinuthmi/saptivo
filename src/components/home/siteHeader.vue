@@ -714,7 +714,7 @@ onBeforeUnmount(() => {
 }
 .mm-tab:hover {
   color: var(--navy);
-  background: #f6f6f8;
+  background: #fff1e6;
 }
 .mm-tab.on {
   color: var(--navy);
@@ -787,7 +787,7 @@ onBeforeUnmount(() => {
   line-height: 1.45;
 }
 .mm-it:hover {
-  background: #f3f3f5;
+  background: #fff1e6;
 }
 .mm-it:hover .ic {
   stroke: var(--accent);
@@ -1181,7 +1181,7 @@ onBeforeUnmount(() => {
   transition: background .2s ease, color .2s ease;
 }
 .mm-hub-link:hover,
-.mm-hub-link:focus-visible { background: #f1f1f4; color: var(--ink); }
+.mm-hub-link:focus-visible { background: #fff1e6; color: var(--ink); }
 .mm-feature-columns { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: 8px; align-content: start; }
 .mm-feature-column { display: flex; flex-direction: column; gap: 19px; min-width: 0; }
 .mm-feature-column .mm-it { padding: 12px 4px; gap: 10px; }
