@@ -42,7 +42,11 @@ const clients = [
 <style scoped>
 .trusted-brands {
   position: relative;
-  width: min(1240px, calc(100% - 16px));
+  /* full width, with a little space on the left and right */
+  --side: clamp(16px, 3vw, 48px);
+  --scale: 1.4;
+  width: calc(100% - 2 * var(--side));
+  max-width: 1800px;
   margin: clamp(36px, 5vw, 72px) auto;
 }
 
@@ -75,24 +79,39 @@ const clients = [
   min-width: 0;
   overflow-x: auto;
   align-items: center;
-  gap: 8px;
+  gap: 0;
   scrollbar-width: none;
   margin: 40px 0 0;
+  padding: 0;
   list-style: none;
 }
 
 .trusted-logos li {
+  position: relative;
+  box-sizing: border-box;
   display: flex;
   flex: 1 1 0;
   min-width: 0;
   align-items: center;
   justify-content: center;
-  height: 88px;
-  padding: 0 6px;
+  height: 104px;
+  padding: 0 clamp(8px, 1vw, 16px);
+}
+
+/* divider between logos */
+.trusted-logos li + li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 1px;
+  height: 36px;
+  transform: translateY(-50%);
+  background: #d8dbe1;
 }
 
 .trusted-logos li.trusted-logo-autosale {
-  flex: 0 0 132px;
+  flex: 0 0 auto;
 }
 
 .trusted-logos li > span {
@@ -107,7 +126,7 @@ const clients = [
 
 .trusted-logos img {
   display: block;
-  width: min(var(--dw), calc((100vw - 132px) / 9));
+  width: calc(var(--dw) * var(--scale));
   max-width: 100%;
   height: auto;
   object-fit: contain;
@@ -122,27 +141,29 @@ const clients = [
 }
 
 .trusted-logos li.trusted-logo-autosale img {
-  width: min(var(--dw), 100%);
+  width: calc(var(--dw) * var(--scale));
 }
 
 @media (max-width: 900px) {
   .trusted-logos li {
-    height: 68px;
+    height: 80px;
   }
 }
 
 @media (max-width: 640px) {
   .trusted-logos li {
     flex: 0 0 auto;
-    height: 68px;
+    height: 80px;
+    padding: 0 18px;
   }
 
-  .trusted-logos img {
-    width: calc(var(--dw) * 0.7);
-  }
-
+  .trusted-logos img,
   .trusted-logos li.trusted-logo-autosale img {
-    width: calc(var(--dw) * 0.7);
+    width: calc(var(--dw) * 0.95);
+  }
+
+  .trusted-logos li + li::before {
+    height: 28px;
   }
 }
 </style>

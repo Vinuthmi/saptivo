@@ -40,7 +40,7 @@
     <section class="info-section" aria-label="Contact details">
       <div class="info-grid">
 
-        <!-- CARD 1: PHONE NUMBERS AND EMAIL -->
+        <!-- CARD 1: PHONE NUMBERS -->
 
         <div class="info-card info-contact-card">
 
@@ -82,14 +82,6 @@
 
               </div>
             </div>
-
-            <a
-              class="info-row"
-              href="mailto:info@weblook.com"
-            >
-              <small>EMAIL</small>
-              <strong>info@weblook.com</strong>
-            </a>
 
           </div>
         </div>
@@ -163,7 +155,7 @@
       <div class="form-heading">
 
         <h2 id="form-title">
-          Let’s talk about your business.
+          Let’s talk <em>about your business.</em>
         </h2>
 
         <p>
@@ -369,7 +361,7 @@
       <div class="team-heading">
 
         <h2 id="team-title">
-          Which team should I contact?
+          Which team <em>should I contact?</em>
         </h2>
 
       </div>
@@ -377,36 +369,39 @@
       <div class="team-grid">
 
         <article
-          v-for="(t, i) in teams"
+          v-for="t in teams"
           :key="t.name"
           class="team-card"
         >
 
-          <span class="team-number">
-            0{{ i + 1 }}
-          </span>
+          <img
+            v-if="t.image && !teamImgFailed[t.name]"
+            class="team-img"
+            :src="t.image"
+            alt=""
+            loading="lazy"
+            decoding="async"
+            draggable="false"
+            @error="teamImgFailed[t.name] = true"
+          />
 
-          <span class="team-symbol" aria-hidden="true">
-            <svg viewBox="0 0 24 24">
-              <path :d="t.icon" />
-            </svg>
-          </span>
+          <span class="team-shade" aria-hidden="true"></span>
 
-          <h3>{{ t.name }}</h3>
+          <div class="team-body">
 
-          <p>{{ t.text }}</p>
+            <h3>{{ t.name }}</h3>
 
-          <a
-            :href="`mailto:info@weblook.com?subject=${encodeURIComponent(t.subject)}`"
-          >
+            <p>{{ t.text }}</p>
 
-            {{ t.cta }}
+            <a
+              :href="`mailto:info@weblook.com?subject=${encodeURIComponent(t.subject)}`"
+            >
 
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M5 12h14M13 6l6 6-6 6" />
-            </svg>
+              {{ t.cta }}
 
-          </a>
+            </a>
+
+          </div>
 
         </article>
 
@@ -475,27 +470,30 @@ const mapEmbedUrl =
    CONTACT TEAMS
 ========================================= */
 
+/* Replace these image paths with your own photos */
+const teamImgFailed = reactive({})
+
 const teams = [
   {
     name: 'Sales',
     text: 'Pricing, plans, demos and moving from another CRM.',
     cta: 'Talk to sales',
     subject: 'Sales enquiry',
-    icon: 'M3 17l6-6 4 4 8-8M15 7h6v6'
+    image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&q=80&auto=format&fit=crop'
   },
   {
     name: 'Support',
     text: 'Help for existing Saptivo customers.',
     cta: 'Contact support',
     subject: 'Customer support',
-    icon: 'M4 14v-2a8 8 0 0 1 16 0v2M4 14h3v5H5a1 1 0 0 1-1-1zM20 14h-3v5h2a1 1 0 0 0 1-1zM17 19c0 1.5-2 2-5 2'
+    image: '/saptivo/images/features/smiling-woman-answers-landline-phone-in-office-2026-09-24-08-00-48-utc.webp'
   },
   {
     name: 'Partnerships',
     text: 'Our reseller and white-label program.',
     cta: 'Explore partnerships',
     subject: 'Partnership enquiry',
-    icon: 'M12 5v14M5 12h14'
+    image: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1200&q=80&auto=format&fit=crop'
   }
 ]
 
@@ -548,7 +546,7 @@ function sendMessage() {
   color: var(--contact-ink);
   overflow: hidden;
 
-  padding: 0 24px 64px;
+  padding: 0 24px 120px;
 
   font-family:
     'Urbanist',
@@ -709,7 +707,7 @@ p {
 ========================================= */
 
 .info-section {
-  padding-top: 8px;
+  padding-top: 20px;
 }
 
 .info-grid {
@@ -718,7 +716,7 @@ p {
   grid-template-columns:
     repeat(3, minmax(0, 1fr));
 
-  gap: 12px;
+  gap: 20px;
 }
 
 .info-card {
@@ -828,14 +826,14 @@ p {
   display: flex;
   flex-direction: column;
 
-  gap: 12px;
+  gap: 18px;
 }
 
 .phone-list {
   display: flex;
   flex-direction: column;
 
-  gap: 11px;
+  gap: 22px;
 }
 
 .phone-item {
@@ -966,13 +964,13 @@ p {
 ========================================= */
 
 .contact-form-section {
-  padding-top: 20px;
+  padding-top: 120px;
 
   scroll-margin-top: 90px;
 }
 
 .form-heading {
-  margin-bottom: 20px;
+  margin-bottom: 36px;
 
   text-align: center;
 }
@@ -1247,17 +1245,55 @@ p {
 ========================================= */
 
 .team-section {
-  padding-top: 20px;
+  padding-top: 120px;
 }
 
 .team-heading {
-  margin-bottom: 18px;
+  margin-bottom: 36px;
 }
 
 .team-heading h2 {
-  max-width: 660px;
-
   margin-bottom: 0;
+}
+
+/* section H2 style (same as the other pages) */
+.contact-page .form-heading h2,
+.contact-page .team-heading h2 {
+  max-width: 20em;
+  margin: 0;
+  padding-bottom: 0.12em;
+
+  color: #0f172a !important;
+
+  font-family: 'Urbanist', system-ui, sans-serif;
+  font-size: clamp(30px, 4vw, 58px);
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -0.055em;
+
+  text-wrap: balance;
+}
+
+.contact-page .form-heading h2 {
+  margin-inline: auto;
+}
+
+.contact-page .form-heading h2 em,
+.contact-page .team-heading h2 em {
+  font-style: normal;
+
+  background: linear-gradient(
+    100deg,
+    #a1a1aa 0%,
+    #8b8b93 50%,
+    #6f6f78 100%
+  );
+
+  -webkit-background-clip: text;
+  background-clip: text;
+
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
 }
 
 .team-grid {
@@ -1271,98 +1307,125 @@ p {
 
 .team-card {
   position: relative;
+  isolation: isolate;
 
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  justify-content: flex-end;
 
-  min-height: 250px;
+  min-height: 340px;
+
+  overflow: hidden;
+
+  border-radius: 26px;
+
+  background: linear-gradient(150deg, #4a5667, #14243a);
+}
+
+.team-img {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  transition: scale 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.team-card:hover .team-img {
+  scale: 1.05;
+}
+
+.team-shade {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+  background: linear-gradient(
+    180deg,
+    rgba(8, 11, 16, 0.12) 0%,
+    rgba(8, 11, 16, 0.55) 50%,
+    rgba(8, 11, 16, 0.9) 100%
+  );
+}
+
+.team-body {
+  position: relative;
+  z-index: 2;
 
   padding: 28px;
-
-  border: 1px solid var(--contact-line);
-  border-radius: 22px;
-
-  background: #ffffff;
 }
 
-.team-number {
-  color: #aaa9b0;
+.contact-page .team-card h3 {
+  margin: 0;
 
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-}
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
 
-.team-symbol {
-  position: absolute;
-
-  top: 22px;
-  right: 24px;
-
-  display: grid;
-  place-items: center;
-
-  width: 42px;
-  height: 42px;
-
-  border-radius: 14px;
-
-  background: #f8f4f3;
-  color: var(--contact-accent);
-}
-
-.team-symbol svg {
-  width: 20px;
-  height: 20px;
-}
-
-.team-card h3 {
-  margin: 35px 0 7px;
-
-  font-size: 25px;
+  font-size: clamp(24px, 2.2vw, 30px);
+  font-weight: 600;
+  line-height: 1.15;
   letter-spacing: -0.04em;
 }
 
-.team-card p {
+.contact-page .team-card p {
   max-width: 300px;
 
-  margin: 0;
+  margin: 10px 0 0;
 
-  color: var(--contact-muted);
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
 
   font-size: 15px;
   line-height: 1.55;
+
+  opacity: 0.9;
 }
 
 .team-card a {
   display: inline-flex;
   align-items: center;
+  justify-content: space-between;
 
-  gap: 9px;
+  gap: 14px;
 
-  margin-top: auto;
-  padding-top: 24px;
+  margin-top: 22px;
+  padding: 12px 24px;
 
-  color: var(--contact-ink);
+  border: 1px solid rgb(255 255 255 / 55%);
+  border-radius: 999px;
 
-  font-size: 13px;
-  font-weight: 800;
+  /* transparent / glass button */
+  background: rgb(255 255 255 / 10%);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+
+  font-size: 14px;
+  font-weight: 700;
 
   text-decoration: none;
+
+  transition:
+    background 0.25s,
+    border-color 0.25s,
+    transform 0.25s;
 }
 
-.team-card a svg {
-  width: 17px;
-  height: 17px;
-
-  color: var(--contact-accent);
-
-  transition: transform 0.2s;
+.contact-page .team-card a {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
 }
 
-.team-card a:hover svg {
-  transform: translateX(3px);
+.team-card a:hover {
+  background: rgb(255 255 255 / 22%);
+  border-color: #ffffff;
+
+  transform: translateY(-2px);
 }
 
 /* =========================================
@@ -1427,6 +1490,11 @@ p {
     padding: 0 16px 75px;
   }
 
+  .contact-page .form-heading h2,
+  .contact-page .team-heading h2 {
+    font-size: 36px;
+  }
+
   .contact-hero {
     min-height: 480px;
   }
@@ -1462,7 +1530,7 @@ p {
   }
 
   .phone-list {
-    gap: 12px;
+    gap: 18px;
   }
 
   .phone-item strong {
@@ -1485,12 +1553,7 @@ p {
 
   .contact-form-section,
   .team-section {
-    padding-top: 16px;
-  }
-
-  .form-heading h2,
-  .team-heading h2 {
-    font-size: 36px;
+    padding-top: 78px;
   }
 
   .form-heading > p {
@@ -1554,14 +1617,12 @@ p {
     padding: 13px;
   }
 
-  .team-heading h2 {
-    margin-top: 12px;
+  .team-card {
+    min-height: 280px;
   }
 
-  .team-card {
-    min-height: 220px;
-
-    padding: 23px;
+  .team-body {
+    padding: 22px;
   }
 
 }

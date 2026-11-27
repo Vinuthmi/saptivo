@@ -48,8 +48,8 @@ defineOptions({ name: 'ContactHero' });
   align-items: center;
   width: min(980px, calc(100% - 40px));
   margin: 0 auto;
-  /* small bottom space only, so the section below sits close to the intro text */
-  padding: clamp(104px, 11vw, 150px) 0
+  /* extra space above the heading; small bottom space so the section below sits close */
+  padding: clamp(136px, 14vw, 190px) 0
            0;
 }
 
