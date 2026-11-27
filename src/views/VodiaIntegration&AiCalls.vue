@@ -8,8 +8,6 @@
     <SE5 />
     <SE6 />
     <SE7 />
-    <SE6 />
-    <SE7 />
     <SE8 />
   </main>
 </template>

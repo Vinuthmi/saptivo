@@ -23,6 +23,7 @@ import SE5 from '@/components/Features/Inventory & Multi-Warehouse/SE5.vue';
 import SE6 from '@/components/Features/Inventory & Multi-Warehouse/SE6.vue';
 import SE7 from '@/components/Features/Inventory & Multi-Warehouse/SE7.vue';
 import SE8 from '@/components/Features/Inventory & Multi-Warehouse/SE8.vue';
+import SE9 from '@/components/Features/Inventory & Multi-Warehouse/SE9.vue';
 </script>
 
 <style scoped>

@@ -18,7 +18,7 @@
               :aria-controls="`faq-a-${i}`"
               @click="toggle(i)"
             >
-              <span class="num" aria-hidden="true">0{{ i + 1 }}</span>
+              <span class="num" aria-hidden="true">{{ String(i + 1).padStart(2, "0") }}</span>
               <span class="qt">{{ f.q }}</span>
               <span class="pm" aria-hidden="true"><i></i><i></i></span>
             </button>
@@ -33,13 +33,6 @@
             </div>
           </div>
         </div>
-
-        <p class="rel">
-          Related:
-          <template v-for="(r, i) in related" :key="r.href">
-            <a :href="r.href">{{ r.label }}</a><span v-if="i < related.length - 1" aria-hidden="true"> · </span>
-          </template>
-        </p>
       </div>
 
       <!-- call to action (photo background) -->
@@ -50,8 +43,8 @@
             <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>
             14-day free trial
           </span>
-          <h3>Try the pipeline free for 14 days</h3>
-          <p>No setup fee · No credit card required. See every deal, follow-up and forecast in one place.</p>
+          <h3>Ready to run everything from one system?</h3>
+          <p>Switch on the modules you need today and add the rest whenever you grow.</p>
           <div class="btns">
             <a class="btn primary" href="#signup">
               Try the pipeline free for 14 days
@@ -62,6 +55,15 @@
         </div>
       </aside>
     </div>
+
+    <!-- internal links -->
+    <nav class="related" aria-label="Related pages">
+      <a href="/quotations-invoicing">Quotations &amp; Invoicing</a>
+      <span class="sep" aria-hidden="true">·</span>
+      <a href="/reports-analytics">Reports &amp; Analytics</a>
+      <span class="sep" aria-hidden="true">·</span>
+      <a href="/contractors-services">Contractors &amp; Services</a>
+    </nav>
   </section>
 </template>
 
@@ -85,30 +87,53 @@ const faqs = [
   {
     q: "Can I customise pipeline stages?",
     a: "Yes. Name the stages, set their order and default probability, and add as many pipelines as you need.",
-    chip: "Your stages, your order",
+    chip: "Custom stages, order & win probabilities",
   },
   {
     q: "Can managers see the whole team's pipeline?",
     a: "Yes. Managers see their team's deals; reps see their own, based on the permissions you set.",
-    chip: "Visibility by permission",
+    chip: "Role-based team & rep pipeline views",
   },
   {
     q: "Can I see why deals are lost?",
     a: "Yes. Saptivo asks for a lost reason when a deal is closed as lost and reports on the most common reasons.",
-    chip: "Lost reasons, reported",
+    chip: "Deal lost-reason tracking & reports",
   },
   {
     q: "Does the pipeline work on mobile?",
     a: "Yes. Reps can view and update deals from the Saptivo mobile app.",
-    chip: "iOS and Android",
+    chip: "Full mobile pipeline access",
   },
-];
-
-// Internal links shown under the questions. Change the paths to your real routes.
-const related = [
-  { label: "Quotations & Invoicing", href: "/quotations-and-invoicing" },
-  { label: "Reports & Analytics", href: "/reports-and-analytics" },
-  { label: "Contractors & Services", href: "/contractors-and-services" },
+  {
+    q: "What is sales pipeline software?",
+    a: "Sales pipeline software shows every open deal by stage, so your team knows what to do next and managers can forecast revenue.",
+    chip: "Visual stage tracking & forecasting",
+  },
+  {
+    q: "Can I have more than one pipeline?",
+    a: "Yes. Create separate pipelines for new business, renewals, upsells or any process you run.",
+    chip: "Multiple custom sales pipelines",
+  },
+  {
+    q: "Does Saptivo forecast revenue?",
+    a: "Yes. Weighted and best-case forecasts roll up by rep, team, branch and month.",
+    chip: "Weighted & best-case revenue forecasts",
+  },
+  {
+    q: "Do reminders sync with Google Calendar?",
+    a: "Yes. Tasks and follow-ups sync with Google Calendar.",
+    chip: "Google Calendar task & follow-up sync",
+  },
+  {
+    q: "Can I create a quotation from a deal?",
+    a: "Yes. Build a quotation inside the deal and track when the customer opens it.",
+    chip: "In-deal quoting with open tracking",
+  },
+  {
+    q: "Can actions happen automatically when a deal changes stage?",
+    a: "Yes. Workflows can send reminders, notify managers or create tasks when a deal moves.",
+    chip: "Automated stage-change workflows",
+  },
 ];
 
 const open = ref(0);
@@ -146,12 +171,10 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
-
 .faq {
   --orange: #33485d;
   --orange-soft: #edf1f4;
-  --ink: #14120f;
+  --ink: #000000;
   --muted: #6a6560;
   --line: #e4e9ed;
   position: relative;
@@ -160,7 +183,7 @@ onBeforeUnmount(() => {
   padding: 112px 0;
   color: var(--ink);
   background: #fff;
-  font-family: "Inter", system-ui, sans-serif;
+  font-family: 'Urbanist', system-ui, sans-serif;
 }
 .faq *, .faq *::before, .faq *::after { box-sizing: border-box; }
 .faq a:focus-visible, .faq button:focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
@@ -204,10 +227,6 @@ onBeforeUnmount(() => {
 .a-in p { margin: 0 0 14px; font-size: 15.5px; line-height: 1.75; color: var(--muted); max-width: 52ch; }
 .chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 99px; background: #e6f6ec; color: #15803d; font-size: 12px; font-weight: 600; }
 
-.rel { margin: 8px 0 0; font-size: 14px; line-height: 1.9; color: var(--muted); }
-.rel a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--line); transition: color 0.25s, border-color 0.25s; }
-.rel a:hover { color: var(--orange); border-color: var(--orange); }
-
 /* ---------- CTA ---------- */
 .cta {
   position: relative; overflow: hidden; display: flex; align-items: center;
@@ -232,7 +251,7 @@ onBeforeUnmount(() => {
   padding: 14px 24px; border-radius: 99px; font-size: 14.5px; font-weight: 500; text-decoration: none; white-space: nowrap;
   transition: transform 0.35s cubic-bezier(0.3, 1.4, 0.5, 1), background 0.3s, border-color 0.3s, box-shadow 0.3s;
 }
-.btn svg { transition: transform 0.35s cubic-bezier(0.3, 1.4, 0.5, 1); }
+.btn svg { flex: none; transition: transform 0.35s cubic-bezier(0.3, 1.4, 0.5, 1); }
 .btn.primary { background: #33485d; color: #fff; box-shadow: 0 12px 28px rgba(51, 72, 93, 0.24); }
 .btn.primary:hover { transform: translateY(-2px); box-shadow: 0 16px 34px rgba(51, 72, 93, 0.32); }
 .btn.primary:hover svg { transform: translateX(4px); }
@@ -240,12 +259,42 @@ onBeforeUnmount(() => {
 .btn.ghost { color: #fff; border: 1px solid rgba(255, 255, 255, 0.35); background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(6px); }
 .btn.ghost:hover { background: rgba(255, 255, 255, 0.14); border-color: rgba(255, 255, 255, 0.6); transform: translateY(-2px); }
 
+/* ---------- internal links ---------- */
+.related {
+  width: min(1180px, calc(100% - 40px));
+  margin: 44px auto 0;
+  padding-top: 28px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px 16px;
+  font-size: 14.5px;
+  color: var(--muted);
+}
+.related a {
+  color: var(--orange);
+  font-weight: 500;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+.related a:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.related .sep {
+  color: var(--muted);
+  user-select: none;
+}
+
 /* ---------- entrance (runs once) + pause when off screen ---------- */
-.faq:not(.in) .list, .faq:not(.in) .cta { opacity: 0; }
+.faq:not(.in) .list, .faq:not(.in) .cta, .faq:not(.in) .related { opacity: 0; }
 .faq.in .title span { animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) backwards; }
 .faq.in .title .soft { animation-delay: 0.1s; }
 .faq.in .list { animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) 0.15s backwards; }
 .faq.in .cta { animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) 0.3s backwards; }
+.faq.in .related { animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) 0.35s backwards; }
 .faq:not(.live) .glow, .faq:not(.live) .btn.primary::after { animation-play-state: paused; }
 
 @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
@@ -259,16 +308,18 @@ onBeforeUnmount(() => {
 }
 @media (max-width: 760px) {
   .faq { padding: 72px 0; }
-  .grid { width: calc(100% - 32px); margin-top: 40px; }
+  .grid, .related { width: calc(100% - 32px); }
+  .grid { margin-top: 40px; }
   .q { padding: 18px 16px; gap: 12px; }
   .qt { font-size: 15.5px; }
   .a-in { padding-left: 16px; padding-right: 16px; }
   .cta { padding: 32px 22px; border-radius: 22px; background-position: 70% center; }
   .cta-body { width: 100%; }
   .btns { flex-direction: column; align-items: stretch; width: 100%; }
+  .btn { white-space: normal; text-align: center; }
 }
 @media (prefers-reduced-motion: reduce) {
   .faq *, .faq *::before, .faq *::after { animation: none !important; transition: none !important; }
-  .faq:not(.in) .list, .faq:not(.in) .cta { opacity: 1; }
+  .faq:not(.in) .list, .faq:not(.in) .cta, .faq:not(.in) .related { opacity: 1; }
 }
 </style>

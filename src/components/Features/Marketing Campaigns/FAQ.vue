@@ -18,7 +18,7 @@
               :aria-controls="`faq-a-${i}`"
               @click="toggle(i)"
             >
-              <span class="num" aria-hidden="true">0{{ i + 1 }}</span>
+              <span class="num" aria-hidden="true">{{ String(i + 1).padStart(2, "0") }}</span>
               <span class="qt">{{ f.q }}</span>
               <span class="pm" aria-hidden="true"><i></i><i></i></span>
             </button>
@@ -26,34 +26,44 @@
           <div class="a" :id="`faq-a-${i}`" role="region" :aria-labelledby="`faq-q-${i}`">
             <div class="a-in">
               <p>{{ f.a }}</p>
+              <span class="chip">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10" /></svg>
+                {{ f.chip }}
+              </span>
             </div>
           </div>
         </div>
       </div>
 
-      <nav class="related" aria-label="Related features">
-        <span>Explore related features</span>
-        <div class="related-links">
-          <router-link to="/features/whatsapp-crm/">WhatsApp CRM</router-link>
-          <router-link to="/features/lead-management/">Lead Management</router-link>
-          <router-link to="/industries/retail/">Retail &amp; Supermarkets</router-link>
-        </div>
-      </nav>
-
       <!-- call to action (photo background) -->
       <aside class="cta" :style="ctaStyle" aria-label="Get started">
         <span class="glow" aria-hidden="true"></span>
         <div class="cta-body">
-          <h3 style="color: #fff">Run your first campaign free</h3>
+          <span class="trial">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>
+            14-day free trial
+          </span>
+          <h3>Ready to run everything from one system?</h3>
+          <p>Switch on the modules you need today and add the rest whenever you grow.</p>
           <div class="btns">
-            <a class="btn primary" style="color: #fff" href="mailto:hello@saptivo.com?subject=Run%20my%20first%20campaign%20free">
+            <a class="btn primary" href="#signup">
               Run your first campaign free
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></svg>
             </a>
+            <a class="btn ghost" href="#demo">Book a demo</a>
           </div>
         </div>
       </aside>
     </div>
+
+    <!-- internal links -->
+    <nav class="related" aria-label="Related pages">
+      <a href="/whatsapp-crm">WhatsApp CRM</a>
+      <span class="sep" aria-hidden="true">·</span>
+      <a href="/lead-management">Lead Management</a>
+      <span class="sep" aria-hidden="true">·</span>
+      <a href="/retail-supermarkets">Retail &amp; Supermarkets</a>
+    </nav>
   </section>
 </template>
 
@@ -77,10 +87,52 @@ const faqs = [
   {
     q: "Can I send WhatsApp campaigns?",
     a: "Yes, using approved WhatsApp Business templates to customers who have opted in.",
+    chip: "Opt-in WhatsApp template campaigns",
   },
   {
     q: "Can I test two versions of an email?",
     a: "Yes. A/B testing compares subject lines or content and shows which performs better.",
+    chip: "Built-in email A/B testing",
+  },
+  {
+    q: "Can I send email campaigns from Saptivo?",
+    a: "Yes. Design emails with a drag-and-drop or HTML editor and send them to any segment.",
+    chip: "Drag-and-drop & HTML email builder",
+  },
+  {
+    q: "How do I build a customer segment?",
+    a: "Filter by any field, such as purchase history, VIP tier, location, lead source or AMC status.",
+    chip: "Dynamic multi-field segmentation",
+  },
+  {
+    q: "Can I set up drip campaigns?",
+    a: "Yes. Automated sequences follow up with leads and stop when the contact replies or buys.",
+    chip: "Smart auto-stopping drip sequences",
+  },
+  {
+    q: "Can I track campaign results?",
+    a: "Yes. See opens, clicks and conversions, with UTM tracking for website visits.",
+    chip: "Opens, clicks, conversions & UTMs",
+  },
+  {
+    q: "Does Saptivo handle unsubscribes?",
+    a: "Yes. Unsubscribes and consent are recorded automatically.",
+    chip: "Automatic consent & opt-out tracking",
+  },
+  {
+    q: "Can I personalise campaign messages?",
+    a: "Yes. Merge fields add each customer's name and other details.",
+    chip: "Dynamic merge-field personalisation",
+  },
+  {
+    q: "Can I see which campaign led to a sale?",
+    a: "Yes. Leads and deals record the campaign that created them.",
+    chip: "End-to-end revenue attribution",
+  },
+  {
+    q: "Can I send AMC renewal campaigns?",
+    a: "Yes. Segment customers by contract expiry and send renewal reminders by email or WhatsApp.",
+    chip: "Automated AMC renewal outreach",
   },
 ];
 
@@ -149,11 +201,6 @@ onBeforeUnmount(() => {
   display: grid; grid-template-columns: 1.15fr 1fr; gap: 56px; align-items: stretch;
 }
 
-.related { grid-column: 1; display: flex; flex-direction: column; gap: 12px; color: var(--muted); font-size: 13px; }
-.related-links { display: flex; flex-wrap: wrap; gap: 8px 16px; }
-.related-links a { color: var(--orange); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
-.related-links a:hover { color: var(--ink); }
-
 /* ---------- accordion ---------- */
 .list { display: grid; gap: 14px; align-content: start; min-width: 0; }
 .item { border: 1px solid var(--line); border-radius: 20px; background: #fff; transition: border-color 0.3s, background 0.3s, box-shadow 0.4s; }
@@ -183,7 +230,6 @@ onBeforeUnmount(() => {
 /* ---------- CTA ---------- */
 .cta {
   position: relative; overflow: hidden; display: flex; align-items: center;
-  grid-column: 2; grid-row: 1 / span 2;
   min-height: 380px; padding: 44px 40px; border-radius: 28px;
   background-color: var(--ink); background-size: cover; background-position: center; background-repeat: no-repeat;
   color: #fff; min-width: 0; box-shadow: 0 24px 50px rgba(20, 18, 15, 0.25);
@@ -197,28 +243,58 @@ onBeforeUnmount(() => {
 .cta-body { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; }
 .trial { display: inline-flex; align-items: center; gap: 7px; padding: 6px 12px; border-radius: 99px; background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.2); backdrop-filter: blur(6px); font-size: 12px; font-weight: 500; }
 .trial svg { color: var(--orange); }
-.cta h3 { margin: 20px 0 12px; color: #fff; font-size: clamp(24px, 2.4vw, 32px); font-weight: 500; line-height: 1.22; letter-spacing: -0.025em; text-wrap: balance; }
-.cta p { margin: 0; max-width: 40ch; font-size: 15px; line-height: 1.7; color: #fff; }
+.cta h3 { margin: 20px 0 12px; font-size: clamp(24px, 2.4vw, 32px); font-weight: 500; line-height: 1.22; letter-spacing: -0.025em; text-wrap: balance; }
+.cta p { margin: 0; max-width: 40ch; font-size: 15px; line-height: 1.7; color: rgba(255, 255, 255, 0.78); }
 .btns { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
 .btn {
   position: relative; overflow: hidden; display: inline-flex; align-items: center; justify-content: center; gap: 9px;
   padding: 14px 24px; border-radius: 99px; font-size: 14.5px; font-weight: 500; text-decoration: none; white-space: nowrap;
   transition: transform 0.35s cubic-bezier(0.3, 1.4, 0.5, 1), background 0.3s, border-color 0.3s, box-shadow 0.3s;
 }
-.btn svg { transition: transform 0.35s cubic-bezier(0.3, 1.4, 0.5, 1); }
-.cta .btn.primary { background: #33485d; color: #fff; box-shadow: 0 12px 28px rgba(51, 72, 93, 0.24); }
+.btn svg { flex: none; transition: transform 0.35s cubic-bezier(0.3, 1.4, 0.5, 1); }
+.btn.primary { background: #33485d; color: #fff; box-shadow: 0 12px 28px rgba(51, 72, 93, 0.24); }
 .btn.primary:hover { transform: translateY(-2px); box-shadow: 0 16px 34px rgba(51, 72, 93, 0.32); }
 .btn.primary:hover svg { transform: translateX(4px); }
 .btn.primary::after { content: ""; position: absolute; inset: 0; background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, 0.28) 50%, transparent 70%); transform: translateX(-100%); animation: sheen 3.6s ease-in-out infinite; }
 .btn.ghost { color: #fff; border: 1px solid rgba(255, 255, 255, 0.35); background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(6px); }
 .btn.ghost:hover { background: rgba(255, 255, 255, 0.14); border-color: rgba(255, 255, 255, 0.6); transform: translateY(-2px); }
 
+/* ---------- internal links ---------- */
+.related {
+  width: min(1180px, calc(100% - 40px));
+  margin: 44px auto 0;
+  padding-top: 28px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px 16px;
+  font-size: 14.5px;
+  color: var(--muted);
+}
+.related a {
+  color: var(--orange);
+  font-weight: 500;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+.related a:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.related .sep {
+  color: var(--muted);
+  user-select: none;
+}
+
 /* ---------- entrance (runs once) + pause when off screen ---------- */
-.faq:not(.in) .list, .faq:not(.in) .cta { opacity: 0; }
+.faq:not(.in) .list, .faq:not(.in) .cta, .faq:not(.in) .related { opacity: 0; }
 .faq.in .title span { animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) backwards; }
 .faq.in .title .soft { animation-delay: 0.1s; }
 .faq.in .list { animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) 0.15s backwards; }
 .faq.in .cta { animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) 0.3s backwards; }
+.faq.in .related { animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) 0.35s backwards; }
 .faq:not(.live) .glow, .faq:not(.live) .btn.primary::after { animation-play-state: paused; }
 
 @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
@@ -228,21 +304,22 @@ onBeforeUnmount(() => {
 /* ---------- responsive ---------- */
 @media (max-width: 960px) {
   .grid { grid-template-columns: minmax(0, 1fr); gap: 36px; }
-  .related { grid-column: 1; }
-  .cta { grid-column: 1; grid-row: auto; min-height: 340px; }
+  .cta { min-height: 340px; }
 }
 @media (max-width: 760px) {
   .faq { padding: 72px 0; }
-  .grid { width: calc(100% - 32px); margin-top: 40px; }
+  .grid, .related { width: calc(100% - 32px); }
+  .grid { margin-top: 40px; }
   .q { padding: 18px 16px; gap: 12px; }
   .qt { font-size: 15.5px; }
   .a-in { padding-left: 16px; padding-right: 16px; }
   .cta { padding: 32px 22px; border-radius: 22px; background-position: 70% center; }
   .cta-body { width: 100%; }
   .btns { flex-direction: column; align-items: stretch; width: 100%; }
+  .btn { white-space: normal; text-align: center; }
 }
 @media (prefers-reduced-motion: reduce) {
   .faq *, .faq *::before, .faq *::after { animation: none !important; transition: none !important; }
-  .faq:not(.in) .list, .faq:not(.in) .cta { opacity: 1; }
+  .faq:not(.in) .list, .faq:not(.in) .cta, .faq:not(.in) .related { opacity: 1; }
 }
 </style>

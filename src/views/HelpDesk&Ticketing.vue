@@ -46,4 +46,42 @@ import SE9 from '@/components/Features/Help Desk & Ticketing/SE9.vue'
   color: #8a8f97 !important;
   -webkit-text-fill-color: #8a8f97 !important;
 }
+
+@media (max-width: 640px) {
+  .help-desk-ticketing-page {
+    overflow-x: clip;
+  }
+
+  .help-desk-ticketing-page :deep(.hw),
+  .help-desk-ticketing-page :deep(.kb),
+  .help-desk-ticketing-page :deep(.cs),
+  .help-desk-ticketing-page :deep(.sc),
+  .help-desk-ticketing-page :deep(.tf),
+  .help-desk-ticketing-page :deep(.sb),
+  .help-desk-ticketing-page :deep(.faq) {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .help-desk-ticketing-page :deep(.title) {
+    font-size: clamp(30px, 8vw, 42px);
+    line-height: 1.12;
+  }
+
+  .help-desk-ticketing-page :deep(img),
+  .help-desk-ticketing-page :deep(video),
+  .help-desk-ticketing-page :deep(svg) {
+    max-width: 100%;
+  }
+
+  .help-desk-ticketing-page :deep(.grid),
+  .help-desk-ticketing-page :deep(.wrap),
+  .help-desk-ticketing-page :deep(.board),
+  .help-desk-ticketing-page :deep(.card),
+  .help-desk-ticketing-page :deep(.panel),
+  .help-desk-ticketing-page :deep(.row),
+  .help-desk-ticketing-page :deep(.content) {
+    min-width: 0;
+  }
+}
 </style>
