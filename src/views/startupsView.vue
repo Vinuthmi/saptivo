@@ -5,6 +5,7 @@ import StartupsFeatures2 from '@/components/industries/Startups & SMEs/section2.
 import StartupsFeatures3 from '@/components/industries/Startups & SMEs/section3.vue'
 import StartupsFeatures4 from '@/components/industries/Startups & SMEs/section4.vue'
 import StartupsFeatures5 from '@/components/industries/Startups & SMEs/section5.vue'
+import startupsfaq from '@/components/industries/Startups & SMEs/faq.vue'
 </script>
 
 <template>
@@ -15,6 +16,6 @@ import StartupsFeatures5 from '@/components/industries/Startups & SMEs/section5.
     <StartupsFeatures3 />
     <StartupsFeatures4 />
     <StartupsFeatures5 />
-    
+    <startupsfaq/>
   </main>
 </template>

@@ -5,6 +5,7 @@ import ContractorsFeatures2 from '@/components/industries/Contractors & Services
 import ContractorsFeatures3 from '@/components/industries/Contractors & Services/section3.vue'
 import ContractorsFeatures4 from '@/components/industries/Contractors & Services/section4.vue'
 import ContractorsFeatures5 from '@/components/industries/Contractors & Services/section5.vue'
+import contractorsfaq from '@/components/industries/Contractors & Services/faq.vue'
 </script>
 
 <template>
@@ -15,6 +16,8 @@ import ContractorsFeatures5 from '@/components/industries/Contractors & Services
     <ContractorsFeatures3 />
     <ContractorsFeatures4 />
     <ContractorsFeatures5 />
+    <contractorsfaq/>
+
   
   </main>
 </template>

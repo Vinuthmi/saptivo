@@ -5,6 +5,7 @@ import FieldServiceFeatures2 from '@/components/industries/Field Service & Maint
 import FieldServiceFeatures3 from '@/components/industries/Field Service & Maintenance/section3.vue'
 import FieldServiceFeatures4 from '@/components/industries/Field Service & Maintenance/section4.vue'
 import FieldServiceFeatures5 from '@/components/industries/Field Service & Maintenance/section5.vue'
+import FieldServicefaq from '@/components/industries/Field Service & Maintenance/faq.vue'
 </script>
 
 <template>
@@ -15,5 +16,6 @@ import FieldServiceFeatures5 from '@/components/industries/Field Service & Maint
     <FieldServiceFeatures3 />
     <FieldServiceFeatures4 />
     <FieldServiceFeatures5 /> 
+    <FieldServicefaq/>
   </main>
 </template>
