@@ -1,4 +1,5 @@
 <script setup>
+import { ref, onMounted } from 'vue'
 defineOptions({ name: 'SiteFooter' })
 
 const year = new Date().getFullYear()
@@ -70,6 +71,42 @@ const clients = [
     displayWidth: 136,
   },
 ]
+
+// The AutoSale file has a badge (A and tyre) followed by the AUTOSALE.LK letters. To enlarge only the letters we
+// need to know where the badge ends, so the first empty vertical strip after the badge is found from the image itself.
+// 0.23 is only the fallback if the image can't be read.
+const asSplit = ref(0.23)
+onMounted(() => {
+  const logo = clients.find((c) => c.name === 'AutoSale.lk')
+  const im = new Image()
+  im.onload = () => {
+    try {
+      const w = Math.min(im.naturalWidth, 1000)
+      const h = Math.max(1, Math.round((im.naturalHeight * w) / im.naturalWidth))
+      const cv = document.createElement('canvas')
+      cv.width = w
+      cv.height = h
+      const cx = cv.getContext('2d', { willReadFrequently: true })
+      cx.drawImage(im, 0, 0, w, h)
+      const d = cx.getImageData(0, 0, w, h).data
+      const bgClear = d[3] < 40
+      const isInk = (i) => (bgClear ? d[i + 3] > 40 : d[i + 3] > 40 && Math.abs(d[i] - d[0]) + Math.abs(d[i + 1] - d[1]) + Math.abs(d[i + 2] - d[2]) > 120)
+      const col = new Array(w).fill(false)
+      for (let x = 0; x < w; x++) for (let y = 0; y < h && !col[x]; y++) if (isInk((y * w + x) * 4)) col[x] = true
+      let x = col.indexOf(true)
+      if (x < 0) return
+      while (x < w && col[x]) x++            // end of the badge
+      let gapStart = x
+      while (x < w && !col[x]) x++           // empty strip between the badge and the letters
+      const gap = x - gapStart
+      if (x < w && gap >= 2) {
+        const mid = (gapStart + x / 1) / 2 / w
+        if (mid > 0.06 && mid < 0.45) asSplit.value = Math.round(mid * 1000) / 1000
+      }
+    } catch (e) { /* keep the fallback */ }
+  }
+  im.src = logo.src
+})
 
 const featureGroups = [
   { title: 'Sales & CRM', links: [
@@ -162,8 +199,15 @@ const conversionLinks = [
           <p>One connected workspace for customers, sales, and every store you run.</p>
         </div>
         <ul class="trusted-logos">
-          <li v-for="client in clients" :key="client.name" :class="{ 'logo-emphasis': client.name === 'AutoSale.lk' || client.name === 'Smardove', 'logo-autosale': client.name === 'AutoSale.lk', 'logo-smardove': client.name === 'Smardove', 'logo-voxinnova': client.name === 'Voxinnova' }">
-            <span :aria-label="client.name"><img :src="client.src" :alt="client.name" :width="client.width" :height="client.height" :style="{ '--dw': `${client.displayWidth}px` }" loading="lazy" draggable="false" /></span>
+          <li v-for="client in clients" :key="client.name" :class="{ 'logo-emphasis': client.name === 'AutoSale.lk' || client.name === 'Smardove', 'logo-autosale': client.name === 'AutoSale.lk', 'logo-smardove': client.name === 'Smardove', 'logo-saasbeds': client.name === 'SaaSBeds', 'logo-voxinnova': client.name === 'Voxinnova' }">
+            <span v-if="client.name === 'AutoSale.lk'" class="autosale" :aria-label="client.name">
+              <!-- two copies of the same file: the badge keeps its size, the AUTOSALE.LK letters are scaled up -->
+              <span class="autosale-art" :style="{ '--as-split-n': asSplit }">
+                <img class="as-badge" :src="client.src" :alt="client.name" :width="client.width" :height="client.height" loading="lazy" draggable="false" />
+                <img class="as-text" :src="client.src" alt="" aria-hidden="true" :width="client.width" :height="client.height" loading="lazy" draggable="false" />
+              </span>
+            </span>
+            <span v-else :aria-label="client.name"><img :src="client.src" :alt="client.name" :width="client.width" :height="client.height" :style="{ '--dw': `${client.displayWidth}px` }" loading="lazy" draggable="false" /></span>
           </li>
         </ul>
       </section>
@@ -249,22 +293,38 @@ const conversionLinks = [
   border-top: 1px solid var(--footer-rule);
 }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
-.trusted-brands { display: grid; grid-template-columns: minmax(210px, 1fr) minmax(0, 4fr); gap: clamp(32px, 4.5vw, 84px); align-items: center; padding: 35px 0 39px; border-top: 1px solid var(--footer-rule); }
+.trusted-brands { display: grid; grid-template-columns: minmax(200px, 0.9fr) minmax(0, 4.4fr); gap: clamp(28px, 4vw, 72px); align-items: center; padding: 35px 0 39px; border-top: 1px solid var(--footer-rule); }
 .footer-brand-block { min-width: 0; }
 .footer-brand { display: inline-flex; align-items: center; }
 .footer-brand img { display: block; width: 160px; max-width: 100%; height: auto; filter: brightness(0); }
 .footer-brand-block p { max-width: 280px; margin: 15px 0 0; color: var(--footer-muted); font-size: 13px; line-height: 1.75; }
 /* Equal-width logo slots and a real gap prevent logos from crowding neighbours. */
-.trusted-logos { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); align-items: center; column-gap: clamp(18px, 1.65vw, 32px); row-gap: 22px; min-width: 0; margin: 0; padding: 0; list-style: none; }
+.trusted-logos { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); align-items: center; column-gap: clamp(24px, 2.6vw, 48px); row-gap: 30px; min-width: 0; margin: 0; padding: 0; list-style: none; }
 .trusted-logos li { display: flex; min-width: 0; min-height: 60px; align-items: center; justify-content: center; }
 .trusted-logos li span { display: flex; width: 100%; min-width: 0; align-items: center; justify-content: center; }
-.trusted-logos img { display: block; width: min(var(--dw), 100%); max-width: 100%; max-height: 34px; height: auto; object-fit: contain; object-position: center; filter: brightness(0); transition: opacity .2s ease; }
+.trusted-logos img { display: block; width: min(var(--dw), 100%); max-width: 100%; max-height: 34px; height: auto; object-fit: contain; object-position: center; filter: brightness(0); opacity: .5; transition: opacity .2s ease; }
 /* Preserve the individually balanced sizes without transforms that overlap the gaps. */
 .trusted-logos li.logo-emphasis img { max-height: 40px; }
-.trusted-logos li.logo-autosale img { width: min(var(--dw), calc(100% + 10px)); max-width: none; max-height: 46px; flex: 0 0 auto; }
-.trusted-logos li.logo-smardove img { width: min(136px, 100%); max-height: 44px; transform: translateY(-4px); }
+/* AutoSale gets a double-width slot so it can be larger than the others. */
+.trusted-logos li.logo-autosale { grid-column: span 2; }
+.trusted-logos li.logo-autosale, .trusted-logos li.logo-autosale .autosale { justify-content: flex-end; }
+.trusted-logos li.logo-autosale .autosale-art {
+  /* --as-split-n: where the A-and-tyre badge ends (0.23 = 23% of the image width); --as-scale: size of the letters. */
+  --as-split-n: 0.23;
+  --as-split: calc(var(--as-split-n) * 100%);
+  --as-scale: 1.5;
+  --as-w: clamp(84px, 7vw, 100px);
+  position: relative; flex: none; width: var(--as-w); aspect-ratio: 1694 / 255;
+  /* the enlarged letters grow to the right, so reserve that room and keep the same gap to the next logo */
+  margin-right: calc(var(--as-w) * (1 - var(--as-split-n)) * (var(--as-scale) - 1));
+}
+.trusted-logos li.logo-autosale .autosale-art img { position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none; }
+.trusted-logos li.logo-autosale .as-badge { clip-path: inset(0 calc(100% - var(--as-split)) 0 0); }
+.trusted-logos li.logo-autosale .as-text { clip-path: inset(0 0 0 var(--as-split)); transform: scale(var(--as-scale)); transform-origin: var(--as-split) 50%; }
+.trusted-logos li.logo-smardove img { width: min(136px, calc(100% + 16px)); max-width: none; max-height: 50px; flex: 0 0 auto; margin-inline: auto; transform: translateY(-6px); }
+.trusted-logos li.logo-saasbeds img { width: min(var(--dw), 96%); max-height: 32px; }
 .trusted-logos li.logo-voxinnova img { width: min(104px, 100%); max-height: 32px; }
-.trusted-logos li:hover img { opacity: .8; }
+.trusted-logos li:hover img { opacity: .85; }
 .footer-bottom { display: flex; justify-content: flex-start; align-items: center; gap: 20px; padding-top: 22px; border-top: 1px solid var(--footer-rule); color: #625d59; font-size: 12px; }
 .footer-bottom a { color: #282522; text-decoration: none; }
 .footer-legal { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 12px 28px; margin-left: auto; }
@@ -273,7 +333,7 @@ const conversionLinks = [
 @media (max-width: 1250px) {
   .site-footer { --footer-gap: 32px; }
   .trusted-brands { grid-template-columns: minmax(190px, 1fr) minmax(0, 3fr); gap: 35px; }
-  .trusted-logos { grid-template-columns: repeat(5, minmax(0,1fr)); gap: 18px 24px; }
+  .trusted-logos { grid-template-columns: repeat(5, minmax(0,1fr)); gap: 26px 32px; }
 }
 @media (max-width: 900px) {
   .site-footer { --footer-columns: repeat(2, minmax(0,1fr)); }
@@ -290,7 +350,7 @@ const conversionLinks = [
   .feature-grid, .footer-middle { row-gap: 31px; }
   .site-footer :is(.feature-group, .footer-links) .footer-heading { margin-bottom: 10px; font-size: 15px !important; }
   .site-footer .footer-link-list a { padding: 9px 0; font-size: 13px; }
-  .trusted-logos { grid-template-columns: repeat(3, minmax(0,1fr)); gap: 18px 24px; }
+  .trusted-logos { grid-template-columns: repeat(3, minmax(0,1fr)); gap: 24px 28px; }
   .footer-bottom { flex-direction: column; align-items: flex-start; font-size: 11px; }
   .footer-legal { justify-content: flex-start; margin-left: 0; }
   .footer-back-to-top { margin-left: 0; }
