@@ -1463,7 +1463,7 @@ onBeforeUnmount(() => {
   background: transparent;
   color: var(--ink);
   font-family: 'Urbanist', system-ui, sans-serif;
-  font-size: 13.5px;
+  font-size: 15px;
   font-weight: 600;
   letter-spacing: -0.01em;
   line-height: 1;
@@ -1522,4 +1522,15 @@ onBeforeUnmount(() => {
 .nav-shell .topbar-login { position: relative; }
 .nav-shell .topbar-login::after { content: ''; position: absolute; top: 50%; right: 0; width: 1px; height: 14px; background: rgba(11, 12, 14, 0.22); transform: translateY(-50%); }
 .nav-shell .mobile-actions .reseller-btn { grid-column: auto; }
+
+/* Gap between the three phone numbers (as before) and more spacing between the characters of each number. */
+@media (min-width: 761px) {
+  .nav-shell .topbar-in { column-gap: clamp(36px, 4vw, 72px); }
+}
+@media (max-width: 760px) {
+  .nav-shell .topbar-in { column-gap: 22px; }
+}
+.nav-shell .tb-number { letter-spacing: 0.06em; word-spacing: 0.2em; }
+@media (max-width: 760px) { .nav-shell .topbar-reseller { font-size: 14px; } }
+@media (min-width: 2200px) { .nav-shell .topbar-reseller { font-size: 16.5px; } }
 </style>
