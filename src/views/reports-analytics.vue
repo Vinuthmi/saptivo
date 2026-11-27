@@ -48,4 +48,45 @@ import SE10 from '@/components/Features/Reports & Analytics/SE10.vue'
   color: #8a8f97 !important;
   -webkit-text-fill-color: #8a8f97 !important;
 }
+
+@media (max-width: 640px) {
+  .reports-analytics-page {
+    overflow-x: clip;
+  }
+
+  .reports-analytics-page :deep(.hero),
+  .reports-analytics-page :deep(.r2),
+  .reports-analytics-page :deep(.rb),
+  .reports-analytics-page :deep(.db),
+  .reports-analytics-page :deep(.sr),
+  .reports-analytics-page :deep(.ex),
+  .reports-analytics-page :deep(.aa),
+  .reports-analytics-page :deep(.rr),
+  .reports-analytics-page :deep(.dc),
+  .reports-analytics-page :deep(.faq) {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .reports-analytics-page :deep(.title) {
+    font-size: clamp(30px, 8vw, 42px);
+    line-height: 1.12;
+  }
+
+  .reports-analytics-page :deep(img),
+  .reports-analytics-page :deep(video),
+  .reports-analytics-page :deep(svg) {
+    max-width: 100%;
+  }
+
+  .reports-analytics-page :deep(.grid),
+  .reports-analytics-page :deep(.wrap),
+  .reports-analytics-page :deep(.board),
+  .reports-analytics-page :deep(.card),
+  .reports-analytics-page :deep(.panel),
+  .reports-analytics-page :deep(.row),
+  .reports-analytics-page :deep(.content) {
+    min-width: 0;
+  }
+}
 </style>

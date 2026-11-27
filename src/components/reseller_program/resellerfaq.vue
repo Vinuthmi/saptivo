@@ -1,7 +1,7 @@
 <template>
   <section class="pf" aria-labelledby="pf-title">
     <div class="pf-wrap">
-      <h2 id="pf-title" class="pf-title">Frequently <br> <em> Asked Questions</em></h2>
+      <h2 id="pf-title" class="pf-title">Frequently <br> <em>asked questions</em></h2>
 
       <div class="pf-main">
         <ul class="pf-list">
@@ -33,14 +33,17 @@
 </template>
 
 <script setup>
-defineOptions({ name: 'ResellerFaq' })
+defineOptions({ name: 'PricingFaq' })
 /**
- * ResellerFaq.vue: same format as PricingFaq (heading on the left, soft grey accordion on the right, first open by default,
- * several can be open at once, CTA under the list). Copy exactly as supplied. Pass `apply-to` to change the CTA link.
+- SectionPricingFaq.vue — "FAQ": big heading on the left, a stack of soft grey accordion rows on the right
+- (several can be open at once, first open by default) and the CTA under the list. Vue 3, <script setup>.
+- The CTA link defaults to /contact/ — pass `apply-to` or edit the default. SSR safe.
  */
 import { ref } from 'vue'
 
-defineProps({ applyTo: { type: String, default: '/reseller-signup/' } })
+defineProps({
+  applyTo: { type: String, default: '/contact/' },
+})
 
 const open = ref([0])
 const isOpen = (i) => open.value.includes(i)
@@ -49,13 +52,50 @@ const toggle = (i) => {
 }
 
 const items = [
-  { q: 'Can I sell Saptivo under my own brand?', a: 'Yes, through the white-label option.' },
-  { q: 'How are commissions tracked?', a: 'The partner hub shows your clients, their subscriptions and your commissions in real time.' },
+  {
+    q: 'Can I sell Saptivo under my own brand?',
+    a: 'Yes, through the white-label option.',
+  },
+  {
+    q: 'How are commissions tracked?',
+    a: 'The partner hub shows your clients, their subscriptions and your commissions in real time.',
+  },
+  {
+    q: 'Who can become a Saptivo reseller?',
+    a: 'IT solution providers, digital agencies, accountants, business consultants, telecom and 3CX partners, and POS or hardware resellers.',
+  },
+  {
+    q: 'How does wholesale pricing work?',
+    a: 'Your discount tier rises as your monthly partner sales grow.',
+  },
+  {
+    q: 'Do I need technical skills to resell Saptivo?',
+    a: 'No. Weblook provides training, demo workspaces and help with your first deployments.',
+  },
+  {
+    q: 'Can I use my own domain for clients?',
+    a: 'Yes. The white-label option puts your logo, colours and domain on the CRM and customer portal.',
+  },
+  {
+    q: 'How do I create a workspace for a new client?',
+    a: 'Provision client workspaces in minutes from the partner hub.',
+  },
+  {
+    q: 'Do I get sales materials?',
+    a: 'Yes. Partners receive sales materials and a demo workspace.',
+  },
+  {
+    q: 'Who supports my clients?',
+    a: 'Talk to our partner team about support arrangements for your tier.',
+  },
+  {
+    q: 'How do I apply?',
+    a: 'Complete the reseller signup form and our partner team will contact you.',
+  },
 ]
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap');
 .pf, .pf * { box-sizing: border-box; }
 .pf { --ease: cubic-bezier(0.2, 0.8, 0.2, 1); font-family: 'Urbanist', system-ui, sans-serif; color: #0f172a; background: #fff; }
 .pf-wrap {

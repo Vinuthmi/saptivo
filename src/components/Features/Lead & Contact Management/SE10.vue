@@ -6,7 +6,7 @@
     </h2>
 
     <div class="grid">
-      <!-- Accordion -->
+      <!-- accordion -->
       <div class="list">
         <div v-for="(f, i) in faqs" :key="f.q" class="item" :class="{ open: open === i }">
           <h3>
@@ -18,22 +18,24 @@
               :aria-controls="`faq-a-${i}`"
               @click="toggle(i)"
             >
-              <span class="num" aria-hidden="true">0{{ i + 1 }}</span>
+              <span class="num" aria-hidden="true">{{ String(i + 1).padStart(2, "0") }}</span>
               <span class="qt">{{ f.q }}</span>
               <span class="pm" aria-hidden="true"><i></i><i></i></span>
             </button>
           </h3>
           <div class="a" :id="`faq-a-${i}`" role="region" :aria-labelledby="`faq-q-${i}`">
             <div class="a-in">
-              <p>
-                <strong class="yes">Yes.</strong> {{ f.a }}
-              </p>
+              <p>{{ f.a }}</p>
+              <span class="chip">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10" /></svg>
+                {{ f.chip }}
+              </span>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Call to Action (Photo Background) -->
+      <!-- call to action (photo background) -->
       <aside class="cta" :style="ctaStyle" aria-label="Get started">
         <span class="glow" aria-hidden="true"></span>
         <div class="cta-body">
@@ -41,59 +43,92 @@
             <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>
             14-day free trial
           </span>
-          <h3>Start capturing leads free for 14 days</h3>
+          <h3>Ready to run everything from one system?</h3>
+          <p>Switch on the modules you need today and add the rest whenever you grow.</p>
           <div class="btns">
             <a class="btn primary" href="#signup">
-              Create your account
+              Start capturing leads free for 14 days
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></svg>
             </a>
+            <a class="btn ghost" href="#demo">Book a demo</a>
           </div>
         </div>
       </aside>
     </div>
 
-    <!-- Internal Links -->
-    <div class="bottom-links">
-      <a href="#">Sales Pipeline</a>
-      <span class="dot">·</span>
-      <a href="#">WhatsApp CRM</a>
-      <span class="dot">·</span>
-      <a href="#">Startups & SMEs</a>
-    </div>
+    <!-- internal links -->
+    <nav class="related" aria-label="Related pages">
+      <a href="/sales-pipeline">Sales Pipeline</a>
+      <span class="sep" aria-hidden="true">·</span>
+      <a href="/whatsapp-crm">WhatsApp CRM</a>
+      <span class="sep" aria-hidden="true">·</span>
+      <a href="/startups-smes">Startups &amp; SMEs</a>
+    </nav>
   </section>
 </template>
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from "vue";
 
-defineOptions({ name: "FaqSection" });
+defineOptions({ name: "FeaturesSection8" });
 
-// Background photo for the CTA card
-const bgImage = `${import.meta.env.BASE_URL}images/features/threecolleagues-.jpg`;
-
-// Gradient matching Saptivo Ink
+const bgImage = `${import.meta.env.BASE_URL}images/features/smiling-young-man-working-on-a-laptop-2026-09-21-01-59-36-utc.webp`;
 const ctaStyle = bgImage
   ? {
-      backgroundImage: `linear-gradient(100deg, rgba(20, 18, 15, 0.9) 0%, rgba(20, 18, 15, 0.72) 55%, rgba(20, 18, 15, 0.4) 100%), url("${bgImage}")`,
+      backgroundImage: `linear-gradient(100deg, rgba(20, 18, 15, 0.9) 0%, rgba(20, 18, 15, 0.72) 55%, rgba(20, 18, 15, 0.5) 100%), url("${bgImage}")`,
     }
   : {};
 
 const faqs = [
   {
     q: "Can I import my existing customer list?",
-    a: "Upload a CSV or Excel file and map the columns to Saptivo fields. Duplicates are flagged during import.",
+    a: "Yes. Upload a CSV or Excel file and map the columns to Saptivo fields. Duplicates are flagged during import.",
+    chip: "CSV & Excel import with duplicate check",
   },
   {
     q: "Can I see where each lead came from?",
-    a: "Every lead records its source, campaign and, for web forms, the page it was submitted on.",
+    a: "Yes. Every lead records its source, campaign and, for web forms, the page it was submitted on.",
+    chip: "Full source & campaign attribution",
   },
   {
     q: "Can I add custom fields?",
-    a: "Add as many custom fields as your business needs, such as vehicle model, property type or system capacity.",
+    a: "Yes. Add as many custom fields as your business needs, such as vehicle model, property type or system capacity.",
+    chip: "Unlimited custom fields",
   },
   {
     q: "Can leads be assigned automatically?",
-    a: "Use round-robin or territory rules to assign leads as soon as they arrive.",
+    a: "Yes. Use round-robin or territory rules to assign leads as soon as they arrive.",
+    chip: "Round-robin & territory routing",
+  },
+  {
+    q: "What is lead management software?",
+    a: "Lead management software captures enquiries from all your channels, organises them and helps your team follow up and convert them into customers.",
+    chip: "Centralised multi-channel capture",
+  },
+  {
+    q: "Can Saptivo capture leads from Facebook?",
+    a: "Yes. Facebook Lead Ads Instant Form submissions become leads in Saptivo within seconds.",
+    chip: "Instant Facebook Lead Ads sync",
+  },
+  {
+    q: "Does Saptivo detect duplicate contacts?",
+    a: "Yes. Duplicates are flagged with smart merge suggestions, including during import.",
+    chip: "Smart duplicate detection & merge",
+  },
+  {
+    q: "Can I score leads?",
+    a: "Yes. Set your own scoring rules, or use Saptivo AI lead scoring trained on your closed deals.",
+    chip: "Rule-based & AI lead scoring",
+  },
+  {
+    q: "Can I link contacts to a company?",
+    a: "Yes. Contacts belong to accounts, and accounts can be linked in parent and subsidiary hierarchies.",
+    chip: "Parent & subsidiary account hierarchies",
+  },
+  {
+    q: "Can I convert a lead into a deal?",
+    a: "Yes. One click turns a qualified lead into a contact, an account and a deal.",
+    chip: "One-click lead conversion",
   },
 ];
 
@@ -122,9 +157,9 @@ onMounted(() => {
     { threshold: 0, rootMargin: "0px 0px -8% 0px" }
   );
   st.io.observe(root.value);
+  // safety net so the content can never stay invisible
   st.fallback = window.setTimeout(() => { if (!seen.value) seen.value = true; }, 2500);
 });
-
 onBeforeUnmount(() => {
   if (st.io) st.io.disconnect();
   window.clearTimeout(st.fallback);
@@ -132,13 +167,12 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
 .faq {
-  --orange: #ff6338;
-  --orange-soft: #fff1ec;
-  --ink: #14120f;
+  --orange: #33485d;
+  --orange-soft: #edf1f4;
+  --ink: #000000;
   --muted: #6a6560;
-  --line: #f1e7e2;
+  --line: #e4e9ed;
   position: relative;
   overflow: clip;
   scroll-margin-top: 100px;
@@ -154,7 +188,6 @@ onBeforeUnmount(() => {
   margin: 0 auto; width: min(900px, calc(100% - 40px)); text-align: center; text-wrap: balance;
   font-size: clamp(34px, 3.6vw, 56px); font-weight: 500; line-height: 1.15;
   letter-spacing: -0.03em; color: var(--ink);
-  font-family: "Poppins", system-ui, sans-serif;
 }
 .title span { display: block; }
 .title .soft { color: var(--muted); }
@@ -164,10 +197,10 @@ onBeforeUnmount(() => {
   display: grid; grid-template-columns: 1.15fr 1fr; gap: 56px; align-items: stretch;
 }
 
-/* ---------- Accordion ---------- */
+/* ---------- accordion ---------- */
 .list { display: grid; gap: 14px; align-content: start; min-width: 0; }
 .item { border: 1px solid var(--line); border-radius: 20px; background: #fff; transition: border-color 0.3s, background 0.3s, box-shadow 0.4s; }
-.item.open { border-color: rgba(255, 99, 56, 0.35); background: #fff8f5; box-shadow: 0 16px 36px rgba(255, 99, 56, 0.1); }
+.item.open { border-color: rgba(51, 72, 93, 0.35); background: #f5f7f8; box-shadow: 0 16px 36px rgba(51, 72, 93, 0.1); }
 .item h3 { margin: 0; font: inherit; }
 .q {
   width: 100%; display: flex; align-items: center; gap: 16px; padding: 22px 24px;
@@ -187,8 +220,8 @@ onBeforeUnmount(() => {
 .item.open .a { grid-template-rows: 1fr; }
 .a-in { overflow: hidden; min-height: 0; padding: 0 24px 0 58px; opacity: 0; transition: opacity 0.35s ease, padding 0.5s; }
 .item.open .a-in { opacity: 1; padding-bottom: 24px; transition-delay: 0.1s, 0s; }
-.a-in p { margin: 0; font-size: 15.5px; line-height: 1.75; color: var(--muted); max-width: 52ch; }
-.yes { color: var(--orange); font-weight: 600; margin-right: 4px; }
+.a-in p { margin: 0 0 14px; font-size: 15.5px; line-height: 1.75; color: var(--muted); max-width: 52ch; }
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 99px; background: #e6f6ec; color: #15803d; font-size: 12px; font-weight: 600; }
 
 /* ---------- CTA ---------- */
 .cta {
@@ -197,66 +230,92 @@ onBeforeUnmount(() => {
   background-color: var(--ink); background-size: cover; background-position: center; background-repeat: no-repeat;
   color: #fff; min-width: 0; box-shadow: 0 24px 50px rgba(20, 18, 15, 0.25);
 }
+/* decorative glow: stays absolutely positioned, behind the content */
 .glow {
   position: absolute; right: -90px; top: -90px; z-index: 0; width: 320px; height: 320px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 99, 56, 0.6), rgba(255, 99, 56, 0) 68%);
+  background: radial-gradient(circle, rgba(51, 72, 93, 0.24), rgba(51, 72, 93, 0) 68%);
   animation: drift 7s ease-in-out infinite; pointer-events: none;
 }
 .cta-body { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; }
 .trial { display: inline-flex; align-items: center; gap: 7px; padding: 6px 12px; border-radius: 99px; background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.2); backdrop-filter: blur(6px); font-size: 12px; font-weight: 500; }
 .trial svg { color: var(--orange); }
-.cta h3 { margin: 20px 0 12px; font-size: clamp(28px, 2.8vw, 38px); font-weight: 500; line-height: 1.22; letter-spacing: -0.025em; text-wrap: balance; font-family: "Poppins", system-ui, sans-serif; }
-.btns { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
+.cta h3 { margin: 20px 0 12px; font-size: clamp(24px, 2.4vw, 32px); font-weight: 500; line-height: 1.22; letter-spacing: -0.025em; text-wrap: balance; }
+.cta p { margin: 0; max-width: 40ch; font-size: 15px; line-height: 1.7; color: rgba(255, 255, 255, 0.78); }
+.btns { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
 .btn {
   position: relative; overflow: hidden; display: inline-flex; align-items: center; justify-content: center; gap: 9px;
   padding: 14px 24px; border-radius: 99px; font-size: 14.5px; font-weight: 500; text-decoration: none; white-space: nowrap;
   transition: transform 0.35s cubic-bezier(0.3, 1.4, 0.5, 1), background 0.3s, border-color 0.3s, box-shadow 0.3s;
 }
-.btn svg { transition: transform 0.35s cubic-bezier(0.3, 1.4, 0.5, 1); }
-.btn.primary { background: var(--orange); color: #fff; box-shadow: 0 12px 28px rgba(255, 99, 56, 0.4); }
-.btn.primary:hover { transform: translateY(-2px); box-shadow: 0 16px 34px rgba(255, 99, 56, 0.5); }
+.btn svg { flex: none; transition: transform 0.35s cubic-bezier(0.3, 1.4, 0.5, 1); }
+.btn.primary { background: #33485d; color: #fff; box-shadow: 0 12px 28px rgba(51, 72, 93, 0.24); }
+.btn.primary:hover { transform: translateY(-2px); box-shadow: 0 16px 34px rgba(51, 72, 93, 0.32); }
 .btn.primary:hover svg { transform: translateX(4px); }
 .btn.primary::after { content: ""; position: absolute; inset: 0; background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, 0.28) 50%, transparent 70%); transform: translateX(-100%); animation: sheen 3.6s ease-in-out infinite; }
+.btn.ghost { color: #fff; border: 1px solid rgba(255, 255, 255, 0.35); background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(6px); }
+.btn.ghost:hover { background: rgba(255, 255, 255, 0.14); border-color: rgba(255, 255, 255, 0.6); transform: translateY(-2px); }
 
-/* ---------- Bottom Links ---------- */
-.bottom-links {
-  display: flex; justify-content: center; align-items: center; gap: 14px;
-  margin-top: 56px; font-size: 14px; font-weight: 500; color: #a39d97; flex-wrap: wrap;
+/* ---------- internal links ---------- */
+.related {
+  width: min(1180px, calc(100% - 40px));
+  margin: 44px auto 0;
+  padding-top: 28px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px 16px;
+  font-size: 14.5px;
+  color: var(--muted);
 }
-.bottom-links a { color: var(--muted); text-decoration: none; transition: color 0.25s; }
-.bottom-links a:hover { color: var(--orange); }
-.dot { color: #cfc5bc; }
+.related a {
+  color: var(--orange);
+  font-weight: 500;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+.related a:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.related .sep {
+  color: var(--muted);
+  user-select: none;
+}
 
-/* ---------- Entrance (runs once) ---------- */
-.faq:not(.in) .list, .faq:not(.in) .cta, .faq:not(.in) .bottom-links { opacity: 0; }
+/* ---------- entrance (runs once) + pause when off screen ---------- */
+.faq:not(.in) .list, .faq:not(.in) .cta, .faq:not(.in) .related { opacity: 0; }
 .faq.in .title span { animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) backwards; }
 .faq.in .title .soft { animation-delay: 0.1s; }
 .faq.in .list { animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) 0.15s backwards; }
 .faq.in .cta { animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) 0.3s backwards; }
-.faq.in .bottom-links { animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) 0.45s backwards; }
+.faq.in .related { animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) 0.35s backwards; }
 .faq:not(.live) .glow, .faq:not(.live) .btn.primary::after { animation-play-state: paused; }
 
 @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
 @keyframes sheen { 0%, 45% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
 @keyframes drift { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-30px, 24px); } }
 
-/* ---------- Responsive ---------- */
+/* ---------- responsive ---------- */
 @media (max-width: 960px) {
   .grid { grid-template-columns: minmax(0, 1fr); gap: 36px; }
   .cta { min-height: 340px; }
 }
 @media (max-width: 760px) {
   .faq { padding: 72px 0; }
-  .grid { width: calc(100% - 32px); margin-top: 40px; }
+  .grid, .related { width: calc(100% - 32px); }
+  .grid { margin-top: 40px; }
   .q { padding: 18px 16px; gap: 12px; }
   .qt { font-size: 15.5px; }
   .a-in { padding-left: 16px; padding-right: 16px; }
   .cta { padding: 32px 22px; border-radius: 22px; background-position: 70% center; }
   .cta-body { width: 100%; }
   .btns { flex-direction: column; align-items: stretch; width: 100%; }
+  .btn { white-space: normal; text-align: center; }
 }
 @media (prefers-reduced-motion: reduce) {
   .faq *, .faq *::before, .faq *::after { animation: none !important; transition: none !important; }
-  .faq:not(.in) .list, .faq:not(.in) .cta, .faq:not(.in) .bottom-links { opacity: 1; }
+  .faq:not(.in) .list, .faq:not(.in) .cta, .faq:not(.in) .related { opacity: 1; }
 }
 </style>

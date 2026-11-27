@@ -1,48 +1,31 @@
 <template>
-  <section class="sf" aria-labelledby="sf-title">
-    <div class="sf-wrap">
-      <div class="sf-content">
-        <h2 id="sf-title" class="sf-title">
-          <span>Why CRM data</span>
-          <span class="sf-muted">security matters.</span>
-        </h2>
-        <p class="sf-intro">A CRM contains customer names, phone numbers, prices and the deals your competitors would love to see. A leaked spreadsheet or a shared password can cost you customers and trust. Saptivo's layered controls make sure that every person sees only what they need, and that every action leaves a trace.</p>
+  <section class="pf" aria-labelledby="pf-title">
+    <div class="pf-wrap">
+      <h2 id="pf-title" class="pf-title">Frequently <br> <em>asked questions</em></h2>
 
-        <ul class="sf-list">
-          <li v-for="(item, i) in items" :key="item.q" :class="{ on: open === i }">
-            <h3 class="sf-question">
+      <div class="pf-main">
+        <ul class="pf-list">
+          <li v-for="(it, i) in items" :key="it.q" class="pf-item" :class="{ on: isOpen(i) }">
+            <h3 class="pf-h">
               <button
-                :id="`sf-button-${i}`"
+                :id="`pf-b${i}`"
                 type="button"
-                :aria-expanded="open === i"
-                :aria-controls="`sf-panel-${i}`"
-                @click="open = open === i ? -1 : i"
+                :aria-expanded="isOpen(i)"
+                :aria-controls="`pf-p${i}`"
+                @click="toggle(i)"
               >
-                <span>{{ item.q }}</span>
-                <span class="sf-plus" aria-hidden="true"></span>
+                <span class="pf-q">{{ it.q }}</span>
+                <svg class="pf-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
               </button>
             </h3>
-            <div :id="`sf-panel-${i}`" class="sf-answer" role="region" :aria-labelledby="`sf-button-${i}`">
-              <div><p>{{ item.a }}</p></div>
+            <div :id="`pf-p${i}`" class="pf-a" role="region" :aria-labelledby="`pf-b${i}`">
+              <div><p>{{ it.a }}</p></div>
             </div>
           </li>
         </ul>
 
-        <a class="sf-cta" :href="contactHref">
-          Ask our team about security
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M5 12h14m-6-6 6 6-6 6" />
-          </svg>
-        </a>
-      </div>
-
-      <div class="sf-visual">
-        <img :src="securityImage" alt="Secure server infrastructure" loading="lazy" />
-        <div class="sf-image-shade" aria-hidden="true"></div>
-        <div class="sf-image-caption" aria-hidden="true">
-          <span class="sf-status"><span class="sf-dot"></span> SECURITY FIRST</span>
-          <span class="sf-caption-title">Your data.<br />Your control.</span>
-          <span class="sf-caption-sub">Protected at every step.</span>
+        <div class="pf-cta">
+          <router-link :to="contactTo" class="pf-btn pf-btn-d">Ask our team about security</router-link>
         </div>
       </div>
     </div>
@@ -50,15 +33,23 @@
 </template>
 
 <script setup>
+defineOptions({ name: 'PricingFaq' })
+/**
+- SectionPricingFaq.vue — "FAQ": big heading on the left, a stack of soft grey accordion rows on the right
+- (several can be open at once, first open by default) and the CTA under the list. Vue 3, <script setup>.
+- The CTA link defaults to /contact/ — pass `contact-to` or edit the default. SSR safe.
+ */
 import { ref } from 'vue'
 
-defineOptions({ name: 'SecurityFaqSection' })
+defineProps({
+  contactTo: { type: String, default: '/contact/' },
+})
 
-const open = ref(0)
-// Replace this URL with a local asset if preferred.
-const securityImage = 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1400&q=85'
-// Change this to your actual contact route.
-const contactHref = '/contact'
+const open = ref([0])
+const isOpen = (i) => open.value.includes(i)
+const toggle = (i) => {
+  open.value = isOpen(i) ? open.value.filter((n) => n !== i) : [...open.value, i]
+}
 
 const items = [
   {
@@ -77,129 +68,93 @@ const items = [
     q: 'Does Saptivo support two-factor authentication?',
     a: 'Yes, with one-time codes by SMS at login and by email for sensitive changes.',
   },
+  {
+    q: 'Is Saptivo secure CRM software?',
+    a: 'Yes. Saptivo protects data at every layer, from two-factor login and role-based access to device checks, session timeouts and audit logs.',
+  },
+  {
+    q: 'Can I restrict logins to my office?',
+    a: 'Yes. Administrators can limit access by IP address.',
+  },
+  {
+    q: 'Can I hide prices or margins from some staff?',
+    a: "Yes. Field-level permissions hide sensitive fields such as deal values or margins from roles that don't need them.",
+  },
+  {
+    q: 'Can deleted records be recovered?',
+    a: 'Yes. Deleted leads and quotes go to a recycle bin and can be restored in one click.',
+  },
+  {
+    q: "Does Saptivo help with GDPR and Sri Lanka's PDPA?",
+    a: 'Yes. Saptivo includes consent tracking, retention rules, erasure workflows and data export to support privacy compliance.',
+  },
+  {
+    q: 'Is there an audit trail?',
+    a: 'Yes. The audit log shows who changed what, and when, on every record.',
+  },
 ]
 </script>
 
-<style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800&display=swap');
+<style>
+.pf, .pf * { box-sizing: border-box; }
+.pf { --ease: cubic-bezier(0.2, 0.8, 0.2, 1); font-family: 'Urbanist', system-ui, sans-serif; color: #0f172a; background: #fff; }
+.pf-wrap {
+  max-width: 1240px; margin: 0 auto; padding: clamp(56px, 8vw, 110px) clamp(16px, 3vw, 32px);
+  display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); gap: clamp(24px, 6vw, 96px); align-items: start;
+}
 
-.sf {
-  --ink: #18202b;
-  --muted: #68717e;
-  --line: rgba(30, 43, 58, .12);
-  --accent: #33485d;
-  --ease: cubic-bezier(.2,.8,.2,1);
-  padding: 100px 0;
-  background: #fff;
-  color: var(--ink);
+.pf-title {
+  position: sticky; top: 130px; margin: 0; padding-bottom: 0.12em;
   font-family: 'Urbanist', system-ui, sans-serif;
+  font-size: clamp(30px, 4vw, 58px); font-weight: 500; line-height: 1.08; letter-spacing: -0.055em;
 }
-.sf *, .sf *::before, .sf *::after { box-sizing: border-box; }
-.sf-wrap {
-  max-width: 1360px;
-  margin: 0 auto;
-  padding: 0 clamp(20px, 4vw, 48px);
-  display: grid;
-  grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr);
-  gap: clamp(44px, 6vw, 90px);
-  align-items: center;
+.pf .pf-title { color: #0f172a !important; }
+.pf-title em {
+  font-style: normal;
+  background: linear-gradient(100deg, #a1a1aa 0%, #8b8b93 50%, #6f6f78 100%);
+  -webkit-background-clip: text; background-clip: text;
+  color: transparent !important; -webkit-text-fill-color: transparent !important;
 }
-.sf-content { min-width: 0; }
-.sf-title {
-  margin: 0 0 22px;
-  font-size: clamp(38px, 4vw, 58px);
-  line-height: 1.09;
-  letter-spacing: -.045em;
-  font-weight: 600;
+
+.pf-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.pf-item { overflow: hidden; border-radius: 18px; background: #f4f4f5; transition: background 0.3s ease; }
+.pf-item.on { background: #ececee; }
+.pf-h { margin: 0; font: inherit; }
+.pf-h button {
+  display: flex; font-family: inherit; width: 100%; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 24px;
+  border: 0; background: none; font: inherit; text-align: left; cursor: pointer; color: #0f172a;
 }
-.sf-title span { display: block; }
-.sf-muted { color: #7e8793; }
-.sf-intro {
-  margin: 0 0 30px;
-  max-width: 610px;
-  color: #626c79;
-  font-size: 16px;
-  line-height: 1.75;
-  font-weight: 500;
+.pf-h button:focus-visible { outline: 2px solid #0f172a; outline-offset: -2px; border-radius: 18px; }
+.pf-q { flex: 1; min-width: 0; font-size: clamp(16px, 1.25vw, 18.5px); font-weight: 600; line-height: 1.35; letter-spacing: -0.012em; }
+.pf .pf-q { color: #0f172a; }
+.pf-chev { flex: none; width: 22px; height: 22px; color: #3f3f46; transition: rotate 0.4s var(--ease); }
+.pf-item.on .pf-chev { rotate: 180deg; }
+.pf-item:not(.on) button:hover .pf-chev { translate: 0 2px; }
+
+.pf-a { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.45s var(--ease); }
+.pf-a > div { overflow: hidden; min-height: 0; }
+.pf-a p { margin: 0; padding: 0 24px 24px; max-width: 58ch; font-family: 'Urbanist', system-ui, sans-serif; font-size: 16px; font-weight: 500; line-height: 1.6; opacity: 0; transition: opacity 0.3s ease; }
+.pf .pf-a p { color: #3b3f4a; }
+.pf-item.on .pf-a { grid-template-rows: 1fr; }
+.pf-item.on .pf-a p { opacity: 1; transition-delay: 0.1s; }
+
+.pf-cta { margin-top: clamp(22px, 2.6vw, 34px); display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+.pf-btn {
+  font-family: inherit; display: inline-flex; align-items: center; justify-content: center; padding: 15px 30px; border-radius: 999px; border: 1.5px solid #0f172a;
+  background: #fff; color: #0f172a !important; font-size: clamp(15px, 1.1vw, 16.5px); font-weight: 500; text-decoration: none; transition: background 0.3s, color 0.3s, transform 0.3s;
 }
-.sf-list { list-style: none; display: grid; gap: 12px; margin: 0; padding: 0; }
-.sf-list li {
-  overflow: hidden;
-  background: #fff;
-  border: 1px solid var(--line);
-  border-radius: 17px;
-  transition: background .3s, border-color .3s, box-shadow .3s;
-}
-.sf-list li.on { background: #f6f8fa; border-color: rgba(51,72,93,.24); box-shadow: 0 9px 25px rgba(31,47,64,.045); }
-.sf-question { margin: 0; }
-.sf-question button {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 18px;
-  width: 100%;
-  padding: 19px 21px;
-  border: 0;
-  background: transparent;
-  text-align: left;
-  font-family: inherit;
-  font-size: 17px;
-  font-weight: 700;
-  line-height: 1.35;
-  color: var(--ink);
-  cursor: pointer;
-}
-.sf-question button:focus-visible { outline: 2px solid var(--accent); outline-offset: -3px; }
-.sf-plus { position: relative; flex: 0 0 30px; width: 30px; height: 30px; border-radius: 50%; background: #edf1f4; transition: background .3s; }
-.sf-plus::before, .sf-plus::after { content: ''; position: absolute; top: 50%; left: 50%; width: 12px; height: 2px; border-radius: 2px; background: #33485d; transform: translate(-50%, -50%); transition: transform .3s, background .3s; }
-.sf-plus::after { transform: translate(-50%, -50%) rotate(90deg); }
-.sf-list li.on .sf-plus { background: #33485d; }
-.sf-list li.on .sf-plus::before, .sf-list li.on .sf-plus::after { background: #fff; }
-.sf-list li.on .sf-plus::after { transform: translate(-50%, -50%) rotate(0); }
-.sf-answer { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .45s var(--ease); }
-.sf-answer > div { overflow: hidden; }
-.sf-answer p { margin: 0; padding: 0 21px 21px; color: #697380; font-size: 15.5px; font-weight: 500; line-height: 1.65; opacity: 0; transition: opacity .25s; }
-.sf-list li.on .sf-answer { grid-template-rows: 1fr; }
-.sf-list li.on .sf-answer p { opacity: 1; transition-delay: .1s; }
-.sf-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 18px;
-  margin-top: 29px;
-  padding: 15px 21px;
-  border-radius: 100px;
-  background: #33485d;
-  color: #fff;
-  text-decoration: none;
-  font-size: 15px;
-  font-weight: 700;
-  transition: background .25s, transform .25s;
-}
-.sf-cta:hover { background: #24384d; transform: translateY(-2px); }
-.sf-cta:focus-visible { outline: 3px solid #93a9c0; outline-offset: 3px; }
-.sf-visual { position: relative; align-self: stretch; min-height: 590px; border-radius: 28px; overflow: hidden; background: #1a2735; }
-.sf-visual img { display: block; position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
-.sf-image-shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(8,17,27,.06) 25%, rgba(8,17,27,.22) 53%, rgba(8,17,27,.87) 100%); pointer-events: none; }
-.sf-image-caption { position: absolute; left: clamp(24px, 3vw, 42px); right: 24px; bottom: 36px; color: #fff; display: flex; flex-direction: column; align-items: flex-start; }
-.sf-status { display: inline-flex; align-items: center; gap: 8px; padding: 9px 13px; border: 1px solid rgba(255,255,255,.25); background: rgba(255,255,255,.12); border-radius: 100px; font-size: 11px; font-weight: 800; letter-spacing: .12em; }
-.sf-dot { width: 7px; height: 7px; border-radius: 50%; background: #83d5b2; }
-.sf-caption-title { margin-top: 18px; font-size: clamp(35px, 3.5vw, 51px); line-height: 1.06; font-weight: 700; letter-spacing: -.045em; }
-.sf-caption-sub { margin-top: 13px; font-size: 15px; font-weight: 500; color: rgba(255,255,255,.85); }
-@media (max-width: 900px) {
-  .sf { padding: 70px 0; }
-  .sf-wrap { grid-template-columns: 1fr; gap: 36px; }
-  .sf-visual { min-height: 440px; }
-}
-@media (max-width: 600px) {
-  .sf { padding: 54px 0; }
-  .sf-title { font-size: clamp(34px, 9vw, 44px); }
-  .sf-intro { font-size: 15px; }
-  .sf-question button { padding: 17px; font-size: 16px; }
-  .sf-answer p { padding: 0 17px 18px; font-size: 14.5px; }
-  .sf-visual { min-height: 360px; border-radius: 22px; }
-  .sf-caption-title { font-size: 38px; }
+.pf-btn:hover { background: #f4f4f5; transform: translateY(-2px); }
+.pf-btn-d { background: #0f172a; color: #fff !important; }
+.pf-btn-d:hover { background: #2b3446; }
+.pf-btn:focus-visible { outline: 2px solid #0f172a; outline-offset: 3px; }
+
+@media (max-width: 860px) {
+  .pf-wrap { grid-template-columns: minmax(0, 1fr); }
+  .pf-title { position: static; }
+  .pf-h button { padding: 18px 18px; }
+  .pf-a p { padding: 0 18px 20px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .sf-list li, .sf-answer, .sf-answer p, .sf-plus, .sf-plus::before, .sf-plus::after, .sf-cta { transition: none; }
+  .pf * { transition: none !important; }
 }
 </style>

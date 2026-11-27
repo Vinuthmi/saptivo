@@ -273,11 +273,18 @@ onBeforeUnmount(() => {
 }
 @media (max-width: 560px) {
   .ps { padding: 72px 0; }
-  .card { padding: 16px; border-radius: 24px; }
-  .row { grid-template-columns: 18px minmax(0, 1fr) 36px 24px; }
+  .grid { width: calc(100% - 32px); margin-top: 32px; gap: 14px; }
+  .card { min-width: 0; padding: 14px; border-radius: 22px; }
+  .ed header { gap: 8px; }
+  .reset { flex: 0 0 auto; padding: 6px 9px; font-size: 10.5px; }
+  .row { min-width: 0; grid-template-columns: 18px minmax(0, 1fr) 36px 24px; gap: 7px; padding: 8px; }
+  .nm { min-width: 0; padding-inline: 8px; font-size: 12px; }
   .pr { grid-column: 2 / 4; grid-row: 2; }
   .pv { grid-row: 1; grid-column: 3; }
   .rm { grid-column: 4; grid-row: 1; }
+  .cols { gap: 7px; padding: 2px 2px 10px; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+  .col { flex: 0 0 72px; min-width: 72px; grid-template-rows: 44px 150px auto; scroll-snap-align: start; }
+  .foot { font-size: 12px; line-height: 1.55; }
 }
 @media (prefers-reduced-motion: reduce) {
   .ps *, .ps *::before, .ps *::after { animation: none !important; transition: none !important; }

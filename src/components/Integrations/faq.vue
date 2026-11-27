@@ -1,64 +1,31 @@
-
 <template>
-  <section class="fq" aria-labelledby="fq-title">
-    <div class="fq-wrap">
-      <!-- FAQ Image -->
-      <img
-        class="fq-image"
-        :src="faqImage"
-        alt="Colleagues working together around a laptop"
-        loading="lazy"
-      />
+  <section class="pf" aria-labelledby="pf-title">
+    <div class="pf-wrap">
+      <h2 id="pf-title" class="pf-title">Frequently <br> <em>asked questions</em></h2>
 
-      <!-- FAQ Content -->
-      <div class="fq-content">
-        <h2 id="fq-title" class="fq-title">
-          <span>Frequently</span>
-          <span class="fq-g">asked questions.</span>
-        </h2>
-
-        <!-- FAQ Accordion -->
-        <ul class="fq-list">
-          <li
-            v-for="(it, i) in items"
-            :key="it.q"
-            :class="{ on: open === i }"
-          >
-            <h3 class="fq-h">
+      <div class="pf-main">
+        <ul class="pf-list">
+          <li v-for="(it, i) in items" :key="it.q" class="pf-item" :class="{ on: isOpen(i) }">
+            <h3 class="pf-h">
               <button
-                :id="`fq-b${i}`"
+                :id="`pf-b${i}`"
                 type="button"
-                :aria-expanded="open === i"
-                :aria-controls="`fq-p${i}`"
-                @click="open = open === i ? -1 : i"
+                :aria-expanded="isOpen(i)"
+                :aria-controls="`pf-p${i}`"
+                @click="toggle(i)"
               >
-                <span class="fq-q">{{ it.q }}</span>
-                <span class="fq-pm" aria-hidden="true"></span>
+                <span class="pf-q">{{ it.q }}</span>
+                <svg class="pf-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
               </button>
             </h3>
-
-            <div
-              :id="`fq-p${i}`"
-              class="fq-a"
-              role="region"
-              :aria-labelledby="`fq-b${i}`"
-              :aria-hidden="open !== i"
-            >
-              <div>
-                <p>{{ it.a }}</p>
-              </div>
+            <div :id="`pf-p${i}`" class="pf-a" role="region" :aria-labelledby="`pf-b${i}`">
+              <div><p>{{ it.a }}</p></div>
             </div>
           </li>
         </ul>
 
-        <!-- Black CTA Button -->
-        <div class="fq-cta">
-          <a
-            href="mailto:hello@saptivo.com?subject=Saptivo%20Integrations%20Live%20Demo"
-            class="fq-btn"
-          >
-            See integrations in a live demo
-          </a>
+        <div class="pf-cta">
+          <router-link :to="demoTo" class="pf-btn pf-btn-d">See integrations in a live demo</router-link>
         </div>
       </div>
     </div>
@@ -66,14 +33,23 @@
 </template>
 
 <script setup>
+defineOptions({ name: 'PricingFaq' })
+/**
+- SectionPricingFaq.vue — "FAQ": big heading on the left, a stack of soft grey accordion rows on the right
+- (several can be open at once, first open by default) and the CTA under the list. Vue 3, <script setup>.
+- The CTA link defaults to /demo/ — pass `demo-to` or edit the default. SSR safe.
+ */
 import { ref } from 'vue'
 
-defineOptions({ name: 'IntegrationsFaq' })
+defineProps({
+  demoTo: { type: String, default: '/demo/' },
+})
 
-const open = ref(0)
-
-const faqImage =
-  `${import.meta.env.BASE_URL}images/features/threecolleagues-.jpg`
+const open = ref([0])
+const isOpen = (i) => open.value.includes(i)
+const toggle = (i) => {
+  open.value = isOpen(i) ? open.value.filter((n) => n !== i) : [...open.value, i]
+}
 
 const items = [
   {
@@ -92,338 +68,93 @@ const items = [
     q: 'Can integrations be switched off?',
     a: 'Yes. Administrators can enable or disable each integration at any time.',
   },
+  {
+    q: 'Which tools does Saptivo integrate with?',
+    a: 'WordPress website forms, Facebook Lead Ads, WhatsApp Business API, 3CX, Vodia, Google Calendar, payment gateways and other systems through the REST API and webhooks.',
+  },
+  {
+    q: 'How quickly do Facebook leads appear in Saptivo?',
+    a: 'Leads from Facebook Instant Forms are created in Saptivo within seconds of submission.',
+  },
+  {
+    q: 'Does Saptivo sync with Google Calendar?',
+    a: 'Yes. Follow-ups and meetings sync both ways between Saptivo and Google Calendar.',
+  },
+  {
+    q: 'Does Saptivo have an API?',
+    a: 'Yes. A REST API with OAuth 2.0 and outbound webhooks connects Saptivo to accounting, ecommerce and in-house systems.',
+  },
+  {
+    q: 'Can I connect Saptivo to Zapier or Make?',
+    a: 'Yes. Saptivo is compatible with Zapier and Make for no-code connections.',
+  },
+  {
+    q: 'Which phone systems integrate with Saptivo?',
+    a: '3CX and Vodia, plus VoIP providers such as Twilio and Vonage.',
+  },
 ]
 </script>
 
-<style scoped>
-.fq {
-  --ink: #14152b;
-  --mute: #6c7084;
-  --line: rgba(20, 21, 43, 0.12);
-  --accent: #33485d;
-  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
-
-  padding: 112px 0;
-  font-family: 'Poppins', system-ui, sans-serif;
-  color: var(--ink);
-  background: #fff;
+<style>
+.pf, .pf * { box-sizing: border-box; }
+.pf { --ease: cubic-bezier(0.2, 0.8, 0.2, 1); font-family: 'Urbanist', system-ui, sans-serif; color: #0f172a; background: #fff; }
+.pf-wrap {
+  max-width: 1240px; margin: 0 auto; padding: clamp(56px, 8vw, 110px) clamp(16px, 3vw, 32px);
+  display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); gap: clamp(24px, 6vw, 96px); align-items: start;
 }
 
-.fq *,
-.fq *::before,
-.fq *::after {
-  box-sizing: border-box;
-}
-
-/* MAIN LAYOUT */
-.fq-wrap {
-  max-width: 1240px;
-  margin: 0 auto;
-  padding: 0 clamp(20px, 4vw, 40px);
-
-  display: grid;
-  grid-template-columns:
-    minmax(0, 0.9fr)
-    minmax(0, 1.1fr);
-
-  align-items: center;
-  gap: clamp(32px, 5vw, 72px);
-}
-
-/* FAQ IMAGE */
-.fq-image {
-  grid-column: 2;
-  grid-row: 1;
-
-  display: block;
-  width: 100%;
-  height: 100%;
-  min-height: 500px;
-  max-height: 680px;
-
-  border-radius: 24px;
-  object-fit: cover;
-  object-position: 64% center;
-}
-
-/* FAQ CONTENT */
-.fq-content {
-  grid-column: 1;
-  grid-row: 1;
-  min-width: 0;
-}
-
-/* HEADING */
-.fq-title {
-  margin: 0 0 36px;
-  text-align: left;
-  text-wrap: balance;
-
+.pf-title {
+  position: sticky; top: 130px; margin: 0; padding-bottom: 0.12em;
   font-family: 'Urbanist', system-ui, sans-serif;
-  font-size: clamp(34px, 3.6vw, 56px);
-  font-weight: 500;
-  line-height: 1.15;
-  letter-spacing: -0.03em;
-  color: var(--ink);
+  font-size: clamp(30px, 4vw, 58px); font-weight: 500; line-height: 1.08; letter-spacing: -0.055em;
+}
+.pf .pf-title { color: #0f172a !important; }
+.pf-title em {
+  font-style: normal;
+  background: linear-gradient(100deg, #a1a1aa 0%, #8b8b93 50%, #6f6f78 100%);
+  -webkit-background-clip: text; background-clip: text;
+  color: transparent !important; -webkit-text-fill-color: transparent !important;
 }
 
-.fq-title span {
-  display: block;
+.pf-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.pf-item { overflow: hidden; border-radius: 18px; background: #f4f4f5; transition: background 0.3s ease; }
+.pf-item.on { background: #ececee; }
+.pf-h { margin: 0; font: inherit; }
+.pf-h button {
+  display: flex; font-family: inherit; width: 100%; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 24px;
+  border: 0; background: none; font: inherit; text-align: left; cursor: pointer; color: #0f172a;
 }
+.pf-h button:focus-visible { outline: 2px solid #0f172a; outline-offset: -2px; border-radius: 18px; }
+.pf-q { flex: 1; min-width: 0; font-size: clamp(16px, 1.25vw, 18.5px); font-weight: 600; line-height: 1.35; letter-spacing: -0.012em; }
+.pf .pf-q { color: #0f172a; }
+.pf-chev { flex: none; width: 22px; height: 22px; color: #3f3f46; transition: rotate 0.4s var(--ease); }
+.pf-item.on .pf-chev { rotate: 180deg; }
+.pf-item:not(.on) button:hover .pf-chev { translate: 0 2px; }
 
-.fq-g {
-  color: var(--mute);
+.pf-a { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.45s var(--ease); }
+.pf-a > div { overflow: hidden; min-height: 0; }
+.pf-a p { margin: 0; padding: 0 24px 24px; max-width: 58ch; font-family: 'Urbanist', system-ui, sans-serif; font-size: 16px; font-weight: 500; line-height: 1.6; opacity: 0; transition: opacity 0.3s ease; }
+.pf .pf-a p { color: #3b3f4a; }
+.pf-item.on .pf-a { grid-template-rows: 1fr; }
+.pf-item.on .pf-a p { opacity: 1; transition-delay: 0.1s; }
+
+.pf-cta { margin-top: clamp(22px, 2.6vw, 34px); display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+.pf-btn {
+  font-family: inherit; display: inline-flex; align-items: center; justify-content: center; padding: 15px 30px; border-radius: 999px; border: 1.5px solid #0f172a;
+  background: #fff; color: #0f172a !important; font-size: clamp(15px, 1.1vw, 16.5px); font-weight: 500; text-decoration: none; transition: background 0.3s, color 0.3s, transform 0.3s;
 }
+.pf-btn:hover { background: #f4f4f5; transform: translateY(-2px); }
+.pf-btn-d { background: #0f172a; color: #fff !important; }
+.pf-btn-d:hover { background: #2b3446; }
+.pf-btn:focus-visible { outline: 2px solid #0f172a; outline-offset: 3px; }
 
-/* FAQ LIST */
-.fq-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 14px;
+@media (max-width: 860px) {
+  .pf-wrap { grid-template-columns: minmax(0, 1fr); }
+  .pf-title { position: static; }
+  .pf-h button { padding: 18px 18px; }
+  .pf-a p { padding: 0 18px 20px; }
 }
-
-.fq-list li {
-  overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: 20px;
-  background: #fff;
-
-  transition:
-    border-color 0.3s,
-    background 0.3s,
-    box-shadow 0.4s;
-}
-
-.fq-list li.on {
-  border-color: rgba(51, 72, 93, 0.35);
-  background: #f5f7f8;
-  box-shadow: 0 16px 36px rgba(51, 72, 93, 0.1);
-}
-
-/* FAQ QUESTION */
-.fq-h {
-  margin: 0;
-  font: inherit;
-}
-
-.fq-h button {
-  display: flex;
-  width: 100%;
-  gap: 16px;
-  justify-content: space-between;
-  align-items: center;
-
-  padding: 22px 24px;
-  border: 0;
-  background: none;
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-  color: var(--ink);
-}
-
-.fq-h button:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: -2px;
-}
-
-.fq-q {
-  flex: 1;
-  min-width: 0;
-  font-size: 17px;
-  font-weight: 500;
-  line-height: 1.4;
-  letter-spacing: -0.01em;
-
-  transition: color 0.3s;
-}
-
-.fq-list li:not(.on) button:hover .fq-q {
-  color: var(--accent);
-}
-
-/* PLUS / MINUS ICON */
-.fq-pm {
-  position: relative;
-  flex: none;
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: #f4efec;
-
-  transition:
-    background 0.3s,
-    transform 0.5s cubic-bezier(0.3, 1.4, 0.5, 1);
-}
-
-.fq-pm::before,
-.fq-pm::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 12px;
-  height: 2px;
-  border-radius: 2px;
-  background: var(--ink);
-
-  transform: translate(-50%, -50%);
-
-  transition:
-    transform 0.4s,
-    background 0.3s;
-}
-
-.fq-pm::after {
-  transform: translate(-50%, -50%) rotate(90deg);
-}
-
-.fq-list li.on .fq-pm {
-  background: var(--accent);
-  transform: rotate(180deg);
-}
-
-.fq-list li.on .fq-pm::before,
-.fq-list li.on .fq-pm::after {
-  background: #fff;
-}
-
-.fq-list li.on .fq-pm::after {
-  transform: translate(-50%, -50%) rotate(0);
-}
-
-/* FAQ ANSWER ANIMATION */
-.fq-a {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows 0.5s var(--ease);
-}
-
-.fq-a > div {
-  overflow: hidden;
-}
-
-.fq-a p {
-  margin: 0;
-  padding: 0 24px 24px;
-  max-width: 72ch;
-  font-size: 15.5px;
-  line-height: 1.7;
-  color: var(--mute);
-  opacity: 0;
-
-  transition: opacity 0.3s;
-}
-
-.fq-list li.on .fq-a {
-  grid-template-rows: 1fr;
-}
-
-.fq-list li.on .fq-a p {
-  opacity: 1;
-  transition-delay: 0.12s;
-}
-
-/* BLACK CTA BUTTON */
-.fq-cta {
-  margin-top: 32px;
-}
-
-.fq-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  min-height: 54px;
-  padding: 0 26px;
-  border-radius: 12px;
-
-  background: #111111;
-  border: 1px solid #111111;
-  color: #ffffff;
-  text-decoration: none;
-
-  font-size: 14px;
-  font-weight: 600;
-
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
-
-  transition:
-    background 0.25s ease,
-    transform 0.25s ease,
-    box-shadow 0.25s ease;
-}
-
-.fq-btn:hover {
-  background: #292929;
-  color: #ffffff;
-  transform: translateY(-3px);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
-}
-
-.fq-btn:focus-visible {
-  outline: 2px solid #33485d;
-  outline-offset: 4px;
-}
-
-/* RESPONSIVE */
-@media (max-width: 760px) {
-  .fq {
-    padding: 72px 0;
-  }
-
-  .fq-wrap {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 32px;
-  }
-
-  .fq-image,
-  .fq-content {
-    grid-column: 1;
-    grid-row: auto;
-  }
-
-  .fq-image {
-    height: auto;
-    min-height: 0;
-    max-height: none;
-    aspect-ratio: 16 / 10;
-    object-position: center 48%;
-  }
-
-  .fq-title {
-    margin-bottom: 32px;
-  }
-
-  .fq-h button {
-    padding: 18px 16px;
-  }
-
-  .fq-q {
-    font-size: 15.5px;
-  }
-
-  .fq-a p {
-    padding: 0 16px 20px;
-  }
-
-  .fq-btn {
-    width: 100%;
-    padding: 14px 18px;
-    text-align: center;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .fq-a,
-  .fq-pm,
-  .fq-pm::before,
-  .fq-pm::after,
-  .fq-a p,
-  .fq-btn {
-    transition: none;
-  }
+  .pf * { transition: none !important; }
 }
 </style>
